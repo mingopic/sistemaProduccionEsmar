@@ -7,10 +7,15 @@
 package Vista;
 
 import Controlador.ConexionBD;
+import Controlador.ProveedorCommands;
+import Controlador.RecepcionCueroCommands;
+import Modelo.Proveedor;
+import Modelo.RecepcionCuero;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -22,6 +27,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PnlRecepcionCuero extends javax.swing.JPanel {
     ConexionBD conexion;
+    RecepcionCuero rc;
+    RecepcionCueroCommands rcc;
+    Proveedor p;
+    ProveedorCommands pc;
     
     DefaultTableModel dtms=new DefaultTableModel();
     
@@ -44,8 +53,10 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     public void inicializar() throws Exception
     {
         conexion = new ConexionBD();
+        rc = new RecepcionCuero();
+        rcc = new RecepcionCueroCommands();
         
-        actualizarTablaCueroTrabajar();
+        actualizarTablaRecepcionCuero();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
@@ -56,10 +67,8 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     //método que llena los combobox de los tipos de producto en la base de datos
     public void llenarComboProveedores() throws Exception
     {
-        String[] proveedores = new String[3];
-        proveedores[0] = "Prov 1";
-        proveedores[1] = "Prov 2";
-        proveedores[2] = "Prov 3";
+        pc = new ProveedorCommands();
+        String[] proveedores = pc.llenarComboboxProveedores();
         
         int i=0;
         while (i<proveedores.length)
@@ -71,123 +80,122 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     
     
     //Método para actualizar la tabla de las entradas de cuero por trabajar, se inicializa al llamar la clase
-    public void actualizarTablaCueroTrabajar() 
+    public void actualizarTablaRecepcionCuero() 
     {
 //        boolean invIniciales;
 //        
 //        //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
 //        //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
-//        if (jrFiltroFechasEntrada.isSelected())
-//        {
-//            try {
-//                    String fechaAux="";
-//                    String fecha=dcFecha1EntradaSemiterminado.getText();
-//                    
-//                    if (fecha.length()<10)
-//                    {
-//                        fecha="0"+fecha;
-//                    }
-//                    
-//                    for (int i=6; i<fecha.length(); i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-//                    
-//                    for (int i=3; i<5; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-//                    
-//                    for (int i=0; i<2; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                            
-//                    ct.setFecha(fechaAux);
-//                }
-//            catch (Exception ex) 
-//                {
-//                    ct.setFecha("0");
-//                }
-//            
-//            try {
-//                    String fechaAux="";
-//                    String fecha=dcFecha2EntradaSemiterminado.getText();
-//                    
-//                    if (fecha.length()<10)
-//                    {
-//                        fecha="0"+fecha;
-//                    }
-//                    
-//                    //obtiene año
-//                    for (int i=6; i<fecha.length(); i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-//                    
-//                    //obtiene mes
-//                    for (int i=3; i<5; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
+        if (jrFiltroFechasEntrada.isSelected())
+        {
+            try {
+                    String fechaAux="";
+                    String fecha=dcFecha1EntradaSemiterminado.getText();
+                    
+                    if (fecha.length()<10)
+                    {
+                        fecha="0"+fecha;
+                    }
+                    
+                    for (int i=6; i<fecha.length(); i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    for (int i=3; i<5; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    for (int i=0; i<2; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                            
+                    rc.setFecha(fechaAux);
+                }
+            catch (Exception ex) 
+                {
+                    rc.setFecha("0");
+                }
+            
+            try {
+                    String fechaAux="";
+                    String fecha=dcFecha2EntradaSemiterminado.getText();
+                    
+                    if (fecha.length()<10)
+                    {
+                        fecha="0"+fecha;
+                    }
+                    
+                    //obtiene año
+                    for (int i=6; i<fecha.length(); i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    //obtiene mes
+                    for (int i=3; i<5; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
 //                    
 //                    //obtiene día
-//                    for (int i=0; i<2; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                            
-//                    ct.setFecha1(fechaAux);
-//                }
-//            catch (Exception ex) 
-//                {
-//                    ct.setFecha1("0");
-//                }
-//        }
-//        else
-//        {
-//            ct.setFecha("1900-01-01");
-//            ct.setFecha1("2040-01-01");
-//        }
-//        
-//        
-//        //validamos si esta seleccionado algún producto para hacer filtro
-//        if (cmbProveedor.getSelectedItem().toString().equals("..."))
-//        {
-//            ct.setTipoProducto("'%%'");
-//        }
-//        else
-//        {
-//            ct.setTipoProducto("'"+cmbProveedor.getSelectedItem().toString()+"'");
-//        }
-//        
+                    for (int i=0; i<2; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                            
+                    rc.setFecha1(fechaAux);
+                }
+            catch (Exception ex) 
+                {
+                    rc.setFecha1("0");
+                }
+        }
+        else
+        {
+            rc.setFecha("1900-01-01");
+            rc.setFecha1("2040-01-01");
+        }
+        
+        
+        //validamos si esta seleccionado algún producto para hacer filtro
+        if (cmbProveedor.getSelectedItem().toString().equals("..."))
+        {
+            rc.setProveedor("'%%'");
+        }
+        else
+        {
+            rc.setProveedor("'"+cmbProveedor.getSelectedItem().toString()+"'");
+        }
+        
 //        ct.setDescripcion("");
-//        
-//        String[][] datos = null;
-//       
-//        DefaultTableModel dtm = null;
-//        
-//        try {
-//            
-//            datos = ctc.obtenerListaCueroTrabajar(ct);
-//            
-//            dtm = new DefaultTableModel(datos, cols){
-//            public boolean isCellEditable(int row, int column) {
-//            return false;
-//            }
-//            };
-//            tblCueroTrabajar.setModel(dtm);
-//
-//        } catch (Exception e) {
-//           
-//            e.printStackTrace();
-//            
-//            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
-//        }
+        
+        String[][] datos = null;
+        DefaultTableModel dtm = null;
+        
+        try {
+            
+            datos = rcc.obtenerListaRecepcionCuero(rc);
+            
+            dtm = new DefaultTableModel(datos, cols){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            tblRecepcionCuero.setModel(dtm);
+
+        } catch (Exception e) {
+           
+            e.printStackTrace();
+            
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
     }
     
 
@@ -335,7 +343,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         btnGroup = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCueroTrabajar = new javax.swing.JTable();
+        tblRecepcionCuero = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         btnAgregarEntrada = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -591,8 +599,8 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
 
     setBackground(new java.awt.Color(255, 255, 255));
 
-    tblCueroTrabajar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-    tblCueroTrabajar.setModel(new javax.swing.table.DefaultTableModel(
+    tblRecepcionCuero.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+    tblRecepcionCuero.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
             {null, null, null, null},
             {null, null, null, null},
@@ -603,7 +611,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             "Title 1", "Title 2", "Title 3", "Title 4"
         }
     ));
-    jScrollPane1.setViewportView(tblCueroTrabajar);
+    jScrollPane1.setViewportView(tblRecepcionCuero);
 
     jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar1.setFloatable(false);
@@ -721,6 +729,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             false,
             true)));
 dcFecha1EntradaSemiterminado.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
+dcFecha1EntradaSemiterminado.setFormat(2);
 dcFecha1EntradaSemiterminado.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
 try {
     dcFecha1EntradaSemiterminado.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
@@ -912,7 +921,7 @@ try {
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed
-        actualizarTablaCueroTrabajar();
+        actualizarTablaRecepcionCuero();
     }//GEN-LAST:event_btnBuscarEntradaActionPerformed
 
     private void jrFiltroFechasEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrFiltroFechasEntradaActionPerformed
@@ -931,7 +940,7 @@ try {
     }//GEN-LAST:event_jrFiltroFechasEntradaActionPerformed
 
     private void cmbProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedorActionPerformed
-        actualizarTablaCueroTrabajar();
+        actualizarTablaRecepcionCuero();
     }//GEN-LAST:event_cmbProveedorActionPerformed
 
     private void btnAgregarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEntradaActionPerformed
@@ -994,7 +1003,7 @@ try {
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lblErrorAgregar;
-    private javax.swing.JTable tblCueroTrabajar;
+    private javax.swing.JTable tblRecepcionCuero;
     private javax.swing.JTextField txtNoPartidaCueroTrabajar;
     private javax.swing.JTextField txtNoPartidaCueroTrabajar1;
     private javax.swing.JTextField txtNoPartidaCueroTrabajar2;

@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Mingo
  */
-public class PnlRecepcionCuero extends javax.swing.JPanel {
+public class PnlInsumoXproceso extends javax.swing.JPanel {
     ConexionBD conexion;
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -34,7 +34,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     /**
      * Creates new form PnlEntradas
      */
-    public PnlRecepcionCuero() throws Exception {
+    public PnlInsumoXproceso() throws Exception {
         initComponents();
         inicializar();
     }
@@ -858,7 +858,7 @@ try {
         } 
         catch (Exception ex) 
         {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlInsumoXproceso.class.getName()).log(Level.SEVERE, null, ex);
         }
        
     }//GEN-LAST:event_btnRealizarEntradaActionPerformed
@@ -873,7 +873,7 @@ try {
             try {
                 ponerUnidadProducto();
             } catch (Exception ex) {
-                Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PnlInsumoXproceso.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -938,7 +938,7 @@ try {
         try {
             abrirDialogoAgregar();
         } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlInsumoXproceso.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAgregarEntradaActionPerformed
 

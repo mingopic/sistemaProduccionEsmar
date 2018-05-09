@@ -143,3 +143,5 @@ as begin
 		and rc.fechaentrada between @fecha and @fecha1
 end
 go
+
+insert into tb_tipoMerma values ('SAL'),('HUMEDAD'),('CACHETE'),('TARIMAS');

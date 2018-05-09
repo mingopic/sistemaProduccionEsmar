@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 public class FrmPrincipal extends javax.swing.JFrame {
     PnlPrincipal pnlPrincipal;
     PnlRecepcionCuero pnlRecepcionCuero;
+    PnlInsXproc pnlInsXproc;
     ConexionBD conexionBD;
     /**
      * Creates new form FrmPrincipal
@@ -130,12 +131,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lblTipoUsuario = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         lblVentana = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblLogoEsmar = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jmpArchivo = new javax.swing.JMenu();
+        jmSalir = new javax.swing.JMenuItem();
+        jmpCatalogos = new javax.swing.JMenu();
+        jmProveedores = new javax.swing.JMenuItem();
+        jmSubProcesos = new javax.swing.JMenuItem();
+        jmpConfiguraciones = new javax.swing.JMenu();
+        jmpAcercaDe = new javax.swing.JMenu();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         dlgLogin.setTitle("Login");
@@ -441,7 +445,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addComponent(lblVentana, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
         );
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo_esmarCH.png"))); // NOI18N
+        lblLogoEsmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoEsmar_CH.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -449,22 +453,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlFooter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(16, 16, 16))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblLogoEsmar)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblLogoEsmar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -476,37 +481,55 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(pnlFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page.png"))); // NOI18N
-        jMenu1.setText("Archivo");
+        jmpArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page.png"))); // NOI18N
+        jmpArchivo.setText("Archivo");
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
-        jMenuItem1.setText("Salir");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jmSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        jmSalir.setText("Salir");
+        jmSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jmSalirActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jmpArchivo.add(jmSalir);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jmpArchivo);
 
-        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/book.png"))); // NOI18N
-        jMenu3.setText("Catálogos");
-        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+        jmpCatalogos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/book.png"))); // NOI18N
+        jmpCatalogos.setText("Catálogos");
+        jmpCatalogos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu3MouseClicked(evt);
+                jmpCatalogosMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu3);
 
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
-        jMenu2.setText("Acerca de");
-        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+        jmProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
+        jmProveedores.setText("Proveedores");
+        jmpCatalogos.add(jmProveedores);
+
+        jmSubProcesos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
+        jmSubProcesos.setText("SubProcesos");
+        jmpCatalogos.add(jmSubProcesos);
+
+        jMenuBar1.add(jmpCatalogos);
+
+        jmpConfiguraciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cog.png"))); // NOI18N
+        jmpConfiguraciones.setText("Configuraciones");
+        jmpConfiguraciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu2MouseClicked(evt);
+                jmpConfiguracionesMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jmpConfiguraciones);
+
+        jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
+        jmpAcercaDe.setText("Acerca de");
+        jmpAcercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jmpAcercaDeMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jmpAcercaDe);
 
         setJMenuBar(jMenuBar1);
 
@@ -524,22 +547,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jmSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSalirActionPerformed
         
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jmSalirActionPerformed
 
-    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+    private void jmpCatalogosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpCatalogosMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu3MouseClicked
+    }//GEN-LAST:event_jmpCatalogosMouseClicked
 
-    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+    private void jmpAcercaDeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpAcercaDeMouseClicked
         JOptionPane.showMessageDialog(null, "'Sistema de Producción ESMAR V.1.0' \n"
             + "Julio 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez \n\n"
             + "Dudas, comentarios o reportes de errores: \n"
             + "mingo.utl@gmail.com", "Acerca de...",
             JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jMenu2MouseClicked
+    }//GEN-LAST:event_jmpAcercaDeMouseClicked
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         validarUsuario();
@@ -578,7 +601,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPartidasActionPerformed
 
     private void btnInsXprocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsXprocActionPerformed
-        // TODO add your handling code here:
+        try {
+            pnlInsXproc = new PnlInsXproc();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlInsXproc, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlInsXproc.getGraphics());
+            
+            lblVentana.setText("Insumos Por Proceso");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnInsXprocActionPerformed
 
     private void btnRecepcionCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecepcionCueroActionPerformed
@@ -606,6 +640,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         ImageIcon ico=new ImageIcon(".\\src\\imagenes\\house.png");
         lblVentana.setIcon(ico);
     }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void jmpConfiguracionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpConfiguracionesMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jmpConfiguracionesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -659,20 +697,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnSemiterminado;
     private javax.swing.JButton btnTerminado;
     private javax.swing.JDialog dlgLogin;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JMenuItem jmProveedores;
+    private javax.swing.JMenuItem jmSalir;
+    private javax.swing.JMenuItem jmSubProcesos;
+    private javax.swing.JMenu jmpAcercaDe;
+    private javax.swing.JMenu jmpArchivo;
+    private javax.swing.JMenu jmpCatalogos;
+    private javax.swing.JMenu jmpConfiguraciones;
     private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblLogoEsmar;
     private javax.swing.JLabel lblMenui;
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblTipoUsuario;

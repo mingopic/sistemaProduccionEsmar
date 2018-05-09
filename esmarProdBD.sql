@@ -106,26 +106,28 @@ create table tb_insumXproc (
 );
 go
 
-CREATE PROC consultaRecepcionCuero(@proveedor VARCHAR(100), @fecha VARCHAR(100), @fecha1 VARCHAR(100))
-AS BEGIN
-	SELECT 
-		rc.idRecepcionCuero, p.nombreProveedor, tp.descripcion, rc.noCamion, rc.noTotalPiezas, rc.kgTotal, rc.precioXKilo ,(rc.noTotalPiezas*rc.precioXKilo) AS costoCamion, rc.fechaEntrada
-	FROM 
-		tb_proveedor AS p INNER JOIN tb_recepcionCuero AS rc
-		ON p.idProveedor = rc.idProveedor
-		INNER JOIN tb_tipoCuero AS tp
-		ON rc.idTipoCuero = tp.idTipoCuero
-	WHERE 
-		p.nombreProveedor LIKE @proveedor
-		AND rc.fechaEntrada BETWEEN @fecha AND @fecha1
-END
+create procedure sp_obtEntReccuero(@proveedor varchar(100), @fecha varchar(100), @fecha1 varchar(100))
+as begin
+	select 
+		rc.idrecepcioncuero, p.nombreproveedor, tp.descripcion, rc.nocamion, rc.nototalpiezas, rc.kgtotal, rc.precioxkilo ,(rc.nototalpiezas*rc.precioxkilo) as costocamion, rc.fechaentrada
+	from 
+		tb_proveedor as p inner join tb_recepcioncuero as rc
+		on p.idproveedor = rc.idproveedor
+		inner join tb_tipocuero as tp
+		on rc.idtipocuero = tp.idtipocuero
+	where 
+		p.nombreproveedor like @proveedor
+		and rc.fechaentrada between @fecha and @fecha1
+end
+go
 
-CREATE PROC login(@usuario VARCHAR(100))
-AS BEGIN
-	SELECT 
+create proc sp_valUsulog(@usuario varchar(15))
+as begin
+	select 
 		* 
-	FROM 
+	from 
 		tb_usuario 
-	WHERE 
+	where 
 		usuario=@usuario
-END
+end
+go

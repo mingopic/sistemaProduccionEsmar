@@ -37,7 +37,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "Provedor","Tipo Cuero","No. Camión","Total Piezas","Total Kg","Costo Camión","Fecha de Entrada"
+        "Provedor","Tipo Cuero","No. Camión","Total Piezas","Total Kg","Precio x Kg","Costo Camión","Fecha de Entrada"
     };
    
     /**
@@ -167,11 +167,11 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         //validamos si esta seleccionado algún producto para hacer filtro
         if (cmbProveedor.getSelectedItem().toString().equals("..."))
         {
-            rc.setProveedor("'%%'");
+            rc.setProveedor("%%");
         }
         else
         {
-            rc.setProveedor("'"+cmbProveedor.getSelectedItem().toString()+"'");
+            rc.setProveedor(cmbProveedor.getSelectedItem().toString());
         }
         
 //        ct.setDescripcion("");
@@ -352,11 +352,13 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel34 = new javax.swing.JLabel();
         cmbProveedor = new javax.swing.JComboBox();
         jLabel28 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jrFiltroFechasEntrada = new javax.swing.JRadioButton();
+        cmbProveedor1 = new javax.swing.JComboBox();
         jLabel29 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
+        jLabel27 = new javax.swing.JLabel();
+        jrFiltroFechasEntrada = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         dcFecha1EntradaSemiterminado = new datechooser.beans.DateChooserCombo();
         lbl = new javax.swing.JLabel();
@@ -657,10 +659,28 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     jLabel28.setText("   ");
     jToolBar1.add(jLabel28);
 
+    jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel6.setText("Tipo de Cuero:");
+    jToolBar1.add(jLabel6);
+
     jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel8.setForeground(new java.awt.Color(227, 222, 222));
     jLabel8.setText("     ");
     jToolBar1.add(jLabel8);
+
+    cmbProveedor1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));
+    cmbProveedor1.setMinimumSize(new java.awt.Dimension(100, 20));
+    cmbProveedor1.setPreferredSize(new java.awt.Dimension(120, 25));
+    cmbProveedor1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cmbProveedor1ActionPerformed(evt);
+        }
+    });
+    jToolBar1.add(cmbProveedor1);
+
+    jLabel29.setText("   ");
+    jToolBar1.add(jLabel29);
+    jToolBar1.add(jSeparator1);
 
     jLabel27.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar.png"))); // NOI18N
@@ -678,10 +698,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         }
     });
     jToolBar1.add(jrFiltroFechasEntrada);
-
-    jLabel29.setText("   ");
-    jToolBar1.add(jLabel29);
-    jToolBar1.add(jSeparator1);
 
     jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel4.setText("De:");
@@ -959,6 +975,10 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNoPartidaCueroTrabajar2KeyTyped
 
+    private void cmbProveedor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedor1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbProveedor1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAgregarEntrada;
@@ -968,6 +988,7 @@ try {
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JComboBox cmbProveedor;
+    private javax.swing.JComboBox cmbProveedor1;
     private javax.swing.JComboBox cmbProveedorAgregar;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado1;
@@ -992,6 +1013,7 @@ try {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;

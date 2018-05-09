@@ -25,18 +25,12 @@ public class RecepcionCueroCommands {
     public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc) throws Exception {
         String query;
         
-        query= "select p.nombreProveedor, tp.descripcion, rc.noCamion, rc.noTotalPiezas, rc.kgTotal, (rc.noTotalPiezas*rc.precioXKilo) as costoCamion, rc.fechaEntrada\n" +
-                "from tb_proveedor as p inner join tb_recepcionCuero as rc\n" +
-                "on p.idProveedor = rc.idProveedor\n" +
-                "inner join tb_tipoCuero as tp\n" +
-                "on rc.idTipoCuero = tp.idTipoCuero"    
-                 + " WHERE p.nombreProveedor LIKE "+rc.getProveedor()
-                 + " AND rc.fechaEntrada BETWEEN '"+rc.getFecha()+"' AND '"+rc.getFecha1()+"';";
+        query= "EXEC consultaRecepcionCuero '"+rc.getProveedor()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
 
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 7;
+        int columnas = 8;
         int i = 0;
 
         c.conectar();
@@ -58,11 +52,12 @@ public class RecepcionCueroCommands {
                 datos[i][2] = rs.getString("noCamion");
                 datos[i][3] = rs.getString("noTotalPiezas");
                 datos[i][4] = rs.getString("kgTotal");
-                datos[i][5] = rs.getString("costoCamion");
+                datos[i][5] = rs.getString("precioXKilo");
+                datos[i][6] = rs.getString("costoCamion");
                 
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][6] = sdf.format(sqlDate);
+                datos[i][7] = sdf.format(sqlDate);
                 i++; 
             }
         }

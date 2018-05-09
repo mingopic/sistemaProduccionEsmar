@@ -45,6 +45,7 @@ go
 create table tb_proveedor (
 	idProveedor int not null identity(1,1) primary key
 	, nombreProveedor varchar(100)
+	, estatus int
 );
 go
 
@@ -71,7 +72,7 @@ create table tb_recepcionCuero (
 	, mermaHumedad float
 	, mermaCachete float
 	, mermaTarimas float
-	, fechaEntrada datetime
+	, fechaEntrada date
 );
 go
 
@@ -104,3 +105,27 @@ create table tb_insumXproc (
 	, pu varchar(10)
 );
 go
+
+CREATE PROC consultaRecepcionCuero(@proveedor VARCHAR(100), @fecha VARCHAR(100), @fecha1 VARCHAR(100))
+AS BEGIN
+	SELECT 
+		rc.idRecepcionCuero, p.nombreProveedor, tp.descripcion, rc.noCamion, rc.noTotalPiezas, rc.kgTotal, rc.precioXKilo ,(rc.noTotalPiezas*rc.precioXKilo) AS costoCamion, rc.fechaEntrada
+	FROM 
+		tb_proveedor AS p INNER JOIN tb_recepcionCuero AS rc
+		ON p.idProveedor = rc.idProveedor
+		INNER JOIN tb_tipoCuero AS tp
+		ON rc.idTipoCuero = tp.idTipoCuero
+	WHERE 
+		p.nombreProveedor LIKE @proveedor
+		AND rc.fechaEntrada BETWEEN @fecha AND @fecha1
+END
+
+CREATE PROC login(@usuario VARCHAR(100))
+AS BEGIN
+	SELECT 
+		* 
+	FROM 
+		tb_usuario 
+	WHERE 
+		usuario=@usuario
+END

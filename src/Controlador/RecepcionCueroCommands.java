@@ -25,7 +25,7 @@ public class RecepcionCueroCommands {
     public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc) throws Exception {
         String query;
         
-        query= "EXEC consultaRecepcionCuero '"+rc.getProveedor()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
+        query= "EXEC sp_obtEntReccuero '"+rc.getProveedor()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
 
         
         String[][] datos = null;

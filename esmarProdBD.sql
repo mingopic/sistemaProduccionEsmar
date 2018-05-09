@@ -106,7 +106,30 @@ create table tb_insumXproc (
 );
 go
 
-create procedure sp_obtEntReccuero(@proveedor varchar(100), @fecha varchar(100), @fecha1 varchar(100))
+-- PROCEDURES 
+create procedure sp_valUsulog(@usuario varchar(15))
+as begin
+	select 
+		* 
+	from 
+		tb_usuario 
+	where 
+		usuario=@usuario
+end
+go
+
+create procedure sp_obtProv
+as begin
+	select 
+		nombreProveedor 
+	from 
+		tb_proveedor 
+	where 
+		estatus = 1
+end
+go
+
+create procedure sp_obtEntReccuero(@proveedor varchar(100), @fecha varchar(10), @fecha1 varchar(10))
 as begin
 	select 
 		rc.idrecepcioncuero, p.nombreproveedor, tp.descripcion, rc.nocamion, rc.nototalpiezas, rc.kgtotal, rc.precioxkilo ,(rc.nototalpiezas*rc.precioxkilo) as costocamion, rc.fechaentrada
@@ -118,16 +141,5 @@ as begin
 	where 
 		p.nombreproveedor like @proveedor
 		and rc.fechaentrada between @fecha and @fecha1
-end
-go
-
-create proc sp_valUsulog(@usuario varchar(15))
-as begin
-	select 
-		* 
-	from 
-		tb_usuario 
-	where 
-		usuario=@usuario
 end
 go

@@ -22,7 +22,7 @@ public class ProveedorCommands {
     {
         String[] proveedores=null;
         
-        String query="SELECT nombreProveedor FROM tb_proveedor;";
+        String query="execute sp_obtProv";
         
         Statement stmt = null;
         ResultSet rs = null;

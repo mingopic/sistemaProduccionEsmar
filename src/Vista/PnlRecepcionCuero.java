@@ -665,7 +665,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
 
     jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel8.setForeground(new java.awt.Color(227, 222, 222));
-    jLabel8.setText("     ");
+    jLabel8.setText("  ");
     jToolBar1.add(jLabel8);
 
     cmbProveedor1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));

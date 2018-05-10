@@ -7,10 +7,14 @@
 package Vista;
 
 import Controlador.ConexionBD;
+import Controlador.ProcesoCommands;
 import Controlador.ProveedorCommands;
 import Controlador.RecepcionCueroCommands;
+import Controlador.SubProcesoCommands;
+import Modelo.Proceso;
 import Modelo.Proveedor;
 import Modelo.RecepcionCuero;
+import Modelo.SubProceso;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -27,12 +31,18 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PnlInsXproc extends javax.swing.JPanel {
     ConexionBD conexion;
+    Proceso pr;
+    ProcesoCommands prc;
+    SubProceso subP;
+    SubProcesoCommands subPc;
+    String[][] proceso = null;
+    String[][] subProceso = null;
     DefaultTableModel dtms=new DefaultTableModel();
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "Provedor","Tipo Cuero","No. Camión","Total Piezas","Total Kg","Precio x Kg","Costo Camión","Fecha de Entrada"
+        "Subproceso"
     };
    
     /**
@@ -48,6 +58,86 @@ public class PnlInsXproc extends javax.swing.JPanel {
     public void inicializar() throws Exception
     {
         conexion = new ConexionBD();
+        llenarComboProcesos();
+        llenarComboInsumos();
+        actualizarTablaSubProc();
+    }
+    
+    //método que llena los combobox de los insumos en la base de datos
+    public void llenarComboInsumos() throws Exception
+    {
+        String[][] insumos = new String [3][2];
+        insumos[0][0] = "1";
+        insumos[0][1] = "AGUA";
+        
+        insumos[1][0] = "2";
+        insumos[1][1] = "SAL";
+        
+        insumos[2][0] = "3";
+        insumos[2][1] = "CAL";
+        
+        int i=0;
+        while (i<insumos.length)
+        {
+            cmbInsumo.addItem(insumos[i][1]);
+            i++;
+        }
+    }
+    
+    public void llenarComboProcesos() throws Exception
+    {
+        prc = new ProcesoCommands();
+        proceso = prc.llenarComboboxProcesos();
+        
+        int i=0;
+        while (i<proceso.length)
+        {
+            cmbProceso.addItem(proceso[i][1]);
+            i++;
+        }
+    }
+    
+    //Método para actualizar la tabla de las los subprocesos de cuero por trabajar, se inicializa al llamar la clase
+    public void actualizarTablaSubProc() 
+    {
+        pr = new Proceso();
+        String descripcion = "";
+        String idAux="";
+        int id=0;
+        
+        //validamos el proceso seleccionado para hacer filtro
+        descripcion = cmbProceso.getSelectedItem().toString();
+
+        for (int i = 0; i < proceso.length; i++) 
+        {
+            if (proceso[i][1] == descripcion) 
+            {
+                idAux=proceso[i][0];
+                id = Integer.parseInt(idAux);
+            }
+        }
+
+        pr.setIdProceso(id);
+
+        DefaultTableModel dtm = null;
+        
+        try {
+            
+            subProceso = subPc.obtenerListaSubprocesos(pr);
+            
+            dtm = new DefaultTableModel(subProceso, cols){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            tblSubproceso.setModel(dtm);
+
+        } catch (Exception e) {
+           
+            e.printStackTrace();
+            
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
     }
             
     /**
@@ -97,7 +187,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cmbInsumo = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -107,9 +197,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbProceso = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblSubproceso = new javax.swing.JTable();
 
         dlgAgregarRecepcion.setBackground(new java.awt.Color(255, 255, 255));
         dlgAgregarRecepcion.setResizable(false);
@@ -391,6 +481,8 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Insumo");
 
+        cmbInsumo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "..." }));
+
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
         jButton1.setText("Agregar");
 
@@ -425,7 +517,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -442,7 +534,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
@@ -479,8 +571,14 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText("Proceso");
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        cmbProceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProcesoActionPerformed(evt);
+            }
+        });
+
+        tblSubproceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblSubproceso.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -491,7 +589,12 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblSubproceso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSubprocesoMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblSubproceso);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -505,7 +608,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -515,7 +618,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbProceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                 .addGap(12, 12, 12))
@@ -556,19 +659,40 @@ public class PnlInsXproc extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTarimasActionPerformed
 
+    private void cmbProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProcesoActionPerformed
+        actualizarTablaSubProc();
+    }//GEN-LAST:event_cmbProcesoActionPerformed
+
+    private void tblSubprocesoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubprocesoMouseClicked
+
+      if(evt.getClickCount()==2){
+          String idAux = "";
+          int id = 0;
+//        JOptionPane.showMessageDialog(null, "Se ha seleccionado "+tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString());
+          String descripcion = tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString();
+            if (subProceso[tblSubproceso.getSelectedRow()][0] == descripcion)
+            {
+                idAux = subProceso[tblSubproceso.getSelectedRow()][1];
+                id = Integer.parseInt(idAux);
+            }
+          
+          JOptionPane.showMessageDialog(null, "Se ha seleccionado el id "+id);
+       }
+    }//GEN-LAST:event_tblSubprocesoMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<String> cmbInsumo;
+    private javax.swing.JComboBox<String> cmbProceso;
     private javax.swing.JComboBox<String> cmbProveedorAgregar;
     private javax.swing.JDialog dlgAgregarRecepcion;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -597,8 +721,8 @@ public class PnlInsXproc extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable tblSubproceso;
     private javax.swing.JTextField txtCostoCamion;
     private javax.swing.JTextField txtKgTotales;
     private javax.swing.JTextField txtMermaCachete;

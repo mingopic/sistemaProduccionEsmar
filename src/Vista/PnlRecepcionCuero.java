@@ -64,7 +64,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     }
     
     
-    //método que llena los combobox de los tipos de producto en la base de datos
+    //método que llena los combobox de los proveedores en la base de datos
     public void llenarComboProveedores() throws Exception
     {
         pc = new ProveedorCommands();

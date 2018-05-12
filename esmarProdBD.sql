@@ -143,5 +143,64 @@ as begin
 		and rc.fechaentrada between @fecha and @fecha1
 end
 go
+												
+create procedure sp_agrFormSubProc(@idSubProceso int)
+as begin
+	declare @fechaCreacion datetime
+	set @fechaCreacion = (select getdate())
+	insert into tb_formXsubProc values (@idSubproceso,@fechaCreacion)
+end
+go
+
+create procedure sp_agrInsumXProc (@idSubProceso int, @clave varchar(10), @porcentaje float, @idInsumo int)
+as begin
+	declare @idFormXSubProc = (select
+	idFormXSubProc
+	from tb_formXsubProc
+	where fechaCreacion = (
+	select
+	max(fechaCreacion)
+	from tb_formXsubProc
+	where idSubProceso = @idSubProceso))
+		
+	insert into tb_insumXproc values (@idFormXSubProc,@clave,@porcentaje,@idInsumo)
+end
+go
+		
+create procedure sp_obtFormInsXSubProc (@idSubProceso int)
+as begin
+	declare @idFormXSubProc int
+	set @idFormXSubProc = (select
+	idFormXSubProc
+	from tb_formXsubProc
+	where fechaCreacion = (
+	select 
+	max(fechaCreacion)
+	from tb_formXsubProc
+	where idSubproceso = @idSubProceso))
+	
+	select
+	*
+	from tb_insumXproc
+	where idFormXSubProc = @idFormXSubProc
+end
+go
+
+create procedure sp_obtProc
+as begin
+	select
+	*
+	from tb_proceso
+end
+go
+
+create procedure sp_obtSubProc (@idProceso)
+as begin
+	select
+	descripcion, idSubProceso
+	from tb_subProceso
+	where idProceso = @idProceso
+end
+go
 
 insert into tb_tipoMerma values ('SAL'),('HUMEDAD'),('CACHETE'),('TARIMAS');

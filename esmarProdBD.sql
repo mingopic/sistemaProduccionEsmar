@@ -45,6 +45,7 @@ go
 create table tb_proveedor (
 	idProveedor int not null identity(1,1) primary key
 	, nombreProveedor varchar(100)
+	, estatus int
 );
 go
 
@@ -71,7 +72,7 @@ create table tb_recepcionCuero (
 	, mermaHumedad float
 	, mermaCachete float
 	, mermaTarimas float
-	, fechaEntrada datetime
+	, fechaEntrada date
 );
 go
 
@@ -104,3 +105,102 @@ create table tb_insumXproc (
 	, pu varchar(10)
 );
 go
+
+-- PROCEDURES 
+create procedure sp_valUsulog(@usuario varchar(15))
+as begin
+	select 
+		* 
+	from 
+		tb_usuario 
+	where 
+		usuario=@usuario
+end
+go
+
+create procedure sp_obtProv
+as begin
+	select 
+		nombreProveedor 
+	from 
+		tb_proveedor 
+	where 
+		estatus = 1
+end
+go
+
+create procedure sp_obtEntReccuero(@proveedor varchar(100), @fecha varchar(10), @fecha1 varchar(10))
+as begin
+	select 
+		rc.idrecepcioncuero, p.nombreproveedor, tp.descripcion, rc.nocamion, rc.nototalpiezas, rc.kgtotal, rc.precioxkilo ,(rc.nototalpiezas*rc.precioxkilo) as costocamion, rc.fechaentrada
+	from 
+		tb_proveedor as p inner join tb_recepcioncuero as rc
+		on p.idproveedor = rc.idproveedor
+		inner join tb_tipocuero as tp
+		on rc.idtipocuero = tp.idtipocuero
+	where 
+		p.nombreproveedor like @proveedor
+		and rc.fechaentrada between @fecha and @fecha1
+end
+go
+												
+create procedure sp_agrFormSubProc(@idSubProceso int)
+as begin
+	declare @fechaCreacion datetime
+	set @fechaCreacion = (select getdate())
+	insert into tb_formXsubProc values (@idSubproceso,@fechaCreacion)
+end
+go
+
+create procedure sp_agrInsumXProc (@idSubProceso int, @clave varchar(10), @porcentaje float, @idInsumo int)
+as begin
+	declare @idFormXSubProc = (select
+	idFormXSubProc
+	from tb_formXsubProc
+	where fechaCreacion = (
+	select
+	max(fechaCreacion)
+	from tb_formXsubProc
+	where idSubProceso = @idSubProceso))
+		
+	insert into tb_insumXproc values (@idFormXSubProc,@clave,@porcentaje,@idInsumo)
+end
+go
+		
+create procedure sp_obtFormInsXSubProc (@idSubProceso int)
+as begin
+	declare @idFormXSubProc int
+	set @idFormXSubProc = (select
+	idFormXSubProc
+	from tb_formXsubProc
+	where fechaCreacion = (
+	select 
+	max(fechaCreacion)
+	from tb_formXsubProc
+	where idSubproceso = @idSubProceso))
+	
+	select
+	*
+	from tb_insumXproc
+	where idFormXSubProc = @idFormXSubProc
+end
+go
+
+create procedure sp_obtProc
+as begin
+	select
+	*
+	from tb_proceso
+end
+go
+
+create procedure sp_obtSubProc (@idProceso)
+as begin
+	select
+	descripcion, idSubProceso
+	from tb_subProceso
+	where idProceso = @idProceso
+end
+go
+
+insert into tb_tipoMerma values ('SAL'),('HUMEDAD'),('CACHETE'),('TARIMAS');

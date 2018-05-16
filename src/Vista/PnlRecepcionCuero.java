@@ -9,8 +9,10 @@ package Vista;
 import Controlador.ConexionBD;
 import Controlador.ProveedorCommands;
 import Controlador.RecepcionCueroCommands;
+import Controlador.TipoCueroCommands;
 import Modelo.Proveedor;
 import Modelo.RecepcionCuero;
+import Modelo.TipoCuero;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -31,6 +33,8 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     RecepcionCueroCommands rcc;
     Proveedor p;
     ProveedorCommands pc;
+    TipoCuero tc;
+    TipoCueroCommands tcc;
     
     DefaultTableModel dtms=new DefaultTableModel();
     
@@ -55,12 +59,15 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         conexion = new ConexionBD();
         rc = new RecepcionCuero();
         rcc = new RecepcionCueroCommands();
+        tc = new TipoCuero();
+        tcc = new TipoCueroCommands();
         
         actualizarTablaRecepcionCuero();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
         llenarComboProveedores();
+        llenarComboTipoCuero();
     }
     
     
@@ -78,12 +85,24 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         }
     }
     
+    //método que llena los combobox del tipo de cuero en la base de datos
+    public void llenarComboTipoCuero() throws Exception
+    {
+        tcc = new TipoCueroCommands();
+        String[] tipoCuero = tcc.llenarComboboxTipoCuero();
+        
+        int i=0;
+        while (i<tipoCuero.length)
+        {
+            cmbTipoCuero.addItem(tipoCuero[i]);
+            i++;
+        }
+    }
+    
     
     //Método para actualizar la tabla de las entradas de cuero por trabajar, se inicializa al llamar la clase
     public void actualizarTablaRecepcionCuero() 
     {
-//        boolean invIniciales;
-//        
 //        //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
 //        //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
         if (jrFiltroFechasEntrada.isSelected())
@@ -164,7 +183,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         }
         
         
-        //validamos si esta seleccionado algún producto para hacer filtro
+        //validamos si esta seleccionado algún proveedor para hacer filtro
         if (cmbProveedor.getSelectedItem().toString().equals("..."))
         {
             rc.setProveedor("%%");
@@ -174,14 +193,22 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             rc.setProveedor(cmbProveedor.getSelectedItem().toString());
         }
         
-//        ct.setDescripcion("");
+        //validamos si esta seleccionado algún tipo de cuero para hacer filtro
+        if (cmbTipoCuero.getSelectedItem().toString().equals("..."))
+        {
+            tc.setDescripcion("%%");
+        }
+        else
+        {
+            tc.setDescripcion(cmbTipoCuero.getSelectedItem().toString());
+        }
         
         String[][] datos = null;
         DefaultTableModel dtm = null;
         
         try {
             
-            datos = rcc.obtenerListaRecepcionCuero(rc);
+            datos = rcc.obtenerListaRecepcionCuero(rc,tc);
             
             dtm = new DefaultTableModel(datos, cols){
             public boolean isCellEditable(int row, int column) {
@@ -365,7 +392,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel28 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        cmbProveedor1 = new javax.swing.JComboBox();
+        cmbTipoCuero = new javax.swing.JComboBox();
         jLabel29 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel27 = new javax.swing.JLabel();
@@ -695,15 +722,15 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel8.setText("  ");
         jToolBar1.add(jLabel8);
 
-        cmbProveedor1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));
-        cmbProveedor1.setMinimumSize(new java.awt.Dimension(100, 20));
-        cmbProveedor1.setPreferredSize(new java.awt.Dimension(120, 25));
-        cmbProveedor1.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipoCuero.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));
+        cmbTipoCuero.setMinimumSize(new java.awt.Dimension(100, 20));
+        cmbTipoCuero.setPreferredSize(new java.awt.Dimension(120, 25));
+        cmbTipoCuero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbProveedor1ActionPerformed(evt);
+                cmbTipoCueroActionPerformed(evt);
             }
         });
-        jToolBar1.add(cmbProveedor1);
+        jToolBar1.add(cmbTipoCuero);
 
         jLabel29.setText("   ");
         jToolBar1.add(jLabel29);
@@ -944,9 +971,9 @@ try {
         }
     }//GEN-LAST:event_btnAgregarEntradaActionPerformed
 
-    private void cmbProveedor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedor1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbProveedor1ActionPerformed
+    private void cmbTipoCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoCueroActionPerformed
+        actualizarTablaRecepcionCuero();
+    }//GEN-LAST:event_cmbTipoCueroActionPerformed
 
     private void txtMermaSalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMermaSalActionPerformed
         // TODO add your handling code here:
@@ -965,8 +992,8 @@ try {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JComboBox cmbProveedor;
-    private javax.swing.JComboBox cmbProveedor1;
     private javax.swing.JComboBox<String> cmbProveedorAgregar;
+    private javax.swing.JComboBox cmbTipoCuero;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgAgregarRecepcion;

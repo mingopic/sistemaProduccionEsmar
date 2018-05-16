@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.RecepcionCuero;
+import Modelo.TipoCuero;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -22,10 +23,10 @@ public class RecepcionCueroCommands {
     private final String imagen="/Reportes/logo_esmar.png";
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc) throws Exception {
+    public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc, TipoCuero tp) throws Exception {
         String query;
         
-        query= "EXEC sp_obtEntReccuero '"+rc.getProveedor()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
+        query= "EXEC sp_obtEntReccuero '"+rc.getProveedor()+"','"+tp.getDescripcion()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
 
         
         String[][] datos = null;

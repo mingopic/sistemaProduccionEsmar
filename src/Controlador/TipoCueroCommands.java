@@ -1,0 +1,53 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Controlador;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+/**
+ *
+ * @author Equipo
+ */
+public class TipoCueroCommands {
+    static Statement stmt = null;
+    static ResultSet rs = null;
+    static ConexionBD c=new ConexionBD();
+    
+    //Método para llenar el combobox con los tipos de cuero existentes
+    public static String[] llenarComboboxTipoCuero() throws Exception
+    {
+        String[] tipoCuero=null;
+        
+        String query="execute sp_obtTipoCuero";
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+        int renglones = 0;
+        int i = 0;
+        
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) {
+            renglones = rs.getRow();
+            tipoCuero = new String[renglones];
+            rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                tipoCuero[i]= rs.getString("descripcion");
+                i++;
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return tipoCuero;
+    }
+}

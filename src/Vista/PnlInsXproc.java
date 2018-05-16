@@ -518,7 +518,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         }
         else
         {
-            if (JOptionPane.showConfirmDialog(null, "Realmente desea guardar las modificaciones", "Confirmar salida", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+            if (JOptionPane.showConfirmDialog(null, "Realmente desea guardar las modificaciones", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
             {
                 int idSubProceso = subP.getIdSubProceso();
                 int filas = tblInsXSubProc.getRowCount();

@@ -21,8 +21,7 @@ public class UsuarioCommands
         Usuario u = new Usuario();
         Statement stmt = null;
         ResultSet rs = null;
-        String query = "SELECT * FROM dbo.tb_usuario WHERE usuario='" +
-                        userName + "'";
+        String query = "EXEC sp_valUsulog '"+userName+"';";
         c.conectar();
         stmt = c.getConexion().createStatement();
         rs = stmt.executeQuery(query);

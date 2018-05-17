@@ -203,4 +203,283 @@ as begin
 end
 go
 
+create procedure sp_calCostTot
+(
+	@sal float
+	, @humedad float
+	, @cachete float
+	, @tarimas float
+	, @kgTotales float
+	, @precio float
+	, @piezasTotales int
+	, @refParaMerma int
+)
+as begin
+	declare @salAcep float
+	declare @humedadAcep float
+	declare @cacheteAcep float
+	declare @tarimasAcep float
+	declare @salReal float
+	declare @humedadReal float
+	declare @cacheteReal float
+	declare @tarimasReal float
+	declare @salDiferencia float
+	declare @HumedadDiferencia float
+	declare @cacheteDiferencia float
+	declare @tarimasDiferencia float
+	declare @salDescontar float
+	declare @humedadDescontar float
+	declare @cacheteDescontar float
+	declare @tarimasDescontar float
+	declare @totalKgDescontar float
+	declare @totalDescontar float
+	declare @totalPagar float
+	
+	set @salAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 1
+			)
+	)
+	
+	set @humedadAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 2
+			)
+	)
+	
+	set @humedadAcep = @humedadAcep * @kgTotales
+	
+	set @cacheteAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 3
+			)
+	)
+	
+	set @tarimasAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 4
+			)
+	)
+	
+	set @salReal = @sal/@piezasTotales
+	set @humedadReal = (@humedad/@refParaMerma)*@piezasTotales
+	set @cacheteReal = @cachete/@refParaMerma
+	set @tarimasReal = @tarimas
+	
+	set @salDiferencia = @salReal-@salAcep
+	set @humedadDiferencia = @humedadReal-@humedadAcep
+	set @cacheteDiferencia = @cacheteReal-@cacheteAcep
+	set @tarimasDiferencia = @tarimasReal-@tarimasAcep
+	
+	set @salDescontar = @salDiferencia*@piezasTotales
+	set @humedadDescontar = @humedadDiferencia
+	set @cacheteDescontar = @cacheteDiferencia*@piezasTotales
+	set @tarimasDescontar = @tarimasDiferencia
+	
+	set @totalDescontar = 0
+	
+	if (@salDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@salDescontar
+	end
+	
+	if (@humedadDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@humedadDescontar
+	end
+	
+	if (@cacheteDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@cacheteDescontar
+	end
+	
+	if (@tarimasDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@tarimasDescontar
+	end
+	
+	set @totalKgDescontar = @kgTotales-@totalDescontar
+	set @totalPagar = @totalKgDescontar*@precio
+	
+	select @totalPagar as totalPagar
+end
+go
+
+create procedure sp_obtConfigMermas
+as begin
+	declare @idConfigMermaSal int
+	declare @idConfigMermaHumedad int
+	declare @idConfigMermaCachete int
+	declare @idConfigTarima int
+	
+	set @idConfigMermaSal = (
+	select
+		idConfigMerma
+	from
+		tb_configMerma
+	where
+		fechaConfig = (
+		select
+			max(fechaConfig)
+		from
+			tb_configMerma
+		where idTipoMerma = 1))
+		
+	set @idConfigMermaHumedad = (
+	select
+		idConfigMerma
+	from
+		tb_configMerma
+	where
+		fechaConfig = (
+		select
+			max(fechaConfig)
+		from
+			tb_configMerma
+		where idTipoMerma = 2))
+	
+	set @idConfigMermaCachete = (
+	select
+		idConfigMerma
+	from
+		tb_configMerma
+	where
+		fechaConfig = (
+		select
+			max(fechaConfig)
+		from
+			tb_configMerma
+		where idTipoMerma = 3))
+	
+	set @idConfigTarima = (
+	select
+		idConfigMerma
+	from
+		tb_configMerma
+	where
+		fechaConfig = (
+		select
+			max(fechaConfig)
+		from
+			tb_configMerma
+		where idTipoMerma = 4))
+	
+	select
+		idConfigMerma,idTipoMerma,porcMermaAcep
+	from
+		tb_configMerma
+	where
+		idConfigMerma = @idConfigMermaSal or idConfigMerma = @idConfigMermaHumedad or idConfigMerma = @idConfigMermaCachete or idConfigMerma = @idConfigTarima
+end
+go
+
+create procedure sp_obtNoCamion (
+	@idProveedor int
+)
+as begin
+	declare @anioActual int
+	declare @noCamion int
+	
+	set @anioActual = (
+	Select
+		year(getdate()))
+		
+	set @noCamion = (
+	select
+		max(noCamion)
+	from
+		tb_recepcionCuero
+	where idProveedor = @idProveedor and year(fechaEntrada) =  @anioActual)
+	
+	if(@noCamion is null) begin
+		set @noCamion = 1
+	end
+	
+	else begin
+		set @noCamion = @noCamion+1
+	end
+	
+	select @noCamion as noCamion
+end
+go
+
+create procedure sp_obtRangoPesoCuero (
+	@idProveedor int
+)
+as begin
+	declare @idRangoPesoCuero int
+	set @idRangoPesoCuero = (
+	select
+		idRangoPesoCuero
+	from
+		tb_recepcionCuero
+	where
+		idProveedor = @idProveedor)
+	
+	select
+		rangoMin, rangoMax
+	from
+		tb_rangoPesoCuero
+	where
+		idRangoPesoCuero = @idRangoPesoCuero
+end
+go
+
+create procedure sp_obtTipoCuero
+as begin
+	select 
+		descripcion 
+	from 
+		tb_tipoCuero
+end
+go
+
 insert into tb_tipoMerma values ('SAL'),('HUMEDAD'),('CACHETE'),('TARIMAS');

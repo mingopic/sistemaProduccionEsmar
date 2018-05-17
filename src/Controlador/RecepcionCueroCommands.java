@@ -20,7 +20,6 @@ public class RecepcionCueroCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();
-    private final String imagen="/Reportes/logo_esmar.png";
     
     //Método que se llama para obtener la lista de los cueros por trabajar
     public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc, TipoCuero tp) throws Exception {
@@ -59,6 +58,42 @@ public class RecepcionCueroCommands {
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 datos[i][7] = sdf.format(sqlDate);
+                i++; 
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
+    }
+    
+    //Método que se llama para obtener la lista de los cueros por trabajar
+    public static String[] llenarNoCamiones(RecepcionCuero rc) throws Exception {
+        String query;
+        
+        query= "EXEC sp_obtNoCamion "+rc.getIdProveedor();
+
+        
+        String[] datos = null;
+        int renglones = 0;
+        int i = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+            renglones = rs.getRow();
+            datos = new String[renglones];
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos[i] = rs.getString("noCamion");
                 i++; 
             }
         }

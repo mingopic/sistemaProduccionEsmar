@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.RecepcionCuero;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -12,17 +13,17 @@ import java.sql.Statement;
  *
  * @author Equipo
  */
-public class ProveedorCommands {
+public class RangoPesoCueroCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();
     
-    //Método para llenar el combobox con los datos de los productos existentes
-    public static String[][] llenarComboboxProveedores() throws Exception
+    //Método para señalar el rango minimo y el rango maximo del peso de cuero
+    public static String[][] llenarLabelRangoPesoCuero(RecepcionCuero rc) throws Exception
     {
-        String[][] proveedores=null;
+        String[][] rangoPesoCuero=null;
         
-        String query="execute sp_obtProv";
+        String query="execute sp_obtRangoPesoCuero "+rc.getIdProveedor();
         
         Statement stmt = null;
         ResultSet rs = null;
@@ -36,13 +37,13 @@ public class ProveedorCommands {
         
         if (rs.last()) {
             renglones = rs.getRow();
-            proveedores = new String[renglones][columnas];
+            rangoPesoCuero = new String[renglones][columnas];
             rs.beforeFirst();
 
             //Recorremos el ResultSet registro a registro
             while (rs.next()) {
-                proveedores[i][0]= rs.getString("idProveedor");
-                proveedores[i][1]= rs.getString("nombreProveedor");
+                rangoPesoCuero[i][0]= rs.getString("rangoMin");
+                rangoPesoCuero[i][1]= rs.getString("rangoMax");
                 i++;
             }
         }
@@ -50,6 +51,6 @@ public class ProveedorCommands {
         rs.close();
         stmt.close();
         c.desconectar();
-        return proveedores;
+        return rangoPesoCuero;
     }
 }

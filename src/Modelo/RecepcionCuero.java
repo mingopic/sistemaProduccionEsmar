@@ -11,6 +11,7 @@ package Modelo;
  */
 public class RecepcionCuero {
     int idRegistro;
+    int idProveedor;
     String proveedor;
     String tipoCuero;
     int noCamion;
@@ -26,6 +27,14 @@ public class RecepcionCuero {
 
     public void setIdRegistro(int idRegistro) {
         this.idRegistro = idRegistro;
+    }
+    
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
     public String getProveedor() {

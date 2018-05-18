@@ -7,6 +7,7 @@ package Controlador;
 
 import Modelo.RecepcionCuero;
 import Modelo.TipoCuero;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -102,5 +103,23 @@ public class RecepcionCueroCommands {
         stmt.close();
         c.desconectar();
         return datos;
+    }
+    
+    //Método que se llama para insertar una entrada de recepcion de cuero
+    public static void InsertarEntradaRecepcionCuero(RecepcionCuero rc) throws Exception {
+        String query;
+        
+        query= "EXEC sp_agrEntRecCuero "+rc.getIdProveedor()+","+rc.getNoCamion()+","+rc.getIdTipoCuero()+","
+                +rc.getIdRangoPesoCuero()+","+rc.getNoPiezasLigero()+","+rc.getNoPiezasPesado()+","
+                +rc.getNoTotalPiezas()+","+rc.getKgTotal()+","+rc.getPrecioXKilo()+","+rc.getMermaSal()+","
+                +rc.getMermaHumedad()+","+rc.getMermaCachete()+","+rc.getMermaTarimas();
+
+        
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

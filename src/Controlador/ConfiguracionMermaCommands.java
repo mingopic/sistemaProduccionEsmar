@@ -18,15 +18,15 @@ public class ConfiguracionMermaCommands {
     static ConexionBD c=new ConexionBD();
     
     //Método que se llama para obtener la configuracion de la merma de acuerdo a su fecha de configuracion mas reciente
-    public static String[][] obtenerConfiguracionMerma() throws Exception {
+    public static String[][] obtenerConfiguracionMerma(double sal, double humedad, double cachete, double tarimas, double kgTotales, double precio, int totalPiezas, int refMerma) throws Exception {
         String query;
         
-        query= "EXEC sp_obtConfigMermas";
+        query= "EXEC sp_calCostTot "+sal+","+humedad+","+cachete+","+tarimas+","+kgTotales+","+precio+","+totalPiezas+","+refMerma;
 
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 3;
+        int columnas = 1;
         int i = 0;
 
         c.conectar();
@@ -43,9 +43,7 @@ public class ConfiguracionMermaCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) 
             {
-                datos[i][0] = rs.getString("idConfigMerma");
-                datos[i][1] = rs.getString("idTipoMerma");
-                datos[i][2] = rs.getString("porcMermaAcep");
+                datos[i][0] = rs.getString("totalPagar");
                 i++; 
             }
         }

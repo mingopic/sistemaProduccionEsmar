@@ -15,11 +15,85 @@ public class RecepcionCuero {
     String proveedor;
     String tipoCuero;
     int noCamion;
-    int totalPiezas;
-    int totalKg;
+    int idTipoCuero;
+    int idRangoPesoCuero;
+    int noPiezasLigero;
+    int noPiezasPesado;
+    int noTotalPiezas;
+    double kgTotal;
+    double precioXKilo;
+    double mermaSal;
+    double mermaHumedad;
+    double mermaCachete;
+    double mermaTarimas;
+    String fechaEntrada;
     float costoCamion;
     String fecha;
     String fecha1;
+
+    public int getNoPiezasLigero() {
+        return noPiezasLigero;
+    }
+
+    public void setNoPiezasLigero(int noPiezasLigero) {
+        this.noPiezasLigero = noPiezasLigero;
+    }
+
+    public int getNoPiezasPesado() {
+        return noPiezasPesado;
+    }
+
+    public void setNoPiezasPesado(int noPiezasPesado) {
+        this.noPiezasPesado = noPiezasPesado;
+    }
+
+    public double getPrecioXKilo() {
+        return precioXKilo;
+    }
+
+    public void setPrecioXKilo(double precioXKilo) {
+        this.precioXKilo = precioXKilo;
+    }
+
+    public double getMermaSal() {
+        return mermaSal;
+    }
+
+    public void setMermaSal(double mermaSal) {
+        this.mermaSal = mermaSal;
+    }
+
+    public double getMermaHumedad() {
+        return mermaHumedad;
+    }
+
+    public void setMermaHumedad(double mermaHumedad) {
+        this.mermaHumedad = mermaHumedad;
+    }
+
+    public double getMermaCachete() {
+        return mermaCachete;
+    }
+
+    public void setMermaCachete(double mermaCachete) {
+        this.mermaCachete = mermaCachete;
+    }
+
+    public double getMermaTarimas() {
+        return mermaTarimas;
+    }
+
+    public void setMermaTarimas(double mermaTarimas) {
+        this.mermaTarimas = mermaTarimas;
+    }
+
+    public String getFechaEntrada() {
+        return fechaEntrada;
+    }
+
+    public void setFechaEntrada(String fechaEntrada) {
+        this.fechaEntrada = fechaEntrada;
+    }
 
     public int getIdRegistro() {
         return idRegistro;
@@ -60,21 +134,37 @@ public class RecepcionCuero {
     public void setNoCamion(int noCamion) {
         this.noCamion = noCamion;
     }
-
-    public int getTotalPiezas() {
-        return totalPiezas;
+    
+    public int getIdTipoCuero() {
+        return idTipoCuero;
     }
 
-    public void setTotalPiezas(int totalPiezas) {
-        this.totalPiezas = totalPiezas;
+    public void setIdTipoCuero(int idTipoCuero) {
+        this.idTipoCuero = idTipoCuero;
+    }
+    
+    public int getIdRangoPesoCuero() {
+        return idRangoPesoCuero;
     }
 
-    public int getTotalKg() {
-        return totalKg;
+    public void setIdRangoPesoCuero(int idRangoPesoCuero) {
+        this.idRangoPesoCuero = idRangoPesoCuero;
     }
 
-    public void setTotalKg(int totalKg) {
-        this.totalKg = totalKg;
+    public int getNoTotalPiezas() {
+        return noTotalPiezas;
+    }
+
+    public void setNoTotalPiezas(int totalPiezas) {
+        this.noTotalPiezas = totalPiezas;
+    }
+
+    public double getKgTotal() {
+        return kgTotal;
+    }
+
+    public void setKgTotal(double totalKg) {
+        this.kgTotal = totalKg;
     }
 
     public float getCostoCamion() {

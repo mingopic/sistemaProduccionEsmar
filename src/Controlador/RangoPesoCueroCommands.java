@@ -28,7 +28,7 @@ public class RangoPesoCueroCommands {
         Statement stmt = null;
         ResultSet rs = null;
         int renglones = 0;
-        int columnas = 2;
+        int columnas = 3;
         int i = 0;
         
         c.conectar();
@@ -42,8 +42,9 @@ public class RangoPesoCueroCommands {
 
             //Recorremos el ResultSet registro a registro
             while (rs.next()) {
-                rangoPesoCuero[i][0]= rs.getString("rangoMin");
-                rangoPesoCuero[i][1]= rs.getString("rangoMax");
+                rangoPesoCuero[i][0]= rs.getString("idRangoPesoCuero");
+                rangoPesoCuero[i][1]= rs.getString("rangoMin");
+                rangoPesoCuero[i][2]= rs.getString("rangoMax");
                 i++;
             }
         }

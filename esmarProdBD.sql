@@ -453,30 +453,63 @@ create procedure sp_obtNoCamion
 go
 
 create procedure sp_obtRangoPesoCuero 
-	as begin
-		select
-			rangoMin
-			,rangoMax
-		from
-			tb_rangoPesoCuero
-		where
-			fechaConfig = 
-			(
-				select 
-					max(fechaConfig)
-				from
-					tb_rangoPesoCuero
-			)
-	end
+as begin
+	select
+		idRangoPesoCuero
+		,rangoMin
+		,rangoMax
+	from
+		tb_rangoPesoCuero
+	where
+		fechaConfig = 
+		(
+			select 
+				max(fechaConfig)
+			from
+				tb_rangoPesoCuero
+		)
+end
 go
 
 create procedure sp_obtTipoCuero
 	as begin
 		select 
-			descripcion 
+			idTipoCuero,descripcion 
 		from 
 			tb_tipoCuero
 	end
+go
+
+create procedure sp_agrEntRecCuero
+(
+	@idProveedor int
+	,@noCamion int
+	,@idTipoCuero int
+	,@idRangoPesoCuero int
+	,@noPiezasLigero int
+	,@noPiezasPesado int
+	,@noTotalPiezas int
+	,@kgTotal float
+	,@precioXKilo float
+	,@mermaSal float
+	,@mermaHumedad float
+	,@mermaCachete float
+	,@mermaTarimas float
+)
+as begin
+	declare @fechaEntrada datetime
+	set @fechaEntrada =
+		(
+			select
+				getdate()
+		)
+	
+	insert into
+		tb_recepcionCuero
+	values
+		(@idProveedor,@noCamion,@idTipoCuero,@idRangoPesoCuero,@noPiezasLigero,@noPiezasPesado,@noTotalPiezas,@kgTotal,
+		@precioXKilo,@mermaSal,@mermaHumedad,@mermaCachete,@mermaTarimas,@fechaEntrada)
+end
 go
 
 -- DATOS DE PRUEBAS --

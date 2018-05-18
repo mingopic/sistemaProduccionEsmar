@@ -18,15 +18,16 @@ public class TipoCueroCommands {
     static ConexionBD c=new ConexionBD();
     
     //Método para llenar el combobox con los tipos de cuero existentes
-    public static String[] llenarComboboxTipoCuero() throws Exception
+    public static String[][] llenarComboboxTipoCuero() throws Exception
     {
-        String[] tipoCuero=null;
+        String[][] tipoCuero=null;
         
         String query="execute sp_obtTipoCuero";
         
         Statement stmt = null;
         ResultSet rs = null;
         int renglones = 0;
+        int columnas = 2;
         int i = 0;
         
         c.conectar();
@@ -35,12 +36,13 @@ public class TipoCueroCommands {
         
         if (rs.last()) {
             renglones = rs.getRow();
-            tipoCuero = new String[renglones];
+            tipoCuero = new String[renglones][columnas];
             rs.beforeFirst();
 
             //Recorremos el ResultSet registro a registro
             while (rs.next()) {
-                tipoCuero[i]= rs.getString("descripcion");
+                tipoCuero[i][0]= rs.getString("idTipoCuero");
+                tipoCuero[i][1]= rs.getString("descripcion");
                 i++;
             }
         }

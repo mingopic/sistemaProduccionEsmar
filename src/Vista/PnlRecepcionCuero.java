@@ -299,7 +299,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     //Método que abre el dialogo de agregar entrada de producto por trabajar 
     public void abrirDialogoAgregar() throws Exception
     {    
-        dlgAgregarRecepcion.setSize(600, 450);
+        dlgAgregarRecepcion.setSize(600, 550);
         dlgAgregarRecepcion.setPreferredSize(dlgAgregarRecepcion.getSize());
         dlgAgregarRecepcion.setLocationRelativeTo(null);
         dlgAgregarRecepcion.setAlwaysOnTop(true);
@@ -464,12 +464,24 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             datosConfMerma = cmc.obtenerConfiguracionMerma(mermaSal,mermaHumedad,mermaCachete,tarimas,kgTotales,precio,noTotalPiezas,refMerma);
             
             double costoTotalCamion = Double.parseDouble(datosConfMerma[0][0]);
-
+            double salAcep = Double.parseDouble(datosConfMerma[0][1]);
+            double humedadAcep = Double.parseDouble(datosConfMerma[0][2]);
+            double cacheteAcep = Double.parseDouble(datosConfMerma[0][3]);
+            double tarimasAcep = Double.parseDouble(datosConfMerma[0][4]);
+            
+            txtMermaSalAceptada.setText(String.valueOf(salAcep));
+            txtMermaHumedadAceptada.setText(String.valueOf(humedadAcep));
+            txtMermaCacheteAceptada.setText(String.valueOf(cacheteAcep));
+            txtTarimasAceptada.setText(String.valueOf(tarimasAcep));
             txtCostoTotalCamion.setText(String.valueOf(costoTotalCamion));
         }
         catch (Exception e)
         {
             txtCostoTotalCamion.setText(String.valueOf(0));
+            txtMermaSalAceptada.setText(String.valueOf(0));
+            txtMermaHumedadAceptada.setText(String.valueOf(0));
+            txtMermaCacheteAceptada.setText(String.valueOf(0));
+            txtTarimasAceptada.setText(String.valueOf(0));
         }
     }
     
@@ -739,6 +751,15 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         txtRefMerma = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         cmbTipoCueroAgregar = new javax.swing.JComboBox<>();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        txtMermaSalAceptada = new javax.swing.JTextField();
+        jLabel33 = new javax.swing.JLabel();
+        txtMermaHumedadAceptada = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        txtMermaCacheteAceptada = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        txtTarimasAceptada = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRecepcionCuero = new javax.swing.JTable();
@@ -968,6 +989,29 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
 
         cmbTipoCueroAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
+        jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel31.setText("Mermas Aceptadas");
+
+        jLabel32.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel32.setText("Sal (Kg)");
+
+        txtMermaSalAceptada.setEditable(false);
+
+        jLabel33.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel33.setText("Humedad");
+
+        txtMermaHumedadAceptada.setEditable(false);
+
+        jLabel35.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel35.setText("Cachete");
+
+        txtMermaCacheteAceptada.setEditable(false);
+
+        jLabel36.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel36.setText("Tarimas");
+
+        txtTarimasAceptada.setEditable(false);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -978,34 +1022,53 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel18)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel31)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel19)
+                                        .addComponent(jLabel32)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMermaSal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtMermaSalAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(28, 28, 28)
-                                        .addComponent(jLabel20))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel26)
+                                        .addComponent(jLabel33)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtRefMerma, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel23)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtCostoTotalCamion, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(txtMermaHumedad, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtMermaHumedadAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(34, 34, 34)
-                                        .addComponent(jLabel21)
+                                        .addComponent(jLabel35)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMermaCachete, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtMermaCacheteAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(27, 27, 27)
-                                        .addComponent(jLabel22)
+                                        .addComponent(jLabel36)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtTarimas, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(txtTarimasAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addComponent(jLabel19)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMermaSal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(28, 28, 28)
+                                            .addComponent(jLabel20))
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addComponent(jLabel26)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtRefMerma, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addComponent(jLabel23)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtCostoTotalCamion, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addComponent(txtMermaHumedad, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(34, 34, 34)
+                                            .addComponent(jLabel21)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtMermaCachete, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(27, 27, 27)
+                                            .addComponent(jLabel22)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtTarimas, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                         .addGap(0, 54, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1114,7 +1177,23 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(txtCostoCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel36)
+                        .addComponent(txtTarimasAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtMermaCacheteAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel35))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtMermaHumedadAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel33))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel32)
+                        .addComponent(txtMermaSalAceptada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1130,7 +1209,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel19)
                         .addComponent(txtMermaSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(txtCostoTotalCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1654,7 +1733,12 @@ try {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1678,8 +1762,11 @@ try {
     private javax.swing.JTextField txtCostoTotalCamion;
     private javax.swing.JTextField txtKgTotales;
     private javax.swing.JTextField txtMermaCachete;
+    private javax.swing.JTextField txtMermaCacheteAceptada;
     private javax.swing.JTextField txtMermaHumedad;
+    private javax.swing.JTextField txtMermaHumedadAceptada;
     private javax.swing.JTextField txtMermaSal;
+    private javax.swing.JTextField txtMermaSalAceptada;
     private javax.swing.JTextField txtNoCamion;
     private javax.swing.JTextField txtNoPiezasLigeros;
     private javax.swing.JTextField txtNoPiezasPesados;
@@ -1687,5 +1774,6 @@ try {
     private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtRefMerma;
     private javax.swing.JTextField txtTarimas;
+    private javax.swing.JTextField txtTarimasAceptada;
     // End of variables declaration//GEN-END:variables
 }

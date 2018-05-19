@@ -26,7 +26,7 @@ public class ConfiguracionMermaCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 1;
+        int columnas = 5;
         int i = 0;
 
         c.conectar();
@@ -44,6 +44,10 @@ public class ConfiguracionMermaCommands {
             while (rs.next()) 
             {
                 datos[i][0] = rs.getString("totalPagar");
+                datos[i][1] = rs.getString("salAcep");
+                datos[i][2] = rs.getString("humedadAcep");
+                datos[i][3] = rs.getString("cacheteAcep");
+                datos[i][4] = rs.getString("tarimasAcep");
                 i++; 
             }
         }

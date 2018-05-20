@@ -19,12 +19,14 @@ create table tb_usuario(
 	, contrasenia varchar(15)
 	, nombre varchar(25)
 	, tipo varchar(10)
+	, constraint un_usuario unique(usuario)
 );
 go
 
 create table tb_tipoMerma (
 	idTipoMerma int not null identity(1,1) primary key
 	, descripcion varchar(50)
+	, constraint un_descripcionMerma unique(descripcion)
 );
 go
 
@@ -39,6 +41,7 @@ go
 create table tb_tipoCuero (
     idTipoCuero int not null identity(1,1) primary key
 	, descripcion varchar(20)
+	, constraint un_descripcionTipoCuero unique(descripcion)
 );
 go
 
@@ -46,6 +49,7 @@ create table tb_proveedor (
 	idProveedor int not null identity(1,1) primary key
 	, nombreProveedor varchar(100)
 	, estatus int
+	, constraint un_nombreProveedor unique(nombreProveedor) 
 );
 go
 
@@ -79,6 +83,7 @@ go
 create table tb_proceso (
 	idProceso int not null identity(1,1) primary key
 	, descripcion varchar(20)
+	, constraint un_descripcionProceso unique(descripcion) 
 );
 go
 
@@ -86,6 +91,7 @@ create table tb_subProceso (
 	idSubproceso int not null identity(1,1) primary key
 	, idProceso int not null foreign key references tb_proceso(idProceso)
 	, descripcion varchar(50)
+	, constraint un_descripcionSubProceso unique(descripcion) 
 );
 go
 
@@ -123,11 +129,64 @@ go
 create procedure sp_obtProv
 	as begin
 		select 
+			nombreProveedor, estatus
+		from
+			tb_proveedor
+	end
+go
+
+create procedure sp_obtProvAct
+	as begin
+		select 
 			idProveedor, nombreProveedor 
 		from 
 			tb_proveedor 
 		where 
 			estatus = 1
+	end
+go
+
+create procedure sp_obtProvXnombre
+	(
+		@nombreProveedor varchar(100)
+	)
+	as begin
+		select 
+			*
+		from
+			tb_proveedor
+		where
+			nombreProveedor = @nombreProveedor
+	end
+go
+
+create procedure sp_insProv
+	(
+		@nombreProveedor varchar(100)
+		, @estatus int
+	)
+	as begin
+		insert into
+			tb_proveedor 
+		values
+			(@nombreProveedor,@estatus)
+	end
+go
+
+create procedure sp_actProv
+	(
+		@nombreProveedor varchar(100)
+		, @estatus int
+		, @idProveedor int
+	)
+	as begin
+		update
+			tb_proveedor 
+		set
+			nombreProveedor = @nombreProveedor
+			, estatus = @estatus
+		where
+			idProveedor = @idProveedor
 	end
 go
 
@@ -253,21 +312,107 @@ create procedure sp_obtProc
 			*
 		from 
 			tb_proceso
+		order by
+			idProceso
 	end
 go
 
-create procedure sp_obtSubProc 
+create procedure sp_obtSubProc
 	(
-		@idProceso int
+		@nombreproceso varchar(20)
 	)
 	as begin
 		select
-			descripcion
-			, idSubProceso
+			sp.idSubProceso, sp.descripcion as 'subProceso', p.descripcion as 'proceso'
+		from 
+			tb_subProceso as sp inner join tb_proceso as p
+			on sp.idProceso = p.idProceso
+		where
+			p.descripcion like @nombreproceso 
+		order by
+			sp.idProceso
+	end
+go
+
+create procedure sp_obtSubProcXid
+	(
+		@nombreSubProceso varchar(20)
+	)
+	as begin
+		select
+			*
+		from 
+			tb_subProceso
+		where
+			descripcion like @nombreSubProceso 
+	end
+go
+
+create procedure sp_obtSubProcXdesc
+	(
+		@subProceso varchar(20)
+	)
+	as begin
+		select
+			*
 		from 
 			tb_subProceso
 		where 
+			descripcion = @subProceso
+	end
+go
+
+create procedure sp_insSubProc
+	(
+		@subProceso varchar(20)
+		, @proceso varchar(20)
+	)
+	as begin
+		declare @idProceso int
+		
+		set @idProceso = 
+		(
+			select
+				idProceso
+			from 
+				tb_proceso
+			where 
+				descripcion = @proceso
+		)
+		
+		insert into 
+			tb_subProceso
+		values
+			(@idProceso,@subProceso)
+	end
+go
+
+create procedure sp_actSubProc
+	(
+		@subProceso varchar(20)
+		, @proceso varchar(20)
+		, @idSubProceso int
+	)
+	as begin
+		declare @idProceso int
+		
+		set @idProceso = 
+		(
+			select
+				idProceso
+			from 
+				tb_proceso
+			where 
+				descripcion = @proceso
+		)
+		
+		update
+			tb_subProceso
+		set
 			idProceso = @idProceso
+			, descripcion = @subProceso
+		where
+			idSubProceso = @idSubProceso
 	end
 go
 

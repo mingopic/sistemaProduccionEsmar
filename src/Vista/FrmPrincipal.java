@@ -24,6 +24,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlPrincipal pnlPrincipal;
     PnlRecepcionCuero pnlRecepcionCuero;
     PnlInsXproc pnlInsXproc;
+    PnlProveedores pnlProveedores;
+    PnlSubProcesos pnlSubProcesos;
     ConexionBD conexionBD;
     /**
      * Creates new form FrmPrincipal
@@ -37,10 +39,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     {
         conexionBD = new ConexionBD();
         //Colocar icono de la aplicación
-        Image ico=new ImageIcon(getClass().getResource("/imagenes/esmar.png")).getImage();
+        Image ico = new ImageIcon(getClass().getResource("/imagenes/esmar.png")).getImage();
         setIconImage(ico);        
         //Titulo de la aplicación
         this.setTitle("Sistema de producción V.1.0");
+        
+        ImageIcon fot = new ImageIcon("src/imagenes/logoEsmar_CH.png");
+        Icon icono = new ImageIcon(fot.getImage().getScaledInstance(lblLogoSistema.getWidth(), lblLogoSistema.getHeight(), Image.SCALE_DEFAULT));
+        lblLogoSistema.setIcon(icono);
+        this.repaint();
         
         //Inicializamos las propiedades del dialogo:
         dlgLogin.setSize(560, 322);
@@ -64,6 +71,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             {
                 dlgLogin.setVisible(false);
                 this.setVisible(true);
+                this.setExtendedState(MAXIMIZED_BOTH);
                 pnlPrincipal=new PnlPrincipal();
                 pnlPrincipalx.removeAll();        
                 pnlPrincipalx.add(pnlPrincipal, BorderLayout.CENTER);
@@ -114,6 +122,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lblLogo = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         lblContrasenia = new javax.swing.JLabel();
+        try {
+            pnlProveedores1 = new Vista.PnlProveedores();
+        } catch (java.lang.Exception e1) {
+            e1.printStackTrace();
+        }
         jPanel1 = new javax.swing.JPanel();
         pnlMenu = new javax.swing.JPanel();
         btnInicio = new javax.swing.JButton();
@@ -131,7 +144,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lblTipoUsuario = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         lblVentana = new javax.swing.JLabel();
-        lblLogoEsmar = new javax.swing.JLabel();
+        lblLogoSistema = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmpArchivo = new javax.swing.JMenu();
         jmSalir = new javax.swing.JMenuItem();
@@ -445,31 +458,29 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addComponent(lblVentana, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
         );
 
-        lblLogoEsmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoEsmar_CH.png"))); // NOI18N
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlFooter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblLogoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblLogoEsmar)))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblLogoEsmar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblLogoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -505,10 +516,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jmProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
         jmProveedores.setText("Proveedores");
+        jmProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmProveedoresActionPerformed(evt);
+            }
+        });
         jmpCatalogos.add(jmProveedores);
 
         jmSubProcesos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
         jmSubProcesos.setText("SubProcesos");
+        jmSubProcesos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmSubProcesosActionPerformed(evt);
+            }
+        });
         jmpCatalogos.add(jmSubProcesos);
 
         jMenuBar1.add(jmpCatalogos);
@@ -645,6 +666,42 @@ public class FrmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jmpConfiguracionesMouseClicked
 
+    private void jmProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmProveedoresActionPerformed
+        try 
+        {
+            pnlProveedores = new PnlProveedores();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlProveedores, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlProveedores.getGraphics());
+            
+            lblVentana.setText("Catálogo de Proveedores");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\group.png");
+            lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jmProveedoresActionPerformed
+
+    private void jmSubProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSubProcesosActionPerformed
+        try 
+        {
+            pnlSubProcesos = new PnlSubProcesos();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlSubProcesos, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlSubProcesos.getGraphics());
+            
+            lblVentana.setText("Catálogo de SubProcesos");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jmSubProcesosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -713,7 +770,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jmpConfiguraciones;
     private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblLogo;
-    private javax.swing.JLabel lblLogoEsmar;
+    private javax.swing.JLabel lblLogoSistema;
     private javax.swing.JLabel lblMenui;
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblTipoUsuario;
@@ -722,6 +779,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pnlFooter;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlPrincipalx;
+    private Vista.PnlProveedores pnlProveedores1;
     private javax.swing.JPasswordField ptxtContrasenia;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

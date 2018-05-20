@@ -146,7 +146,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         
         try {
             
-            subProceso = subPc.obtenerListaSubprocesos(pr);
+            subProceso = subPc.obtenerListaSubprocesosXid(pr);
             
             dtm = new DefaultTableModel(subProceso, cols){
             public boolean isCellEditable(int row, int column) {

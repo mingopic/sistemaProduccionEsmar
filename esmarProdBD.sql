@@ -417,154 +417,155 @@ create procedure sp_actSubProc
 go
 
 create procedure sp_calCostTot
+(
+	@sal float
+	, @humedad float
+	, @cachete float
+	, @tarimas float
+	, @kgTotales float
+	, @precio float
+	, @piezasTotales int
+	, @refParaMerma int
+)
+as begin
+	declare @salAcep float
+	declare @humedadAcep float
+	declare @cacheteAcep float
+	declare @tarimasAcep float
+	declare @salReal float
+	declare @humedadReal float
+	declare @cacheteReal float
+	declare @tarimasReal float
+	declare @salDiferencia float
+	declare @HumedadDiferencia float
+	declare @cacheteDiferencia float
+	declare @tarimasDiferencia float
+	declare @salDescontar float
+	declare @humedadDescontar float
+	declare @cacheteDescontar float
+	declare @tarimasDescontar float
+	declare @totalKgDescontar float
+	declare @totalDescontar float
+	declare @totalPagar float
+	
+	set @salAcep =
 	(
-		@sal float
-		, @humedad float
-		, @cachete float
-		, @tarimas float
-		, @kgTotales float
-		, @precio float
-		, @piezasTotales int
-		, @refParaMerma int
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 1
+			)
 	)
-	as begin
-		declare @salAcep float
-		declare @humedadAcep float
-		declare @cacheteAcep float
-		declare @tarimasAcep float
-		declare @salReal float
-		declare @humedadReal float
-		declare @cacheteReal float
-		declare @tarimasReal float
-		declare @salDiferencia float
-		declare @HumedadDiferencia float
-		declare @cacheteDiferencia float
-		declare @tarimasDiferencia float
-		declare @salDescontar float
-		declare @humedadDescontar float
-		declare @cacheteDescontar float
-		declare @tarimasDescontar float
-		declare @totalKgDescontar float
-		declare @totalDescontar float
-		declare @totalPagar float
-		
-		set @salAcep =
-		(
-			select
-				porcMermaAcep
-			from
-				tb_configMerma
-			where
-				idConfigMerma =
-				(
-					select
-						max(idConfigMerma)
-					from
-						tb_configMerma
-					where
-						idTipoMerma = 1
-				)
-		)
-		
-		set @humedadAcep =
-		(
-			select
-				porcMermaAcep
-			from
-				tb_configMerma
-			where
-				idConfigMerma =
-				(
-					select
-						max(idConfigMerma)
-					from
-						tb_configMerma
-					where
-						idTipoMerma = 2
-				)
-		)
-		
-		set @humedadAcep = @humedadAcep * @kgTotales
-		
-		set @cacheteAcep =
-		(
-			select
-				porcMermaAcep
-			from
-				tb_configMerma
-			where
-				idConfigMerma =
-				(
-					select
-						max(idConfigMerma)
-					from
-						tb_configMerma
-					where
-						idTipoMerma = 3
-				)
-		)
-		
-		set @tarimasAcep =
-		(
-			select
-				porcMermaAcep
-			from
-				tb_configMerma
-			where
-				idConfigMerma =
-				(
-					select
-						max(idConfigMerma)
-					from
-						tb_configMerma
-					where
-						idTipoMerma = 4
-				)
-		)
-		
-		set @salReal = @sal/@piezasTotales
-		set @humedadReal = (@humedad/@refParaMerma)*@piezasTotales
-		set @cacheteReal = @cachete/@refParaMerma
-		set @tarimasReal = @tarimas
-		
-		set @salDiferencia = @salReal-@salAcep
-		set @humedadDiferencia = @humedadReal-@humedadAcep
-		set @cacheteDiferencia = @cacheteReal-@cacheteAcep
-		set @tarimasDiferencia = @tarimasReal-@tarimasAcep
-		
-		set @salDescontar = @salDiferencia*@piezasTotales
-		set @humedadDescontar = @humedadDiferencia
-		set @cacheteDescontar = @cacheteDiferencia*@piezasTotales
-		set @tarimasDescontar = @tarimasDiferencia
-		
-		set @totalDescontar = 0
-		
-		if (@salDescontar > 0)
-		begin
-			select @totalDescontar = @totalDescontar+@salDescontar
-		end
-		
-		if (@humedadDescontar > 0)
-		begin
-			select @totalDescontar = @totalDescontar+@humedadDescontar
-		end
-		
-		if (@cacheteDescontar > 0)
-		begin
-			select @totalDescontar = @totalDescontar+@cacheteDescontar
-		end
-		
-		if (@tarimasDescontar > 0)
-		begin
-			select @totalDescontar = @totalDescontar+@tarimasDescontar
-		end
-		
-		set @totalKgDescontar = @kgTotales-@totalDescontar
-		set @totalPagar = @totalKgDescontar*@precio
-		
-		select @totalPagar as totalPagar
+	
+	set @humedadAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 2
+			)
+	)
+	
+	set @humedadAcep = @humedadAcep * @kgTotales
+	
+	set @cacheteAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 3
+			)
+	)
+	
+	set @tarimasAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 4
+			)
+	)
+	
+	set @salReal = @sal/@piezasTotales
+	set @humedadReal = (@humedad/@refParaMerma)*@piezasTotales
+	set @cacheteReal = @cachete/@refParaMerma
+	set @tarimasReal = @tarimas
+	
+	set @salDiferencia = @salReal-@salAcep
+	set @humedadDiferencia = @humedadReal-@humedadAcep
+	set @cacheteDiferencia = @cacheteReal-@cacheteAcep
+	set @tarimasDiferencia = @tarimasReal-@tarimasAcep
+	
+	set @salDescontar = @salDiferencia*@piezasTotales
+	set @humedadDescontar = @humedadDiferencia
+	set @cacheteDescontar = @cacheteDiferencia*@piezasTotales
+	set @tarimasDescontar = @tarimasDiferencia
+	
+	set @totalDescontar = 0
+	
+	if (@salDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@salDescontar
 	end
-	go
+	
+	if (@humedadDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@humedadDescontar
+	end
+	
+	if (@cacheteDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@cacheteDescontar
+	end
+	
+	if (@tarimasDescontar > 0)
+	begin
+		select @totalDescontar = @totalDescontar+@tarimasDescontar
+	end
+	
+	set @totalKgDescontar = @kgTotales-@totalDescontar
+	set @totalPagar = @totalKgDescontar*@precio
+	
+	select
+		@totalPagar as totalPagar, @salAcep as salAcep, @humedadAcep as humedadAcep, @cacheteAcep as cacheteAcep,
+		@tarimasAcep as tarimasAcep
+end
 
 create procedure sp_obtNoCamion 
 	(

@@ -12,17 +12,17 @@ import java.sql.Statement;
  *
  * @author Equipo
  */
-public class ProveedorCommands {
+public class TipoCueroCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();
     
-    //Método para llenar el combobox con los datos de los productos existentes
-    public static String[][] llenarComboboxProveedores() throws Exception
+    //Método para llenar el combobox con los tipos de cuero existentes
+    public static String[][] llenarComboboxTipoCuero() throws Exception
     {
-        String[][] proveedores=null;
+        String[][] tipoCuero=null;
         
-        String query="execute sp_obtProv";
+        String query="execute sp_obtTipoCuero";
         
         Statement stmt = null;
         ResultSet rs = null;
@@ -36,13 +36,13 @@ public class ProveedorCommands {
         
         if (rs.last()) {
             renglones = rs.getRow();
-            proveedores = new String[renglones][columnas];
+            tipoCuero = new String[renglones][columnas];
             rs.beforeFirst();
 
             //Recorremos el ResultSet registro a registro
             while (rs.next()) {
-                proveedores[i][0]= rs.getString("idProveedor");
-                proveedores[i][1]= rs.getString("nombreProveedor");
+                tipoCuero[i][0]= rs.getString("idTipoCuero");
+                tipoCuero[i][1]= rs.getString("descripcion");
                 i++;
             }
         }
@@ -50,6 +50,6 @@ public class ProveedorCommands {
         rs.close();
         stmt.close();
         c.desconectar();
-        return proveedores;
+        return tipoCuero;
     }
 }

@@ -6,6 +6,8 @@
 package Controlador;
 
 import Modelo.RecepcionCuero;
+import Modelo.TipoCuero;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -19,13 +21,12 @@ public class RecepcionCueroCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();
-    private final String imagen="/Reportes/logo_esmar.png";
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc) throws Exception {
+    public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc, TipoCuero tp) throws Exception {
         String query;
         
-        query= "EXEC sp_obtEntReccuero '"+rc.getProveedor()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
+        query= "EXEC sp_obtEntReccuero '"+rc.getProveedor()+"','"+tp.getDescripcion()+"','"+rc.getFecha()+"','"+rc.getFecha1()+"';";
 
         
         String[][] datos = null;
@@ -66,5 +67,59 @@ public class RecepcionCueroCommands {
         stmt.close();
         c.desconectar();
         return datos;
+    }
+    
+    //Método que se llama para obtener la lista de los cueros por trabajar
+    public static String[] llenarNoCamiones(RecepcionCuero rc) throws Exception {
+        String query;
+        
+        query= "EXEC sp_obtNoCamion "+rc.getIdProveedor();
+
+        
+        String[] datos = null;
+        int renglones = 0;
+        int i = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+            renglones = rs.getRow();
+            datos = new String[renglones];
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos[i] = rs.getString("noCamion");
+                i++; 
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
+    }
+    
+    //Método que se llama para insertar una entrada de recepcion de cuero
+    public static void InsertarEntradaRecepcionCuero(RecepcionCuero rc) throws Exception {
+        String query;
+        
+        query= "EXEC sp_agrEntRecCuero "+rc.getIdProveedor()+","+rc.getNoCamion()+","+rc.getIdTipoCuero()+","
+                +rc.getIdRangoPesoCuero()+","+rc.getNoPiezasLigero()+","+rc.getNoPiezasPesado()+","
+                +rc.getNoTotalPiezas()+","+rc.getKgTotal()+","+rc.getPrecioXKilo()+","+rc.getMermaSal()+","
+                +rc.getMermaHumedad()+","+rc.getMermaCachete()+","+rc.getMermaTarimas();
+
+        
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

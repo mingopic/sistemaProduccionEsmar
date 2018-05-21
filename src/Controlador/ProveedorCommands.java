@@ -134,7 +134,7 @@ public class ProveedorCommands {
     
     //Método que se llama para actualizar detos de un proveedor
     public static void actualizarProveedor(Proveedor p) throws Exception {
-        String query= "execute sp_actProv "+p.getNombreProveedor()+","+p.getEstatus()+","+p.getIdProveedor();
+        String query= "execute sp_actProv '"+p.getNombreProveedor()+"',"+p.getEstatus()+","+p.getIdProveedor();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

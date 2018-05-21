@@ -336,7 +336,7 @@ go
 
 create procedure sp_obtSubProcXid
 	(
-		@nombreSubProceso varchar(20)
+		@idProceso int
 	)
 	as begin
 		select
@@ -344,7 +344,7 @@ create procedure sp_obtSubProcXid
 		from 
 			tb_subProceso
 		where
-			descripcion like @nombreSubProceso 
+			idProceso = @idProceso 
 	end
 go
 
@@ -566,6 +566,7 @@ as begin
 		@totalPagar as totalPagar, @salAcep as salAcep, @humedadAcep as humedadAcep, @cacheteAcep as cacheteAcep,
 		@tarimasAcep as tarimasAcep
 end
+go
 
 create procedure sp_obtNoCamion 
 	(
@@ -674,6 +675,15 @@ insert into
 values 
 	('SAL'),('HUMEDAD'),('CACHETE'),('TARIMAS');
 
+insert into 
+	tb_configMerma 
+values
+	('1', '0.3', '2018-05-20T22:40:03.000')
+	, ('2', '0.01', '2018-05-20T22:40:03.000')
+	, ('3', '0.033', '2018-05-20T22:40:03.000')
+	, ('4', '0', '2018-05-20T22:40:03.000');
+	
+	
 insert into 
 	tb_proceso ("descripcion") 
 values 

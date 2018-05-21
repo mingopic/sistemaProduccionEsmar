@@ -17,6 +17,7 @@ import Modelo.Proveedor;
 import Modelo.RangoPesoCuero;
 import Modelo.RecepcionCuero;
 import Modelo.TipoCuero;
+import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Mingo
  */
 public class PnlRecepcionCuero extends javax.swing.JPanel {
+    PnlInsRecCuero pnlInsRecCuero;
     ConexionBD conexion;
     RecepcionCuero rc;
     RecepcionCueroCommands rcc;
@@ -1514,13 +1517,7 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
-//        try {
-//            actualizarTablaCueroTrabajar();
-//            ctc.mostrarReporteInventarioTrabajar(ct);
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Error de conexión a BD","Mensaje de error",JOptionPane.ERROR_MESSAGE);
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed
@@ -1547,10 +1544,26 @@ try {
     }//GEN-LAST:event_cmbProveedorActionPerformed
 
     private void btnAgregarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEntradaActionPerformed
-        try {
-            abrirDialogoAgregar();
-        } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//        try {
+//            abrirDialogoAgregar();
+//        } catch (Exception ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
+         try 
+         {
+            pnlInsRecCuero = new PnlInsRecCuero();
+            FrmPrincipal.pnlPrincipalx.removeAll();
+            FrmPrincipal.pnlPrincipalx.add(pnlInsRecCuero, BorderLayout.CENTER);
+            FrmPrincipal.pnlPrincipalx.paintAll(pnlInsRecCuero.getGraphics());
+            
+            FrmPrincipal.lblVentana.setText("Agregar Recepción Cuero");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\lorry.png");
+            FrmPrincipal.lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAgregarEntradaActionPerformed
 

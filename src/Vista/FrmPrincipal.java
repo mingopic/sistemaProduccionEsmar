@@ -152,6 +152,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmProveedores = new javax.swing.JMenuItem();
         jmSubProcesos = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
+        jmMermas = new javax.swing.JMenuItem();
+        jmRangosPeso = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -541,6 +543,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 jmpConfiguracionesMouseClicked(evt);
             }
         });
+
+        jmMermas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+        jmMermas.setText("Mermas");
+        jmpConfiguraciones.add(jmMermas);
+
+        jmRangosPeso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        jmRangosPeso.setText("Rangos Peso");
+        jmpConfiguraciones.add(jmRangosPeso);
+
         jMenuBar1.add(jmpConfiguraciones);
 
         jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
@@ -761,7 +772,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JMenuItem jmMermas;
     private javax.swing.JMenuItem jmProveedores;
+    private javax.swing.JMenuItem jmRangosPeso;
     private javax.swing.JMenuItem jmSalir;
     private javax.swing.JMenuItem jmSubProcesos;
     private javax.swing.JMenu jmpAcercaDe;
@@ -775,10 +788,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblTipoUsuario;
     private javax.swing.JLabel lblUsuario;
-    private javax.swing.JLabel lblVentana;
+    public static javax.swing.JLabel lblVentana;
     private javax.swing.JPanel pnlFooter;
     private javax.swing.JPanel pnlMenu;
-    private javax.swing.JPanel pnlPrincipalx;
+    public static javax.swing.JPanel pnlPrincipalx;
     private Vista.PnlProveedores pnlProveedores1;
     private javax.swing.JPasswordField ptxtContrasenia;
     private javax.swing.JTextField txtUsuario;

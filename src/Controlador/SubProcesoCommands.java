@@ -5,7 +5,9 @@
  */
 package Controlador;
 
+import static Controlador.ProcesoCommands.c;
 import Modelo.Proceso;
+import Modelo.Proveedor;
 import Modelo.SubProceso;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +26,7 @@ public class SubProcesoCommands {
     
     //Método que se llama para obtener la lista de los cueros por trabajar
     public static String[][] obtenerListaSubprocesosXid(Proceso pr) throws Exception {
-        String query= "execute sp_obtSubProcXid "+pr.getIdProceso()+";";
+        String query= "EXEC sp_obtSubProcXid "+pr.getIdProceso()+";";
         
         String[][] datos = null;
         int renglones = 0;
@@ -61,7 +63,7 @@ public class SubProcesoCommands {
     public static String[][] obtenerListaInsXSubProc(SubProceso subP) throws Exception {
         String query;
         
-        query= "execute sp_obtFormInsXSubProc "+subP.getIdSubProceso()+";";
+        query= "EXEC sp_obtFormInsXSubProc "+subP.getIdSubProceso()+";";
 
         
         String[][] datos = null;

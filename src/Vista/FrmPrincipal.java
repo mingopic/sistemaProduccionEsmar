@@ -548,7 +548,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmMermas.setText("Mermas");
         jmpConfiguraciones.add(jmMermas);
 
-        jmRangosPeso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        jmRangosPeso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
         jmRangosPeso.setText("Rangos Peso");
         jmpConfiguraciones.add(jmRangosPeso);
 

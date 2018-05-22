@@ -26,13 +26,13 @@ public class ConfiguracionMermaCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 5;
+        int columnas = 19;
         int i = 0;
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = stmt.executeQuery(query);
         System.out.println(query);
+        rs = stmt.executeQuery(query);
         
         if (rs.last()) 
         {
@@ -45,9 +45,23 @@ public class ConfiguracionMermaCommands {
             {
                 datos[i][0] = rs.getString("totalPagar");
                 datos[i][1] = rs.getString("salAcep");
-                datos[i][2] = rs.getString("humedadAcep");
+                datos[i][2] = rs.getString("humedadAcepCalc");
                 datos[i][3] = rs.getString("cacheteAcep");
                 datos[i][4] = rs.getString("tarimasAcep");
+                datos[i][5] = rs.getString("salReal");
+                datos[i][6] = rs.getString("humedadReal");
+                datos[i][7] = rs.getString("cacheteReal");
+                datos[i][8] = rs.getString("tarimasReal");
+                datos[i][9] = rs.getString("salDiferencia");
+                datos[i][10] = rs.getString("humedadDiferencia");
+                datos[i][11] = rs.getString("cacheteDiferencia");
+                datos[i][12] = rs.getString("tarimasDiferencia");
+                datos[i][13] = rs.getString("salDescontar");
+                datos[i][14] = rs.getString("humedadDescontar");
+                datos[i][15] = rs.getString("cacheteDescontar");
+                datos[i][16] = rs.getString("tarimasDescontar");
+                datos[i][17] = rs.getString("totalDescontar");
+                datos[i][18] = rs.getString("humedadAcep");
                 i++; 
             }
         }

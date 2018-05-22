@@ -278,7 +278,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jmRangosPeso">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/arrow_down_up.png"/>
+                  <Image iconType="3" name="/Imagenes/Flecha_abajo16x16.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Rangos Peso"/>
               </Properties>

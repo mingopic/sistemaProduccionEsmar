@@ -257,7 +257,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         
         
         //validamos si esta seleccionado algún proveedor para hacer filtro
-        if (cmbProveedor.getSelectedItem().toString().equals("..."))
+        if (cmbProveedor.getSelectedItem().toString().equals("<Todos>"))
         {
             rc.setProveedor("%%");
         }
@@ -267,7 +267,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         }
         
         //validamos si esta seleccionado algún tipo de cuero para hacer filtro
-        if (cmbTipoCuero.getSelectedItem().toString().equals("..."))
+        if (cmbTipoCuero.getSelectedItem().toString().equals("<Todos>"))
         {
             tc.setDescripcion("%%");
         }
@@ -1287,7 +1287,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel34.setText("   ");
         jToolBar1.add(jLabel34);
 
-        cmbProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));
+        cmbProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Todos>" }));
         cmbProveedor.setMinimumSize(new java.awt.Dimension(100, 20));
         cmbProveedor.setPreferredSize(new java.awt.Dimension(120, 25));
         cmbProveedor.addActionListener(new java.awt.event.ActionListener() {
@@ -1309,7 +1309,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel8.setText("  ");
         jToolBar1.add(jLabel8);
 
-        cmbTipoCuero.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));
+        cmbTipoCuero.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Todos>" }));
         cmbTipoCuero.setMinimumSize(new java.awt.Dimension(100, 20));
         cmbTipoCuero.setPreferredSize(new java.awt.Dimension(120, 25));
         cmbTipoCuero.addActionListener(new java.awt.event.ActionListener() {
@@ -1550,8 +1550,8 @@ try {
 //            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 
-         try 
-         {
+        try 
+        {
             pnlInsRecCuero = new PnlInsRecCuero();
             FrmPrincipal.pnlPrincipalx.removeAll();
             FrmPrincipal.pnlPrincipalx.add(pnlInsRecCuero, BorderLayout.CENTER);

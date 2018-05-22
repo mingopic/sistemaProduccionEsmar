@@ -447,6 +447,7 @@ as begin
 	declare @totalKgDescontar float
 	declare @totalDescontar float
 	declare @totalPagar float
+	declare @humedadAcepCalc float
 	
 	set @salAcep =
 	(
@@ -484,7 +485,7 @@ as begin
 			)
 	)
 	
-	set @humedadAcep = @humedadAcep * @kgTotales
+	set @humedadAcepCalc = @humedadAcep * @kgTotales
 	
 	set @cacheteAcep =
 	(
@@ -522,13 +523,30 @@ as begin
 			)
 	)
 	
-	set @salReal = @sal/@piezasTotales
-	set @humedadReal = (@humedad/@refParaMerma)*@piezasTotales
-	set @cacheteReal = @cachete/@refParaMerma
+	if (@piezasTotales = 0)
+	begin
+		set @salReal = 0
+	end
+	else
+	begin
+		set @salReal = @sal/@piezasTotales
+	end
+	
+	if (@refParaMerma = 0)
+	begin
+		set @humedadReal = 0
+		set @cacheteReal = 0
+	end
+	else
+	begin
+		set @humedadReal = (@humedad/@refParaMerma)*@piezasTotales
+		set @cacheteReal = @cachete/@refParaMerma
+	end
+	
 	set @tarimasReal = @tarimas
 	
 	set @salDiferencia = @salReal-@salAcep
-	set @humedadDiferencia = @humedadReal-@humedadAcep
+	set @humedadDiferencia = @humedadReal-@humedadAcepCalc
 	set @cacheteDiferencia = @cacheteReal-@cacheteAcep
 	set @tarimasDiferencia = @tarimasReal-@tarimasAcep
 	
@@ -563,8 +581,12 @@ as begin
 	set @totalPagar = @totalKgDescontar*@precio
 	
 	select
-		@totalPagar as totalPagar, @salAcep as salAcep, @humedadAcep as humedadAcep, @cacheteAcep as cacheteAcep,
-		@tarimasAcep as tarimasAcep
+		@totalPagar as totalPagar, @salAcep as salAcep, @humedadAcepCalc as humedadAcepCalc, @cacheteAcep as cacheteAcep,
+		@tarimasAcep as tarimasAcep, @salReal as salReal, @humedadReal as humedadReal, @cacheteReal as cacheteReal,
+		@tarimasReal as tarimasReal, @salDiferencia as salDiferencia, @humedadDiferencia as humedadDiferencia,
+		@cacheteDiferencia as cacheteDiferencia, @tarimasDiferencia as tarimasDiferencia,
+		@salDescontar as salDescontar, @humedadDescontar as humedadDescontar, @cacheteDescontar as cacheteDescontar,
+		@tarimasDescontar as tarimasDescontar, @totalDescontar as totalDescontar, @humedadAcep as humedadAcep
 end
 go
 

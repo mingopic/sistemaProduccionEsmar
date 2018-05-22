@@ -20,14 +20,25 @@ import Modelo.TipoCuero;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -49,6 +60,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     String[][] proveedoresAgregar = null;
     String[][] tipoCueroAgregar = null;
     String[][] rangoPesoCuero = null;
+    String[][] datosEntRecCuero = null;
     
     DefaultTableModel dtms=new DefaultTableModel();
     
@@ -276,14 +288,13 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             tc.setDescripcion(cmbTipoCuero.getSelectedItem().toString());
         }
         
-        String[][] datos = null;
         DefaultTableModel dtm = null;
         
         try {
             
-            datos = rcc.obtenerListaRecepcionCuero(rc,tc);
+            datosEntRecCuero = rcc.obtenerListaRecepcionCuero(rc,tc);
             
-            dtm = new DefaultTableModel(datos, cols){
+            dtm = new DefaultTableModel(datosEntRecCuero, cols){
             public boolean isCellEditable(int row, int column) {
             return false;
             }
@@ -700,6 +711,37 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
 
             rcc.InsertarEntradaRecepcionCuero(rc);
         } catch (Exception e) {
+        }
+    }
+    
+    public void generarReporteEntradaRecepcionCuero(RecepcionCuero rc, TipoCuero tp) throws Exception
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Vista/ReporteEntrada.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("proveedor",rc.getProveedor());
+            parametros.put("descripcion",tp.getDescripcion());
+            parametros.put("fecha",rc.getFecha());
+            parametros.put("fecha1",rc.getFecha1());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
             
@@ -1517,7 +1559,11 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
-        
+        try {
+            generarReporteEntradaRecepcionCuero(rc, tc);
+            actualizarTablaRecepcionCuero();
+        } catch (Exception ex) {
+        }
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed

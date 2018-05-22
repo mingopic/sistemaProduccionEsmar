@@ -549,7 +549,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jLabel64 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
         txtNoTotalPiezas = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -1010,14 +1009,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
 
         jLabel64.setText("     ");
         jToolBar1.add(jLabel64);
-
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
-        jButton2.setText("Cancelar Recepción");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -1597,7 +1588,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbProveedorAgregar;
     private javax.swing.JComboBox<String> cmbTipoCueroAgregar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

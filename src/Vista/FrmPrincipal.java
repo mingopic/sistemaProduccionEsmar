@@ -908,7 +908,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jmMermas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+        jmMermas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
         jmMermas.setText("Mermas");
         jmMermas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

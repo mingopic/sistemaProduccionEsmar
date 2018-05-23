@@ -5,7 +5,9 @@
  */
 package Controlador;
 
+import Modelo.RangoPesoCuero;
 import Modelo.RecepcionCuero;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -53,5 +55,17 @@ public class RangoPesoCueroCommands {
         stmt.close();
         c.desconectar();
         return rangoPesoCuero;
+    }
+    
+    //Método para agregar una configuracion de merma a la tabla configMerma
+    public static void agregarConfigRangoPesoCuero(RangoPesoCuero rpc) throws Exception {
+        String query = "exec sp_agrConfRanPesoCue "+rpc.getRangoMin()+""
+            + ","+rpc.getRangoMax();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

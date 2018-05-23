@@ -5,6 +5,8 @@
  */
 package Controlador;
 
+import Modelo.ConfiguracionMerma;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -70,5 +72,59 @@ public class ConfiguracionMermaCommands {
         stmt.close();
         c.desconectar();
         return datos;
+    }
+    
+    //Método que se llama para obtener la configuracion de la merma de acuerdo a su fecha de configuracion mas reciente
+    public static String[][] obtenerConfiguracionesMerma() throws Exception {
+        String query;
+        
+        query= "EXEC sp_obtConfMerma";
+
+        
+        String[][] datos = null;
+        int renglones = 0;
+        int columnas = 4;
+        int i = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) 
+        {
+            renglones = rs.getRow();
+            datos = new String[renglones][columnas];
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos[i][0] = rs.getString("salAcep");
+                datos[i][1] = rs.getString("humedadAcep");
+                datos[i][2] = rs.getString("cacheteAcep");
+                datos[i][3] = rs.getString("tarimasAcep");
+                i++; 
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
+    }
+    
+     //Método para agregar una configuracion de merma a la tabla configMerma
+    public static void agregarConfigMerma(ConfiguracionMerma[] datosCM) throws Exception {
+        for (int i = 0; i < datosCM.length; i++) {
+            String query = "exec sp_agrConfMerma "+datosCM[i].getIdTipoMerma()+""
+                + ","+datosCM[i].getPorcMermaAcep();
+            PreparedStatement pstmt = null;
+            c.conectar();
+            pstmt = c.getConexion().prepareStatement(query);
+            System.out.println(query);
+            pstmt.executeUpdate();
+            c.desconectar();
+        }
     }
 }

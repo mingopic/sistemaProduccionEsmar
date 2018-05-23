@@ -6,7 +6,11 @@
 package Vista;
 
 import Controlador.ConexionBD;
+import Controlador.ConfiguracionMermaCommands;
 import Controlador.ControladorUsuario;
+import Controlador.RangoPesoCueroCommands;
+import Modelo.ConfiguracionMerma;
+import Modelo.RangoPesoCuero;
 import Modelo.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -29,6 +33,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlProveedores pnlProveedores;
     PnlSubProcesos pnlSubProcesos;
     ConexionBD conexionBD;
+    ConfiguracionMerma cm;
+    ConfiguracionMermaCommands cmc;
+    RangoPesoCuero rpc;
+    RangoPesoCueroCommands rpcc;
     /**
      * Creates new form FrmPrincipal
      */
@@ -112,6 +120,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             dialogo.setLocationRelativeTo(null);
             dialogo.setAlwaysOnTop(true);
             dialogo.setVisible(true);
+            
+            cargarConfActMerma();
+            cargarConfActRango();
         } 
         catch (Exception e) 
         {
@@ -119,6 +130,171 @@ public class FrmPrincipal extends javax.swing.JFrame {
             dialogo.setVisible(false);
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
             dialogo.setVisible(true);
+        }
+    }
+    
+    public void cargarConfActMerma()
+    {
+        try
+        {
+            String datos[][] = null;
+            cmc = new ConfiguracionMermaCommands();
+            
+            datos = cmc.obtenerConfiguracionesMerma();
+            
+            double humAcep = (Double.parseDouble(datos[0][1]))*100;
+            
+            txtSalAcep.setText(datos[0][0]);
+            txtHumAcep.setText(String.valueOf(humAcep));
+            txtCachAcep.setText(datos[0][2]);
+            txtTarAcep.setText(datos[0][3]);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Error al recuperar datos de la BD", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void cargarConfActRango()
+    {
+        try
+        {
+            String datos[][] = null;
+            rpcc = new RangoPesoCueroCommands();
+            
+            datos = rpcc.llenarLabelRangoPesoCuero();
+            
+            txtRangoMin.setText(datos[0][1]);
+            txtRangoMax.setText(datos[0][2]);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Error al recuperar datos de la BD", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void guardarConfMerma()
+    {
+        try
+        {
+            if (JOptionPane.showConfirmDialog(dlgMermas, "Realmente desea guardar la configuracion", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+            {
+                if (txtSalAcep.getText().isEmpty() || txtHumAcep.getText().isEmpty() || txtCachAcep.getText().isEmpty() || txtTarAcep.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "Debe señalar un valor a todas las mermas", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                cmc = new ConfiguracionMermaCommands();
+                ConfiguracionMerma[] datosCM = new ConfiguracionMerma[4];
+                
+                try
+                {
+                    double salAcep = Double.parseDouble(txtSalAcep.getText());
+                    double humedadAcep = (Double.parseDouble(txtHumAcep.getText()))/100;
+                    double cacheteAcep = Double.parseDouble(txtCachAcep.getText());
+                    double tarimasAcep = Double.parseDouble(txtTarAcep.getText());
+                    
+                    for (int i = 0; i < 4; i++)
+                    {
+                        datosCM[i] = new ConfiguracionMerma();
+                        
+                        switch(i)
+                        {
+                            case 0:
+                               datosCM[i].setIdTipoMerma(i+1);
+                               datosCM[i].setPorcMermaAcep(salAcep);
+                            break;
+                            
+                            case 1:
+                                datosCM[i].setIdTipoMerma(i+1);
+                                datosCM[i].setPorcMermaAcep(humedadAcep);
+                            break;
+                            
+                            case 2:
+                                datosCM[i].setIdTipoMerma(i+1);
+                                datosCM[i].setPorcMermaAcep(cacheteAcep);
+                            break;
+                            
+                            case 3:
+                                datosCM[i].setIdTipoMerma(i+1);
+                                datosCM[i].setPorcMermaAcep(tarimasAcep);
+                            break;
+                        }
+                    }
+                    
+                    cmc.agregarConfigMerma(datosCM);
+                    
+                    JOptionPane.showMessageDialog(dlgMermas, "Registro insertado correctamente");
+                    
+                    dlgMermas.setVisible(false);
+                    this.setVisible(true);
+                    this.setExtendedState(MAXIMIZED_BOTH);
+                    pnlPrincipal=new PnlPrincipal();
+                    pnlPrincipalx.removeAll();        
+                    pnlPrincipalx.add(pnlPrincipal, BorderLayout.CENTER);
+                    pnlPrincipalx.paintAll(pnlPrincipal.getGraphics());
+                    ImageIcon ico=new ImageIcon(".\\src\\imagenes\\house.png");
+                    lblVentana.setIcon(ico);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(dlgMermas, "Error al guardar la configiracion de mermas", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
+    
+    public void guardarConfRangoPesoCuero()
+    {
+        try
+        {
+            if (JOptionPane.showConfirmDialog(dlgRangos, "Realmente desea guardar la configuracion", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+            {
+                if (txtRangoMin.getText().isEmpty() || txtRangoMax.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "Debe señalar un valor a todas los rangos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                rpcc = new RangoPesoCueroCommands();
+                rpc = new RangoPesoCuero();
+                
+                try
+                {
+                    float rangoMin = Float.parseFloat(txtRangoMin.getText());
+                    float rangoMax = Float.parseFloat(txtRangoMax.getText());
+                    
+                    rpc.setRangoMin(rangoMin);
+                    rpc.setRangoMax(rangoMax);
+                    
+                    rpcc.agregarConfigRangoPesoCuero(rpc);
+                    
+                    JOptionPane.showMessageDialog(dlgRangos, "Registro insertado correctamente");
+                    
+                    dlgRangos.setVisible(false);
+                    this.setVisible(true);
+                    this.setExtendedState(MAXIMIZED_BOTH);
+                    pnlPrincipal=new PnlPrincipal();
+                    pnlPrincipalx.removeAll();        
+                    pnlPrincipalx.add(pnlPrincipal, BorderLayout.CENTER);
+                    pnlPrincipalx.paintAll(pnlPrincipal.getGraphics());
+                    ImageIcon ico=new ImageIcon(".\\src\\imagenes\\house.png");
+                    lblVentana.setIcon(ico);
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(dlgRangos, "Error al guardar la configiracion de mermas", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            
         }
     }
 
@@ -169,10 +345,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        txtSalAcep1 = new javax.swing.JTextField();
+        txtRangoMin = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        txtHumAcep1 = new javax.swing.JTextField();
+        txtRangoMax = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
@@ -391,6 +567,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -431,16 +612,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         .addComponent(txtHumAcep, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel12))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
@@ -523,8 +699,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel14.setText("Menor a");
 
-        txtSalAcep1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtSalAcep1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtRangoMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtRangoMin.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel15.setText("Ligeros");
@@ -532,8 +708,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel16.setText("Mayor a");
 
-        txtHumAcep1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtHumAcep1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtRangoMax.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtRangoMax.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel17.setText("Pesados");
@@ -551,6 +727,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jToolBar2.add(jButton2);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -576,13 +757,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtHumAcep1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtRangoMax, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtSalAcep1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtRangoMin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17)
@@ -599,12 +780,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(txtSalAcep1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRangoMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(txtHumAcep1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRangoMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1097,6 +1278,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         abrirDialogo(dlgRangos, 325, 210);
     }//GEN-LAST:event_jmRangosPesoActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        guardarConfMerma();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        guardarConfRangoPesoCuero();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1208,9 +1397,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPasswordField ptxtContrasenia;
     private javax.swing.JTextField txtCachAcep;
     private javax.swing.JTextField txtHumAcep;
-    private javax.swing.JTextField txtHumAcep1;
+    private javax.swing.JTextField txtRangoMax;
+    private javax.swing.JTextField txtRangoMin;
     private javax.swing.JTextField txtSalAcep;
-    private javax.swing.JTextField txtSalAcep1;
     private javax.swing.JTextField txtTarAcep;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

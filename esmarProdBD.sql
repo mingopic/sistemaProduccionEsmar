@@ -681,6 +681,130 @@ as begin
 end
 go
 
+create procedure sp_obtConfMerma
+as begin
+	declare @salAcep float
+	declare @humedadAcep float
+	declare @cacheteAcep float
+	declare @tarimasAcep float
+	
+	set @salAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 1
+			)
+	)
+	
+	set @humedadAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 2
+			)
+	)
+	
+	set @cacheteAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 3
+			)
+	)
+	
+	set @tarimasAcep =
+	(
+		select
+			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 4
+			)
+	)
+	
+	select
+		@salAcep as salAcep, @humedadAcep as humedadAcep, @cacheteAcep as cacheteAcep, @tarimasAcep as tarimasAcep
+end
+go
+
+create procedure sp_agrConfMerma
+(
+	@idTipoMerma int
+	,@porcMermaAcep float
+)
+as begin
+	declare @fechaConfig datetime
+	set @fechaConfig =
+		(
+			select
+				getdate()
+		)
+	
+	insert into
+		tb_configMerma
+	values
+		(@idTipoMerma,@porcMermaAcep,@fechaConfig)
+end
+go
+
+create procedure sp_agrConfRanPesoCue
+(
+	@rangoMin int
+	,@rangoMax int
+)
+as begin
+	declare @fechaConfig datetime
+	set @fechaConfig =
+		(
+			select
+				getdate()
+		)
+	
+	insert into
+		tb_rangoPesoCuero
+	values
+		(@rangoMin,@rangoMax,@fechaConfig)
+end
+go
+
 -- DATOS DE PRUEBAS --
 insert into 
 	tb_usuario ("usuario", "contrasenia", "nombre", "tipo") 

@@ -360,6 +360,12 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         {
             if (JOptionPane.showConfirmDialog(null, "Realmente desea agregar la recepción", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
             {
+                if (txtKgTotales.getText().equals("0") || txtPrecio.getText().equals("0") || txtNoTotalPiezas.getText().equals("0"))
+                {
+                    JOptionPane.showMessageDialog(null, "El numero de kg totales, precio y total de piezas debe ser mayor a 0", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
                 rcc = new RecepcionCueroCommands();
         
                 String proveedor = cmbProveedorAgregar.getSelectedItem().toString();

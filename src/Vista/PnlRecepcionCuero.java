@@ -718,7 +718,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     {
         try
         {
-            URL path = this.getClass().getResource("/Vista/ReporteEntrada.jasper");
+            URL path = this.getClass().getResource("/Reportes/ReporteEntrada.jasper");
             
             Map parametros = new HashMap();
             parametros.put("proveedor",rc.getProveedor());
@@ -833,6 +833,9 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jSeparator6 = new javax.swing.JToolBar.Separator();
         btnReporteEntrada = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
+        jToolBar2 = new javax.swing.JToolBar();
+        btnReporteEntrada1 = new javax.swing.JButton();
+        jLabel48 = new javax.swing.JLabel();
 
         dlgAgregarRecepcion.setBackground(new java.awt.Color(255, 255, 255));
         dlgAgregarRecepcion.setResizable(false);
@@ -1531,19 +1534,45 @@ try {
     jLabel11.setText("     ");
     jToolBar1.add(jLabel11);
 
+    jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jToolBar2.setFloatable(false);
+    jToolBar2.setRollover(true);
+
+    btnReporteEntrada1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteEntrada1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+    btnReporteEntrada1.setText("Reporte Detalle");
+    btnReporteEntrada1.setFocusable(false);
+    btnReporteEntrada1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnReporteEntrada1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteEntrada1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteEntrada1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteEntrada1ActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteEntrada1);
+
+    jLabel48.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel48.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel48.setText("     ");
+    jToolBar2.add(jLabel48);
+
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(jScrollPane1)
         .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
+        .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
     );
     jPanel4Layout.setVerticalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
             .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
+            .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1753,6 +1782,10 @@ try {
         }
     }//GEN-LAST:event_cmbProveedorAgregarItemStateChanged
 
+    private void btnReporteEntrada1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporteEntrada1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAgregarEntrada;
@@ -1761,6 +1794,7 @@ try {
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnReporteEntrada;
+    private javax.swing.JButton btnReporteEntrada1;
     private javax.swing.JComboBox cmbProveedor;
     private javax.swing.JComboBox<String> cmbProveedorAgregar;
     private javax.swing.JComboBox cmbTipoCuero;
@@ -1799,6 +1833,7 @@ try {
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1812,6 +1847,7 @@ try {
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lblRangoMax;

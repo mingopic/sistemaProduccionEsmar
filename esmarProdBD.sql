@@ -76,6 +76,10 @@ create table tb_recepcionCuero (
 	, mermaHumedad float
 	, mermaCachete float
 	, mermaTarimas float
+	, idMerSal int
+	, idMerHum int
+	, idMerCac int
+	, idMerTar int
 	, fechaEntrada date
 );
 go

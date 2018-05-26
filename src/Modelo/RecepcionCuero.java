@@ -30,6 +30,60 @@ public class RecepcionCuero {
     float costoCamion;
     String fecha;
     String fecha1;
+    int refParaMerma;
+    int idMerSal;
+    int idMerHum;
+    int idMerCac;
+    int idMerTar;
+    int idRecepcionCuero;
+
+    public int getRefParaMerma() {
+        return refParaMerma;
+    }
+
+    public void setRefParaMerma(int refParaMerma) {
+        this.refParaMerma = refParaMerma;
+    }
+
+    public int getIdMerSal() {
+        return idMerSal;
+    }
+
+    public void setIdMerSal(int idMerSal) {
+        this.idMerSal = idMerSal;
+    }
+
+    public int getIdMerHum() {
+        return idMerHum;
+    }
+
+    public void setIdMerHum(int idMerHum) {
+        this.idMerHum = idMerHum;
+    }
+
+    public int getIdMerCac() {
+        return idMerCac;
+    }
+
+    public void setIdMerCac(int idMerCac) {
+        this.idMerCac = idMerCac;
+    }
+
+    public int getIdMerTar() {
+        return idMerTar;
+    }
+
+    public void setIdMerTar(int idMerTar) {
+        this.idMerTar = idMerTar;
+    }
+
+    public int getIdRecepcionCuero() {
+        return idRecepcionCuero;
+    }
+
+    public void setIdRecepcionCuero(int idRecepcionCuero) {
+        this.idRecepcionCuero = idRecepcionCuero;
+    }
 
     public int getNoPiezasLigero() {
         return noPiezasLigero;

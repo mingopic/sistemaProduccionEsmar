@@ -72,6 +72,7 @@ create table tb_recepcionCuero (
 	, noTotalPiezas int
 	, kgTotal float
 	, precioXKilo float
+	, costocamion float
 	, mermaSal float
 	, mermaHumedad float
 	, mermaCachete float
@@ -667,17 +668,21 @@ create procedure sp_agrEntRecCuero
 )
 as begin
 	declare @fechaEntrada datetime
+	declare @costoCamion float
+	
 	set @fechaEntrada =
 		(
 			select
 				getdate()
 		)
 	
+	set @costoCamion = @kgTotal*@precioXKilo
+	
 	insert into
 		tb_recepcionCuero
 	values
 		(@idProveedor,@noCamion,@idTipoCuero,@idRangoPesoCuero,@noPiezasLigero,@noPiezasPesado,@noTotalPiezas,@kgTotal,
-		@precioXKilo,@mermaSal,@mermaHumedad,@mermaCachete,@mermaTarimas,@fechaEntrada)
+		@precioXKilo,@mermaSal,@mermaHumedad,@mermaCachete,@mermaTarimas,@fechaEntrada,@costoCamion)
 end
 go
 

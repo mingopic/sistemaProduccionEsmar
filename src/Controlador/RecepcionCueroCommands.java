@@ -31,7 +31,7 @@ public class RecepcionCueroCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 8;
+        int columnas = 9;
         int i = 0;
 
         c.conectar();
@@ -59,6 +59,7 @@ public class RecepcionCueroCommands {
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 datos[i][7] = sdf.format(sqlDate);
+                datos[i][8] = rs.getString("idRecepcionCuero");
                 i++; 
             }
         }
@@ -112,7 +113,8 @@ public class RecepcionCueroCommands {
         query= "EXEC sp_agrEntRecCuero "+rc.getIdProveedor()+","+rc.getNoCamion()+","+rc.getIdTipoCuero()+","
                 +rc.getIdRangoPesoCuero()+","+rc.getNoPiezasLigero()+","+rc.getNoPiezasPesado()+","
                 +rc.getNoTotalPiezas()+","+rc.getKgTotal()+","+rc.getPrecioXKilo()+","+rc.getMermaSal()+","
-                +rc.getMermaHumedad()+","+rc.getMermaCachete()+","+rc.getMermaTarimas();
+                +rc.getMermaHumedad()+","+rc.getMermaCachete()+","+rc.getMermaTarimas()+","+rc.getRefParaMerma()+","
+                +rc.getIdMerSal()+","+rc.getIdMerHum()+","+rc.getIdMerCac()+","+rc.getIdMerTar();
 
         
         PreparedStatement pstmt = null;
@@ -121,5 +123,80 @@ public class RecepcionCueroCommands {
         System.out.println(query);
         pstmt.executeUpdate();
         c.desconectar();
+    }
+    
+    //Método que se llama para obtener el detalle de ña recepcion de cuero seleccionada
+    public static String[][] obtenerListaRecepcionCueroDetalle(RecepcionCuero rc, TipoCuero tp) throws Exception {
+        String query;
+        
+        query= "EXEC sp_obtEntReccueroDetalle '"+rc.getIdRecepcionCuero();
+
+        
+        String[][] datos = null;
+        int renglones = 0;
+        int columnas = 35;
+        int i = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+            renglones = rs.getRow();
+            datos = new String[renglones][columnas];
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos[i][0] = rs.getString("nombreProveedor");
+                
+                Date sqlDate = rs.getDate("fechaEntrada");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                datos[i][1] = sdf.format(sqlDate);
+                
+                datos[i][2] = rs.getString("noCamion");
+                datos[i][3] = rs.getString("kgTotal");
+                datos[i][4] = rs.getString("precioXKilo");
+                datos[i][5] = rs.getString("costoCamion");
+                datos[i][6] = rs.getString("rangoMin");
+                datos[i][7] = rs.getString("rangoMax");
+                datos[i][8] = rs.getString("noPiezasLigero");
+                datos[i][9] = rs.getString("noPiezasPesado");
+                datos[i][10] = rs.getString("noTotalPiezas");
+                datos[i][11] = rs.getString("mermaSal");
+                datos[i][12] = rs.getString("mermaHumedad");
+                datos[i][13] = rs.getString("mermaCachete");
+                datos[i][14] = rs.getString("mermaTarimas");
+                datos[i][15] = rs.getString("salAcep");
+                datos[i][16] = rs.getString("humedadAcep");
+                datos[i][17] = rs.getString("cacheteAcep");
+                datos[i][18] = rs.getString("tarimasAcep");
+                datos[i][19] = rs.getString("salReal");
+                datos[i][20] = rs.getString("humedadReal");
+                datos[i][21] = rs.getString("cacheteReal");
+                datos[i][22] = rs.getString("tarimasReal");
+                datos[i][23] = rs.getString("salDif");
+                datos[i][24] = rs.getString("humedadDif");
+                datos[i][25] = rs.getString("cacheteDif");
+                datos[i][26] = rs.getString("tarimasDif");
+                datos[i][27] = rs.getString("salDesc");
+                datos[i][28] = rs.getString("humedadDesc");
+                datos[i][29] = rs.getString("cacheteDesc");
+                datos[i][30] = rs.getString("tarimasDesc");
+                datos[i][31] = rs.getString("totalDescKg");
+                datos[i][32] = rs.getString("pesoCamion");
+                datos[i][33] = rs.getString("totalPagarKg");
+                datos[i][34] = rs.getString("totalPagar");
+                i++; 
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
     }
 }

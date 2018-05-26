@@ -35,6 +35,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     RecepcionCuero rc;
     RecepcionCueroCommands rcc;
     ConfiguracionMermaCommands cmc;
+    String[][] datosConfMerma = null;
     /**
      * Creates new form PnlInsRecCuero
      */
@@ -119,7 +120,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     {
         try 
         {
-            String[][] datosConfMerma = null;
             cmc = new ConfiguracionMermaCommands();
 
             double costoCamion;
@@ -383,6 +383,11 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 double mermaHumedad;
                 double mermaCachete;
                 double mermaTarimas;
+                int refParaMerma;
+                int idMerSal;
+                int idMerHum;
+                int idMerCac;
+                int idMerTar;
 
                 for (int i = 0; i < proveedoresAgregar.length; i++)
                 {
@@ -412,6 +417,11 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 mermaHumedad = Double.parseDouble(txtMermaHumedad.getText());
                 mermaCachete = Double.parseDouble(txtMermaCachete.getText());
                 mermaTarimas = Double.parseDouble(txtTarimas.getText());
+                refParaMerma = Integer.parseInt(txtRefMerma.getText());
+                idMerSal = Integer.parseInt(datosConfMerma[0][19]);
+                idMerHum = Integer.parseInt(datosConfMerma[0][20]);
+                idMerCac = Integer.parseInt(datosConfMerma[0][21]);
+                idMerTar = Integer.parseInt(datosConfMerma[0][22]);
 
                 rc.setIdProveedor(idProveedor);
                 rc.setNoCamion(noCamion);
@@ -426,6 +436,11 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 rc.setMermaHumedad(mermaHumedad);
                 rc.setMermaCachete(mermaCachete);
                 rc.setMermaTarimas(mermaTarimas);
+                rc.setRefParaMerma(refParaMerma);
+                rc.setIdMerSal(idMerSal);
+                rc.setIdMerHum(idMerHum);
+                rc.setIdMerCac(idMerCac);
+                rc.setIdMerTar(idMerTar);
 
                 rcc.InsertarEntradaRecepcionCuero(rc);
                 

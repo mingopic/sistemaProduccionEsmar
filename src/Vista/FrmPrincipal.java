@@ -14,6 +14,7 @@ import Modelo.RangoPesoCuero;
 import Modelo.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.SwingNode;
@@ -181,7 +182,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             {
                 if (txtSalAcep.getText().isEmpty() || txtHumAcep.getText().isEmpty() || txtCachAcep.getText().isEmpty() || txtTarAcep.getText().isEmpty())
                 {
-                    JOptionPane.showMessageDialog(null, "Debe señalar un valor a todas las mermas", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(dlgMermas, "Debe señalar un valor a todas las mermas", "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 
@@ -257,7 +258,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             {
                 if (txtRangoMin.getText().isEmpty() || txtRangoMax.getText().isEmpty())
                 {
-                    JOptionPane.showMessageDialog(null, "Debe señalar un valor a todas los rangos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(dlgRangos, "Debe señalar un valor a todas los rangos", "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 
@@ -295,6 +296,35 @@ public class FrmPrincipal extends javax.swing.JFrame {
         catch (Exception e)
         {
             
+        }
+    }
+    
+    private void validarNumeros(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c;
+            c=evt.getKeyChar();    
+            int punto=textoCaja.indexOf(".")+1;
+
+            if (punto==0)
+            {
+                if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_PERIOD)
+                {
+                    getToolkit().beep();           
+                    evt.consume();
+                }
+            }
+
+            else
+            {
+                if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+                {
+                    getToolkit().beep();           
+                    evt.consume();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlInsRecCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -527,6 +557,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtSalAcep.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSalAcep.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtSalAcep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSalAcepKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText("Kg/Cuero");
@@ -536,6 +571,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtHumAcep.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtHumAcep.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtHumAcep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHumAcepKeyTyped(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText("% de Kg total");
@@ -545,6 +585,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtCachAcep.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtCachAcep.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCachAcep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCachAcepKeyTyped(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel10.setText("Kg/Cuero");
@@ -554,6 +599,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtTarAcep.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtTarAcep.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTarAcep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTarAcepKeyTyped(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel12.setText("Kg");
@@ -701,6 +751,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtRangoMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtRangoMin.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtRangoMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRangoMinKeyTyped(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel15.setText("Ligeros");
@@ -710,6 +765,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtRangoMax.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtRangoMax.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtRangoMax.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRangoMaxKeyTyped(evt);
+            }
+        });
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel17.setText("Pesados");
@@ -1285,6 +1345,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         guardarConfRangoPesoCuero();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtSalAcepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSalAcepKeyTyped
+        validarNumeros(evt, txtSalAcep.getText());
+    }//GEN-LAST:event_txtSalAcepKeyTyped
+
+    private void txtHumAcepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHumAcepKeyTyped
+        validarNumeros(evt, txtHumAcep.getText());
+    }//GEN-LAST:event_txtHumAcepKeyTyped
+
+    private void txtCachAcepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCachAcepKeyTyped
+        validarNumeros(evt, txtCachAcep.getText());
+    }//GEN-LAST:event_txtCachAcepKeyTyped
+
+    private void txtTarAcepKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTarAcepKeyTyped
+        validarNumeros(evt, txtTarAcep.getText());
+    }//GEN-LAST:event_txtTarAcepKeyTyped
+
+    private void txtRangoMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRangoMinKeyTyped
+        validarNumeros(evt, txtRangoMin.getText());
+    }//GEN-LAST:event_txtRangoMinKeyTyped
+
+    private void txtRangoMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRangoMaxKeyTyped
+        validarNumeros(evt, txtRangoMax.getText());
+    }//GEN-LAST:event_txtRangoMaxKeyTyped
 
     /**
      * @param args the command line arguments

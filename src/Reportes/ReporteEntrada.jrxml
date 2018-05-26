@@ -25,6 +25,9 @@
 	<parameter name="fecha1" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="logo" class="java.lang.Object">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[EXEC sp_obtEntReccuero $P{proveedor},$P{descripcion},$P{fecha},$P{fecha1};]]>
 	</queryString>
@@ -67,7 +70,7 @@
 			</line>
 			<image>
 				<reportElement x="862" y="0" width="53" height="46" uuid="c4d07a9d-e408-45e3-9ffb-d519c549c521"/>
-				<imageExpression><![CDATA["C:\\Users\\Equipo\\Documents\\NetBeansProjects\\sistemaProduccionEsmar\\src\\Imagenes\\esmar.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -175,7 +178,7 @@
 				<reportElement x="684" y="0" width="100" height="20" uuid="8c43a72d-7c6e-4a19-aacc-4a0817532880"/>
 				<textFieldExpression><![CDATA[$F{costocamion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField>
 				<reportElement x="795" y="0" width="100" height="20" uuid="d013c461-86bd-4de3-933e-dabdc81588cc"/>
 				<textFieldExpression><![CDATA[$F{fechaentrada}]]></textFieldExpression>
 			</textField>

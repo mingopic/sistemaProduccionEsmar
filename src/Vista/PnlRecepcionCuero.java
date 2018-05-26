@@ -61,6 +61,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     String[][] tipoCueroAgregar = null;
     String[][] rangoPesoCuero = null;
     String[][] datosEntRecCuero = null;
+    private final String imagen="/Imagenes/esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
     
@@ -721,6 +722,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             URL path = this.getClass().getResource("/Reportes/ReporteEntrada.jasper");
             
             Map parametros = new HashMap();
+            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
             parametros.put("proveedor",rc.getProveedor());
             parametros.put("descripcion",tp.getDescripcion());
             parametros.put("fecha",rc.getFecha());
@@ -744,6 +746,40 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void generarReporteEntradaRecepcionCueroDetalle(RecepcionCuero rc) throws Exception
+    {
+        try
+        {
+            int idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblRecepcionCuero.getSelectedRow()][8]);
+            rc.setIdRecepcionCuero(idRecepcionCuero);
+            
+            URL path = this.getClass().getResource("/Reportes/ReporteEntradaDetalle.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
+            parametros.put("idRecepcionCuero",rc.getIdRecepcionCuero());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
             
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1783,7 +1819,11 @@ try {
     }//GEN-LAST:event_cmbProveedorAgregarItemStateChanged
 
     private void btnReporteEntrada1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada1ActionPerformed
-        // TODO add your handling code here:
+         try {
+            generarReporteEntradaRecepcionCueroDetalle(rc);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnReporteEntrada1ActionPerformed
 
 

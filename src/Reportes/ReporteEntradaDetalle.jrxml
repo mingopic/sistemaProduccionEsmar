@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="1080" pageHeight="612" orientation="Landscape" columnWidth="1040" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6021a312-e96a-462c-9774-ff5e315f9b70">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="1080" pageHeight="612" orientation="Landscape" columnWidth="1040" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6021a312-e96a-462c-9774-ff5e315f9b70">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="15"/>
+	<property name="ireport.y" value="242"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -242,7 +242,7 @@
 				</textElement>
 				<text><![CDATA[Costo del camión]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="128" y="60" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4943c5d4-32a2-4f43-94bb-a3546d0e5f59"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -258,7 +258,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noCamion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="128" y="100" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5c606bba-3fdb-4199-a972-562ec9f5db7b"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -274,7 +274,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precioXKilo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="128" y="140" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="75f5f8de-b74b-4e47-ad9f-bc3e49f87508"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -398,7 +398,7 @@
 				</textElement>
 				<text><![CDATA[ Pesados]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="437" y="100" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="875c1a66-b8fc-4b7b-b4a4-80315c696038"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -406,7 +406,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noPiezasPesado}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="437" y="40" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="633901ff-a84a-4c64-9a10-921e76f467dd"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -414,7 +414,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noPiezasLigero}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="437" y="140" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="a7f427b1-8c54-409a-85d2-ab7c35974437"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -422,7 +422,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noTotalPiezas}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="328" y="140" width="109" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="19d55e0e-3214-4afd-80a1-5f6063596bc8"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -510,7 +510,7 @@
 			<rectangle>
 				<reportElement x="100" y="320" width="100" height="40" uuid="159d6207-d50e-40dc-b341-93344532f28d"/>
 			</rectangle>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="100" y="200" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="19d27ee4-4dd3-4c49-ae0e-18fdc5ec9eb2"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -518,7 +518,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mermaSal}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="100" y="240" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="38169478-4ef0-4982-a939-ce1cc1be76fa"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -526,7 +526,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mermaHumedad}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="100" y="280" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="6be8ef60-578d-4539-a4a9-a4fa347b1933"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -534,7 +534,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mermaCachete}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="100" y="320" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="4c735b0e-4617-4daa-95b2-e95c4ba8ec9f"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -618,7 +618,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{salAcep}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="300" y="240" width="115" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4614bba8-a696-41a4-b2b7-62d07a6f6eb5"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -758,7 +758,7 @@
 				</textElement>
 				<text><![CDATA[Kg]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="515" y="200" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e9fe85a8-31d9-4275-9a1c-f859cf5bce3c"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -766,7 +766,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{salReal}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="515" y="240" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e997edb4-c5ee-4ec6-8c0d-491d872b341f"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -774,7 +774,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{humedadReal}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="515" y="280" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e13fc3cf-613c-4c04-9497-6515170fc6b0"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -782,7 +782,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cacheteReal}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="515" y="320" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="f471bd46-e22a-4688-82b5-bec03ef6202c"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -934,7 +934,7 @@
 				</textElement>
 				<text><![CDATA[Tarimas a descontar]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="915" y="200" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="cd352db6-af2c-4500-b410-f6a473c4ea03"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -942,7 +942,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{salDesc}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="915" y="240" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="7b044ad8-4c2f-47d8-b188-0392446f6c49"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -950,7 +950,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{humedadDesc}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="915" y="280" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="9092ce4f-85ae-4120-897f-ce13019825ea"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -958,7 +958,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cacheteDesc}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="915" y="320" width="100" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="d8a9161f-e11e-4d2b-9f2d-c8418c3e0336"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1012,7 +1012,7 @@
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Tarimas p/liviano]]></text>
+				<text><![CDATA[Tarimas]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="715" y="420" width="200" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="0dd7989a-9dd7-4faf-93c6-24590f365ef5"/>
@@ -1022,7 +1022,7 @@
 				</textElement>
 				<text><![CDATA[Total a pagar]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="915" y="360" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="570aee19-45da-47f4-88b9-906d11b12cd0"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1030,7 +1030,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalDescKg}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="915" y="380" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="f2d1500e-64a1-474e-94c0-1f7dadde9fae"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1038,7 +1038,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pesoCamion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="915" y="420" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="89724fc9-6745-426c-beb6-8ce0ca6aca81"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1046,8 +1046,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalPagarKg}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="915" y="440" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5f4bcf5b-3bb7-48b1-8a50-ea72b5e428ca"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="915" y="440" width="100" height="20" forecolor="#FF0000" backcolor="#FFFFFF" uuid="5f4bcf5b-3bb7-48b1-8a50-ea72b5e428ca"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

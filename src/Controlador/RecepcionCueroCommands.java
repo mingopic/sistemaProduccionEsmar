@@ -20,8 +20,8 @@ import java.util.Date;
 public class RecepcionCueroCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
-    static ConexionBD c=new ConexionBD();
-    
+    static ConexionBD c = new ConexionBD();
+     
     //Método que se llama para obtener la lista de los cueros por trabajar
     public static String[][] obtenerListaRecepcionCuero(RecepcionCuero rc, TipoCuero tp) throws Exception {
         String query;

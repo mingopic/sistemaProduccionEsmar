@@ -77,6 +77,7 @@ create table tb_recepcionCuero (
 	, mermaHumedad float
 	, mermaCachete float
 	, mermaTarimas float
+	, refParaMerma int
 	, idMerSal int
 	, idMerHum int
 	, idMerCac int
@@ -204,7 +205,7 @@ create procedure sp_obtEntReccuero
 	)
 	as begin
 		select 
-			rc.idrecepcioncuero, p.nombreproveedor, tp.descripcion, rc.nocamion, rc.nototalpiezas, rc.kgtotal, rc.precioxkilo ,(rc.nototalpiezas*rc.precioxkilo) as costocamion, rc.fechaentrada
+			rc.idrecepcioncuero, p.nombreproveedor, tp.descripcion, rc.nocamion, rc.nototalpiezas, rc.kgtotal, rc.precioxkilo ,(rc.kgtotal*rc.precioxkilo) as costocamion, rc.fechaentrada
 		from 
 			tb_proveedor as p inner join tb_recepcioncuero as rc
 			on p.idproveedor = rc.idproveedor
@@ -453,6 +454,10 @@ as begin
 	declare @totalDescontar float
 	declare @totalPagar float
 	declare @humedadAcepCalc float
+	declare @idConfigMermaSal int
+	declare @idConfigMermaHumedad int
+	declare @idConfigMermaCachete int
+	declare @idConfigMermaTarimas int
 	
 	set @salAcep =
 	(
@@ -514,6 +519,78 @@ as begin
 	(
 		select
 			porcMermaAcep
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 4
+			)
+	)
+	
+	set @idConfigMermaSal =
+	(
+		select
+			idConfigMerma
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 1
+			)
+	)
+	
+	set @idConfigMermaHumedad =
+	(
+		select
+			idConfigMerma
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 2
+			)
+	)
+	
+	set @idConfigMermaCachete =
+	(
+		select
+			idConfigMerma
+		from
+			tb_configMerma
+		where
+			idConfigMerma =
+			(
+				select
+					max(idConfigMerma)
+				from
+					tb_configMerma
+				where
+					idTipoMerma = 3
+			)
+	)
+	
+	set @idConfigMermaTarimas =
+	(
+		select
+			idConfigMerma
 		from
 			tb_configMerma
 		where
@@ -591,7 +668,9 @@ as begin
 		@tarimasReal as tarimasReal, @salDiferencia as salDiferencia, @humedadDiferencia as humedadDiferencia,
 		@cacheteDiferencia as cacheteDiferencia, @tarimasDiferencia as tarimasDiferencia,
 		@salDescontar as salDescontar, @humedadDescontar as humedadDescontar, @cacheteDescontar as cacheteDescontar,
-		@tarimasDescontar as tarimasDescontar, @totalDescontar as totalDescontar, @humedadAcep as humedadAcep
+		@tarimasDescontar as tarimasDescontar, @totalDescontar as totalDescontar, @humedadAcep as humedadAcep,
+		@idConfigMermaSal as idConfigMermaSal, @idConfigMermaHumedad as idConfigMermaHumedad,
+		@idConfigMermaCachete as idConfigMermaCachete, @idConfigMermaTarimas as idConfigMermaTarimas
 end
 go
 

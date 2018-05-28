@@ -663,14 +663,29 @@ as begin
 	set @totalPagar = @totalKgDescontar*@precio
 	
 	select
-		@totalPagar as totalPagar, @salAcep as salAcep, @humedadAcepCalc as humedadAcepCalc, @cacheteAcep as cacheteAcep,
-		@tarimasAcep as tarimasAcep, @salReal as salReal, @humedadReal as humedadReal, @cacheteReal as cacheteReal,
-		@tarimasReal as tarimasReal, @salDiferencia as salDiferencia, @humedadDiferencia as humedadDiferencia,
-		@cacheteDiferencia as cacheteDiferencia, @tarimasDiferencia as tarimasDiferencia,
-		@salDescontar as salDescontar, @humedadDescontar as humedadDescontar, @cacheteDescontar as cacheteDescontar,
-		@tarimasDescontar as tarimasDescontar, @totalDescontar as totalDescontar, @humedadAcep as humedadAcep,
-		@idConfigMermaSal as idConfigMermaSal, @idConfigMermaHumedad as idConfigMermaHumedad,
-		@idConfigMermaCachete as idConfigMermaCachete, @idConfigMermaTarimas as idConfigMermaTarimas
+		@totalPagar as totalPagar
+		, @salAcep as salAcep
+		, @humedadAcepCalc as humedadAcepCalc
+		, @cacheteAcep as cacheteAcep
+		, @tarimasAcep as tarimasAcep
+		, @salReal as salReal
+		, @humedadReal as humedadReal
+		, @cacheteReal as cacheteReal
+		, @tarimasReal as tarimasReal
+		, @salDiferencia as salDiferencia
+		, @humedadDiferencia as humedadDiferencia
+		, @cacheteDiferencia as cacheteDiferencia
+		, @tarimasDiferencia as tarimasDiferencia
+		, @salDescontar as salDescontar
+		, @humedadDescontar as humedadDescontar
+		, @cacheteDescontar as cacheteDescontar
+		, @tarimasDescontar as tarimasDescontar
+		, @totalDescontar as totalDescontar
+		, @humedadAcep as humedadAcep
+		, @idConfigMermaSal as idConfigMermaSal
+		, @idConfigMermaHumedad as idConfigMermaHumedad
+		, @idConfigMermaCachete as idConfigMermaCachete
+		, @idConfigMermaTarimas as idConfigMermaTarimas
 end
 go
 

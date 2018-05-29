@@ -314,8 +314,8 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             URL path = this.getClass().getResource("/Reportes/ReporteEntradaDetalle.jasper");
             
             Map parametros = new HashMap();
-            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
             parametros.put("idRecepcionCuero",rc.getIdRecepcionCuero());
+            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

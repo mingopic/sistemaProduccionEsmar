@@ -1085,9 +1085,26 @@ as begin
 			idRecepcionCuero = @idRecepcionCuero
 	)
 	
-	set @salReal = @sal/@noTotalPiezas
-	set @humedadReal = (@humedad/@refParaMerma)*@noTotalPiezas
-	set @cacheteReal = @cachete/@refParaMerma
+	if (@noTotalPiezas = 0)
+	begin
+		set @salReal = 0
+	end
+	else
+	begin
+		set @salReal = @sal/@noTotalPiezas
+	end
+	
+	if (@refParaMerma = 0)
+	begin
+		set @humedadReal = 0
+		set @cacheteReal = 0
+	end
+	else
+	begin
+		set @humedadReal = (@humedad/@refParaMerma)*@nototalpiezas
+		set @cacheteReal = @cachete/@refParaMerma
+	end
+	
 	set @tarimasReal = @tarimas
 	
 	set @salDif = @salReal-@salAcep

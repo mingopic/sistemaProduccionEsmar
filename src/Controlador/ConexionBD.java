@@ -32,9 +32,8 @@ public class ConexionBD
     
     public void conectar() throws Exception
     {
-//        String url = "jdbc:sqlserver://EQUIPO-PC:1433;databaseName=esmarProd";
-//        String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
-        String url = "jdbc:sqlserver://EQUIPO-PC\\SQLEXPRESS:1433;databaseName=esmarProd";
+        String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
+//        String url = "jdbc:sqlserver://EQUIPO-PC\\SQLEXPRESS:1433;databaseName=esmarProd";
         String usuario = "sa";
         String password = "root";
         

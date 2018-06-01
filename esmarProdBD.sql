@@ -117,6 +117,13 @@ create table tb_insumXproc (
 );
 go
 
+create table tb_inventarioCrudo (
+	idInventarioCrudo int not null identity(1,1) primary key
+	, noPiezasActual int not null
+	, idRecepcionCuero int not null foreign key references tb_recepcionCuero(idRecepcionCuero)
+);
+go
+
 -- PROCEDURES 
 create procedure sp_valUsulog 
 	(
@@ -1164,6 +1171,33 @@ as begin
 		rc.idRangoPesoCuero = rpc.idRangoPesoCuero
 	where
 		rc.idRecepcionCuero = @idRecepcionCuero
+end
+go
+
+-- TRIGGERS --
+create trigger tr_insInvCueroCrudo
+on tb_recepcionCuero
+after insert
+as 
+begin
+	-- set nocount on impide que se generen mensajes de texto 
+	set nocount on;
+
+	insert into 
+		tb_inventarioCrudo (noPiezasActual, idRecepcionCuero)
+		
+	select 
+		noTotalPiezas, idRecepcionCuero
+	from 
+		tb_recepcionCuero
+	where
+		idRecepcionCuero = 
+		(
+			select 
+				max(idRecepcionCuero) 
+			from 
+				tb_recepcionCuero
+		)
 end
 go
 

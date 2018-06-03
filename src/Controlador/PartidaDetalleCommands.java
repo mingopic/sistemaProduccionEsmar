@@ -5,28 +5,26 @@
  */
 package Controlador;
 
-import Modelo.InsumoPorProceso;
-import Modelo.SubProceso;
+import Modelo.PartidaDetalle;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
  *
- * @author Equipo
+ * @author EQUIPO-PC
  */
-public class InsumoPorProcesoCommands {
+public class PartidaDetalleCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
-    static ConexionBD c=new ConexionBD();
-    static InsumoPorProceso ipp;
-    static SubProceso subP;
+    static ConexionBD c = new ConexionBD();
     
     //Método para agregar una entrada a la tabla entradaProductoAlmacen
-    public static void agregarInsumoXProc(InsumoPorProceso[] datosIXP, int idSubProceso) throws Exception {
-        for (int i = 0; i < datosIXP.length; i++) {
-            String query = "exec sp_agrInsumXProc "+idSubProceso+","+datosIXP[i].getClave()+""
-                + ","+datosIXP[i].getPorcentaje()+","+datosIXP[i].getIdInsumo();
+    public static void agregarPartidaDetalle(PartidaDetalle[] datosPD, String[][] datosPar) throws Exception {
+        for (int i = 0; i < datosPD.length; i++) {
+            String query = "exec sp_agrPartidaDetalle "+datosPD[i].getNoPiezas()+""
+                + ","+datosPD[i].getIdPartida()+","+datosPD[i].getIdTipoRecorte()+""
+                    + ",'"+datosPar[i][0]+"',"+datosPar[i][1]+",'"+datosPar[i][2]+"'";
             PreparedStatement pstmt = null;
             c.conectar();
             pstmt = c.getConexion().prepareStatement(query);

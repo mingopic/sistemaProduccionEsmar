@@ -124,6 +124,30 @@ create table tb_inventarioCrudo (
 );
 go
 
+create table tb_tipoRecorte (
+	idTipoRecorte int not null identity(1,1) primary key
+	, descripcion varchar (20)
+);
+go
+
+create table tb_partida (
+	idPartida int not null identity(1,1) primary key
+	, noPartida int
+	, noTotalPiezas int
+	, fecha date
+	, idProceso int not null foreign key references tb_proceso(idProceso)
+);
+go
+
+create table tb_partidaDet (
+	idPartidaDet int not null identity(1,1) primary key
+	, noPiezas int
+	, idPartida int not null foreign key references tb_partida(idPartida)
+	, idRecepcionCuero int not null foreign key references tb_recepcionCuero(idRecepcionCuero)
+	, idTipoRecorte int not null foreign key references tb_tipoRecorte(idTipoRecorte)
+);
+go
+
 -- PROCEDURES 
 create procedure sp_valUsulog 
 	(
@@ -321,10 +345,19 @@ go
 
 create procedure sp_obtProc
 	as begin
+		declare 
+			@procInicio int
+			, @procFin  int
+		
+		set @procInicio = 1
+		set @procFin  = 7
+
 		select
 			*
 		from 
 			tb_proceso
+		where
+			idProceso not in (@procInicio, @procFin)
 		order by
 			idProceso
 	end
@@ -1174,6 +1207,175 @@ as begin
 end
 go
 
+create procedure sp_obtRecCueroDisp
+as begin
+	select
+		p.nombreProveedor, rc.noCamion, tp.descripcion, ic.noPiezasActual, rc.kgTotal, rc.kgTotal/ic.noPiezasActual as PromKgPieza, rc.fechaEntrada, rc.idRecepcionCuero
+	from
+		tb_proveedor as p
+	inner join
+		tb_recepcionCuero as rc
+	on
+		p.idProveedor = rc.idProveedor
+	inner join
+		tb_inventarioCrudo as ic
+	on
+		ic.idRecepcionCuero = rc.idRecepcionCuero
+	inner join
+		tb_tipoCuero as tp
+	on
+		rc.idTipoCuero = tp.idTipoCuero
+end
+go
+
+create procedure sp_obtListaPartida
+as begin
+	select
+		rc.noCamion, p.nombreproveedor, ic.noPiezasActual, rc.kgTotal
+	from
+		tb_proveedor as p
+	inner join
+		tb_recepcionCuero as rc
+	on
+		p.idProveedor = rc.idProveedor
+	inner join
+		tb_inventarioCrudo as ic
+	on
+		rc.idRecepcionCuero = ic.idRecepcionCuero
+end
+go
+
+create procedure sp_obtNoPartida
+	as begin
+		declare @anioActual int
+		declare @noPartida int
+		
+		set @anioActual = (
+		Select
+			year(getdate()))
+			
+		set @noPartida = (
+		select
+			max(noPartida)
+		from
+			tb_partida
+		where year(fecha) =  @anioActual)
+		
+		if(@noPartida is null) begin
+			set @noPartida = 1
+		end
+		
+		else begin
+			set @noPartida = @noPartida+1
+		end
+		
+		select @noPartida as noPartida
+	end
+	go
+	
+create procedure sp_agrPartida
+(
+	@noPartida int
+	, @noTotalPiezas int
+	, @idProceso int
+)
+as begin
+	declare @fecha datetime
+	
+	set @fecha = 
+	(
+		select getdate()
+	)
+	
+	insert into
+		tb_partida
+	values
+		(@noPartida, @noTotalPiezas, @fecha, @idProceso)
+end
+go
+
+create procedure sp_agrPartidaDetalle
+(
+	@noPiezas int
+	, @idPartida int
+	, @idTipoRecorte int
+	, @proveedor varchar(20)
+	, @noCamion int
+	, @fecha date
+)
+as begin
+	declare @idRecepcionCuero int
+	
+	set @idRecepcionCuero =
+		(
+			select
+				idRecepcionCuero
+			from
+				tb_recepcionCuero
+			where
+				noCamion = @noCamion
+			and
+				fechaEntrada = @fecha
+			and
+				idProveedor =
+				(
+					select
+						idProveedor
+					from
+						tb_proveedor
+					where
+						nombreProveedor = @proveedor
+				)
+		)
+	
+	insert into
+		tb_partidaDet
+	values
+		(@noPiezas, @idPartida, @idRecepcionCuero, @idTipoRecorte)
+end
+go
+
+create procedure sp_actInvCrudo
+(
+	@proveedor varchar(20)
+	, @noCamion int
+	, @fecha date
+	, @piezasUtilizar int
+)
+as begin
+	declare @idRecepcionCuero int
+	
+	set @idRecepcionCuero =
+		(
+			select
+				idRecepcionCuero
+			from
+				tb_recepcionCuero
+			where
+				noCamion = @noCamion
+			and
+				fechaEntrada = @fecha
+			and
+				idProveedor =
+				(
+					select
+						idProveedor
+					from
+						tb_proveedor
+					where
+						nombreProveedor = @proveedor
+				)
+		)
+		
+	update
+		tb_inventarioCrudo
+	set
+		noPiezasActual = noPiezasActual-@piezasUtilizar
+	where
+		idRecepcionCuero = @idRecepcionCuero
+end
+go
+
 -- TRIGGERS --
 create trigger tr_insInvCueroCrudo
 on tb_recepcionCuero
@@ -1229,7 +1431,7 @@ values
 insert into 
 	tb_proceso ("descripcion") 
 values 
-	('REMOJO'),('PELAMBRE'),('DESENCALADO'),('CURTIDO'),('ENGRASE');
+	('INICIO'),('REMOJO'),('PELAMBRE'),('DESENCALADO'),('CURTIDO'),('ENGRASE'),('FIN');
 	
 insert into
 	tb_subProceso ("idProceso", "descripcion") 
@@ -1266,3 +1468,8 @@ insert into
 	tb_rangoPesoCuero
 values
 	('20','100','2018-05-12T22:50:27.000');
+	
+insert into
+	tb_tipoRecorte
+values
+	('Entero');

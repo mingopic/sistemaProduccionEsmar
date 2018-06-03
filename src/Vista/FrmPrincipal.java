@@ -32,6 +32,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlInsXproc pnlInsXproc;
     PnlProveedores pnlProveedores;
     PnlSubProcesos pnlSubProcesos;
+    PnlPartidas pnlPartidas;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -1243,7 +1244,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrossActionPerformed
 
     private void btnPartidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPartidasActionPerformed
-        // TODO add your handling code here:
+        try {
+            pnlPartidas = new PnlPartidas();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlPartidas, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlPartidas.getGraphics());
+            
+            lblVentana.setText("Partidas");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnPartidasActionPerformed
 
     private void btnInsXprocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsXprocActionPerformed

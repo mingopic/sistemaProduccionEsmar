@@ -19,7 +19,7 @@ public class FormulaXSubProcesoCommands {
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();
     
-     //Método para agregar una formula por subproceso
+    //Método para agregar una formula por subproceso
     public static void agregarFormXSubProc(FormulaXSubProceso fxs) throws Exception {
         String query = "exec sp_agrFormSubProc "+fxs.getIdSubproceso();
         PreparedStatement pstmt = null;

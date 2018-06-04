@@ -542,6 +542,7 @@ public class PnlSubProcesos extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblSubProcesos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblSubProcesos);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());

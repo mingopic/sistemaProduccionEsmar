@@ -1225,6 +1225,8 @@ as begin
 		tb_tipoCuero as tp
 	on
 		rc.idTipoCuero = tp.idTipoCuero
+	where
+		ic.noPiezasActual > 0
 end
 go
 

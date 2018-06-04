@@ -261,6 +261,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 "Clave", "Porcentaje", "Insumo"
             }
         ));
+        tblInsXSubProc.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblInsXSubProc.getTableHeader().setReorderingAllowed(false);
         tblInsXSubProc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -353,6 +354,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblSubproceso.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblSubproceso.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblSubprocesoMouseClicked(evt);

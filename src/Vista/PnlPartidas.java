@@ -45,7 +45,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     
     String[] colums = new String[]
         {
-            "No. Camión","Proveedor","No. Piezas","Prom. Kg/Pza","Pzas Inventario","Kg Totales","Fecha"
+            "No. Camión","Proveedor","No. Piezas","Pzas Inventario","Prom. Kg/Pza","Kg Totales","Fecha"
         };
     
     
@@ -67,11 +67,25 @@ public class PnlPartidas extends javax.swing.JPanel {
     {
         dtms=new DefaultTableModel()
         {
+//            Class[] types = new Class []
+//            {
+//                //Defines el tipo que admitirá la COLUMNA, cada uno con el índice correspondiente
+//                //Codigo (Integer), Cantidad (Integer), Nombre (String), Precio(Double)
+//                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+//                ,java.lang.String.class, java.lang.String.class, java.lang.String.class
+//            };
+//
+//            //Función que asignará el tipo de campo que asignaste previamente
+//            public Class getColumnClass(int columnIndex)
+//            {
+//                return types [columnIndex];
+//            }
+
             public boolean isCellEditable (int row, int column)
             {
                 // Aquí devolvemos true o false según queramos que una celda
                 // identificada por fila,columna (row,column), sea o no editable
-                if (column == 4)
+                if (column == 3)
                 {
                     return true;
                 }
@@ -96,11 +110,15 @@ public class PnlPartidas extends javax.swing.JPanel {
         try
         {
             datosIC = icc.obtenerListaInvCueroCrudo();
-            asignados = new String[datosIC.length][1];
             
-            for (int i = 0; i < asignados.length; i++)
+            if (datosIC != null)
             {
-                asignados[i][0] = "0";
+                asignados = new String[datosIC.length][1];
+                
+                for (int i = 0; i < asignados.length; i++)
+                {
+                    asignados[i][0] = "0";
+                }
             }
             
             dtm = new DefaultTableModel(datosIC, columnas){
@@ -137,7 +155,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         {
             for (int i = 0; i < noRegistros.length; i++)
             {
-                noRegistros[i][0] = tblPartida.getValueAt(i, 4).toString();
+                noRegistros[i][0] = tblPartida.getValueAt(i, 3).toString();
                 noRegistros[i][1] = tblPartida.getValueAt(i, 5).toString();
                 
                 totalPiezas = totalPiezas + (Integer.parseInt(noRegistros[i][0]));
@@ -319,12 +337,15 @@ public class PnlPartidas extends javax.swing.JPanel {
                 "No. Camión", "Nombre Proveedor", "No. Piezas", "Kg Total"
             }
         ));
+        tblPartida.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblPartida.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblPartidaMousePressed(evt);
+            }
+        });
         tblPartida.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tblPartidaKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tblPartidaKeyTyped(evt);
             }
         });
         jScrollPane2.setViewportView(tblPartida);
@@ -418,28 +439,34 @@ public class PnlPartidas extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAsignarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarEntradaActionPerformed
-        int fila = tblInvCueCrudo.getSelectedRow();
-        
-        if (asignados[fila][0].equals("1"))
+        try
         {
-            JOptionPane.showMessageDialog(null, "Esta recepción de cuero ya se encuentra asignada");
-        }
-        else
-        {
-            datosPartidas = new String[7];
+            int fila = tblInvCueCrudo.getSelectedRow();
         
-            datosPartidas[0]= tblInvCueCrudo.getValueAt(fila, 1).toString();
-            datosPartidas[1]= tblInvCueCrudo.getValueAt(fila, 0).toString();
-            datosPartidas[2]= tblInvCueCrudo.getValueAt(fila, 3).toString();
-            datosPartidas[3]= tblInvCueCrudo.getValueAt(fila, 5).toString();
-            datosPartidas[4]= "0";
-            datosPartidas[5]= String.valueOf((Integer.parseInt(datosPartidas[4])) * (Double.parseDouble(datosPartidas[3])));
-            datosPartidas[5]= (String.format("%.2f",Double.parseDouble(datosPartidas[5])));
-            datosPartidas[6]= tblInvCueCrudo.getValueAt(fila, 6).toString();
+            if (asignados[fila][0].equals("1"))
+            {
+                JOptionPane.showMessageDialog(null, "Esta recepción de cuero ya se encuentra asignada");
+            }
+            else
+            {
+                datosPartidas = new String[7];
 
-            dtms.addRow(datosPartidas);
-            totalPiezasPartida();
-            asignados[fila][0] = "1";
+                datosPartidas[0]= tblInvCueCrudo.getValueAt(fila, 1).toString();
+                datosPartidas[1]= tblInvCueCrudo.getValueAt(fila, 0).toString();
+                datosPartidas[2]= tblInvCueCrudo.getValueAt(fila, 3).toString();
+                datosPartidas[3]= tblInvCueCrudo.getValueAt(fila, 3).toString();
+                datosPartidas[4]= tblInvCueCrudo.getValueAt(fila, 5).toString();
+                datosPartidas[5]= String.valueOf((Integer.parseInt(datosPartidas[3])) * (Double.parseDouble(datosPartidas[4])));
+                datosPartidas[5]= (String.format("%.2f",Double.parseDouble(datosPartidas[5])));
+                datosPartidas[6]= tblInvCueCrudo.getValueAt(fila, 6).toString();
+
+                dtms.addRow(datosPartidas);
+                totalPiezasPartida();
+                asignados[fila][0] = "1";
+            }
+        } catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario de Cuero Crudo","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnAsignarEntradaActionPerformed
 
@@ -490,7 +517,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                         datosPD[i] = new PartidaDetalle();
                         datosInC[i] = new InventarioCrudo();
                         
-                        datosPD[i].setNoPiezas(Integer.parseInt(tblPartida.getValueAt(i, 4).toString()));
+                        datosPD[i].setNoPiezas(Integer.parseInt(tblPartida.getValueAt(i, 3).toString()));
                         datosPD[i].setIdPartida(Integer.parseInt(txtNoPartida.getText()));
                         datosPD[i].setIdTipoRecorte(1);
                         
@@ -498,7 +525,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                         datosPar[i][0] = tblPartida.getValueAt(i, 1).toString();
                         datosPar[i][1] = tblPartida.getValueAt(i, 0).toString();
                         datosPar[i][2] = tblPartida.getValueAt(i, 6).toString();
-                        datosPar[i][3] = tblPartida.getValueAt(i, 4).toString();
+                        datosPar[i][3] = tblPartida.getValueAt(i, 3).toString();
                     }
                     
                     p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));
@@ -521,44 +548,83 @@ public class PnlPartidas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void tblPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPartidaKeyTyped
-        
-    }//GEN-LAST:event_tblPartidaKeyTyped
-
     private void tblPartidaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPartidaKeyReleased
         int fila = tblPartida.getSelectedRow();
-        String piezasUtilizar = tblPartida.getValueAt(fila, 4).toString();
+        String piezasUtilizar = tblPartida.getValueAt(fila, 3).toString();
         String piezas = tblPartida.getValueAt(fila, 2).toString();
-        String kgCalc = tblPartida.getValueAt(fila, 3).toString();
+        String promKgPza = tblPartida.getValueAt(fila, 4).toString();
         
         try
         {
             if (Integer.parseInt(piezasUtilizar) < 0)
             {
                 JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
-                tblPartida.setValueAt("0", fila, 4);
+                tblPartida.setValueAt("0", fila, 3);
             }
             else
             {
                 if (Integer.parseInt(piezasUtilizar) > Integer.parseInt(piezas))
                 {
                     JOptionPane.showMessageDialog(null, "El numero de piezas a utilizar no puede ser mayor al numero de piezas");
-                    tblPartida.setValueAt("0", fila, 4);
+                    tblPartida.setValueAt("0", fila, 3);
                 }
                 else
                 {
-                    String kgTotales = String.valueOf((Integer.parseInt(piezasUtilizar)) * (Double.parseDouble(kgCalc)));
+                    String kgTotales = String.valueOf((Integer.parseInt(piezasUtilizar)) * (Double.parseDouble(promKgPza)));
                     kgTotales = (String.format("%.2f",Double.parseDouble(kgTotales)));
                     tblPartida.setValueAt(kgTotales, fila, 5);
-                    totalPiezasPartida();
                 }
             }
         } catch (Exception e)
         {
             JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
-            tblPartida.setValueAt("0", fila, 4);
+            tblPartida.setValueAt("0", fila, 3);
         }
+        totalPiezasPartida();
     }//GEN-LAST:event_tblPartidaKeyReleased
+
+    private void tblPartidaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPartidaMousePressed
+         if(evt.getClickCount()==1)
+        {
+            for (int fila = 0; fila < tblPartida.getRowCount(); fila++)
+            {
+                String piezasUtilizar = tblPartida.getValueAt(fila, 3).toString();
+                String piezas = tblPartida.getValueAt(fila, 2).toString();
+                String promKgPza = tblPartida.getValueAt(fila, 4).toString();
+
+                try
+                {
+                    if (Integer.parseInt(piezasUtilizar) < 0)
+                    {
+                        JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
+                        tblPartida.setValueAt("0", fila, 3);
+                        tblPartida.setValueAt("0", fila, 5);
+                    }
+                    else
+                    {
+                        if (Integer.parseInt(piezasUtilizar) > Integer.parseInt(piezas))
+                        {
+                            JOptionPane.showMessageDialog(null, "El numero de piezas a utilizar no puede ser mayor al numero de piezas");
+                            tblPartida.setValueAt("0", fila, 3);
+                            tblPartida.setValueAt("0", fila, 5);
+                        }
+                        else
+                        {
+                            String kgTotales = String.valueOf((Integer.parseInt(piezasUtilizar)) * (Double.parseDouble(promKgPza)));
+                            kgTotales = (String.format("%.2f",Double.parseDouble(kgTotales)));
+                            tblPartida.setValueAt(kgTotales, fila, 5);
+                        }
+                    }
+                } catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
+                    tblPartida.setValueAt("0", fila, 3);
+                    tblPartida.setValueAt("0", fila, 5);
+                }
+            }
+            totalPiezasPartida();
+        }
+    }//GEN-LAST:event_tblPartidaMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -500,6 +500,7 @@ public class PnlProveedores extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblProveedores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblProveedores);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());

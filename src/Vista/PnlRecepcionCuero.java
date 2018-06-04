@@ -392,6 +392,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblRecepcionCuero.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblRecepcionCuero);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());

@@ -389,12 +389,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnInicio = new javax.swing.JButton();
         lblMenui = new javax.swing.JLabel();
         btnRecepcionCuero = new javax.swing.JButton();
-        btnInsXproc = new javax.swing.JButton();
         btnPartidas = new javax.swing.JButton();
         btnCross = new javax.swing.JButton();
         btnSemiterminado = new javax.swing.JButton();
         btnTerminado = new javax.swing.JButton();
         btnProdEnProc = new javax.swing.JButton();
+        btnPartidas1 = new javax.swing.JButton();
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
@@ -411,6 +411,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
+        jmInsumosXproceso = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -907,17 +908,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnInsXproc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnInsXproc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/flask.png"))); // NOI18N
-        btnInsXproc.setText("Insumos por proceso");
-        btnInsXproc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnInsXproc.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnInsXproc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsXprocActionPerformed(evt);
-            }
-        });
-
         btnPartidas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnPartidas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
         btnPartidas.setText("Partidas");
@@ -973,6 +963,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnPartidas1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnPartidas1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/document_index.png"))); // NOI18N
+        btnPartidas1.setText("Fichas de Producción");
+        btnPartidas1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPartidas1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPartidas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPartidas1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
         pnlMenuLayout.setHorizontalGroup(
@@ -987,11 +988,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCross, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnPartidas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInsXproc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRecepcionCuero, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSemiterminado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnProdEnProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnProdEnProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPartidas1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -1004,9 +1005,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRecepcionCuero)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnInsXproc)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPartidas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPartidas1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProdEnProc)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1015,7 +1016,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnSemiterminado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTerminado)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -1167,6 +1168,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpConfiguraciones.add(jmRangosPeso);
 
+        jmInsumosXproceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/flask.png"))); // NOI18N
+        jmInsumosXproceso.setText("Insumos por Proceso");
+        jmInsumosXproceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmInsumosXprocesoActionPerformed(evt);
+            }
+        });
+        jmpConfiguraciones.add(jmInsumosXproceso);
+
         jMenuBar1.add(jmpConfiguraciones);
 
         jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
@@ -1251,27 +1261,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlPartidas.getGraphics());
             
             lblVentana.setText("Partidas");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnPartidasActionPerformed
-
-    private void btnInsXprocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsXprocActionPerformed
-        try {
-            pnlInsXproc = new PnlInsXproc();
-            pnlPrincipalx.removeAll();
-            pnlPrincipalx.add(pnlInsXproc, BorderLayout.CENTER);
-            pnlPrincipalx.paintAll(pnlInsXproc.getGraphics());
-            
-            lblVentana.setText("Insumos Por Proceso");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
-            lblVentana.setIcon(ico);
-        } catch (Exception ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnInsXprocActionPerformed
 
     private void btnRecepcionCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecepcionCueroActionPerformed
         try {
@@ -1381,6 +1376,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
         validarNumeros(evt, txtRangoMax.getText());
     }//GEN-LAST:event_txtRangoMaxKeyTyped
 
+    private void jmInsumosXprocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmInsumosXprocesoActionPerformed
+        try {
+            pnlInsXproc = new PnlInsXproc();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlInsXproc, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlInsXproc.getGraphics());
+            
+            lblVentana.setText("Insumos Por Proceso");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jmInsumosXprocesoActionPerformed
+
+    private void btnPartidas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPartidas1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPartidas1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1425,8 +1439,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnCross;
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnInicio;
-    private javax.swing.JButton btnInsXproc;
     private javax.swing.JButton btnPartidas;
+    private javax.swing.JButton btnPartidas1;
     private javax.swing.JButton btnProdEnProc;
     private javax.swing.JButton btnRecepcionCuero;
     private javax.swing.JButton btnSalir;
@@ -1469,6 +1483,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JMenuItem jmInsumosXproceso;
     private javax.swing.JMenuItem jmMermas;
     private javax.swing.JMenuItem jmProveedores;
     private javax.swing.JMenuItem jmRangosPeso;

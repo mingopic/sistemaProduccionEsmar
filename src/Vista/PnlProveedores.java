@@ -60,6 +60,7 @@ public class PnlProveedores extends javax.swing.JPanel {
             }
             };
             tblProveedores.setModel(dtm);
+            tblProveedores.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            

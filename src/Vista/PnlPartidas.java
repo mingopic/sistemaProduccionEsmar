@@ -67,20 +67,6 @@ public class PnlPartidas extends javax.swing.JPanel {
     {
         dtms=new DefaultTableModel()
         {
-//            Class[] types = new Class []
-//            {
-//                //Defines el tipo que admitirá la COLUMNA, cada uno con el índice correspondiente
-//                //Codigo (Integer), Cantidad (Integer), Nombre (String), Precio(Double)
-//                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-//                ,java.lang.String.class, java.lang.String.class, java.lang.String.class
-//            };
-//
-//            //Función que asignará el tipo de campo que asignaste previamente
-//            public Class getColumnClass(int columnIndex)
-//            {
-//                return types [columnIndex];
-//            }
-
             public boolean isCellEditable (int row, int column)
             {
                 // Aquí devolvemos true o false según queramos que una celda
@@ -98,6 +84,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         
         dtms.setColumnIdentifiers(colums);
         tblPartida.setModel(dtms);
+        tblPartida.getTableHeader().setReorderingAllowed(false);
     }
     
     //Método para actualizar la tabla con las recepciones de cuero disponibles para crear partidad
@@ -127,6 +114,7 @@ public class PnlPartidas extends javax.swing.JPanel {
             }
             };
             tblInvCueCrudo.setModel(dtm);
+            tblInvCueCrudo.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            

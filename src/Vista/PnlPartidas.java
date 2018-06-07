@@ -45,7 +45,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     
     String[] colums = new String[]
         {
-            "No. Camión","Proveedor","No. Piezas","Pzas Inventario","Prom. Kg/Pza","Kg Totales","Fecha"
+            "No. Camión","Proveedor","Pzas Inventario","No. Piezas","Prom. Kg/Pza","Kg Totales","Fecha"
         };
     
     
@@ -67,25 +67,12 @@ public class PnlPartidas extends javax.swing.JPanel {
     {
         dtms=new DefaultTableModel()
         {
-//            Class[] types = new Class []
-//            {
-//                //Defines el tipo que admitirá la COLUMNA, cada uno con el índice correspondiente
-//                //Codigo (Integer), Cantidad (Integer), Nombre (String), Precio(Double)
-//                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-//                ,java.lang.String.class, java.lang.String.class, java.lang.String.class
-//            };
-//
-//            //Función que asignará el tipo de campo que asignaste previamente
-//            public Class getColumnClass(int columnIndex)
-//            {
-//                return types [columnIndex];
-//            }
 
             public boolean isCellEditable (int row, int column)
             {
                 // Aquí devolvemos true o false según queramos que una celda
                 // identificada por fila,columna (row,column), sea o no editable
-                if (column == 3)
+                if (column == 2)
                 {
                     return true;
                 }
@@ -456,7 +443,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 datosPartidas[2]= tblInvCueCrudo.getValueAt(fila, 3).toString();
                 datosPartidas[3]= tblInvCueCrudo.getValueAt(fila, 3).toString();
                 datosPartidas[4]= tblInvCueCrudo.getValueAt(fila, 5).toString();
-                datosPartidas[5]= String.valueOf((Integer.parseInt(datosPartidas[3])) * (Double.parseDouble(datosPartidas[4])));
+                datosPartidas[5]= String.valueOf((Integer.parseInt(datosPartidas[2])) * (Double.parseDouble(datosPartidas[4])));
                 datosPartidas[5]= (String.format("%.2f",Double.parseDouble(datosPartidas[5])));
                 datosPartidas[6]= tblInvCueCrudo.getValueAt(fila, 6).toString();
 
@@ -517,7 +504,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                         datosPD[i] = new PartidaDetalle();
                         datosInC[i] = new InventarioCrudo();
                         
-                        datosPD[i].setNoPiezas(Integer.parseInt(tblPartida.getValueAt(i, 3).toString()));
+                        datosPD[i].setNoPiezas(Integer.parseInt(tblPartida.getValueAt(i, 2).toString()));
                         datosPD[i].setIdPartida(Integer.parseInt(txtNoPartida.getText()));
                         datosPD[i].setIdTipoRecorte(1);
                         
@@ -525,7 +512,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                         datosPar[i][0] = tblPartida.getValueAt(i, 1).toString();
                         datosPar[i][1] = tblPartida.getValueAt(i, 0).toString();
                         datosPar[i][2] = tblPartida.getValueAt(i, 6).toString();
-                        datosPar[i][3] = tblPartida.getValueAt(i, 3).toString();
+                        datosPar[i][3] = tblPartida.getValueAt(i, 2).toString();
                     }
                     
                     p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));
@@ -550,8 +537,8 @@ public class PnlPartidas extends javax.swing.JPanel {
 
     private void tblPartidaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPartidaKeyReleased
         int fila = tblPartida.getSelectedRow();
-        String piezasUtilizar = tblPartida.getValueAt(fila, 3).toString();
-        String piezas = tblPartida.getValueAt(fila, 2).toString();
+        String piezasUtilizar = tblPartida.getValueAt(fila, 2).toString();
+        String piezas = tblPartida.getValueAt(fila, 3).toString();
         String promKgPza = tblPartida.getValueAt(fila, 4).toString();
         
         try
@@ -559,14 +546,14 @@ public class PnlPartidas extends javax.swing.JPanel {
             if (Integer.parseInt(piezasUtilizar) < 0)
             {
                 JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
-                tblPartida.setValueAt("0", fila, 3);
+                tblPartida.setValueAt("0", fila, 2);
             }
             else
             {
                 if (Integer.parseInt(piezasUtilizar) > Integer.parseInt(piezas))
                 {
                     JOptionPane.showMessageDialog(null, "El numero de piezas a utilizar no puede ser mayor al numero de piezas");
-                    tblPartida.setValueAt("0", fila, 3);
+                    tblPartida.setValueAt("0", fila, 2);
                 }
                 else
                 {
@@ -578,7 +565,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         } catch (Exception e)
         {
             JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
-            tblPartida.setValueAt("0", fila, 3);
+            tblPartida.setValueAt("0", fila, 2);
         }
         totalPiezasPartida();
     }//GEN-LAST:event_tblPartidaKeyReleased
@@ -588,8 +575,8 @@ public class PnlPartidas extends javax.swing.JPanel {
         {
             for (int fila = 0; fila < tblPartida.getRowCount(); fila++)
             {
-                String piezasUtilizar = tblPartida.getValueAt(fila, 3).toString();
-                String piezas = tblPartida.getValueAt(fila, 2).toString();
+                String piezasUtilizar = tblPartida.getValueAt(fila, 2).toString();
+                String piezas = tblPartida.getValueAt(fila, 3).toString();
                 String promKgPza = tblPartida.getValueAt(fila, 4).toString();
 
                 try
@@ -597,7 +584,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                     if (Integer.parseInt(piezasUtilizar) < 0)
                     {
                         JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
-                        tblPartida.setValueAt("0", fila, 3);
+                        tblPartida.setValueAt("0", fila, 2);
                         tblPartida.setValueAt("0", fila, 5);
                     }
                     else
@@ -605,7 +592,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                         if (Integer.parseInt(piezasUtilizar) > Integer.parseInt(piezas))
                         {
                             JOptionPane.showMessageDialog(null, "El numero de piezas a utilizar no puede ser mayor al numero de piezas");
-                            tblPartida.setValueAt("0", fila, 3);
+                            tblPartida.setValueAt("0", fila, 2);
                             tblPartida.setValueAt("0", fila, 5);
                         }
                         else
@@ -618,7 +605,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 } catch (Exception e)
                 {
                     JOptionPane.showMessageDialog(null, "Solo puede insertar numeros enteros mayores o igual a 0");
-                    tblPartida.setValueAt("0", fila, 3);
+                    tblPartida.setValueAt("0", fila, 2);
                     tblPartida.setValueAt("0", fila, 5);
                 }
             }

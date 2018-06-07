@@ -241,6 +241,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             }
             };
             tblRecepcionCuero.setModel(dtm);
+            tblRecepcionCuero.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            

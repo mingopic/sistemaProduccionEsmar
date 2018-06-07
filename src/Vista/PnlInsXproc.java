@@ -143,6 +143,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
             }
             };
             tblSubproceso.setModel(dtm);
+            tblSubproceso.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -455,6 +456,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 }
                 };
                 tblInsXSubProc.setModel(dtmInsumos);
+                tblInsXSubProc.getTableHeader().setReorderingAllowed(false);
 
             } catch (Exception e) {
 
@@ -462,8 +464,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
 
                 JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
             }
-          
-//          JOptionPane.showMessageDialog(null, "Se ha seleccionado el id "+id);
        }
     }//GEN-LAST:event_tblSubprocesoMouseClicked
 

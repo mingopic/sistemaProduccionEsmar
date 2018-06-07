@@ -103,6 +103,7 @@ public class PnlSubProcesos extends javax.swing.JPanel {
             }
             };
             tblSubProcesos.setModel(dtm);
+            tblSubProcesos.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            

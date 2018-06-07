@@ -85,6 +85,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         
         dtms.setColumnIdentifiers(colums);
         tblPartida.setModel(dtms);
+        tblPartida.getTableHeader().setReorderingAllowed(false);
     }
     
     //Método para actualizar la tabla con las recepciones de cuero disponibles para crear partidad
@@ -114,6 +115,7 @@ public class PnlPartidas extends javax.swing.JPanel {
             }
             };
             tblInvCueCrudo.setModel(dtm);
+            tblInvCueCrudo.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            

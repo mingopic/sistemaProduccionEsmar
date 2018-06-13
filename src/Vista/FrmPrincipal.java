@@ -33,6 +33,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlProveedores pnlProveedores;
     PnlSubProcesos pnlSubProcesos;
     PnlPartidas pnlPartidas;
+    PnlExportar pnlExportar; 
+    PnlImportar pnlImportar;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -413,6 +415,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmRangosPeso = new javax.swing.JMenuItem();
         jmInsumosXproceso = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         dlgLogin.setTitle("Login");
@@ -1188,6 +1193,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenuBar1.add(jmpAcercaDe);
 
+        jMenu1.setText("Base de datos");
+
+        jMenuItem1.setText("Exportar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Importar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1395,6 +1420,36 @@ public class FrmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPartidas1ActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            pnlExportar = new PnlExportar();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlExportar, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlExportar.getGraphics());
+            
+            lblVentana.setText("Exportar base de datos");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        try {
+            pnlImportar = new PnlImportar();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlImportar, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlImportar.getGraphics());
+            
+            lblVentana.setText("Importar Base de datos");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1469,7 +1524,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

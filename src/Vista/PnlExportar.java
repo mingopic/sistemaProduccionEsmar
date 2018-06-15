@@ -5,6 +5,10 @@
  */
 package Vista;
 
+import Controlador.ConexionBD;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -13,17 +17,33 @@ import javax.swing.JOptionPane;
  * @author EQUIPO-PC
  */
 public class PnlExportar extends javax.swing.JPanel {
-
+    String[] datosBD = null;
+    ConexionBD c = new ConexionBD();
     
-    String usuario = "sa";
-    String password = "root";
-    String bd = "esmarProdClon";
-    String hostname = "EQUIPO-PC\\SQLEXPRESS";
+    String hostname;
+    String bd;
+    String usuario;
+    String password;
     /**
      * Creates new form Exportar
      */
-    public PnlExportar() {
+    public PnlExportar()  {
         initComponents();
+        inicializar();
+    }
+    
+    public void inicializar()
+    {
+        try {
+            datosBD = c.buscaDatos();
+        } catch (IOException ex) {
+            Logger.getLogger(PnlExportar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        hostname = datosBD[0];
+        bd = datosBD[4];
+        usuario = datosBD[2];
+        password = datosBD[3];
     }
 
     /**
@@ -38,6 +58,8 @@ public class PnlExportar extends javax.swing.JPanel {
         txtRuta = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+
+        txtRuta.setEditable(false);
 
         jButton1.setText("Seleccionar carpeta");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -96,14 +118,13 @@ public class PnlExportar extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String ruta = txtRuta.getText();
-        String nombre = "\\backupJava.bak";
+        String nombre = "\\"+bd+".bak";
         String backup = "";
 
         if (ruta.trim().length() != 0)
         {
             try
             {
-                //                backup = "mysqldump --opt -u"+usuario+" -p"+password+" -B "+bd+" -r "+ruta+nombre;
                 backup = "sqlcmd -E -S "+hostname+" -Q \"BACKUP DATABASE "+bd+" TO DISK = '"+ruta+nombre+"'\"";
                 System.out.println(backup);
                 Runtime rt = Runtime.getRuntime();
@@ -112,9 +133,12 @@ public class PnlExportar extends javax.swing.JPanel {
             }
             catch (Exception e)
             {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al exportar la base de datos","Error",JOptionPane.ERROR_MESSAGE);
             }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una ruta para exportar la base de datos","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

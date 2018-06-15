@@ -14,7 +14,7 @@ import java.sql.Statement;
  *
  * @author Equipo
  */
-public class ConfiguracionMermaCommands {
+public class ConfiguracionMermaCommands  {
     static Statement stmt = null;
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();

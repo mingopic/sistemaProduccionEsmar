@@ -15,6 +15,7 @@ import Modelo.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -43,12 +44,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form FrmPrincipal
      */
-    public FrmPrincipal() {
+    public FrmPrincipal() throws IOException, IOException {
         initComponents();
         inicializar();
     }
     
-    private void inicializar()
+    private void inicializar() throws IOException
     {
         conexionBD = new ConexionBD();
         //Colocar icono de la aplicación

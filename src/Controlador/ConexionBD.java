@@ -79,7 +79,7 @@ public class ConexionBD
         while((cadena = b.readLine())!=null) {
             String[] palabra = cadena.split(":");
             for (int i = 0; i < palabra.length; i++) {
-                datos[j]=palabra[1];
+                datos[j]=palabra[1].replaceAll("^\\s*","");
             }
             System.out.println(datos[j]);
             j++;

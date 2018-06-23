@@ -1,5 +1,6 @@
 usuarioPC:EQUIPO-PC\SQLEXPRESS
-baseDatos:esmarProd
+baseDatos:       esmarProd        
 usuario:sa
 password:root
 baseDatosExportar:esmarProdClon
+puerto:1433

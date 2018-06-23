@@ -20,7 +20,7 @@ public class PnlExportar extends javax.swing.JPanel {
     String[] datosBD = null;
     ConexionBD c = new ConexionBD();
     
-    String hostname;
+    String servidor;
     String bd;
     String usuario;
     String password;
@@ -40,7 +40,7 @@ public class PnlExportar extends javax.swing.JPanel {
             Logger.getLogger(PnlExportar.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        hostname = datosBD[0];
+        servidor = datosBD[0];
         bd = datosBD[4];
         usuario = datosBD[2];
         password = datosBD[3];
@@ -125,7 +125,7 @@ public class PnlExportar extends javax.swing.JPanel {
         {
             try
             {
-                backup = "sqlcmd -E -S "+hostname+" -Q \"BACKUP DATABASE "+bd+" TO DISK = '"+ruta+nombre+"'\"";
+                backup = "sqlcmd -E -S "+servidor+" -Q \"BACKUP DATABASE "+bd+" TO DISK = '"+ruta+nombre+"'\"";
                 System.out.println(backup);
                 Runtime rt = Runtime.getRuntime();
                 rt.exec(backup);

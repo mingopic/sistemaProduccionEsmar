@@ -50,7 +50,7 @@ public class ConexionBD
     {
         
 //        String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
-        String url = "jdbc:sqlserver://"+datosBD[0]+":1433;databaseName="+datosBD[1];
+        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[1];
         String usuario = datosBD[2];
         String password = datosBD[3];
         
@@ -71,7 +71,7 @@ public class ConexionBD
     
     public String[] buscaDatos() throws FileNotFoundException, IOException {
         String cadena;
-        String[] datos = new String[5];
+        String[] datos = new String[6];
         int j=0;
         
         FileReader f = new FileReader("datosBD.txt");

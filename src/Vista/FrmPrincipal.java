@@ -36,6 +36,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlPartidas pnlPartidas;
     PnlExportar pnlExportar; 
     PnlImportar pnlImportar;
+    PnlCross pnlCross;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -1276,7 +1277,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSemiterminadoActionPerformed
 
     private void btnCrossActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrossActionPerformed
-        // TODO add your handling code here:
+        try {
+            pnlCross = new PnlCross();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlCross, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlCross.getGraphics());
+            
+            lblVentana.setText("Cross");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnCrossActionPerformed
 
     private void btnPartidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPartidasActionPerformed

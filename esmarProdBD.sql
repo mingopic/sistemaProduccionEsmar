@@ -148,7 +148,48 @@ create table tb_partidaDet (
 );
 go
 
--- PROCEDURES 
+create table tb_calibre (
+  idCalibre int not null identity(1,1) primary key
+  , descripcion varchar(15)
+)
+go
+
+create table tb_seleccion (
+  idSeleccion int not null identity(1,1) primary key
+  , descripcion varchar(15)
+)
+go
+
+create table tb_invCross (
+  idInvPCross int not null identity(1,1) primary key
+  , idPartidaDet int not null foreign key references tb_partidaDet(idPartidaDet)
+  , idPartida int not null foreign key references tb_partida(idPartida)
+  , noPiezas int
+  , noPiezasActuales int
+  , fechaEntrada datetime
+)
+go
+
+create table tb_invCrossSemi (
+  idInvCrossSemi int not null identity(1,1) primary key
+  , idInvPCross int not null foreign key references tb_partidaDet(idPartidaDet)
+  , noPiezas int
+  , noPiezasActuales int
+  , fechaEntrada datetime
+)
+go
+
+create table tb_invSemiterminado (
+  idInvSemiterminado int not null identity(1,1) primary key
+  , idInvParSemi int not null foreign key references tb_invParSemi(idInvParSemi)
+  , idCalibre int not null foreign key references tb_calibre(idCalibre)
+  , idSeleccion int not null foreign key references tb_seleccion(idSeleccion)
+  , kgTotales float
+  , fechaEntrada datetime
+)
+go
+
+-- PROCEDURES
 create procedure sp_valUsulog 
   (
     @usuario varchar(15)

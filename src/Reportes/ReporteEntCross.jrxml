@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f861fb8c-6d23-42ea-9c98-2c03742ec913">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="imagen" class="java.lang.Object">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[exec sp_obtEntCross '%%',0,'1900-01-01','2040-01-01']]>
+	</queryString>
+	<field name="idPartida" class="java.lang.Integer"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="noPiezas" class="java.lang.Integer"/>
+	<field name="noPiezasActuales" class="java.lang.Integer"/>
+	<field name="fechaentrada" class="java.sql.Timestamp"/>
+	<field name="idInvPCross" class="java.lang.Integer"/>
+	<group name="descripcion">
+		<groupExpression><![CDATA[$F{descripcion}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="54" width="572" height="25" forecolor="#000000" backcolor="#000099" uuid="2e3c4c27-5221-4022-8ed3-c148077a5bdc"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="417" y="0" width="144" height="20" forecolor="#FFFFFF" uuid="dbb406da-0f1a-473d-84f5-44761222d2ac"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="472" height="54" forecolor="#000000" backcolor="#009900" uuid="c818f18e-2e31-49af-95a4-e5c5ac2d26a4"/>
+				<staticText>
+					<reportElement x="38" y="0" width="223" height="36" uuid="1595fe4d-1268-4f51-886a-0e38d2812fbd"/>
+					<textElement>
+						<font size="24"/>
+					</textElement>
+					<text><![CDATA[Entradas de Cross]]></text>
+				</staticText>
+			</frame>
+			<image>
+				<reportElement x="472" y="4" width="100" height="50" uuid="47d1e0fc-296a-46a3-b0b1-bd5f438e5c82"/>
+				<imageExpression><![CDATA[$P{imagen}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="25" backcolor="#CCCCFF" uuid="aa69c318-d80b-4a16-b0ad-d2367c96dc65"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="c0dfd1ba-f561-477a-a263-ba69825068e1"/>
+				<text><![CDATA[No. Partida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="0" width="100" height="20" uuid="1ec396c5-298d-4247-abe8-aeff9bbd66b2"/>
+				<text><![CDATA[Tipo Recorte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="233" y="5" width="100" height="20" uuid="ca0835b4-e161-4288-b342-9c2e86dbf5aa"/>
+				<text><![CDATA[No. Piezas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="0" width="100" height="20" uuid="8c68a9f0-5a5b-481b-bd35-42f982bf0026"/>
+				<text><![CDATA[Fecha de Entrada]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="5aaa4e62-9bbe-42f9-a8a4-e0927bb6364a"/>
+				<textFieldExpression><![CDATA[$F{idPartida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="0" width="100" height="20" uuid="8e499ec0-ec02-41be-8bfc-4963510a6462"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="351" y="0" width="100" height="20" uuid="19e483a8-7bd0-4931-a222-ea785659775d"/>
+				<textFieldExpression><![CDATA[$F{fechaentrada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="233" y="0" width="100" height="20" uuid="a881ced5-cc53-48ed-8862-fccd52081726"/>
+				<textFieldExpression><![CDATA[$F{noPiezas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="216" y="0" width="80" height="20" uuid="e22be54b-f507-4850-9ff8-de1e4e2dd96e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="296" y="0" width="40" height="20" uuid="9a571be0-847d-4ca4-9339-d6886081d995"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

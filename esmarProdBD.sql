@@ -181,7 +181,7 @@ go
 
 create table tb_invSemiterminado (
   idInvSemiterminado int not null identity(1,1) primary key
-  , idInvParSemi int not null foreign key references tb_invParSemi(idInvParSemi)
+  , idInvCrossSemi int not null foreign key references tb_invCrossSemi(idInvCrossSemi)
   , idCalibre int not null foreign key references tb_calibre(idCalibre)
   , idSeleccion int not null foreign key references tb_seleccion(idSeleccion)
   , kgTotales float
@@ -1418,6 +1418,158 @@ as begin
     idRecepcionCuero = @idRecepcionCuero
 end
 go
+
+create procedure sp_obtInvCross
+as begin
+	select
+		tr.descripcion, ic.noPiezas
+	from
+		tb_tipoRecorte as tr
+	inner join
+		tb_partidaDet as pd
+	on
+		tr.idTipoRecorte = pd.idTipoRecorte
+	inner join
+		tb_invCross as ic
+	on
+		pd.idPartidaDet = ic.idPartidaDet
+end
+go
+
+create procedure sp_obtEntCross
+(
+	@tipoCuero varchar(20)
+	, @noPartida int
+	, @fecha varchar(10)
+	, @fecha1 varchar(10)
+)
+as begin
+	if (@noPartida = 0)
+	begin
+		select 
+			ic.idPartida, tr.descripcion, ic.noPiezas, ic.noPiezasActuales, ic.fechaentrada, ic.idInvPCross
+		from 
+			tb_tipoRecorte as tr
+		inner join
+			tb_partidaDet as pd
+		on
+			tr.idTipoRecorte = pd.idTipoRecorte
+		inner join
+			tb_invCross as ic
+		on
+			pd.idPartidaDet = ic.idPartidaDet
+		inner join
+			tb_recepcionCuero as rc
+		on
+			pd.idRecepcionCuero = rc.idRecepcionCuero
+		inner join
+			tb_tipoCuero as tc
+		on
+			rc.idTipoCuero = tc.idTipoCuero
+		where
+			tc.descripcion like @tipoCuero
+		and
+			ic.fechaentrada between @fecha and @fecha1
+	end
+	
+	else
+	begin
+		select 
+		ic.idPartida, tr.descripcion, ic.noPiezas, ic.fechaentrada
+	from 
+		tb_tipoRecorte as tr
+	inner join
+		tb_partidaDet as pd
+	on
+		tr.idTipoRecorte = pd.idTipoRecorte
+	inner join
+		tb_invCross as ic
+	on
+		pd.idPartidaDet = ic.idPartidaDet
+	inner join
+		tb_recepcionCuero as rc
+	on
+		pd.idRecepcionCuero = rc.idRecepcionCuero
+	inner join
+		tb_tipoCuero as tc
+	on
+		rc.idTipoCuero = tc.idTipoCuero
+	where
+		ic.idPartida = @noPartida
+	and
+		tc.descripcion like @tipoCuero
+	and
+		ic.fechaentrada between @fecha and @fecha1
+	end
+end
+go
+
+create procedure sp_agrInvCrossSemi
+(
+	@idInvPCross int
+	, @noPiezas int
+	, @noPiezasActuales int
+)
+as begin
+	declare @fechaEntrada datetime
+	
+	set @fechaEntrada =
+	(
+		select
+			getdate()
+	)
+	
+	insert into
+		tb_invCrossSemi
+	values
+		(@idInvPCross, @noPiezas, @noPiezasActuales, @fechaEntrada)
+end
+go
+
+create procedure sp_actInvCross
+(
+  @idInvPCross int
+  , @piezasUtilizar int
+)
+as begin
+  update
+    tb_invCross
+  set
+    noPiezasActuales = noPiezasActuales-@piezasUtilizar
+  where
+    idInvPCross = @idInvPCross
+end
+go
+
+create procedure sp_obtInvCueCrudo
+as begin
+	declare @descripcion varchar(30)
+	declare @tipoRecorte varchar(30)
+	
+	set @tipoRecorte =
+	(
+		select
+			descripcion
+		from
+			tb_tipoRecorte
+		where
+			idTipoRecorte = 1
+	)
+
+	select
+		concat(@tipoRecorte,' ',tc.descripcion) as descripcion, p.nombreProveedor, rc.noTotalPiezas, rc.kgTotal,
+		(rc.kgTotal/rc.noTotalPiezas) as pesoProm, rc.precioXKilo, rc.costoCamion
+	from
+		tb_tipoCuero as tc
+	inner join
+		tb_recepcionCuero as rc
+	on
+		tc.idTipoCuero = rc.idTipoCuero
+	inner join
+		tb_proveedor as p
+	on
+		rc.idProveedor = p.idProveedor
+end
 
 -- TRIGGERS --
 create trigger tr_insInvCueroCrudo

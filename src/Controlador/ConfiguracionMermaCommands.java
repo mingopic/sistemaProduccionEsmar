@@ -118,7 +118,7 @@ public class ConfiguracionMermaCommands  {
         return datos;
     }
     
-     //Método para agregar una configuracion de merma a la tabla configMerma
+    //Método para agregar una configuracion de merma a la tabla configMerma
     public static void agregarConfigMerma(ConfiguracionMerma[] datosCM) throws Exception {
         for (int i = 0; i < datosCM.length; i++) {
             String query = "exec sp_agrConfMerma "+datosCM[i].getIdTipoMerma()+""

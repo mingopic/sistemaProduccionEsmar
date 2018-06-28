@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a70557c-72df-46a7-8155-a62a15b44545">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="imagen" class="java.lang.Object">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[exec sp_obtInvCross]]>
+	</queryString>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="noPiezas" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="54" width="572" height="25" forecolor="#000000" backcolor="#000099" uuid="a41f3dc3-ea80-486a-a5d9-470dc3ee44ba"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="417" y="0" width="144" height="20" forecolor="#FFFFFF" uuid="2d2d15f3-861e-47c8-9766-158060ee8760"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="472" height="54" forecolor="#000000" backcolor="#009900" uuid="95253172-6a43-4a6a-b6db-a6fb9326682b"/>
+				<staticText>
+					<reportElement x="38" y="0" width="223" height="36" uuid="11f88b2b-3841-41ae-8719-fc38dfe4a66e"/>
+					<textElement>
+						<font size="24"/>
+					</textElement>
+					<text><![CDATA[Inventario Cross]]></text>
+				</staticText>
+			</frame>
+			<image>
+				<reportElement x="472" y="4" width="100" height="50" uuid="8a081a0d-88e2-4f93-9558-b296923b63cc"/>
+				<imageExpression><![CDATA[$P{imagen}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="2" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="b2f6c4c9-44e2-44df-badc-38f6ae36ce9d"/>
+				<text><![CDATA[Tipo Recorte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="0" width="100" height="20" uuid="3ed09c68-23fc-4e3a-b3f5-13707bc8303d"/>
+				<text><![CDATA[No. Piezas]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="759b3fe3-bd7f-4da5-a0e0-55f290920abd"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="0" width="100" height="20" uuid="cb522ae1-128f-439e-aeaf-a8c04dccf5b3"/>
+				<textFieldExpression><![CDATA[$F{noPiezas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="229" y="0" width="80" height="20" uuid="60c76284-5eb4-45a2-831b-1d95b2af8192"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="309" y="0" width="40" height="20" uuid="5266fbd2-55c0-4347-b34d-245070aea0f7"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

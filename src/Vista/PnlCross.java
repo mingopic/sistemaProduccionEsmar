@@ -8,11 +8,15 @@ package Vista;
 
 import Controlador.ConexionBD;
 import Controlador.ConfiguracionMermaCommands;
+import Controlador.InventarioCrossCommands;
+import Controlador.InventarioCrossSemiterminadoCommands;
 import Controlador.ProveedorCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.RecepcionCueroCommands;
 import Controlador.TipoCueroCommands;
 import Modelo.ConfiguracionMerma;
+import Modelo.InventarioCross;
+import Modelo.InventarioCrossSemiterminado;
 import Modelo.Proveedor;
 import Modelo.RangoPesoCuero;
 import Modelo.RecepcionCuero;
@@ -47,8 +51,8 @@ import net.sf.jasperreports.view.JasperViewer;
 public class PnlCross extends javax.swing.JPanel {
     PnlInsRecCuero pnlInsRecCuero;
     ConexionBD conexion;
-    RecepcionCuero rc;
-    RecepcionCueroCommands rcc;
+    InventarioCross ic;
+    InventarioCrossCommands icc;
     Proveedor p;
     ProveedorCommands pc;
     TipoCuero tc;
@@ -57,10 +61,12 @@ public class PnlCross extends javax.swing.JPanel {
     RangoPesoCueroCommands rpcc;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
+    InventarioCrossSemiterminado ics;
+    InventarioCrossSemiterminadoCommands icsc;
     String[][] proveedoresAgregar = null;
     String[][] tipoCueroAgregar = null;
     String[][] rangoPesoCuero = null;
-    String[][] datosEntRecCuero = null;
+    String[][] datosInvCross = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -68,7 +74,7 @@ public class PnlCross extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "Provedor","Tipo Cuero","No. Camión","Total Piezas","Total Kg","Precio x Kg","Costo Camión","Fecha de Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas","No. Piezas Actuales","Fecha de Entrada"
     };
    
     /**
@@ -84,16 +90,15 @@ public class PnlCross extends javax.swing.JPanel {
     public void inicializar() throws Exception
     {
         conexion = new ConexionBD();
-        rc = new RecepcionCuero();
-        rcc = new RecepcionCueroCommands();
+        ic = new InventarioCross();
+        icc = new InventarioCrossCommands();
         tc = new TipoCuero();
         tcc = new TipoCueroCommands();
         
-        actualizarTablaRecepcionCuero();
+        actualizarTablaCross();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
-        llenarComboProveedores();
         llenarComboTipoCuero();
     }
     
@@ -115,140 +120,153 @@ public class PnlCross extends javax.swing.JPanel {
     //método que llena los combobox del tipo de cuero en la base de datos
     public void llenarComboTipoCuero() throws Exception
     {
-//        tcc = new TipoCueroCommands();
-//        String[][] tipoCuero = tcc.llenarComboboxTipoCuero();
-//        
-//        int i=0;
-//        while (i<tipoCuero.length)
-//        {
-//            cmbTipoCuero.addItem(tipoCuero[i][1]);
-//            i++;
-//        }
+        tcc = new TipoCueroCommands();
+        String[][] tipoCuero = tcc.llenarComboboxTipoCuero();
+        
+        int i=0;
+        while (i<tipoCuero.length)
+        {
+            cmbTipoCuero.addItem(tipoCuero[i][1]);
+            i++;
+        }
+    }
+    
+    private void validarNumerosEnteros(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c = evt.getKeyChar();
+            
+            if (c<'0' || c>'9') 
+            {
+                evt.consume();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     //Método para actualizar la tabla de las entradas de cuero por trabajar, se inicializa al llamar la clase
-    public void actualizarTablaRecepcionCuero() 
+    public void actualizarTablaCross() 
     {
-//        //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
-//        //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
-//        if (jrFiltroFechasEntrada.isSelected())
-//        {
-//            try {
-//                    String fechaAux="";
-//                    String fecha=dcFecha1EntradaSemiterminado.getText();
+        //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
+        //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
+        if (jrFiltroFechasEntrada.isSelected())
+        {
+            try {
+                    String fechaAux="";
+                    String fecha=dcFecha1EntradaSemiterminado.getText();
+                    
+                    if (fecha.length()<10)
+                    {
+                        fecha="0"+fecha;
+                    }
+                    
+                    for (int i=6; i<fecha.length(); i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    for (int i=3; i<5; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    for (int i=0; i<2; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                            
+                    ic.setFecha(fechaAux);
+                }
+            catch (Exception ex) 
+                {
+                    ic.setFecha("0");
+                }
+            
+            try {
+                    String fechaAux="";
+                    String fecha=dcFecha2EntradaSemiterminado.getText();
+                    
+                    if (fecha.length()<10)
+                    {
+                        fecha="0"+fecha;
+                    }
+                    
+                    //obtiene año
+                    for (int i=6; i<fecha.length(); i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    //obtiene mes
+                    for (int i=3; i<5; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
 //                    
-//                    if (fecha.length()<10)
-//                    {
-//                        fecha="0"+fecha;
-//                    }
-//                    
-//                    for (int i=6; i<fecha.length(); i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-//                    
-//                    for (int i=3; i<5; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-//                    
-//                    for (int i=0; i<2; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                            
-//                    rc.setFecha(fechaAux);
-//                }
-//            catch (Exception ex) 
-//                {
-//                    rc.setFecha("0");
-//                }
-//            
-//            try {
-//                    String fechaAux="";
-//                    String fecha=dcFecha2EntradaSemiterminado.getText();
-//                    
-//                    if (fecha.length()<10)
-//                    {
-//                        fecha="0"+fecha;
-//                    }
-//                    
-//                    //obtiene año
-//                    for (int i=6; i<fecha.length(); i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-//                    
-//                    //obtiene mes
-//                    for (int i=3; i<5; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                    fechaAux=fechaAux+"-";
-////                    
-////                    //obtiene día
-//                    for (int i=0; i<2; i++)
-//                    {
-//                        fechaAux=fechaAux+fecha.charAt(i);
-//                    }
-//                            
-//                    rc.setFecha1(fechaAux);
-//                }
-//            catch (Exception ex) 
-//                {
-//                    rc.setFecha1("0");
-//                }
-//        }
-//        else
-//        {
-//            rc.setFecha("1900-01-01");
-//            rc.setFecha1("2040-01-01");
-//        }
-//        
-//        
-//        //validamos si esta seleccionado algún proveedor para hacer filtro
-//        if (cmbProveedor.getSelectedItem().toString().equals("<Todos>"))
-//        {
-//            rc.setProveedor("%%");
-//        }
-//        else
-//        {
-//            rc.setProveedor(cmbProveedor.getSelectedItem().toString());
-//        }
-//        
-//        //validamos si esta seleccionado algún tipo de cuero para hacer filtro
-//        if (cmbTipoCuero.getSelectedItem().toString().equals("<Todos>"))
-//        {
-//            tc.setDescripcion("%%");
-//        }
-//        else
-//        {
-//            tc.setDescripcion(cmbTipoCuero.getSelectedItem().toString());
-//        }
-//        
-//        DefaultTableModel dtm = null;
-//        
-//        try {
-//            
-//            datosEntRecCuero = rcc.obtenerListaRecepcionCuero(rc,tc);
-//            
-//            dtm = new DefaultTableModel(datosEntRecCuero, cols){
-//            public boolean isCellEditable(int row, int column) {
-//            return false;
-//            }
-//            };
-//            tblInvCross.setModel(dtm);
-//            tblInvCross.getTableHeader().setReorderingAllowed(false);
-//
-//        } catch (Exception e) {
-//           
-//            e.printStackTrace();
-//            
-//            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
-//        }
+//                    //obtiene día
+                    for (int i=0; i<2; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                            
+                    ic.setFecha1(fechaAux);
+                }
+            catch (Exception ex) 
+                {
+                    ic.setFecha1("0");
+                }
+        }
+        else
+        {
+            ic.setFecha("1900-01-01");
+            ic.setFecha1("2040-01-01");
+        }
+        
+        //validamos si esta seleccionado algún tipo de cuero para hacer filtro
+        if (cmbTipoCuero.getSelectedItem().toString().equals("<Todos>"))
+        {
+            tc.setDescripcion("%%");
+        }
+        else
+        {
+            tc.setDescripcion(cmbTipoCuero.getSelectedItem().toString());
+        }
+        
+        if (txtNoPartida.getText().isEmpty())
+        {
+            ic.setIdPartida(0);
+        }
+        else
+        {
+            int noPartida = Integer.parseInt(txtNoPartida.getText());
+            ic.setIdPartida(noPartida);
+        }
+        
+        DefaultTableModel dtm = null;
+        
+        try {
+            
+            datosInvCross = icc.obtenerListaInvCross(ic,tc);
+            
+            dtm = new DefaultTableModel(datosInvCross, cols){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            tblInvCross.setModel(dtm);
+            tblInvCross.getTableHeader().setReorderingAllowed(false);
+
+        } catch (Exception e) {
+           
+            e.printStackTrace();
+            
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
     }
     
     //Inicializar la tabla donde se agregarán los nuevos productos
@@ -337,6 +355,149 @@ public class PnlCross extends javax.swing.JPanel {
 //            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
 //        }
     }
+    
+    //Metodo para inicializar los campos de dlgAgregar
+    public void inicializarCamposEnvSemi() throws Exception
+    {
+        int fila = tblInvCross.getSelectedRow();
+        
+        txtNoPartidaEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 0)));
+        txtTipoRecorteEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 1)));
+        txtNoPiezasActualesEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 3)));
+    }  
+    
+    //Método que abre el dialogo para enviar a semiterminado 
+    public void abrirDialogoEnvSemi() throws Exception
+    {
+        
+        inicializarCamposEnvSemi();
+        
+        dlgEnvSemi.setSize(400, 380);
+        dlgEnvSemi.setPreferredSize(dlgEnvSemi.getSize());
+        dlgEnvSemi.setLocationRelativeTo(null);
+        dlgEnvSemi.setAlwaysOnTop(true);
+        dlgEnvSemi.setVisible(true);
+    }
+    
+    //Método para realizar entrada de material y actualizar inventarios
+    public void realizarEntradaEnvSemi () throws Exception
+    {
+        try 
+        {
+            if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
+            {
+                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor al número de piezas actuales");
+            }
+            else
+            {
+                int fila = tblInvCross.getSelectedRow();
+                ics = new InventarioCrossSemiterminado();
+                icsc = new InventarioCrossSemiterminadoCommands();
+
+                ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
+                ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
+                ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()));
+
+                icsc.agregarInvCrossSemi(ics);
+                icc.actualizarNoPiezasActual(ics);
+                actualizarTablaCross();
+                dlgEnvSemi.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
+            }
+        } 
+        catch (Exception e) 
+        {
+            dlgEnvSemi.setVisible(false);                
+            JOptionPane.showMessageDialog(null, "Error de conexión");
+        }
+    }
+    
+    public void generarReporteEntradaCross()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteEntCross.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void generarReporteSalidaCross()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteSalCross.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void generarReporteInventarioCross()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteInvCross.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -347,10 +508,22 @@ public class PnlCross extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnGroup = new javax.swing.ButtonGroup();
+        dlgEnvSemi = new javax.swing.JDialog();
+        jLabel14 = new javax.swing.JLabel();
+        btnRealizarEntradaEnvSemi = new javax.swing.JButton();
+        btnCancelarAgregarEnvSemi = new javax.swing.JButton();
+        jLabel31 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel53 = new javax.swing.JLabel();
+        txtNoPiezasActualesEnvSemi = new javax.swing.JTextField();
+        txtNoPartidaEnvSemi = new javax.swing.JTextField();
+        jLabel54 = new javax.swing.JLabel();
+        txtNoPiezasEnvSemi = new javax.swing.JTextField();
+        jLabel55 = new javax.swing.JLabel();
+        txtTipoRecorteEnvSemi = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblEntradasCross = new javax.swing.JTable();
+        tblInvCross = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         btnEnviarSemiterminado = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -362,7 +535,7 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel29 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNoPartida = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel27 = new javax.swing.JLabel();
@@ -381,10 +554,155 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel51 = new javax.swing.JLabel();
         btnReporteEntrada2 = new javax.swing.JButton();
 
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Agregar entrada semiterminado");
+
+        btnRealizarEntradaEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarEntradaEnvSemi.setText("Aceptar");
+        btnRealizarEntradaEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarEntradaEnvSemiActionPerformed(evt);
+            }
+        });
+
+        btnCancelarAgregarEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarAgregarEnvSemi.setText("Cancelar");
+        btnCancelarAgregarEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarAgregarEnvSemiActionPerformed(evt);
+            }
+        });
+
+        jLabel31.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel31.setText("No. Partida:");
+
+        jLabel53.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel53.setText("No. Piezas Actuales:");
+
+        txtNoPiezasActualesEnvSemi.setEditable(false);
+        txtNoPiezasActualesEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasActualesEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNoPiezasActualesEnvSemiActionPerformed(evt);
+            }
+        });
+        txtNoPiezasActualesEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasActualesEnvSemiKeyTyped(evt);
+            }
+        });
+
+        txtNoPartidaEnvSemi.setEditable(false);
+        txtNoPartidaEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPartidaEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPartidaEnvSemiKeyTyped(evt);
+            }
+        });
+
+        jLabel54.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel54.setText("No. Piezas a enviar:");
+
+        txtNoPiezasEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasEnvSemiKeyTyped(evt);
+            }
+        });
+
+        jLabel55.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel55.setText("Tipo Recorte:");
+
+        txtTipoRecorteEnvSemi.setEditable(false);
+        txtTipoRecorteEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTipoRecorteEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTipoRecorteEnvSemiActionPerformed(evt);
+            }
+        });
+        txtTipoRecorteEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTipoRecorteEnvSemiKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout dlgEnvSemiLayout = new javax.swing.GroupLayout(dlgEnvSemi.getContentPane());
+        dlgEnvSemi.getContentPane().setLayout(dlgEnvSemiLayout);
+        dlgEnvSemiLayout.setHorizontalGroup(
+            dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+            .addComponent(jSeparator5)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgEnvSemiLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRealizarEntradaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCancelarAgregarEnvSemi)
+                .addContainerGap())
+            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(jLabel53)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtNoPiezasActualesEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(jLabel54)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtNoPiezasEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgEnvSemiLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(jLabel55)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTipoRecorteEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(jLabel31)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtNoPartidaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(2, 2, 2)))
+                .addContainerGap(140, Short.MAX_VALUE))
+        );
+        dlgEnvSemiLayout.setVerticalGroup(
+            dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel31)
+                    .addComponent(txtNoPartidaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel55)
+                    .addComponent(txtTipoRecorteEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel53)
+                    .addComponent(txtNoPiezasActualesEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel54)
+                    .addComponent(txtNoPiezasEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
+                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarEntradaEnvSemi)
+                    .addComponent(btnCancelarAgregarEnvSemi))
+                .addContainerGap())
+        );
+
         setBackground(new java.awt.Color(255, 255, 255));
 
-        tblEntradasCross.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tblEntradasCross.setModel(new javax.swing.table.DefaultTableModel(
+        tblInvCross.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblInvCross.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -395,8 +713,8 @@ public class PnlCross extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblEntradasCross.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tblEntradasCross);
+        tblInvCross.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tblInvCross);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
@@ -411,6 +729,11 @@ public class PnlCross extends javax.swing.JPanel {
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         jLabel12.setText("   ");
@@ -450,10 +773,20 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel9.setText("  ");
         jToolBar1.add(jLabel9);
 
-        jTextField1.setMinimumSize(new java.awt.Dimension(60, 25));
-        jTextField1.setName(""); // NOI18N
-        jTextField1.setPreferredSize(new java.awt.Dimension(50, 25));
-        jToolBar1.add(jTextField1);
+        txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
+        txtNoPartida.setName(""); // NOI18N
+        txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
+        txtNoPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNoPartidaActionPerformed(evt);
+            }
+        });
+        txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPartidaKeyTyped(evt);
+            }
+        });
+        jToolBar1.add(txtNoPartida);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(227, 222, 222));
@@ -693,7 +1026,7 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed
-        actualizarTablaRecepcionCuero();
+        actualizarTablaCross();
     }//GEN-LAST:event_btnBuscarEntradaActionPerformed
 
     private void jrFiltroFechasEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrFiltroFechasEntradaActionPerformed
@@ -712,43 +1045,120 @@ try {
     }//GEN-LAST:event_jrFiltroFechasEntradaActionPerformed
 
     private void cmbTipoCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoCueroActionPerformed
-        actualizarTablaRecepcionCuero();
+        actualizarTablaCross();
     }//GEN-LAST:event_cmbTipoCueroActionPerformed
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
-        actualizarTablaRecepcionCuero();
-        generarReporteEntradaRecepcionCuero(rc, tc);
+        actualizarTablaCross();
+        generarReporteEntradaCross();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnReporteEntrada2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada2ActionPerformed
-        // TODO add your handling code here:
+        generarReporteInventarioCross();
     }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
-        // TODO add your handling code here:
+        generarReporteSalidaCross();
     }//GEN-LAST:event_btnReporteEntrada3ActionPerformed
+
+    private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
+        validarNumerosEnteros(evt, txtNoPartida.getText());
+    }//GEN-LAST:event_txtNoPartidaKeyTyped
+
+    private void txtNoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPartidaActionPerformed
+        actualizarTablaCross();
+    }//GEN-LAST:event_txtNoPartidaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            abrirDialogoEnvSemi();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnRealizarEntradaEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemiActionPerformed
+        try
+        {
+            realizarEntradaEnvSemi();
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnRealizarEntradaEnvSemiActionPerformed
+
+    private void btnCancelarAgregarEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvSemiActionPerformed
+        dlgEnvSemi.setVisible(false);
+    }//GEN-LAST:event_btnCancelarAgregarEnvSemiActionPerformed
+
+    private void txtNoPiezasActualesEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvSemiKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNoPiezasActualesEnvSemiKeyTyped
+
+    private void txtNoPartidaEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaEnvSemiKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNoPartidaEnvSemiKeyTyped
+
+    private void txtNoPiezasEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEnvSemiKeyTyped
+        validarNumerosEnteros(evt, txtNoPiezasEnvSemi.getText());
+    }//GEN-LAST:event_txtNoPiezasEnvSemiKeyTyped
+
+    private void txtNoPiezasActualesEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvSemiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPiezasActualesEnvSemiActionPerformed
+
+    private void txtTipoRecorteEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvSemiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoRecorteEnvSemiActionPerformed
+
+    private void txtTipoRecorteEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvSemiKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoRecorteEnvSemiKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
+    private javax.swing.JButton btnCancelarAgregarEnvSemi;
     private javax.swing.JLabel btnEnviarSemiterminado;
-    private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
     private javax.swing.JComboBox cmbTipoCuero;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
+    private javax.swing.JDialog dlgEnvSemi;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -757,11 +1167,16 @@ try {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
-    private javax.swing.JTable tblEntradasCross;
+    private javax.swing.JTable tblInvCross;
+    private javax.swing.JTextField txtNoPartida;
+    private javax.swing.JTextField txtNoPartidaEnvSemi;
+    private javax.swing.JTextField txtNoPiezasActualesEnvSemi;
+    private javax.swing.JTextField txtNoPiezasEnvSemi;
+    private javax.swing.JTextField txtTipoRecorteEnvSemi;
     // End of variables declaration//GEN-END:variables
 }

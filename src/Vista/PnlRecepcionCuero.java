@@ -296,6 +296,35 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         }
     }
     
+    public void generarReporteInventarioCueroCrudo(RecepcionCuero rc, TipoCuero tp)
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteInvCueCrudo.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void generarReporteEntradaRecepcionCueroDetalle(RecepcionCuero rc)
     {
         try
@@ -750,7 +779,7 @@ try {
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnReporteEntrada2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada2ActionPerformed
-        // TODO add your handling code here:
+        generarReporteInventarioCueroCrudo(rc, tc);
     }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
 
 

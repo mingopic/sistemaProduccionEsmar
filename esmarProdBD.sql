@@ -166,7 +166,7 @@ create table tb_invCross (
   , idPartida int not null foreign key references tb_partida(idPartida)
   , noPiezas int
   , noPiezasActuales int
-  , fechaEntrada datetime
+  , fechaEntrada date
 )
 go
 
@@ -175,7 +175,7 @@ create table tb_invCrossSemi (
   , idInvPCross int not null foreign key references tb_partidaDet(idPartidaDet)
   , noPiezas int
   , noPiezasActuales int
-  , fechaEntrada datetime
+  , fechaEntrada date
 )
 go
 
@@ -185,7 +185,7 @@ create table tb_invSemiterminado (
   , idCalibre int not null foreign key references tb_calibre(idCalibre)
   , idSeleccion int not null foreign key references tb_seleccion(idSeleccion)
   , kgTotales float
-  , fechaEntrada datetime
+  , fechaEntrada date
 )
 go
 
@@ -1422,7 +1422,7 @@ go
 create procedure sp_obtInvCross
 as begin
 	select
-		tr.descripcion, ic.noPiezas
+		tr.descripcion, ic.noPiezasActuales
 	from
 		tb_tipoRecorte as tr
 	inner join
@@ -1475,7 +1475,7 @@ as begin
 	else
 	begin
 		select 
-		ic.idPartida, tr.descripcion, ic.noPiezas, ic.fechaentrada
+		ic.idPartida, tr.descripcion, ic.noPiezas, ic.noPiezasActuales, ic.fechaentrada, ic.idInvPCross
 	from 
 		tb_tipoRecorte as tr
 	inner join
@@ -1570,6 +1570,28 @@ as begin
 	on
 		rc.idProveedor = p.idProveedor
 end
+go
+
+create procedure sp_obtSalidaCross
+as begin
+	select
+		ic.idPartida, tr.descripcion, ics.noPiezas, ics.fechaEntrada
+	from
+		tb_tipoRecorte as tr
+	inner join
+		tb_partidaDet as pd
+	on
+		tr.idTipoRecorte = pd.idTipoRecorte
+	inner join
+		tb_invCross as ic
+	on
+		pd.idPartidaDet = ic.idPartidaDet
+	inner join
+		tb_invCrossSemi as ics
+	on
+		ic.idInvPCross = ics.idInvPCross
+end
+go
 
 -- TRIGGERS --
 create trigger tr_insInvCueroCrudo

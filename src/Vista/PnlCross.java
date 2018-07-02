@@ -386,7 +386,7 @@ public class PnlCross extends javax.swing.JPanel {
         {
             if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
             {
-                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor al número de piezas actuales");
+                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
             }
             else
             {
@@ -776,12 +776,10 @@ public class PnlCross extends javax.swing.JPanel {
         txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
         txtNoPartida.setName(""); // NOI18N
         txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
-        txtNoPartida.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoPartidaActionPerformed(evt);
-            }
-        });
         txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNoPartidaKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNoPartidaKeyTyped(evt);
             }
@@ -857,6 +855,7 @@ public class PnlCross extends javax.swing.JPanel {
                 false,
                 true)));
     dcFecha1EntradaSemiterminado.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
+    dcFecha1EntradaSemiterminado.setFormat(2);
     dcFecha1EntradaSemiterminado.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
     try {
         dcFecha1EntradaSemiterminado.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
@@ -1065,10 +1064,6 @@ try {
         validarNumerosEnteros(evt, txtNoPartida.getText());
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
-    private void txtNoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPartidaActionPerformed
-        actualizarTablaCross();
-    }//GEN-LAST:event_txtNoPartidaActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             abrirDialogoEnvSemi();
@@ -1130,6 +1125,13 @@ try {
     private void txtTipoRecorteEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvSemiKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTipoRecorteEnvSemiKeyTyped
+
+    private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            actualizarTablaCross();
+        }
+    }//GEN-LAST:event_txtNoPartidaKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

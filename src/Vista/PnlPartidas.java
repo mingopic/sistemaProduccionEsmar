@@ -45,7 +45,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     
     String[] colums = new String[]
         {
-            "No. Camión","Proveedor","No. Piezas","Pzas Inventario","Prom. Kg/Pza","Kg Totales","Fecha"
+            "No. Camión","Proveedor","Pzas Inventario","No. Piezas","Prom. Kg/Pza","Kg Totales","Fecha"
         };
     
     
@@ -144,7 +144,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         {
             for (int i = 0; i < noRegistros.length; i++)
             {
-                noRegistros[i][0] = tblPartida.getValueAt(i, 2).toString();
+                noRegistros[i][0] = tblPartida.getValueAt(i, 3).toString();
                 noRegistros[i][1] = tblPartida.getValueAt(i, 5).toString();
                 
                 totalPiezas = totalPiezas + (Integer.parseInt(noRegistros[i][0]));

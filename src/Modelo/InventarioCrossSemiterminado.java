@@ -15,6 +15,7 @@ public class InventarioCrossSemiterminado {
     int noPiezas;
     int noPiezasActuales;
     String fechaEntrada;
+    String fecha;
 
     public int getIdInvCrossSemi() {
         return idInvCrossSemi;

@@ -105,7 +105,7 @@
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[costoCamion]]></text>
+				<text><![CDATA[Costo Camion]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

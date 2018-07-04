@@ -6,20 +6,16 @@
 
 package Vista;
 
+import Controlador.CalibreCommands;
 import Controlador.ConexionBD;
-import Controlador.ConfiguracionMermaCommands;
 import Controlador.InventarioCrossCommands;
-import Controlador.InventarioCrossSemiterminadoCommands;
-import Controlador.ProveedorCommands;
-import Controlador.RangoPesoCueroCommands;
-import Controlador.RecepcionCueroCommands;
+import Controlador.InventarioSemiterminadoCommands;
+import Controlador.SeleccionCommands;
 import Controlador.TipoCueroCommands;
-import Modelo.ConfiguracionMerma;
+import Modelo.Calibre;
 import Modelo.InventarioCross;
-import Modelo.InventarioCrossSemiterminado;
-import Modelo.Proveedor;
-import Modelo.RangoPesoCuero;
-import Modelo.RecepcionCuero;
+import Modelo.InventarioSemiterminado;
+import Modelo.Seleccion;
 import Modelo.TipoCuero;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
@@ -48,25 +44,19 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author Mingo
  */
-public class PnlCross extends javax.swing.JPanel {
-    PnlInsRecCuero pnlInsRecCuero;
+public class PnlSemiterminado extends javax.swing.JPanel {
     ConexionBD conexion;
-    InventarioCross ic;
-    InventarioCrossCommands icc;
-    Proveedor p;
-    ProveedorCommands pc;
     TipoCuero tc;
     TipoCueroCommands tcc;
-    RangoPesoCuero rpc;
-    RangoPesoCueroCommands rpcc;
-    ConfiguracionMerma cm;
-    ConfiguracionMermaCommands cmc;
-    InventarioCrossSemiterminado ics;
-    InventarioCrossSemiterminadoCommands icsc;
-    String[][] proveedoresAgregar = null;
-    String[][] tipoCueroAgregar = null;
-    String[][] rangoPesoCuero = null;
-    String[][] datosInvCross = null;
+    InventarioSemiterminado is;
+    InventarioSemiterminadoCommands isc;
+    Calibre c;
+    CalibreCommands cc;
+    Seleccion s;
+    SeleccionCommands sc;
+    InventarioCross ic;
+    InventarioCrossCommands icc;
+    String[][] datosSemiterminado = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -74,50 +64,56 @@ public class PnlCross extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas","No. Piezas Actuales","Fecha de Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
     };
    
     /**
      * Creates new form PnlEntradas
      */
-    public PnlCross() throws Exception {
+    public PnlSemiterminado() throws Exception {
         initComponents();
         inicializar();
     }
     
     
-    //Método que se invica al inicializar el sistema, inicializa todas las clases a utilizar
+//    //Método que se invica al inicializar el sistema, inicializa todas las clases a utilizar
     public void inicializar() throws Exception
     {
         conexion = new ConexionBD();
-        ic = new InventarioCross();
-        icc = new InventarioCrossCommands();
+        is = new InventarioSemiterminado();
         tc = new TipoCuero();
         tcc = new TipoCueroCommands();
+        ic = new InventarioCross();
+        c = new Calibre();
+        cc = new CalibreCommands();
+        s = new Seleccion();
+        sc = new SeleccionCommands();
         
-        actualizarTablaCross();
+        actualizarTablaSemiterminado();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
         llenarComboTipoCuero();
+        llenarComboCalibre();
+        llenarComboSeleccion();
     }
-    
-    
-    //método que llena los combobox de los proveedores en la base de datos
-    public void llenarComboProveedores() throws Exception
+//    
+//    
+    //método que llena los combobox del calibre en la base de datos
+    public void llenarComboCalibre() throws Exception
     {
-//        pc = new ProveedorCommands();
-//        String[][] proveedores = pc.llenarComboboxProveedores();
-//        
-//        int i=0;
-//        while (i<proveedores.length)
-//        {
-//            cmbProveedor.addItem(proveedores[i][1]);
-//            i++;
-//        }
+        cc = new CalibreCommands();
+        String[][] calibres = cc.llenarComboboxCalibre();
+        
+        int i=0;
+        while (i<calibres.length)
+        {
+            cmbCalibre.addItem(calibres[i][1]);
+            i++;
+        }
     }
-    
-    //método que llena los combobox del tipo de cuero en la base de datos
+//    
+//    //método que llena los combobox del tipo de cuero en la base de datos
     public void llenarComboTipoCuero() throws Exception
     {
         tcc = new TipoCueroCommands();
@@ -131,6 +127,20 @@ public class PnlCross extends javax.swing.JPanel {
         }
     }
     
+    //método que llena los combobox de la selección en la base de datos
+    public void llenarComboSeleccion() throws Exception
+    {
+        sc = new SeleccionCommands();
+        String[][] seleccion = sc.llenarComboboxSeleccion();
+        
+        int i=0;
+        while (i<seleccion.length)
+        {
+            cmbSeleccion.addItem(seleccion[i][1]);
+            i++;
+        }
+    }
+//    
     private void validarNumerosEnteros(java.awt.event.KeyEvent evt, String textoCaja)
     {
         try {
@@ -141,12 +151,12 @@ public class PnlCross extends javax.swing.JPanel {
                 evt.consume();
             }
         } catch (Exception ex) {
-            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    //Método para actualizar la tabla de las entradas de cuero por trabajar, se inicializa al llamar la clase
-    public void actualizarTablaCross() 
+//    
+//    //Método para actualizar la tabla de las entradas de cuero por trabajar, se inicializa al llamar la clase
+    public void actualizarTablaSemiterminado() 
     {
         //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
         //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
@@ -178,11 +188,11 @@ public class PnlCross extends javax.swing.JPanel {
                         fechaAux=fechaAux+fecha.charAt(i);
                     }
                             
-                    ic.setFecha(fechaAux);
+                    is.setFecha(fechaAux);
                 }
             catch (Exception ex) 
                 {
-                    ic.setFecha("0");
+                    is.setFecha("0");
                 }
             
             try {
@@ -214,17 +224,17 @@ public class PnlCross extends javax.swing.JPanel {
                         fechaAux=fechaAux+fecha.charAt(i);
                     }
                             
-                    ic.setFecha1(fechaAux);
+                    is.setFecha1(fechaAux);
                 }
             catch (Exception ex) 
                 {
-                    ic.setFecha1("0");
+                    is.setFecha1("0");
                 }
         }
         else
         {
-            ic.setFecha("1900-01-01");
-            ic.setFecha1("2040-01-01");
+            is.setFecha("1900-01-01");
+            is.setFecha1("2040-01-01");
         }
         
         //validamos si esta seleccionado algún tipo de cuero para hacer filtro
@@ -235,6 +245,24 @@ public class PnlCross extends javax.swing.JPanel {
         else
         {
             tc.setDescripcion(cmbTipoCuero.getSelectedItem().toString());
+        }
+        
+        if (cmbCalibre.getSelectedItem().toString().equals("<Todos>"))
+        {
+            c.setDescripcion("%%");
+        }
+        else
+        {
+            c.setDescripcion(cmbCalibre.getSelectedItem().toString());
+        }
+        
+        if (cmbSeleccion.getSelectedItem().toString().equals("<Todos>"))
+        {
+            s.setDescripcion("%%");
+        }
+        else
+        {
+            s.setDescripcion(cmbSeleccion.getSelectedItem().toString());
         }
         
         if (txtNoPartida.getText().isEmpty())
@@ -251,15 +279,15 @@ public class PnlCross extends javax.swing.JPanel {
         
         try {
             
-            datosInvCross = icc.obtenerListaInvCross(ic,tc);
+            datosSemiterminado = isc.obtenerListaInvSemiterminado(ic,tc,c,s,is);
             
-            dtm = new DefaultTableModel(datosInvCross, cols){
+            dtm = new DefaultTableModel(datosSemiterminado, cols){
             public boolean isCellEditable(int row, int column) {
             return false;
             }
             };
-            tblInvCross.setModel(dtm);
-            tblInvCross.getTableHeader().setReorderingAllowed(false);
+            tblSemiterminado.setModel(dtm);
+            tblSemiterminado.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -268,31 +296,158 @@ public class PnlCross extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
         }
     }
-    
-    //Inicializar la tabla donde se agregarán los nuevos productos
-    public void inicializarTablaAgregarEntrada()
-    {
-//        String[] cols = new String[]
-//        {
-//            "Producto","Cantidad","Unidad"
-//        };
+//    
+//    //Inicializar la tabla donde se agregarán los nuevos productos
+//    public void inicializarTablaAgregarEntrada()
+//    {
+////        String[] cols = new String[]
+////        {
+////            "Producto","Cantidad","Unidad"
+////        };
+////        
+////        dtms=new DefaultTableModel();
+////        dtms.setColumnIdentifiers(cols);
+//    }
+//
+//    public void generarReporteEntradaRecepcionCuero(RecepcionCuero rc, TipoCuero tp)
+//    {
+////        try
+////        {
+////            URL path = this.getClass().getResource("/Reportes/ReporteEntradas.jasper");
+////            
+////            Map parametros = new HashMap();
+////            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+////            parametros.put("proveedor",rc.getProveedor());
+////            parametros.put("descripcion",tp.getDescripcion());
+////            parametros.put("fecha",rc.getFecha());
+////            parametros.put("fecha1",rc.getFecha1());
+////            
+////            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+////            
+////            conexion.conectar();
+////            
+////            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+////            
+////            JasperViewer view = new JasperViewer(jprint, false);
+////            
+////            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+////            
+////            view.setVisible(true);
+////            conexion.desconectar();
+////        } catch (JRException ex) {
+////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+////            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+////        } catch (Exception ex) {
+////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+//    }
+//    
+//    public void generarReporteEntradaRecepcionCueroDetalle(RecepcionCuero rc)
+//    {
+////        try
+////        {
+////            int idRecepcionCuero = 0;
+////            try 
+////            {
+////                idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblInvCross.getSelectedRow()][8]);
+////            } 
+////            catch (Exception e) 
+////            {
+////                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla","Mensaje",JOptionPane.WARNING_MESSAGE);
+////                return;
+////            }
+////            rc.setIdRecepcionCuero(idRecepcionCuero);
+////            
+////            URL path = this.getClass().getResource("/Reportes/ReporteEntradaDetalle.jasper");
+////            
+////            Map parametros = new HashMap();
+////            parametros.put("idRecepcionCuero",rc.getIdRecepcionCuero());
+////            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
+////            
+////            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+////            
+////            conexion.conectar();
+////            
+////            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+////            
+////            JasperViewer view = new JasperViewer(jprint, false);
+////            
+////            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+////            
+////            view.setVisible(true);
+////            conexion.desconectar();
+////        } catch (JRException ex) {
+////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+////            JOptionPane.showMessageDialog(null, "No se puede generar el  reporte","Error",JOptionPane.ERROR_MESSAGE);
+////        } catch (Exception ex) {
+////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+//    }
+//    
+//    //Metodo para inicializar los campos de dlgAgregar
+//    public void inicializarCamposEnvSemi() throws Exception
+//    {
+//        int fila = tblInvCross.getSelectedRow();
 //        
-//        dtms=new DefaultTableModel();
-//        dtms.setColumnIdentifiers(cols);
-    }
-
-    public void generarReporteEntradaRecepcionCuero(RecepcionCuero rc, TipoCuero tp)
-    {
+//        txtNoPartidaEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 0)));
+//        txtTipoRecorteEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 1)));
+//        txtNoPiezasActualesEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 3)));
+//    }  
+//    
+//    //Método que abre el dialogo para enviar a semiterminado 
+//    public void abrirDialogoEnvSemi() throws Exception
+//    {
+//        
+//        inicializarCamposEnvSemi();
+//        
+//        dlgEnvSemi.setSize(400, 380);
+//        dlgEnvSemi.setPreferredSize(dlgEnvSemi.getSize());
+//        dlgEnvSemi.setLocationRelativeTo(null);
+//        dlgEnvSemi.setAlwaysOnTop(true);
+//        dlgEnvSemi.setVisible(true);
+//    }
+//    
+//    //Método para realizar entrada de material y actualizar inventarios
+//    public void realizarEntradaEnvSemi () throws Exception
+//    {
+//        try 
+//        {
+//            if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
+//            {
+//                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+//            }
+//            else
+//            {
+//                int fila = tblInvCross.getSelectedRow();
+//                ics = new InventarioCrossSemiterminado();
+//                icsc = new InventarioCrossSemiterminadoCommands();
+//
+//                ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
+//                ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
+//                ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()));
+//
+//                icsc.agregarInvCrossSemi(ics);
+//                icc.actualizarNoPiezasActual(ics);
+//                actualizarTablaCross();
+//                dlgEnvSemi.setVisible(false);
+//                JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
+//            }
+//        } 
+//        catch (Exception e) 
+//        {
+//            dlgEnvSemi.setVisible(false);                
+//            JOptionPane.showMessageDialog(null, "Error de conexión");
+//        }
+//    }
+//    
+//    public void generarReporteEntradaCross()
+//    {
 //        try
 //        {
-//            URL path = this.getClass().getResource("/Reportes/ReporteEntradas.jasper");
+//            URL path = this.getClass().getResource("/Reportes/ReporteEntCross.jasper");
 //            
 //            Map parametros = new HashMap();
 //            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-//            parametros.put("proveedor",rc.getProveedor());
-//            parametros.put("descripcion",tp.getDescripcion());
-//            parametros.put("fecha",rc.getFecha());
-//            parametros.put("fecha1",rc.getFecha1());
 //            
 //            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
 //            
@@ -307,34 +462,21 @@ public class PnlCross extends javax.swing.JPanel {
 //            view.setVisible(true);
 //            conexion.desconectar();
 //        } catch (JRException ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
 //            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
 //        } catch (Exception ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-    }
-    
-    public void generarReporteEntradaRecepcionCueroDetalle(RecepcionCuero rc)
-    {
+//    }
+//    
+//    public void generarReporteSalidaCross()
+//    {
 //        try
 //        {
-//            int idRecepcionCuero = 0;
-//            try 
-//            {
-//                idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblInvCross.getSelectedRow()][8]);
-//            } 
-//            catch (Exception e) 
-//            {
-//                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla","Mensaje",JOptionPane.WARNING_MESSAGE);
-//                return;
-//            }
-//            rc.setIdRecepcionCuero(idRecepcionCuero);
-//            
-//            URL path = this.getClass().getResource("/Reportes/ReporteEntradaDetalle.jasper");
+//            URL path = this.getClass().getResource("/Reportes/ReporteSalCross.jasper");
 //            
 //            Map parametros = new HashMap();
-//            parametros.put("idRecepcionCuero",rc.getIdRecepcionCuero());
-//            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
+//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
 //            
 //            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
 //            
@@ -349,157 +491,41 @@ public class PnlCross extends javax.swing.JPanel {
 //            view.setVisible(true);
 //            conexion.desconectar();
 //        } catch (JRException ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el  reporte","Error",JOptionPane.ERROR_MESSAGE);
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
 //        } catch (Exception ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-    }
-    
-    //Metodo para inicializar los campos de dlgAgregar
-    public void inicializarCamposEnvSemi() throws Exception
-    {
-        txtNoPiezasEnvSemi.setText("");
-        
-        int fila = tblInvCross.getSelectedRow();
-        
-        txtNoPartidaEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 0)));
-        txtTipoRecorteEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 1)));
-        txtNoPiezasActualesEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 3)));
-    }  
-    
-    //Método que abre el dialogo para enviar a semiterminado 
-    public void abrirDialogoEnvSemi() throws Exception
-    {
-        
-        inicializarCamposEnvSemi();
-        
-        dlgEnvSemi.setSize(400, 380);
-        dlgEnvSemi.setPreferredSize(dlgEnvSemi.getSize());
-        dlgEnvSemi.setLocationRelativeTo(null);
-        dlgEnvSemi.setAlwaysOnTop(true);
-        dlgEnvSemi.setVisible(true);
-    }
-    
-    //Método para realizar entrada de material y actualizar inventarios
-    public void realizarEntradaEnvSemi () throws Exception
-    {
-        try 
-        {
-            if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
-            {
-                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
-            }
-            else
-            {
-                int fila = tblInvCross.getSelectedRow();
-                ics = new InventarioCrossSemiterminado();
-                icsc = new InventarioCrossSemiterminadoCommands();
-
-                ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
-                ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
-                ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()));
-
-                icsc.agregarInvCrossSemi(ics);
-                icc.actualizarNoPiezasActual(ics);
-                actualizarTablaCross();
-                dlgEnvSemi.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
-            }
-        } 
-        catch (Exception e) 
-        {
-            dlgEnvSemi.setVisible(false);                
-            JOptionPane.showMessageDialog(null, "Error de conexión");
-        }
-    }
-    
-    public void generarReporteEntradaCross()
-    {
-        try
-        {
-            URL path = this.getClass().getResource("/Reportes/ReporteEntCross.jasper");
-            
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-            
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void generarReporteSalidaCross()
-    {
-        try
-        {
-            URL path = this.getClass().getResource("/Reportes/ReporteSalCross.jasper");
-            
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-            
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void generarReporteInventarioCross()
-    {
-        try
-        {
-            URL path = this.getClass().getResource("/Reportes/ReporteInvCross.jasper");
-            
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-            
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    }
+//    
+//    public void generarReporteInventarioCross()
+//    {
+//        try
+//        {
+//            URL path = this.getClass().getResource("/Reportes/ReporteInvCross.jasper");
+//            
+//            Map parametros = new HashMap();
+//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+//            
+//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+//            
+//            conexion.conectar();
+//            
+//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+//            
+//            JasperViewer view = new JasperViewer(jprint, false);
+//            
+//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+//            
+//            view.setVisible(true);
+//            conexion.desconectar();
+//        } catch (JRException ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+//        } catch (Exception ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -525,20 +551,25 @@ public class PnlCross extends javax.swing.JPanel {
         txtTipoRecorteEnvSemi = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblInvCross = new javax.swing.JTable();
+        tblSemiterminado = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        btnEnviarSemiterminado = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         cmbTipoCuero = new javax.swing.JComboBox();
-        jLabel29 = new javax.swing.JLabel();
+        jLabel58 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        cmbCalibre = new javax.swing.JComboBox();
+        jLabel56 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        cmbSeleccion = new javax.swing.JComboBox();
+        jLabel60 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtNoPartida = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        jLabel59 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel27 = new javax.swing.JLabel();
         jrFiltroFechasEntrada = new javax.swing.JRadioButton();
@@ -549,12 +580,20 @@ public class PnlCross extends javax.swing.JPanel {
         dcFecha2EntradaSemiterminado = new datechooser.beans.DateChooserCombo();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btnBuscarEntrada = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
         jToolBar2 = new javax.swing.JToolBar();
         btnReporteEntrada = new javax.swing.JButton();
         jLabel50 = new javax.swing.JLabel();
         btnReporteEntrada3 = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
         btnReporteEntrada2 = new javax.swing.JButton();
+        jLabel57 = new javax.swing.JLabel();
+        btnReporteEntrada6 = new javax.swing.JButton();
+        jToolBar3 = new javax.swing.JToolBar();
+        btnEnviarSemiterminado1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel61 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -703,8 +742,8 @@ public class PnlCross extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        tblInvCross.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tblInvCross.setModel(new javax.swing.table.DefaultTableModel(
+        tblSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblSemiterminado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -715,34 +754,15 @@ public class PnlCross extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblInvCross.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tblInvCross);
+        tblSemiterminado.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tblSemiterminado);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnEnviarSemiterminado.setText("   ");
-        jToolBar1.add(btnEnviarSemiterminado);
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
-        jButton1.setText("Enviar a Semiterminado");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton1);
-
         jLabel12.setText("   ");
         jToolBar1.add(jLabel12);
-
-        jLabel13.setText("   ");
-        jToolBar1.add(jLabel13);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Tipo de Cuero:");
@@ -763,8 +783,58 @@ public class PnlCross extends javax.swing.JPanel {
         });
         jToolBar1.add(cmbTipoCuero);
 
-        jLabel29.setText("   ");
-        jToolBar1.add(jLabel29);
+        jLabel58.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel58.setForeground(new java.awt.Color(227, 222, 222));
+        jLabel58.setText("   ");
+        jToolBar1.add(jLabel58);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel15.setText("Calibre:");
+        jToolBar1.add(jLabel15);
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(227, 222, 222));
+        jLabel16.setText("  ");
+        jToolBar1.add(jLabel16);
+
+        cmbCalibre.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Todos>" }));
+        cmbCalibre.setMinimumSize(new java.awt.Dimension(100, 20));
+        cmbCalibre.setPreferredSize(new java.awt.Dimension(85, 25));
+        cmbCalibre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCalibreActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cmbCalibre);
+
+        jLabel56.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel56.setForeground(new java.awt.Color(227, 222, 222));
+        jLabel56.setText("   ");
+        jToolBar1.add(jLabel56);
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel17.setText("Selección:");
+        jToolBar1.add(jLabel17);
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(227, 222, 222));
+        jLabel18.setText("  ");
+        jToolBar1.add(jLabel18);
+
+        cmbSeleccion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Todos>" }));
+        cmbSeleccion.setMinimumSize(new java.awt.Dimension(100, 20));
+        cmbSeleccion.setPreferredSize(new java.awt.Dimension(85, 25));
+        cmbSeleccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSeleccionActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cmbSeleccion);
+
+        jLabel60.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel60.setForeground(new java.awt.Color(227, 222, 222));
+        jLabel60.setText("   ");
+        jToolBar1.add(jLabel60);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("No. Partida");
@@ -777,7 +847,7 @@ public class PnlCross extends javax.swing.JPanel {
 
         txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
         txtNoPartida.setName(""); // NOI18N
-        txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
+        txtNoPartida.setPreferredSize(new java.awt.Dimension(40, 25));
         txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtNoPartidaKeyPressed(evt);
@@ -788,10 +858,10 @@ public class PnlCross extends javax.swing.JPanel {
         });
         jToolBar1.add(txtNoPartida);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(227, 222, 222));
-        jLabel11.setText("  ");
-        jToolBar1.add(jLabel11);
+        jLabel59.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel59.setForeground(new java.awt.Color(227, 222, 222));
+        jLabel59.setText("  ");
+        jToolBar1.add(jLabel59);
         jToolBar1.add(jSeparator1);
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -801,7 +871,7 @@ public class PnlCross extends javax.swing.JPanel {
         jrFiltroFechasEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jrFiltroFechasEntrada.setFocusable(false);
         jrFiltroFechasEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jrFiltroFechasEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jrFiltroFechasEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jrFiltroFechasEntrada.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jrFiltroFechasEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jrFiltroFechasEntrada.addActionListener(new java.awt.event.ActionListener() {
@@ -869,7 +939,7 @@ public class PnlCross extends javax.swing.JPanel {
 
     lbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     lbl.setForeground(new java.awt.Color(227, 222, 222));
-    lbl.setText("     ");
+    lbl.setText("   ");
     jToolBar1.add(lbl);
 
     jLabel25.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -941,6 +1011,11 @@ try {
     });
     jToolBar1.add(btnBuscarEntrada);
 
+    jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel11.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel11.setText("  ");
+    jToolBar1.add(jLabel11);
+
     jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar2.setFloatable(false);
     jToolBar2.setRollover(true);
@@ -985,7 +1060,7 @@ try {
 
     btnReporteEntrada2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnReporteEntrada2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntrada2.setText("Reporte Inventario Cross");
+    btnReporteEntrada2.setText("Reporte Inventario x Trabajar");
     btnReporteEntrada2.setFocusable(false);
     btnReporteEntrada2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     btnReporteEntrada2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -996,13 +1071,71 @@ try {
     });
     jToolBar2.add(btnReporteEntrada2);
 
+    jLabel57.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel57.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel57.setText("     ");
+    jToolBar2.add(jLabel57);
+
+    btnReporteEntrada6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteEntrada6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+    btnReporteEntrada6.setText("Reporte Inventario Semiterminado");
+    btnReporteEntrada6.setFocusable(false);
+    btnReporteEntrada6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnReporteEntrada6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteEntrada6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteEntrada6.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteEntrada6ActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteEntrada6);
+
+    jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jToolBar3.setFloatable(false);
+    jToolBar3.setRollover(true);
+
+    btnEnviarSemiterminado1.setText("   ");
+    jToolBar3.add(btnEnviarSemiterminado1);
+
+    jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+    jButton2.setText("Agregar Entrada");
+    jButton2.setFocusable(false);
+    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton2ActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(jButton2);
+
+    jLabel61.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel61.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel61.setText("   ");
+    jToolBar3.add(jLabel61);
+
+    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+    jButton1.setText("Enviar a Terminado");
+    jButton1.setFocusable(false);
+    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(jButton1);
+
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(jScrollPane1)
-        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
-        .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
+        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1223, Short.MAX_VALUE)
+        .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1223, Short.MAX_VALUE)
+        .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1223, Short.MAX_VALUE)
     );
     jPanel4Layout.setVerticalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1011,7 +1144,9 @@ try {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+            .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1027,7 +1162,7 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed
-        actualizarTablaCross();
+        actualizarTablaSemiterminado();
     }//GEN-LAST:event_btnBuscarEntradaActionPerformed
 
     private void jrFiltroFechasEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrFiltroFechasEntradaActionPerformed
@@ -1046,20 +1181,20 @@ try {
     }//GEN-LAST:event_jrFiltroFechasEntradaActionPerformed
 
     private void cmbTipoCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoCueroActionPerformed
-        actualizarTablaCross();
+        actualizarTablaSemiterminado();
     }//GEN-LAST:event_cmbTipoCueroActionPerformed
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
-        actualizarTablaCross();
-        generarReporteEntradaCross();
+//        actualizarTablaCross();
+//        generarReporteEntradaCross();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnReporteEntrada2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada2ActionPerformed
-        generarReporteInventarioCross();
+//        generarReporteInventarioCross();
     }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
-        generarReporteSalidaCross();
+//        generarReporteSalidaCross();
     }//GEN-LAST:event_btnReporteEntrada3ActionPerformed
 
     private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
@@ -1067,53 +1202,53 @@ try {
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            abrirDialogoEnvSemi();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
-        }
+//        try {
+//            abrirDialogoEnvSemi();
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnRealizarEntradaEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemiActionPerformed
-        try
-        {
-            realizarEntradaEnvSemi();
-        }
-        catch (Exception ex)
-        {
-            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try
+//        {
+//            realizarEntradaEnvSemi();
+//        }
+//        catch (Exception ex)
+//        {
+//            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }//GEN-LAST:event_btnRealizarEntradaEnvSemiActionPerformed
 
     private void btnCancelarAgregarEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvSemiActionPerformed
-        dlgEnvSemi.setVisible(false);
+//        dlgEnvSemi.setVisible(false);
     }//GEN-LAST:event_btnCancelarAgregarEnvSemiActionPerformed
 
     private void txtNoPiezasActualesEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvSemiKeyTyped
-        char c;
-        c=evt.getKeyChar();
-
-        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
+//        char c;
+//        c=evt.getKeyChar();
+//
+//        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+//        {
+//            getToolkit().beep();
+//            evt.consume();
+//        }
     }//GEN-LAST:event_txtNoPiezasActualesEnvSemiKeyTyped
 
     private void txtNoPartidaEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaEnvSemiKeyTyped
-        char c;
-        c=evt.getKeyChar();
-
-        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
+//        char c;
+//        c=evt.getKeyChar();
+//
+//        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+//        {
+//            getToolkit().beep();
+//            evt.consume();
+//        }
     }//GEN-LAST:event_txtNoPartidaEnvSemiKeyTyped
 
     private void txtNoPiezasEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEnvSemiKeyTyped
-        validarNumerosEnteros(evt, txtNoPiezasEnvSemi.getText());
+//        validarNumerosEnteros(evt, txtNoPiezasEnvSemi.getText());
     }//GEN-LAST:event_txtNoPiezasEnvSemiKeyTyped
 
     private void txtNoPiezasActualesEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvSemiActionPerformed
@@ -1131,31 +1266,53 @@ try {
     private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
         {
-            actualizarTablaCross();
+            actualizarTablaSemiterminado();
         }
     }//GEN-LAST:event_txtNoPartidaKeyPressed
+
+    private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
+
+    private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed
+        actualizarTablaSemiterminado();
+    }//GEN-LAST:event_cmbCalibreActionPerformed
+
+    private void cmbSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSeleccionActionPerformed
+        actualizarTablaSemiterminado();
+    }//GEN-LAST:event_cmbSeleccionActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
-    private javax.swing.JLabel btnEnviarSemiterminado;
+    private javax.swing.JLabel btnEnviarSemiterminado1;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
+    private javax.swing.JButton btnReporteEntrada6;
+    private javax.swing.JComboBox cmbCalibre;
+    private javax.swing.JComboBox cmbSeleccion;
     private javax.swing.JComboBox cmbTipoCuero;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgEnvSemi;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel50;
@@ -1163,7 +1320,13 @@ try {
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1174,9 +1337,10 @@ try {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
-    private javax.swing.JTable tblInvCross;
+    private javax.swing.JTable tblSemiterminado;
     private javax.swing.JTextField txtNoPartida;
     private javax.swing.JTextField txtNoPartidaEnvSemi;
     private javax.swing.JTextField txtNoPiezasActualesEnvSemi;

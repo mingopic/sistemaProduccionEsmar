@@ -1433,6 +1433,8 @@ as begin
 		tb_invCross as ic
 	on
 		pd.idPartidaDet = ic.idPartidaDet
+	where
+		ic.noPiezasActuales > 0
 end
 go
 
@@ -1593,6 +1595,128 @@ as begin
 end
 go
 
+create procedure sp_obtCalibre
+as begin
+	select
+		*
+	from
+		tb_calibre
+end
+go
+
+create procedure sp_obtSeleccion
+as begin
+	select
+		*
+	from
+		tb_seleccion
+end
+go
+
+alter procedure sp_obtEntInvSem
+(
+	@tipoCuero varchar(20)
+	, @calibre varchar(15)
+	, @seleccion varchar(15)
+	, @noPartida int
+	, @fecha varchar(10)
+	, @fecha1 varchar(10)
+)
+as begin
+	if (@noPartida = 0)
+	begin
+		select
+			ic.idPartida, tc.descripcion as tipoCuero, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
+			s.descripcion as seleccion, c.descripcion as calibre, ins.fechaEntrada, ins.idInvSemiterminado
+		from
+			tb_partidaDet as pd
+		inner join
+			tb_invCross as ic
+		on
+			pd.idPartidaDet = ic.idPartidaDet
+		inner join
+			tb_recepcionCuero as rc
+		on
+			pd.idRecepcionCuero = rc.idRecepcionCuero
+		inner join
+			tb_tipoCuero as tc
+		on
+			rc.idTipoCuero = tc.idTipoCuero
+		inner join
+			tb_invCrossSemi as ics
+		on
+			ic.idInvPCross = ics.idInvPCross
+		inner join
+			tb_invSemiterminado as ins
+		on
+			ics.idInvCrossSemi = ins.idInvCrossSemi
+		inner join
+			tb_seleccion as s
+		on
+			ins.idSeleccion = s.idSeleccion
+		inner join
+			tb_calibre as c
+		on
+			ins.idCalibre = c.idCalibre
+		where
+			tc.descripcion like @tipoCuero
+		and
+			c.descripcion like @calibre
+		and
+			s.descripcion like @seleccion
+		and
+			ins.fechaEntrada between @fecha and @fecha1
+	end
+	
+	else
+	begin
+		select
+			ic.idPartida, tc.descripcion as tipoCuero, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
+			s.descripcion as seleccion, c.descripcion as calibre, ins.fechaEntrada, ins.idInvSemiterminado
+		from
+			tb_partidaDet as pd
+		inner join
+			tb_invCross as ic
+		on
+			pd.idPartidaDet = ic.idPartidaDet
+		inner join
+			tb_recepcionCuero as rc
+		on
+			pd.idRecepcionCuero = rc.idRecepcionCuero
+		inner join
+			tb_tipoCuero as tc
+		on
+			rc.idTipoCuero = tc.idTipoCuero
+		inner join
+			tb_invCrossSemi as ics
+		on
+			ic.idInvPCross = ics.idInvPCross
+		inner join
+			tb_invSemiterminado as ins
+		on
+			ics.idInvCrossSemi = ins.idInvCrossSemi
+		inner join
+			tb_seleccion as s
+		on
+			ins.idSeleccion = s.idSeleccion
+		inner join
+			tb_calibre as c
+		on
+			ins.idCalibre = c.idCalibre
+		where
+			tc.descripcion like @tipoCuero
+		and
+			c.descripcion like @calibre
+		and
+			s.descripcion like @seleccion
+		and
+			ic.idPartida = @noPartida
+		and
+			ins.fechaEntrada between @fecha and @fecha1
+	end
+end
+go
+
 -- TRIGGERS --
 create trigger tr_insInvCueroCrudo
 on tb_recepcionCuero
@@ -1690,3 +1814,13 @@ insert into
   tb_tipoRecorte
 values
   ('Entero');
+  
+insert into 
+  tb_calibre
+values 
+  ('4-5'), ('5-6'), ('6-7'), ('7-8'), ('8-9'), ('9-10'), ('10-11'), ('40-45'), ('45-50'), ('50-55'), ('55-60'), ('60-65'), ('65-70');
+
+insert into 
+  tb_seleccion 
+values 
+('Estandar'), ('B'), ('C'), ('D'), ('E'), ('F');

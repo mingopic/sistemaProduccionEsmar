@@ -37,6 +37,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlExportar pnlExportar; 
     PnlImportar pnlImportar;
     PnlCross pnlCross;
+    PnlSemiterminado pnlSemiterminado;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -1273,7 +1274,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTerminadoActionPerformed
 
     private void btnSemiterminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSemiterminadoActionPerformed
-        // TODO add your handling code here:
+        try {
+            pnlSemiterminado = new PnlSemiterminado();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlSemiterminado, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlSemiterminado.getGraphics());
+            
+            lblVentana.setText("Semiterminado");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSemiterminadoActionPerformed
 
     private void btnCrossActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrossActionPerformed

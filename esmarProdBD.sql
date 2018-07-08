@@ -1613,9 +1613,9 @@ as begin
 end
 go
 
-create procedure sp_obtEntInvSem
+alter procedure sp_obtEntInvSem
 (
-	@tipoRecorte varchar(20)
+	@tipoCuero varchar(20)
 	, @calibre varchar(15)
 	, @seleccion varchar(15)
 	, @noPartida int
@@ -1626,18 +1626,22 @@ as begin
 	if (@noPartida = 0)
 	begin
 		select
-			ic.idPartida, tr.descripcion as tipoRecorte, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
+			ic.idPartida, tc.descripcion as tipoCuero, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
 			s.descripcion as seleccion, c.descripcion as calibre, ins.fechaEntrada, ins.idInvSemiterminado
 		from
-			tb_tipoRecorte as tr
-		inner join
 			tb_partidaDet as pd
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
 		inner join
 			tb_invCross as ic
 		on
 			pd.idPartidaDet = ic.idPartidaDet
+		inner join
+			tb_recepcionCuero as rc
+		on
+			pd.idRecepcionCuero = rc.idRecepcionCuero
+		inner join
+			tb_tipoCuero as tc
+		on
+			rc.idTipoCuero = tc.idTipoCuero
 		inner join
 			tb_invCrossSemi as ics
 		on
@@ -1655,7 +1659,7 @@ as begin
 		on
 			ins.idCalibre = c.idCalibre
 		where
-			tr.descripcion like @tipoRecorte
+			tc.descripcion like @tipoCuero
 		and
 			c.descripcion like @calibre
 		and
@@ -1667,18 +1671,22 @@ as begin
 	else
 	begin
 		select
-			ic.idPartida, tr.descripcion as tipoRecorte, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
+			ic.idPartida, tc.descripcion as tipoCuero, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
 			s.descripcion as seleccion, c.descripcion as calibre, ins.fechaEntrada, ins.idInvSemiterminado
 		from
-			tb_tipoRecorte as tr
-		inner join
 			tb_partidaDet as pd
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
 		inner join
 			tb_invCross as ic
 		on
 			pd.idPartidaDet = ic.idPartidaDet
+		inner join
+			tb_recepcionCuero as rc
+		on
+			pd.idRecepcionCuero = rc.idRecepcionCuero
+		inner join
+			tb_tipoCuero as tc
+		on
+			rc.idTipoCuero = tc.idTipoCuero
 		inner join
 			tb_invCrossSemi as ics
 		on
@@ -1696,7 +1704,7 @@ as begin
 		on
 			ins.idCalibre = c.idCalibre
 		where
-			tr.descripcion like @tipoRecorte
+			tc.descripcion like @tipoCuero
 		and
 			c.descripcion like @calibre
 		and
@@ -1706,113 +1714,6 @@ as begin
 		and
 			ins.fechaEntrada between @fecha and @fecha1
 	end
-end
-go
-
-create procedure sp_obtTipoRecorte
-as begin
-	select
-		*
-	from
-		tb_tipoRecorte
-end
-go
-
-create procedure sp_obtInvCrossSemi
-(
-	@tipoRecorte varchar(20)
-	, @noPartida int
-	, @fecha varchar(10)
-	, @fecha1 varchar(10)
-)
-as begin
-	if (@noPartida = 0)
-	begin
-		select
-			ic.idPartida, tr.descripcion, ics.noPiezas, ics.noPiezasActuales, ics.fechaEntrada, ics.idInvCrossSemi
-		from
-			tb_tipoRecorte as tr
-		inner join
-			tb_partidaDet as pd
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
-		inner join
-			tb_invCross as ic
-		on
-			pd.idPartidaDet = ic.idPartidaDet
-		inner join
-			tb_invCrossSemi as ics
-		on
-			ic.idInvPCross = ics.idInvPCross
-		where
-			tr.descripcion like @tipoRecorte
-		and
-			ics.fechaentrada between @fecha and @fecha1
-	end
-	
-	else
-	begin
-		select
-			ic.idPartida, tr.descripcion, ics.noPiezas, ics.noPiezasActuales, ics.fechaEntrada, ics.idInvCrossSemi
-		from
-			tb_tipoRecorte as tr
-		inner join
-			tb_partidaDet as pd
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
-		inner join
-			tb_invCross as ic
-		on
-			pd.idPartidaDet = ic.idPartidaDet
-		inner join
-			tb_invCrossSemi as ics
-		on
-			ic.idInvPCross = ics.idInvPCross
-		where
-			ic.idPartida = @noPartida
-		and
-			tr.descripcion like @tipoRecorte
-		and
-			ics.fechaentrada between @fecha and @fecha1
-	end
-end
-go
-
-create procedure sp_agrInvSemi
-(
-	@idInvCrossSemi int
-	, @idCalibre int
-	, @idSeleccion int
-	, @kgTotales float
-)
-as begin
-	declare @fechaEntrada date
-	
-	set @fechaEntrada =
-	(
-		select
-			getdate()
-	)
-	
-	insert into
-		tb_invSemiterminado
-	values
-		(@idInvCrossSemi,@idCalibre,@idSeleccion,@kgTotales,@fechaEntrada)
-end
-go
-
-create procedure sp_actInvCrossSemi
-(
-  @idInvCrossSemi int
-  , @piezasUtilizar int
-)
-as begin
-  update
-    tb_invCrossSemi
-  set
-    noPiezasActuales = noPiezasActuales-@piezasUtilizar
-  where
-    idInvCrossSemi = @idInvCrossSemi
 end
 go
 

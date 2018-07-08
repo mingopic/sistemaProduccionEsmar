@@ -9,8 +9,7 @@ import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioSemiterminado;
 import Modelo.Seleccion;
-import Modelo.TipoRecorte;
-import java.sql.PreparedStatement;
+import Modelo.TipoCuero;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -26,11 +25,11 @@ public class InventarioSemiterminadoCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaInvSemiterminado(InventarioCross ic, TipoRecorte tr, Calibre ca, Seleccion s, InventarioSemiterminado is) throws Exception
+    public static String[][] obtenerListaInvSemiterminado(InventarioCross ic, TipoCuero tc, Calibre ca, Seleccion s, InventarioSemiterminado is) throws Exception
     {
         String query;
         
-        query= "EXEC sp_obtEntInvSem '"+tr.getDescripcion()+"','"+ca.getDescripcion()+"','"+s.getDescripcion()+"',"
+        query= "EXEC sp_obtEntInvSem '"+tc.getDescripcion()+"','"+ca.getDescripcion()+"','"+s.getDescripcion()+"',"
                 +ic.getIdPartida()+",'"+is.getFecha()+"','"+is.getFecha1()+"'";
 
         
@@ -54,11 +53,11 @@ public class InventarioSemiterminadoCommands {
             while (rs.next()) 
             {
                 datos[i][0] = rs.getString("idPartida");
-                datos[i][1] = rs.getString("tipoRecorte");
+                datos[i][1] = rs.getString("tipoCuero");
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
                 datos[i][4] = rs.getString("kgTotales");
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
+                datos[i][5] = rs.getString("PesoPromXPza");
                 datos[i][6] = rs.getString("seleccion");
                 datos[i][7] = rs.getString("calibre");
                 
@@ -74,18 +73,5 @@ public class InventarioSemiterminadoCommands {
         stmt.close();
         c.desconectar();
         return datos;
-    }
-    
-    //Método para agregar una entrada a la tabla tb_invSemiterminado
-    public static void agregarInvSemiterminado(InventarioSemiterminado is) throws Exception
-    {
-        String query = "exec sp_agrInvSemi "+is.getIdInvCrossSemi()+""
-            + ","+is.getIdCalibre()+","+is.getIdSeleccion()+","+is.getKgTotales();
-        PreparedStatement pstmt = null;
-        c.conectar();
-        pstmt = c.getConexion().prepareStatement(query);
-        System.out.println(query);
-        pstmt.executeUpdate();
-        c.desconectar();
     }
 }

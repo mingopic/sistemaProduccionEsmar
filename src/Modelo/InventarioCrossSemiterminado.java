@@ -16,6 +16,23 @@ public class InventarioCrossSemiterminado {
     int noPiezasActuales;
     String fechaEntrada;
     String fecha;
+    String fecha1;
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getFecha1() {
+        return fecha1;
+    }
+
+    public void setFecha1(String fecha1) {
+        this.fecha1 = fecha1;
+    }
 
     public int getIdInvCrossSemi() {
         return idInvCrossSemi;

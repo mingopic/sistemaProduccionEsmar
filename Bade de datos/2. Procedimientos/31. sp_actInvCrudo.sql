@@ -1,0 +1,48 @@
+use esmarProd
+go
+
+create procedure sp_actInvCrudo
+(
+  @proveedor        varchar(20)
+  , @noCamion       int
+  , @fecha          date
+  , @piezasUtilizar int
+)
+as begin
+
+  declare @idRecepcionCuero int
+  
+  set @idRecepcionCuero =
+    (
+      select
+        idRecepcionCuero
+        
+      from
+        tb_recepcionCuero
+        
+      where
+        noCamion = @noCamion
+        and fechaEntrada = @fecha
+        and idProveedor =
+          (
+            select
+              idProveedor
+              
+            from
+              tb_proveedor
+              
+            where
+              nombreProveedor = @proveedor
+          )
+    )
+    
+  update
+    tb_inventarioCrudo
+    
+  set
+    noPiezasActual = noPiezasActual-@piezasUtilizar
+    
+  where
+    idRecepcionCuero = @idRecepcionCuero
+end
+go

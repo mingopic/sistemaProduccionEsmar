@@ -7,7 +7,8 @@ package Controlador;
 
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
-import Modelo.TipoCuero;
+import Modelo.Partida;
+import Modelo.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -23,14 +24,17 @@ public class InventarioCrossCommands {
     static ResultSet rs = null;
     static ConexionBD c = new ConexionBD();
     
-    //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaInvCross(InventarioCross ic, TipoCuero tc) throws Exception
+    //Método que se llama para obtener la lista del inventario de cross
+    public static String[][] obtenerListaInvCross(InventarioCross ic, TipoRecorte tr, Partida p) throws Exception
     {
         String query;
         
-        query= "EXEC sp_obtEntCross '"+tc.getDescripcion()+"',"+ic.getIdPartida()+",'"+ic.getFecha()+"','"+ic.getFecha1()+"'";
+        query= "execute sp_obtEntCross "
+                + "'" + tr.getDescripcion() +"'"
+                + "," + p.getNoPartida()
+                + ",'" + ic.getFecha() + "'"
+                + ",'" + ic.getFecha1() +"'";
 
-        
         String[][] datos = null;
         int renglones = 0;
         int columnas = 6;
@@ -38,8 +42,8 @@ public class InventarioCrossCommands {
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = stmt.executeQuery(query);
         System.out.println(query);
+        rs = stmt.executeQuery(query);
         
         if (rs.last()) 
         {
@@ -50,7 +54,7 @@ public class InventarioCrossCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) 
             {
-                datos[i][0] = rs.getString("idPartida");
+                datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("descripcion");
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");

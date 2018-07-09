@@ -12,28 +12,23 @@ import Controlador.InventarioCrossCommands;
 import Controlador.InventarioCrossSemiterminadoCommands;
 import Controlador.ProveedorCommands;
 import Controlador.RangoPesoCueroCommands;
-import Controlador.RecepcionCueroCommands;
 import Controlador.TipoCueroCommands;
+import Controlador.TipoRecorteCommands;
 import Modelo.ConfiguracionMerma;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
+import Modelo.Partida;
 import Modelo.Proveedor;
 import Modelo.RangoPesoCuero;
 import Modelo.RecepcionCuero;
 import Modelo.TipoCuero;
-import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
+import Modelo.TipoRecorte;
 import java.awt.event.KeyEvent;
 import java.net.URL;
-import java.sql.Connection;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
@@ -49,23 +44,14 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author Mingo
  */
 public class PnlCross extends javax.swing.JPanel {
-    PnlInsRecCuero pnlInsRecCuero;
     ConexionBD conexion;
+    TipoRecorte tr;
+    TipoRecorteCommands trc;
     InventarioCross ic;
     InventarioCrossCommands icc;
-    Proveedor p;
-    ProveedorCommands pc;
-    TipoCuero tc;
-    TipoCueroCommands tcc;
-    RangoPesoCuero rpc;
-    RangoPesoCueroCommands rpcc;
-    ConfiguracionMerma cm;
-    ConfiguracionMermaCommands cmc;
     InventarioCrossSemiterminado ics;
     InventarioCrossSemiterminadoCommands icsc;
-    String[][] proveedoresAgregar = null;
-    String[][] tipoCueroAgregar = null;
-    String[][] rangoPesoCuero = null;
+    Partida p;
     String[][] datosInvCross = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
@@ -92,41 +78,26 @@ public class PnlCross extends javax.swing.JPanel {
         conexion = new ConexionBD();
         ic = new InventarioCross();
         icc = new InventarioCrossCommands();
-        tc = new TipoCuero();
-        tcc = new TipoCueroCommands();
+        tr = new TipoRecorte();
+        p = new Partida();
         
-        actualizarTablaCross();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
-        llenarComboTipoCuero();
+        llenarComboTipoRecorte();
+        actualizarTablaCross();
     }
     
-    
-    //método que llena los combobox de los proveedores en la base de datos
-    public void llenarComboProveedores() throws Exception
+    //método que llena los combobox del tipo de recorte en la base de datos
+    public void llenarComboTipoRecorte() throws Exception
     {
-//        pc = new ProveedorCommands();
-//        String[][] proveedores = pc.llenarComboboxProveedores();
-//        
-//        int i=0;
-//        while (i<proveedores.length)
-//        {
-//            cmbProveedor.addItem(proveedores[i][1]);
-//            i++;
-//        }
-    }
-    
-    //método que llena los combobox del tipo de cuero en la base de datos
-    public void llenarComboTipoCuero() throws Exception
-    {
-        tcc = new TipoCueroCommands();
-        String[][] tipoCuero = tcc.llenarComboboxTipoCuero();
+        trc = new TipoRecorteCommands();
+        String[][] tipoRecorte = trc.llenarComboboxTipoRecorte();
         
         int i=0;
-        while (i<tipoCuero.length)
+        while (i<tipoRecorte.length)
         {
-            cmbTipoCuero.addItem(tipoCuero[i][1]);
+            cmbTipoRecorte.addItem(tipoRecorte[i][1]);
             i++;
         }
     }
@@ -228,30 +199,30 @@ public class PnlCross extends javax.swing.JPanel {
         }
         
         //validamos si esta seleccionado algún tipo de cuero para hacer filtro
-        if (cmbTipoCuero.getSelectedItem().toString().equals("<Todos>"))
+        if (cmbTipoRecorte.getSelectedItem().toString().equals("<Todos>"))
         {
-            tc.setDescripcion("%%");
+            tr.setDescripcion("%%");
         }
         else
         {
-            tc.setDescripcion(cmbTipoCuero.getSelectedItem().toString());
+            tr.setDescripcion(cmbTipoRecorte.getSelectedItem().toString());
         }
         
         if (txtNoPartida.getText().isEmpty())
         {
-            ic.setIdPartida(0);
+            p.setNoPartida(0);
         }
         else
         {
             int noPartida = Integer.parseInt(txtNoPartida.getText());
-            ic.setIdPartida(noPartida);
+            p.setNoPartida(noPartida);
         }
         
         DefaultTableModel dtm = null;
         
         try {
             
-            datosInvCross = icc.obtenerListaInvCross(ic,tc);
+            datosInvCross = icc.obtenerListaInvCross(ic,tr,p);
             
             dtm = new DefaultTableModel(datosInvCross, cols){
             public boolean isCellEditable(int row, int column) {
@@ -267,93 +238,6 @@ public class PnlCross extends javax.swing.JPanel {
             
             JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
         }
-    }
-    
-    //Inicializar la tabla donde se agregarán los nuevos productos
-    public void inicializarTablaAgregarEntrada()
-    {
-//        String[] cols = new String[]
-//        {
-//            "Producto","Cantidad","Unidad"
-//        };
-//        
-//        dtms=new DefaultTableModel();
-//        dtms.setColumnIdentifiers(cols);
-    }
-
-    public void generarReporteEntradaRecepcionCuero(RecepcionCuero rc, TipoCuero tp)
-    {
-//        try
-//        {
-//            URL path = this.getClass().getResource("/Reportes/ReporteEntradas.jasper");
-//            
-//            Map parametros = new HashMap();
-//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-//            parametros.put("proveedor",rc.getProveedor());
-//            parametros.put("descripcion",tp.getDescripcion());
-//            parametros.put("fecha",rc.getFecha());
-//            parametros.put("fecha1",rc.getFecha1());
-//            
-//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-//            
-//            conexion.conectar();
-//            
-//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-//            
-//            JasperViewer view = new JasperViewer(jprint, false);
-//            
-//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//            
-//            view.setVisible(true);
-//            conexion.desconectar();
-//        } catch (JRException ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }
-    
-    public void generarReporteEntradaRecepcionCueroDetalle(RecepcionCuero rc)
-    {
-//        try
-//        {
-//            int idRecepcionCuero = 0;
-//            try 
-//            {
-//                idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblInvCross.getSelectedRow()][8]);
-//            } 
-//            catch (Exception e) 
-//            {
-//                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla","Mensaje",JOptionPane.WARNING_MESSAGE);
-//                return;
-//            }
-//            rc.setIdRecepcionCuero(idRecepcionCuero);
-//            
-//            URL path = this.getClass().getResource("/Reportes/ReporteEntradaDetalle.jasper");
-//            
-//            Map parametros = new HashMap();
-//            parametros.put("idRecepcionCuero",rc.getIdRecepcionCuero());
-//            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
-//            
-//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-//            
-//            conexion.conectar();
-//            
-//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-//            
-//            JasperViewer view = new JasperViewer(jprint, false);
-//            
-//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//            
-//            view.setVisible(true);
-//            conexion.desconectar();
-//        } catch (JRException ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el  reporte","Error",JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception ex) {
-//            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
     
     //Metodo para inicializar los campos de dlgAgregar
@@ -422,6 +306,10 @@ public class PnlCross extends javax.swing.JPanel {
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            parametros.put("fecha1", ic.getFecha());
+            parametros.put("fecha2", ic.getFecha1());
+            parametros.put("noPartida", p.getNoPartida());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             
@@ -533,7 +421,7 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        cmbTipoCuero = new javax.swing.JComboBox();
+        cmbTipoRecorte = new javax.swing.JComboBox();
         jLabel29 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -745,7 +633,7 @@ public class PnlCross extends javax.swing.JPanel {
         jToolBar1.add(jLabel13);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("Tipo de Cuero:");
+        jLabel6.setText("Tipo Recorte:");
         jToolBar1.add(jLabel6);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -753,15 +641,15 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel8.setText("  ");
         jToolBar1.add(jLabel8);
 
-        cmbTipoCuero.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Todos>" }));
-        cmbTipoCuero.setMinimumSize(new java.awt.Dimension(100, 20));
-        cmbTipoCuero.setPreferredSize(new java.awt.Dimension(120, 25));
-        cmbTipoCuero.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipoRecorte.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Todos>" }));
+        cmbTipoRecorte.setMinimumSize(new java.awt.Dimension(100, 20));
+        cmbTipoRecorte.setPreferredSize(new java.awt.Dimension(120, 25));
+        cmbTipoRecorte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbTipoCueroActionPerformed(evt);
+                cmbTipoRecorteActionPerformed(evt);
             }
         });
-        jToolBar1.add(cmbTipoCuero);
+        jToolBar1.add(cmbTipoRecorte);
 
         jLabel29.setText("   ");
         jToolBar1.add(jLabel29);
@@ -1045,9 +933,9 @@ try {
         }
     }//GEN-LAST:event_jrFiltroFechasEntradaActionPerformed
 
-    private void cmbTipoCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoCueroActionPerformed
+    private void cmbTipoRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoRecorteActionPerformed
         actualizarTablaCross();
-    }//GEN-LAST:event_cmbTipoCueroActionPerformed
+    }//GEN-LAST:event_cmbTipoRecorteActionPerformed
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
         actualizarTablaCross();
@@ -1144,7 +1032,7 @@ try {
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
-    private javax.swing.JComboBox cmbTipoCuero;
+    private javax.swing.JComboBox cmbTipoRecorte;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgEnvSemi;

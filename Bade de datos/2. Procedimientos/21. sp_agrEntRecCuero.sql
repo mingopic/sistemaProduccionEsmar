@@ -1,0 +1,64 @@
+use esmarProd
+go
+
+create procedure sp_agrEntRecCuero
+(
+  @idProveedor       int
+  ,@noCamion         int
+  ,@idTipoCuero      int
+  ,@idRangoPesoCuero int
+  ,@noPiezasLigero   int
+  ,@noPiezasPesado   int
+  ,@noTotalPiezas    int
+  ,@kgTotal          float
+  ,@precioXKilo      float
+  ,@mermaSal         float
+  ,@mermaHumedad     float
+  ,@mermaCachete     float
+  ,@mermaTarimas     float
+  ,@refParamerma     int
+  ,@idMerSal         int
+  ,@idMerHum         int
+  ,@idMerCac         int
+  ,@idMerTar         int
+)
+as begin
+  declare @fechaEntrada datetime
+  declare @costoCamion float
+  
+  set @fechaEntrada =
+    (
+      select
+        getdate()
+    )
+  
+  set @costoCamion = @kgTotal * @precioXKilo
+  
+  insert into
+    tb_recepcionCuero
+    
+  values
+    (
+      @idProveedor
+      , @noCamion
+      , @idTipoCuero
+      , @idRangoPesoCuero
+      , @noPiezasLigero
+      , @noPiezasPesado
+      , @noTotalPiezas
+      , @kgTotal
+      , @precioXKilo
+      , @costoCamion
+      , @mermaSal
+      , @mermaHumedad
+      , @mermaCachete
+      , @mermaTarimas
+      , @refParamerma
+      , @idMerSal
+      , @idMerHum
+      , @idMerCac
+      , @idMerTar
+      , @fechaEntrada
+    )
+end
+go

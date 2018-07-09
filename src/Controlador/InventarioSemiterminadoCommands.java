@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioSemiterminado;
+import Modelo.Partida;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
 import java.sql.PreparedStatement;
@@ -26,14 +27,18 @@ public class InventarioSemiterminadoCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaInvSemiterminado(InventarioCross ic, TipoRecorte tr, Calibre ca, Seleccion s, InventarioSemiterminado is) throws Exception
+    public static String[][] obtenerListaInvSemiterminado(Partida p, TipoRecorte tr, Calibre ca, Seleccion s, InventarioSemiterminado is) throws Exception
     {
         String query;
         
-        query= "EXEC sp_obtEntInvSem '"+tr.getDescripcion()+"','"+ca.getDescripcion()+"','"+s.getDescripcion()+"',"
-                +ic.getIdPartida()+",'"+is.getFecha()+"','"+is.getFecha1()+"'";
+        query= "EXEC sp_obtEntInvSem "
+                + "'" + tr.getDescripcion()+"'"
+                + "," + "'"+ ca.getDescripcion() +"'"
+                + "," + "'"+ s.getDescripcion() +"'"
+                + "," + p.getNoPartida()
+                + "," + "'"+ is.getFecha() +"'"
+                + "," + "'"+ is.getFecha1() +"'";
 
-        
         String[][] datos = null;
         int renglones = 0;
         int columnas = 10;
@@ -53,7 +58,7 @@ public class InventarioSemiterminadoCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) 
             {
-                datos[i][0] = rs.getString("idPartida");
+                datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("tipoRecorte");
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
@@ -79,12 +84,16 @@ public class InventarioSemiterminadoCommands {
     //Método para agregar una entrada a la tabla tb_invSemiterminado
     public static void agregarInvSemiterminado(InventarioSemiterminado is) throws Exception
     {
-        String query = "exec sp_agrInvSemi "+is.getIdInvCrossSemi()+""
-            + ","+is.getIdCalibre()+","+is.getIdSeleccion()+","+is.getKgTotales();
+        String query = "exec sp_agrInvSemi "
+                + is.getIdInvCrossSemi()
+                + "," + is.getIdCalibre()
+                + ","+ is.getIdSeleccion()
+                + ","+ is.getNoPiezas()
+                + "," + is.getKgTotales();
         PreparedStatement pstmt = null;
         c.conectar();
-        pstmt = c.getConexion().prepareStatement(query);
         System.out.println(query);
+        pstmt = c.getConexion().prepareStatement(query);
         pstmt.executeUpdate();
         c.desconectar();
     }

@@ -14,6 +14,8 @@ public class InventarioSemiterminado {
     int idInvCrossSemi;
     int idCalibre;
     int idSeleccion;
+    int noPiezas;
+    int noPiezasActuales;
     double kgTotales;
     String fechaEntrada;
     String fecha;
@@ -67,6 +69,22 @@ public class InventarioSemiterminado {
         this.fechaEntrada = fechaEntrada;
     }
 
+    public int getNoPiezas() {
+        return noPiezas;
+    }
+
+    public void setNoPiezas(int noPiezas) {
+        this.noPiezas = noPiezas;
+    }
+
+    public int getNoPiezasActuales() {
+        return noPiezasActuales;
+    }
+
+    public void setNoPiezasActuales(int noPiezasActuales) {
+        this.noPiezasActuales = noPiezasActuales;
+    }
+
     public String getFecha() {
         return fecha;
     }
@@ -82,4 +100,5 @@ public class InventarioSemiterminado {
     public void setFecha1(String fecha1) {
         this.fecha1 = fecha1;
     }
+    
 }

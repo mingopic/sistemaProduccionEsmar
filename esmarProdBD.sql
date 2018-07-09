@@ -184,6 +184,8 @@ create table tb_invSemiterminado (
   , idInvCrossSemi int not null foreign key references tb_invCrossSemi(idInvCrossSemi)
   , idCalibre int not null foreign key references tb_calibre(idCalibre)
   , idSeleccion int not null foreign key references tb_seleccion(idSeleccion)
+  , noPiezas int
+  , noPiezasActuales int
   , kgTotales float
   , fechaEntrada date
 )
@@ -1440,7 +1442,7 @@ go
 
 create procedure sp_obtEntCross
 (
-	@tipoCuero varchar(20)
+	@tipoRecorte varchar(20)
 	, @noPartida int
 	, @fecha varchar(10)
 	, @fecha1 varchar(10)
@@ -1464,12 +1466,8 @@ as begin
 			tb_recepcionCuero as rc
 		on
 			pd.idRecepcionCuero = rc.idRecepcionCuero
-		inner join
-			tb_tipoCuero as tc
-		on
-			rc.idTipoCuero = tc.idTipoCuero
 		where
-			tc.descripcion like @tipoCuero
+			tr.descripcion like @tipoRecorte
 		and
 			ic.fechaentrada between @fecha and @fecha1
 	end
@@ -1499,7 +1497,7 @@ as begin
 	where
 		ic.idPartida = @noPartida
 	and
-		tc.descripcion like @tipoCuero
+		tr.descripcion like @tipoRecorte
 	and
 		ic.fechaentrada between @fecha and @fecha1
 	end
@@ -1623,92 +1621,127 @@ create procedure sp_obtEntInvSem
 	, @fecha1 varchar(10)
 )
 as begin
-	if (@noPartida = 0)
-	begin
-		select
-			ic.idPartida, tr.descripcion as tipoRecorte, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
-			s.descripcion as seleccion, c.descripcion as calibre, ins.fechaEntrada, ins.idInvSemiterminado
-		from
-			tb_tipoRecorte as tr
-		inner join
-			tb_partidaDet as pd
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
-		inner join
-			tb_invCross as ic
-		on
-			pd.idPartidaDet = ic.idPartidaDet
-		inner join
-			tb_invCrossSemi as ics
-		on
-			ic.idInvPCross = ics.idInvPCross
-		inner join
-			tb_invSemiterminado as ins
-		on
-			ics.idInvCrossSemi = ins.idInvCrossSemi
-		inner join
-			tb_seleccion as s
-		on
-			ins.idSeleccion = s.idSeleccion
-		inner join
-			tb_calibre as c
-		on
-			ins.idCalibre = c.idCalibre
-		where
-			tr.descripcion like @tipoRecorte
-		and
-			c.descripcion like @calibre
-		and
-			s.descripcion like @seleccion
-		and
-			ins.fechaEntrada between @fecha and @fecha1
-	end
 	
-	else
-	begin
-		select
-			ic.idPartida, tr.descripcion as tipoRecorte, ics.noPiezas, ics.noPiezasActuales, ins.kgTotales, (ins.kgTotales/ics.noPiezas) as PesoPromXPza,
-			s.descripcion as seleccion, c.descripcion as calibre, ins.fechaEntrada, ins.idInvSemiterminado
-		from
-			tb_tipoRecorte as tr
-		inner join
-			tb_partidaDet as pd
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
-		inner join
-			tb_invCross as ic
-		on
-			pd.idPartidaDet = ic.idPartidaDet
-		inner join
-			tb_invCrossSemi as ics
-		on
-			ic.idInvPCross = ics.idInvPCross
-		inner join
-			tb_invSemiterminado as ins
-		on
-			ics.idInvCrossSemi = ins.idInvCrossSemi
-		inner join
-			tb_seleccion as s
-		on
-			ins.idSeleccion = s.idSeleccion
-		inner join
-			tb_calibre as c
-		on
-			ins.idCalibre = c.idCalibre
-		where
-			tr.descripcion like @tipoRecorte
-		and
-			c.descripcion like @calibre
-		and
-			s.descripcion like @seleccion
-		and
-			ic.idPartida = @noPartida
-		and
-			ins.fechaEntrada between @fecha and @fecha1
+  if (@noPartida = 0)
+  begin
+  
+		select  
+			ic.idPartida
+      , tr.descripcion as tipoRecorte
+      , ins.noPiezas
+      , ins.noPiezasActuales
+      , ins.kgTotales
+      , (ins.kgTotales/ins.noPiezas) as PesoPromXPza
+      , s.descripcion as seleccion
+      , c.descripcion as calibre
+      , ins.fechaEntrada
+      , ins.idInvSemiterminado
+      
+    from
+      tb_invSemiterminado as ins
+      
+      inner join
+        tb_invCrossSemi as ics
+      on
+        ics.idInvCrossSemi = ins.idInvCrossSemi
+      
+      inner join
+        tb_invCross as ic
+      on
+        ic.idInvPCross = ics.idInvPCross
+        
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = ic.idPartidaDet
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = pd.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = ins.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = ins.idSeleccion
+        and s.descripcion like @seleccion
+        
+    where
+      ins.fechaEntrada between @fecha and @fecha1
+      
 	end
+  
+  else
+	begin
+  
+		select  
+			ic.idPartida
+      , tr.descripcion as tipoRecorte
+      , ins.noPiezas
+      , ins.noPiezasActuales
+      , ins.kgTotales
+      , (ins.kgTotales/ins.noPiezas) as PesoPromXPza
+      , s.descripcion as seleccion
+      , c.descripcion as calibre
+      , ins.fechaEntrada
+      , ins.idInvSemiterminado
+      
+    from
+      tb_invSemiterminado as ins
+      
+      inner join
+        tb_invCrossSemi as ics
+      on
+        ics.idInvCrossSemi = ins.idInvCrossSemi
+      
+      inner join
+        tb_invCross as ic
+      on
+        ic.idInvPCross = ics.idInvPCross
+        
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = ic.idPartidaDet
+        
+      inner join
+        tb_partida as p
+      on
+        p.idPartida = pd.idPartida
+        and p.noPartida = @noPartida
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = pd.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = ins.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = ins.idSeleccion
+        and s.descripcion like @seleccion
+        
+    where
+      ins.fechaEntrada between @fecha and @fecha1
+  end
+
 end
 go
-
+	
 create procedure sp_obtTipoRecorte
 as begin
 	select
@@ -1781,23 +1814,26 @@ go
 create procedure sp_agrInvSemi
 (
 	@idInvCrossSemi int
-	, @idCalibre int
-	, @idSeleccion int
-	, @kgTotales float
+	, @idCalibre    int
+	, @idSeleccion  int
+  , @noPiezas     int
+	, @kgTotales    float
 )
 as begin
-	declare @fechaEntrada date
-	
-	set @fechaEntrada =
-	(
-		select
-			getdate()
-	)
-	
+
 	insert into
 		tb_invSemiterminado
+    
 	values
-		(@idInvCrossSemi,@idCalibre,@idSeleccion,@kgTotales,@fechaEntrada)
+		(
+      @idInvCrossSemi
+      , @idCalibre
+      , @idSeleccion
+      , @noPiezas
+      , @noPiezas
+      , @kgTotales
+      , getdate()
+    )
 end
 go
 

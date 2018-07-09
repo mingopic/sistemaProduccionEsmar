@@ -1,0 +1,28 @@
+use esmarProd
+go
+
+create table tb_recepcionCuero 
+(
+  idRecepcionCuero   int not null identity(1,1) primary key
+  , idProveedor      int not null foreign key references tb_proveedor(idProveedor)
+  , noCamion         int
+  , idTipoCuero      int not null foreign key references tb_tipoCuero(idTipoCuero)
+  , idRangoPesoCuero int not null foreign key references tb_rangoPesoCuero(idRangoPesoCuero)
+  , noPiezasLigero   int
+  , noPiezasPesado   int
+  , noTotalPiezas    int
+  , kgTotal          float
+  , precioXKilo      float
+  , costocamion      float
+  , mermaSal         float
+  , mermaHumedad     float
+  , mermaCachete     float
+  , mermaTarimas     float
+  , refParaMerma     int
+  , idMerSal         int
+  , idMerHum         int
+  , idMerCac         int
+  , idMerTar         int
+  , fechaEntrada     date
+);
+go

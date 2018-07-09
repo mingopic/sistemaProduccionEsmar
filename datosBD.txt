@@ -1,4 +1,4 @@
-usuarioPC:EQUIPO-PC\SQLEXPRESS
+usuarioPC:MINGO-LAP
 baseDatos:       esmarProd        
 usuario:sa
 password:root

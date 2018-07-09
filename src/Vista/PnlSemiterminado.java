@@ -17,6 +17,7 @@ import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.InventarioSemiterminado;
+import Modelo.Partida;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
 import java.awt.BorderLayout;
@@ -60,6 +61,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     InventarioCrossCommands icc;
     InventarioCrossSemiterminado ics;
     InventarioCrossSemiterminadoCommands icsc;
+    Partida p;
     String[][] datosSemiterminado = null;
     String[][] datos = null;
     String[][] calibres = null;
@@ -101,14 +103,15 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         cc = new CalibreCommands();
         s = new Seleccion();
         sc = new SeleccionCommands();
+        p = new Partida();
         
-        actualizarTablaSemiterminado();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
         llenarComboTipoRecorte();
         llenarComboCalibre();
         llenarComboSeleccion();
+        actualizarTablaSemiterminado();
     }
 //    
 //    
@@ -280,19 +283,19 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         
         if (txtNoPartida.getText().isEmpty())
         {
-            ic.setIdPartida(0);
+            p.setNoPartida(0);
         }
         else
         {
             int noPartida = Integer.parseInt(txtNoPartida.getText());
-            ic.setIdPartida(noPartida);
+            p.setNoPartida(noPartida);
         }
         
         DefaultTableModel dtm = null;
         
         try {
             
-            datosSemiterminado = isc.obtenerListaInvSemiterminado(ic,tr,c,s,is);
+            datosSemiterminado = isc.obtenerListaInvSemiterminado(p,tr,c,s,is);
             
             dtm = new DefaultTableModel(datosSemiterminado, cols){
             public boolean isCellEditable(int row, int column) {
@@ -309,236 +312,6 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
         }
     }
-//    
-//    //Inicializar la tabla donde se agregarán los nuevos productos
-//    public void inicializarTablaAgregarEntrada()
-//    {
-////        String[] cols = new String[]
-////        {
-////            "Producto","Cantidad","Unidad"
-////        };
-////        
-////        dtms=new DefaultTableModel();
-////        dtms.setColumnIdentifiers(cols);
-//    }
-//
-//    public void generarReporteEntradaRecepcionCuero(RecepcionCuero rc, TipoCuero tp)
-//    {
-////        try
-////        {
-////            URL path = this.getClass().getResource("/Reportes/ReporteEntradas.jasper");
-////            
-////            Map parametros = new HashMap();
-////            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-////            parametros.put("proveedor",rc.getProveedor());
-////            parametros.put("descripcion",tp.getDescripcion());
-////            parametros.put("fecha",rc.getFecha());
-////            parametros.put("fecha1",rc.getFecha1());
-////            
-////            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-////            
-////            conexion.conectar();
-////            
-////            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-////            
-////            JasperViewer view = new JasperViewer(jprint, false);
-////            
-////            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-////            
-////            view.setVisible(true);
-////            conexion.desconectar();
-////        } catch (JRException ex) {
-////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-////            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-////        } catch (Exception ex) {
-////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//    }
-//    
-//    public void generarReporteEntradaRecepcionCueroDetalle(RecepcionCuero rc)
-//    {
-////        try
-////        {
-////            int idRecepcionCuero = 0;
-////            try 
-////            {
-////                idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblInvCross.getSelectedRow()][8]);
-////            } 
-////            catch (Exception e) 
-////            {
-////                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla","Mensaje",JOptionPane.WARNING_MESSAGE);
-////                return;
-////            }
-////            rc.setIdRecepcionCuero(idRecepcionCuero);
-////            
-////            URL path = this.getClass().getResource("/Reportes/ReporteEntradaDetalle.jasper");
-////            
-////            Map parametros = new HashMap();
-////            parametros.put("idRecepcionCuero",rc.getIdRecepcionCuero());
-////            parametros.put("logo", this.getClass().getResourceAsStream(imagen));
-////            
-////            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-////            
-////            conexion.conectar();
-////            
-////            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-////            
-////            JasperViewer view = new JasperViewer(jprint, false);
-////            
-////            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-////            
-////            view.setVisible(true);
-////            conexion.desconectar();
-////        } catch (JRException ex) {
-////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-////            JOptionPane.showMessageDialog(null, "No se puede generar el  reporte","Error",JOptionPane.ERROR_MESSAGE);
-////        } catch (Exception ex) {
-////            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//    }
-//    
-//    //Metodo para inicializar los campos de dlgAgregar
-//    public void inicializarCamposEnvSemi() throws Exception
-//    {
-//        int fila = tblInvCross.getSelectedRow();
-//        
-//        txtNoPartidaEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 0)));
-//        txtTipoRecorteEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 1)));
-//        txtNoPiezasActualesEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 3)));
-//    }  
-//    
-//    //Método que abre el dialogo para enviar a semiterminado 
-//    public void abrirDialogoEnvSemi() throws Exception
-//    {
-//        
-//        inicializarCamposEnvSemi();
-//        
-//        dlgEnvSemi.setSize(400, 380);
-//        dlgEnvSemi.setPreferredSize(dlgEnvSemi.getSize());
-//        dlgEnvSemi.setLocationRelativeTo(null);
-//        dlgEnvSemi.setAlwaysOnTop(true);
-//        dlgEnvSemi.setVisible(true);
-//    }
-//    
-//    //Método para realizar entrada de material y actualizar inventarios
-//    public void realizarEntradaEnvSemi () throws Exception
-//    {
-//        try 
-//        {
-//            if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
-//            {
-//                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
-//            }
-//            else
-//            {
-//                int fila = tblInvCross.getSelectedRow();
-//                ics = new InventarioCrossSemiterminado();
-//                icsc = new InventarioCrossSemiterminadoCommands();
-//
-//                ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
-//                ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
-//                ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()));
-//
-//                icsc.agregarInvCrossSemi(ics);
-//                icc.actualizarNoPiezasActual(ics);
-//                actualizarTablaCross();
-//                dlgEnvSemi.setVisible(false);
-//                JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
-//            }
-//        } 
-//        catch (Exception e) 
-//        {
-//            dlgEnvSemi.setVisible(false);                
-//            JOptionPane.showMessageDialog(null, "Error de conexión");
-//        }
-//    }
-//    
-//    public void generarReporteEntradaCross()
-//    {
-//        try
-//        {
-//            URL path = this.getClass().getResource("/Reportes/ReporteEntCross.jasper");
-//            
-//            Map parametros = new HashMap();
-//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-//            
-//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-//            
-//            conexion.conectar();
-//            
-//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-//            
-//            JasperViewer view = new JasperViewer(jprint, false);
-//            
-//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//            
-//            view.setVisible(true);
-//            conexion.desconectar();
-//        } catch (JRException ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-//    
-//    public void generarReporteSalidaCross()
-//    {
-//        try
-//        {
-//            URL path = this.getClass().getResource("/Reportes/ReporteSalCross.jasper");
-//            
-//            Map parametros = new HashMap();
-//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-//            
-//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-//            
-//            conexion.conectar();
-//            
-//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-//            
-//            JasperViewer view = new JasperViewer(jprint, false);
-//            
-//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//            
-//            view.setVisible(true);
-//            conexion.desconectar();
-//        } catch (JRException ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-//    
-//    public void generarReporteInventarioCross()
-//    {
-//        try
-//        {
-//            URL path = this.getClass().getResource("/Reportes/ReporteInvCross.jasper");
-//            
-//            Map parametros = new HashMap();
-//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-//            
-//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-//            
-//            conexion.conectar();
-//            
-//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-//            
-//            JasperViewer view = new JasperViewer(jprint, false);
-//            
-//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//            
-//            view.setVisible(true);
-//            conexion.desconectar();
-//        } catch (JRException ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     
     //Metodo para inicializar los campos de dlgAgregar
     public void inicializarCamposAgregar() throws Exception
@@ -546,8 +319,8 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         
         c = new Calibre();
         s = new Seleccion();
-        txtNoPartida.setText("");
-        txtTipoRecorte.setText("");
+        txtNoPartidaAgregar.setText("");
+        txtTipoRecorteAgregar.setText("");
         txtNoPiezasAgregar.setText("");
         txtKgTotalesAgregar.setText("");
         
@@ -596,24 +369,25 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         ics = new InventarioCrossSemiterminado();
         icsc =new InventarioCrossSemiterminadoCommands();
         tr = new TipoRecorte();
-        ic = new InventarioCross();
+        p = new Partida();
         
         ics.setFecha("1900-01-01");
         ics.setFecha1("2040-01-01");     
         tr.setDescripcion("%%");
-        ic.setIdPartida(0);
+        p.setNoPartida(0);
        
         DefaultTableModel dtm = null;
         
         try {
             
-            datos = icsc.obtenerListaInvCrossSemi(ics,ic,tr);
+            datos = icsc.obtenerListaInvCrossSemi(ics,p,tr);
             
-         
-       dtm = new DefaultTableModel(datos, colsInvSemi){
-            public boolean isCellEditable(int row, int column) {
-            return false;
-            }
+            dtm = new DefaultTableModel(datos, colsInvSemi)
+            {
+                public boolean isCellEditable(int row, int column) 
+                {
+                    return false;
+                }
             };
             tblBuscarPartidaInvCrossSemi.setModel(dtm);
 
@@ -687,7 +461,8 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             abrirDialogoAgregar();
             
             txtNoPartidaAgregar.setText(String.valueOf(ic.getIdPartida()));
-            txtTipoRecorte.setText(tr.getDescripcion());
+            txtTipoRecorteAgregar.setText(tr.getDescripcion());
+            txtNoPiezasAgregar.setText(String.valueOf(ics.getNoPiezasActuales()));
         }
         else 
         {
@@ -699,11 +474,11 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     
     public void realizarEntradaSemiterminado()
     {
-        if (!txtNoPartidaAgregar.getText().equals("") || !txtTipoRecorte.getText().equals("") || !txtNoPiezasAgregar.getText().equals("") || !txtKgTotalesAgregar.getText().equals(""))
+        if (!txtNoPartidaAgregar.getText().equals("") || !txtTipoRecorteAgregar.getText().equals("") || !txtNoPiezasAgregar.getText().equals("") || !txtKgTotalesAgregar.getText().equals(""))
         {
-            if (Integer.parseInt(txtNoPiezasAgregar.getText())>=1)
+            if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
             {
-                if (Integer.parseInt(txtNoPiezasAgregar.getText())<=ics.getNoPiezasActuales())
+                if (Integer.parseInt(txtNoPiezasAgregar.getText()) <= ics.getNoPiezasActuales())
                 {
                     try 
                     {
@@ -711,9 +486,10 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                         is.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         is.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
                         is.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
+                        is.setNoPiezas(ics.getNoPiezasActuales());
                         
                         isc.agregarInvSemiterminado(is);
-                        icsc.actualizarNoPiezasActual(is,Integer.parseInt(txtNoPiezasAgregar.getText()));
+                        icsc.actualizarNoPiezasActual(is);
                         dlgAgregar.setVisible(false);
                         JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
                         actualizarTablaSemiterminado();
@@ -780,7 +556,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         jLabel62 = new javax.swing.JLabel();
         txtNoPartidaAgregar = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
-        txtTipoRecorte = new javax.swing.JTextField();
+        txtTipoRecorteAgregar = new javax.swing.JTextField();
         jLabel63 = new javax.swing.JLabel();
         txtNoPiezasAgregar = new javax.swing.JTextField();
         cmbCalibreAgregar = new javax.swing.JComboBox();
@@ -1032,11 +808,11 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             }
         });
 
-        txtTipoRecorte.setEditable(false);
-        txtTipoRecorte.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtTipoRecorte.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtTipoRecorteAgregar.setEditable(false);
+        txtTipoRecorteAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTipoRecorteAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTipoRecorteKeyTyped(evt);
+                txtTipoRecorteAgregarKeyTyped(evt);
             }
         });
 
@@ -1097,7 +873,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     .addComponent(cmbSeleccionAgregar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtNoPiezasAgregar, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtNoPartidaAgregar, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTipoRecorte, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.Alignment.LEADING, 0, 122, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton3)
@@ -1118,7 +894,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                             .addComponent(txtNoPartidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(dlgAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTipoRecorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel52)))
                     .addGroup(dlgAgregarLayout.createSequentialGroup()
                         .addGap(55, 55, 55)
@@ -1788,9 +1564,9 @@ try {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void txtTipoRecorteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteKeyTyped
+    private void txtTipoRecorteAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteAgregarKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTipoRecorteKeyTyped
+    }//GEN-LAST:event_txtTipoRecorteAgregarKeyTyped
 
     private void txtNoPiezasAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasAgregarKeyTyped
         char c;
@@ -1903,7 +1679,7 @@ try {
     private javax.swing.JTextField txtNoPiezasActualesEnvSemi;
     private javax.swing.JTextField txtNoPiezasAgregar;
     private javax.swing.JTextField txtNoPiezasEnvSemi;
-    private javax.swing.JTextField txtTipoRecorte;
+    private javax.swing.JTextField txtTipoRecorteAgregar;
     private javax.swing.JTextField txtTipoRecorteEnvSemi;
     // End of variables declaration//GEN-END:variables
 }

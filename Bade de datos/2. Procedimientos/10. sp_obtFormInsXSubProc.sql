@@ -1,0 +1,46 @@
+use esmarProd
+go
+    
+create procedure sp_obtFormInsXSubProc 
+  (
+    @idSubProceso int
+  )
+  as begin
+  
+    declare 
+      @idFormXSubProc int
+      
+    set
+      @idFormXSubProc = 
+      (
+        select
+          idFormXSubProc
+          
+        from 
+          tb_formXsubProc
+          
+        where 
+          fechaCreacion = 
+          (
+            select 
+              max (fechaCreacion)
+              
+            from 
+              tb_formXsubProc
+              
+            where 
+              idSubproceso = @idSubProceso
+          )
+      )
+    
+    
+    select
+      *
+      
+    from 
+      tb_insumXproc
+      
+    where 
+      idFormXSubProc = @idFormXSubProc
+  end
+go

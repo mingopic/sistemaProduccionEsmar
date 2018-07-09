@@ -81,7 +81,7 @@ public class ConexionBD
             for (int i = 0; i < palabra.length; i++) {
                 datos[j]=palabra[1].replaceAll("^\\s*","");
             }
-            System.out.println(datos[j]);
+            //System.out.println(datos[j]);
             j++;
         }
         b.close();

@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.InventarioSemiterminado;
+import Modelo.Partida;
 import Modelo.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,13 +39,16 @@ public class InventarioCrossSemiterminadoCommands {
     }
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaInvCrossSemi(InventarioCrossSemiterminado ics, InventarioCross ic, TipoRecorte tr) throws Exception
+    public static String[][] obtenerListaInvCrossSemi(InventarioCrossSemiterminado ics, Partida p, TipoRecorte tr) throws Exception
     {
         String query;
         
-        query= "EXEC sp_obtInvCrossSemi '"+tr.getDescripcion()+"',"+ic.getIdPartida()+",'"+ics.getFecha()+"','"+ics.getFecha1()+"'";
+        query= "EXEC sp_obtInvCrossSemi "
+                + "'" + tr.getDescripcion() +"'"
+                + "," + p.getNoPartida()
+                + ",'" + ics.getFecha() +"'"
+                + ",'" + ics.getFecha1() +"'";
 
-        
         String[][] datos = null;
         int renglones = 0;
         int columnas = 6;
@@ -52,8 +56,8 @@ public class InventarioCrossSemiterminadoCommands {
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = stmt.executeQuery(query);
         System.out.println(query);
+        rs = stmt.executeQuery(query);
         
         if (rs.last()) 
         {
@@ -64,7 +68,7 @@ public class InventarioCrossSemiterminadoCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) 
             {
-                datos[i][0] = rs.getString("idPartida");
+                datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("descripcion");
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
@@ -84,10 +88,11 @@ public class InventarioCrossSemiterminadoCommands {
     }
     
     //Método para actualizar el número de piezas actuales
-    public static void actualizarNoPiezasActual(InventarioSemiterminado is, int piezas) throws Exception
+    public static void actualizarNoPiezasActual(InventarioSemiterminado is) throws Exception
     {
-        String query = "exec sp_actInvCrossSemi "+is.getIdInvCrossSemi()+""
-            + ","+piezas;
+        String query = "exec sp_actInvCrossSemi "
+                + is.getIdInvCrossSemi()
+                + "," + is.getNoPiezas();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

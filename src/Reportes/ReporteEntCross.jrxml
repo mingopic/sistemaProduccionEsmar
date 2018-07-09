@@ -6,14 +6,26 @@
 	<parameter name="imagen" class="java.lang.Object">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="tipoRecorte" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="noPartida" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[exec sp_obtEntCross '%%',0,'1900-01-01','2040-01-01']]>
+		<![CDATA[exec sp_obtEntCross $P{tipoRecorte},$P{noPartida},$P{fecha1},$P{fecha2}]]>
 	</queryString>
-	<field name="idPartida" class="java.lang.Integer"/>
+	<field name="noPartida" class="java.lang.Integer"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="noPiezas" class="java.lang.Integer"/>
 	<field name="noPiezasActuales" class="java.lang.Integer"/>
-	<field name="fechaentrada" class="java.sql.Timestamp"/>
+	<field name="fechaentrada" class="java.sql.Date"/>
 	<field name="idInvPCross" class="java.lang.Integer"/>
 	<group name="descripcion">
 		<groupExpression><![CDATA[$F{descripcion}]]></groupExpression>
@@ -98,14 +110,6 @@
 	<detail>
 		<band height="25" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="0" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5aaa4e62-9bbe-42f9-a8a4-e0927bb6364a"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idPartida}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="116" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="8e499ec0-ec02-41be-8bfc-4963510a6462"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -128,6 +132,10 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noPiezas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="438456b3-8fad-42f1-aab6-44d274bdb709"/>
+				<textFieldExpression><![CDATA[$F{noPartida}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

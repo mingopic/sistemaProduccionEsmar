@@ -76,7 +76,7 @@
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
-						<text><![CDATA[noPiezas]]></text>
+						<text><![CDATA[No. Piezas]]></text>
 					</staticText>
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="335" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f1761e64-bf24-46ae-baad-8d4835e25985"/>
@@ -100,10 +100,10 @@
 		<groupFooter>
 			<band height="39">
 				<rectangle>
-					<reportElement x="0" y="14" width="552" height="20" backcolor="#FFFF99" uuid="0d4d5ee6-3a38-4048-8866-e4f33a9902b9"/>
+					<reportElement x="0" y="14" width="555" height="20" backcolor="#FFFF99" uuid="0d4d5ee6-3a38-4048-8866-e4f33a9902b9"/>
 				</rectangle>
 				<staticText>
-					<reportElement mode="Transparent" x="0" y="14" width="77" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="95619611-9f81-4830-b8aa-eca5ba6d3603"/>
+					<reportElement mode="Transparent" x="3" y="14" width="77" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="95619611-9f81-4830-b8aa-eca5ba6d3603"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -139,7 +139,7 @@
 				<imageExpression><![CDATA[$P{imagen}]]></imageExpression>
 			</image>
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="449" height="46" backcolor="#009900" uuid="95bd955b-dd13-4c4b-b161-baaca3ca9dd3"/>
+				<reportElement mode="Opaque" x="0" y="0" width="452" height="46" backcolor="#009900" uuid="95bd955b-dd13-4c4b-b161-baaca3ca9dd3"/>
 				<staticText>
 					<reportElement style="Title" mode="Transparent" x="15" y="0" width="392" height="46" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="0c005e29-d987-4264-930d-c6a211acaaf9"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
@@ -150,7 +150,7 @@
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement mode="Opaque" x="2" y="46" width="553" height="32" forecolor="#000000" backcolor="#000099" uuid="fbe7eba4-9b29-44e1-8b2d-e65bce7a9ccf"/>
+				<reportElement mode="Opaque" x="0" y="46" width="555" height="32" forecolor="#000000" backcolor="#000099" uuid="fbe7eba4-9b29-44e1-8b2d-e65bce7a9ccf"/>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement x="394" y="12" width="144" height="20" forecolor="#FFFFFF" uuid="5943dfa3-b211-49d4-b6bb-bf6e7c1e89bf"/>
 					<textElement textAlignment="Right">
@@ -237,7 +237,7 @@
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#FFFFFF" uuid="9fd4c4ef-165d-4302-b8b9-10f5e0f09c9e"/>
+					<reportElement style="Column header" x="5" y="0" width="197" height="20" forecolor="#FFFFFF" uuid="9fd4c4ef-165d-4302-b8b9-10f5e0f09c9e"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>

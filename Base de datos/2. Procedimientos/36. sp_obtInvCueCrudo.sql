@@ -29,23 +29,27 @@ as begin
 	select
 		concat(@tipoRecorte,' ',tc.descripcion) as descripcion
     , p.nombreProveedor
-    , rc.noTotalPiezas
+    , ic.noPiezasActual
     , rc.kgTotal
-    , (rc.kgTotal/rc.noTotalPiezas) as pesoProm
+    , (rc.kgTotal/ic.noPiezasActual) as pesoProm
     , rc.precioXKilo
     , rc.costoCamion
     
 	from
+		tb_inventarioCrudo as ic
+	inner join
+		tb_recepcionCuero as rc
+	on
+		rc.idRecepcionCuero = ic.idRecepcionCuero
+	
+	inner join
 		tb_tipoCuero as tc
-    
-    inner join
-      tb_recepcionCuero as rc
     on
       tc.idTipoCuero = rc.idTipoCuero
       
     inner join
       tb_proveedor as p
     on
-      rc.idProveedor = p.idProveedor
+      p.idProveedor = rc.idProveedor
 end
 go

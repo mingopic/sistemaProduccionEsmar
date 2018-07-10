@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b89c0d7c-07f4-4a1b-ae29-707f01fc8191">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="606"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="173"/>
 	<parameter name="imagen" class="java.lang.Object">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -11,7 +11,7 @@
 	</queryString>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="nombreProveedor" class="java.lang.String"/>
-	<field name="noTotalPiezas" class="java.lang.Integer"/>
+	<field name="noPiezasActual" class="java.lang.Integer"/>
 	<field name="kgTotal" class="java.lang.Double"/>
 	<field name="pesoProm" class="java.lang.Double"/>
 	<field name="precioXKilo" class="java.lang.Double"/>
@@ -126,14 +126,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreProveedor}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="151" y="0" width="33" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="035eb06b-40d1-4302-879b-35e791f20db9"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{noTotalPiezas}]]></textFieldExpression>
-			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="195" y="0" width="28" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7578a8c0-7574-4353-9c00-fb54dfcdda3c"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
@@ -165,6 +157,10 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{costoCamion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="34" height="20" uuid="a3e8afce-53ba-4a98-859a-8d0aa7c5e17e"/>
+				<textFieldExpression><![CDATA[$F{noPiezasActual}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

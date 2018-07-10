@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="08d7ce75-c13d-466b-8435-6b841d8b4225">
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="191"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -32,10 +32,10 @@
 		<groupHeader>
 			<band height="52">
 				<rectangle>
-					<reportElement x="0" y="28" width="553" height="20" backcolor="#FFFF99" uuid="8548110e-ec8e-412e-a369-fc83c5373f93"/>
+					<reportElement x="0" y="28" width="557" height="20" backcolor="#FFFF99" uuid="8548110e-ec8e-412e-a369-fc83c5373f93"/>
 				</rectangle>
 				<frame>
-					<reportElement mode="Opaque" x="2" y="0" width="555" height="28" forecolor="#B89F7D" backcolor="#CCCCFF" uuid="d54061c8-dc06-4ad1-a9f0-d28bc67ccaa6"/>
+					<reportElement mode="Opaque" x="0" y="0" width="557" height="28" forecolor="#B89F7D" backcolor="#CCCCFF" uuid="d54061c8-dc06-4ad1-a9f0-d28bc67ccaa6"/>
 					<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 						<reportElement style="SubTitle" isPrintRepeatedValues="false" mode="Transparent" x="2" y="0" width="128" height="24" forecolor="#333333" backcolor="#FFFFFF" uuid="6e24661f-11c4-424d-823b-0a3ca106a695"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
@@ -46,7 +46,7 @@
 					</textField>
 				</frame>
 				<staticText>
-					<reportElement style="Column header" mode="Transparent" x="0" y="30" width="57" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="203e51d9-8ac8-49f7-9280-729e1e9d1196"/>
+					<reportElement style="Column header" mode="Transparent" x="2" y="30" width="57" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="203e51d9-8ac8-49f7-9280-729e1e9d1196"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c37aa757-aee4-455b-a410-98caee37556f">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="254"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -45,7 +45,7 @@
 	<group name="tipoRecorte">
 		<groupExpression><![CDATA[$F{tipoRecorte}]]></groupExpression>
 		<groupHeader>
-			<band height="48">
+			<band height="60">
 				<frame>
 					<reportElement mode="Opaque" x="0" y="0" width="802" height="44" forecolor="#B89F7D" backcolor="#CCCCFF" uuid="275fd817-b13b-40df-8740-41ceb3fc7625"/>
 					<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">

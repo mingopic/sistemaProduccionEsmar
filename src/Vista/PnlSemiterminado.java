@@ -474,11 +474,11 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     
     public void realizarEntradaSemiterminado()
     {
-        if (!txtNoPartidaAgregar.getText().equals("") || !txtTipoRecorteAgregar.getText().equals("") || !txtNoPiezasAgregar.getText().equals("") || !txtKgTotalesAgregar.getText().equals(""))
+        if (!txtNoPartidaAgregar.getText().equals("") && !txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals("") && !txtKgTotalesAgregar.getText().equals(""))
         {
             if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
             {
-                if (Integer.parseInt(txtNoPiezasAgregar.getText()) <= ics.getNoPiezasActuales())
+                if (Integer.parseInt(txtNoPiezasAgregar.getText()) < ics.getNoPiezasActuales())
                 {
                     try 
                     {

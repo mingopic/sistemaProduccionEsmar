@@ -1,5 +1,12 @@
 use esmarProd
 go
+
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtInvCrossSemi')
+begin 
+  drop
+    procedure sp_obtInvCrossSemi
+end
+go
 	
 create procedure sp_obtInvCrossSemi
 (

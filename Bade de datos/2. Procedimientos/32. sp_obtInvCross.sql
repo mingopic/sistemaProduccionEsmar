@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtInvCross')
+begin 
+  drop
+    procedure sp_obtInvCross
+end
+go
+
 create procedure sp_obtInvCross
 as begin
 

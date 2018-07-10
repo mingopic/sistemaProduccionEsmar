@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtEntReccuero')
+begin 
+  drop
+    procedure sp_obtEntReccuero
+end
+go
+
 create procedure sp_obtEntReccuero 
   (
     @proveedor   varchar(100)

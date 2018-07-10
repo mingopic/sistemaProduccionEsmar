@@ -1,5 +1,12 @@
 use esmarProd
 go
+
+if exists (select name from sys.sysobjects WHERE name = 'sp_agrInsumXProc')
+begin 
+  drop
+    procedure sp_agrInsumXProc
+end
+go
  
 create procedure sp_agrInsumXProc 
   (

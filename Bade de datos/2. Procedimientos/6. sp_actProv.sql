@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_actProv')
+begin 
+  drop
+    procedure sp_actProv
+end
+go
+
 create procedure sp_actProv
   (
     @nombreProveedor varchar(100)

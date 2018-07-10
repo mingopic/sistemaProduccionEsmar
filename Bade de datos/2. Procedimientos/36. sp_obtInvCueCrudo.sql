@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtInvCueCrudo')
+begin 
+  drop
+    procedure sp_obtInvCueCrudo
+end
+go
+
 create procedure sp_obtInvCueCrudo
 as begin
 

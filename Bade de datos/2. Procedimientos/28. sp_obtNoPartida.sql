@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtNoPartida')
+begin 
+  drop
+    procedure sp_obtNoPartida
+end
+go
+
 create procedure sp_obtNoPartida
 as begin
 

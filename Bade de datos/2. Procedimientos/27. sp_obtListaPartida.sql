@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtListaPartida')
+begin 
+  drop
+    procedure sp_obtListaPartida
+end
+go
+
 create procedure sp_obtListaPartida
 as begin
 

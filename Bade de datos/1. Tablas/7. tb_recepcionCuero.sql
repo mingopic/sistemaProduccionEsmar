@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.tables WHERE name = 'tb_recepcionCuero')
+begin 
+  drop
+    table tb_recepcionCuero 
+end
+go
+
 create table tb_recepcionCuero 
 (
   idRecepcionCuero   int not null identity(1,1) primary key

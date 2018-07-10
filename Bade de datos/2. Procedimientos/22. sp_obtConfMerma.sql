@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtConfMerma')
+begin 
+  drop
+    procedure sp_obtConfMerma
+end
+go
+
 create procedure sp_obtConfMerma
 as begin
   declare @salAcep     float

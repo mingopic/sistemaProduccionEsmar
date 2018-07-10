@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtSubProc')
+begin 
+  drop
+    procedure sp_obtSubProc
+end
+go
+
 create procedure sp_obtSubProc
   (
     @nombreproceso varchar(20)

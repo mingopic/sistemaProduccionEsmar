@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtProc')
+begin 
+  drop
+    procedure sp_obtProc
+end
+go
+
 create procedure sp_obtProc
   as begin
   

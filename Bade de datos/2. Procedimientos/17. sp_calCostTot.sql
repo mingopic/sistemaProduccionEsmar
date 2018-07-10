@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_calCostTot')
+begin 
+  drop
+    procedure sp_calCostTot
+end
+go
+
 create procedure sp_calCostTot
 (
   @sal             float

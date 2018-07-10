@@ -523,6 +523,103 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             dlgAgregar.setVisible(true);
         }
     }
+    
+    public void generarReporteEntradaSemiterminado()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteEntSemi.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            parametros.put("calibre", c.getDescripcion());
+            parametros.put("seleccion", s.getDescripcion());
+            parametros.put("fecha", is.getFecha());
+            parametros.put("fecha1", is.getFecha1());
+            parametros.put("noPartida", p.getNoPartida());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void generarReporteInventarioXTrabajar()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteInvCrossSemi.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void generarReporteInventarioSemiterminado()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteInvSemi.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            parametros.put("calibre", c.getDescripcion());
+            parametros.put("seleccion", s.getDescripcion());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1438,12 +1535,12 @@ try {
     }//GEN-LAST:event_cmbTipoRecorteActionPerformed
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
-//        actualizarTablaCross();
-//        generarReporteEntradaCross();
+        actualizarTablaSemiterminado();
+        generarReporteEntradaSemiterminado();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnReporteEntrada2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada2ActionPerformed
-//        generarReporteInventarioCross();
+        generarReporteInventarioXTrabajar();
     }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
@@ -1524,7 +1621,7 @@ try {
     }//GEN-LAST:event_txtNoPartidaKeyPressed
 
     private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
-        // TODO add your handling code here:
+        generarReporteInventarioSemiterminado();
     }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
 
     private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed

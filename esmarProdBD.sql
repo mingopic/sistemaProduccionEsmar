@@ -1573,23 +1573,78 @@ end
 go
 
 create procedure sp_obtSalidaCross
+(
+	@tipoRecorte varchar(20)
+	, @noPartida int
+	, @fecha varchar(10)
+	, @fecha1 varchar(10)
+)
 as begin
-	select
-		ic.idPartida, tr.descripcion, ics.noPiezas, ics.fechaEntrada
-	from
-		tb_tipoRecorte as tr
-	inner join
-		tb_partidaDet as pd
-	on
-		tr.idTipoRecorte = pd.idTipoRecorte
-	inner join
-		tb_invCross as ic
-	on
-		pd.idPartidaDet = ic.idPartidaDet
-	inner join
-		tb_invCrossSemi as ics
-	on
-		ic.idInvPCross = ics.idInvPCross
+
+	if (@noPartida = 0)
+	begin
+	
+		select
+			p.noPartida, tr.descripcion, ics.noPiezas, ics.fechaEntrada
+		from
+			tb_invCrossSemi as ics
+		inner join
+			tb_invCross as ic
+		on
+			ic.idInvPCross = ics.idInvPCross
+			
+		inner join
+			tb_partidaDet as pd
+		on
+			pd.idPartidaDet = ic.idPartidaDet
+		
+		inner join
+			tb_partida as p
+		on
+			p.idPartida = pd.idPartida
+			
+		inner join
+			tb_tipoRecorte as tr
+		on
+			tr.idTipoRecorte = pd.idTipoRecorte
+			and tr.descripcion like @tipoRecorte
+			
+		where
+		  ics.fechaentrada between @fecha and @fecha1
+	end
+	
+	else
+	begin
+		
+		select
+			p.noPartida, tr.descripcion, ics.noPiezas, ics.fechaEntrada
+		from
+			tb_invCrossSemi as ics
+		inner join
+			tb_invCross as ic
+		on
+			ic.idInvPCross = ics.idInvPCross
+			
+		inner join
+			tb_partidaDet as pd
+		on
+			pd.idPartidaDet = ic.idPartidaDet
+		
+		inner join
+			tb_partida as p
+		on
+			p.idPartida = pd.idPartida
+			and p.noPartida = @noPartida
+			
+		inner join
+			tb_tipoRecorte as tr
+		on
+			tr.idTipoRecorte = pd.idTipoRecorte
+			and tr.descripcion like @tipoRecorte
+			
+		where
+		  ics.fechaentrada between @fecha and @fecha1
+	end
 end
 go
 
@@ -1849,6 +1904,146 @@ as begin
     noPiezasActuales = noPiezasActuales-@piezasUtilizar
   where
     idInvCrossSemi = @idInvCrossSemi
+end
+go
+
+create procedure sp_obtInvSemi
+(
+	@tipoRecorte varchar(20)
+	, @calibre varchar(20)
+	, @seleccion varchar(20)
+)
+as begin
+	select
+		tr.descripcion as tipoRecorte
+		, c.descripcion as calibre
+		, s.descripcion as seleccion
+		, sum(ins.noPiezasActuales) as noPiezas
+		, sum(ins.kgTotales) as peso
+	    , sum(ins.kgTotales)/sum(ins.noPiezasActuales) as pesoProm
+
+	from
+		tb_invSemiterminado as ins
+		
+	inner join
+		tb_invCrossSemi as ics
+	on
+		ics.idInvCrossSemi = ins.idInvCrossSemi
+
+	inner join
+		tb_invCross ic
+	on
+		ic.idInvPCross = ics.idInvPCross
+
+	inner join
+		tb_partidaDet pd
+	on
+		pd.idPartidaDet = ic.idPartidaDet
+
+	inner join
+		tb_tipoRecorte tr
+	on
+		tr.idTipoRecorte = pd.idTipoRecorte
+		and tr.descripcion like @tipoRecorte
+
+	inner join
+		tb_calibre c
+	on
+		c.idCalibre = ins.idCalibre
+		and c.descripcion like @calibre
+
+	inner join
+		tb_seleccion s
+	on
+		s.idSeleccion = ins.idSeleccion
+		and s.descripcion like @seleccion
+	
+	group by
+		tr.descripcion, c.descripcion, s.descripcion;
+end
+go
+
+create procedure sp_obtEntInvCrossSemi
+(
+	@tipoRecorte varchar(20)
+)
+as begin
+	select
+		tr.descripcion as tipoRecorte
+		, sum(ics.noPiezasActuales) as noPiezas
+	from
+		tb_invCrossSemi as ics
+	inner join
+		tb_invCross as ic
+	on
+		ic.idInvPCross = ics.idInvPCross
+	inner join
+		tb_partidaDet as pd
+	on
+		pd.idPartidaDet = ic.idPartidaDet
+	inner join
+		tb_tipoRecorte as tr
+	on
+		tr.idTipoRecorte = pd.idTipoRecorte
+		and tr.descripcion like @tipoRecorte
+	group by
+		tr.descripcion
+end
+go
+
+create procedure sp_obtEntInvSemi
+(
+	@tipoRecorte varchar(20)
+	, @calibre varchar(20)
+	, @seleccion varchar(20)
+	, @fecha varchar(10)
+	, @fecha1 varchar(10)
+)
+as begin
+	select
+		p.noPartida
+		, tr.descripcion as tipoRecorte
+		, ins.noPiezas
+		, ins.kgTotales
+		, (ins.kgTotales/ins.noPiezas) as pesoProm
+		, s.descripcion as seleccion
+		, c.descripcion as calibre
+		, ins.fechaEntrada
+	from
+		tb_invSemiterminado as ins
+	inner join
+		tb_invCrossSemi as ics
+	on
+		ics.idInvCrossSemi = ins.idInvCrossSemi
+	inner join
+		tb_invCross as ic
+	on
+		ic.idInvPCross = ics.idInvPCross
+	inner join
+		tb_partidaDet as pd
+	on
+		pd.idPartidaDet = ic.idPartidaDet
+	inner join
+		tb_partida as p
+	on
+		p.idPartida = pd.idPartida
+	inner join
+		tb_tipoRecorte as tr
+	on
+		tr.idTipoRecorte = pd.idTipoRecorte
+		and tr.descripcion like @tipoRecorte
+	inner join
+		tb_calibre as c
+	on
+		c.idCalibre = ins.idCalibre
+		and c.descripcion like @calibre
+	inner join
+		tb_seleccion as s
+	on
+		s.idSeleccion = ins.idSeleccion
+		and s.descripcion like @seleccion
+	where
+		ins.fechaEntrada between @fecha and @fecha1
 end
 go
 

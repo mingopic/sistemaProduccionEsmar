@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.tables WHERE name = 'tb_subProceso')
+begin 
+  drop
+    table tb_subProceso 
+end
+go
+
 create table tb_subProceso 
 (
   idSubproceso  int not null identity(1,1) primary key

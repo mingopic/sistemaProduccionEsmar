@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtNoCamion')
+begin 
+  drop
+    procedure sp_obtNoCamion
+end
+go
+
 create procedure sp_obtNoCamion 
   (
     @idProveedor int

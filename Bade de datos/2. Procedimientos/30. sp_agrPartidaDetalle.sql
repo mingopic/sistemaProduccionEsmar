@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_agrPartidaDetalle')
+begin 
+  drop
+    procedure sp_agrPartidaDetalle
+end
+go
+
 create procedure sp_agrPartidaDetalle
 (
   @noPiezas        int

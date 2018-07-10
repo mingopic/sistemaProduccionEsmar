@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a70557c-72df-46a7-8155-a62a15b44545">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="imagen" class="java.lang.Object">
@@ -14,16 +14,41 @@
 	<variable name="noPiezasActuales_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{noPiezasActuales}]]></variableExpression>
 	</variable>
+	<variable name="noPiezasActuales_2" class="java.lang.Integer" resetType="Group" resetGroup="descripcion" calculation="Sum">
+		<variableExpression><![CDATA[$F{noPiezasActuales}]]></variableExpression>
+	</variable>
 	<group name="descripcion">
 		<groupExpression><![CDATA[$F{descripcion}]]></groupExpression>
+		<groupFooter>
+			<band height="50">
+				<rectangle>
+					<reportElement x="0" y="0" width="572" height="20" backcolor="#FFFF99" uuid="acdf837c-691a-4e16-ad3c-7e778d23b143"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement mode="Transparent" x="3" y="2" width="57" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="3ed09c68-23fc-4e3a-b3f5-13707bc8303d"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[No. Piezas:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="60" y="2" width="100" height="18" uuid="708ff370-60fd-497a-a4e8-01a96301e66b"/>
+					<textFieldExpression><![CDATA[$V{noPiezasActuales_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="73" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="54" width="572" height="25" forecolor="#000000" backcolor="#000099" uuid="a41f3dc3-ea80-486a-a5d9-470dc3ee44ba"/>
+				<reportElement mode="Opaque" x="0" y="47" width="572" height="25" forecolor="#000000" backcolor="#000099" uuid="a41f3dc3-ea80-486a-a5d9-470dc3ee44ba"/>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement x="417" y="0" width="144" height="20" forecolor="#FFFFFF" uuid="2d2d15f3-861e-47c8-9766-158060ee8760"/>
 					<textElement textAlignment="Right">
@@ -33,9 +58,9 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="472" height="54" forecolor="#000000" backcolor="#009900" uuid="95253172-6a43-4a6a-b6db-a6fb9326682b"/>
+				<reportElement mode="Opaque" x="0" y="0" width="472" height="46" forecolor="#000000" backcolor="#009900" uuid="95253172-6a43-4a6a-b6db-a6fb9326682b"/>
 				<staticText>
-					<reportElement mode="Transparent" x="24" y="0" width="370" height="54" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="11f88b2b-3841-41ae-8719-fc38dfe4a66e"/>
+					<reportElement mode="Transparent" x="17" y="4" width="370" height="42" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="11f88b2b-3841-41ae-8719-fc38dfe4a66e"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Arial" size="24" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -44,7 +69,7 @@
 				</staticText>
 			</frame>
 			<image>
-				<reportElement x="472" y="4" width="100" height="50" uuid="8a081a0d-88e2-4f93-9558-b296923b63cc"/>
+				<reportElement x="472" y="4" width="100" height="42" uuid="8a081a0d-88e2-4f93-9558-b296923b63cc"/>
 				<imageExpression><![CDATA[$P{imagen}]]></imageExpression>
 			</image>
 		</band>
@@ -53,23 +78,15 @@
 		<band height="2" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="54" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<rectangle>
-				<reportElement mode="Opaque" x="0" y="0" width="572" height="54" backcolor="#CCCCFF" uuid="697a1a7d-86d6-49e8-897c-e43980fe076c"/>
+				<reportElement mode="Opaque" x="0" y="4" width="572" height="26" backcolor="#CCCCFF" uuid="697a1a7d-86d6-49e8-897c-e43980fe076c"/>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
 				</graphicElement>
 			</rectangle>
-			<staticText>
-				<reportElement mode="Transparent" x="0" y="34" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="3ed09c68-23fc-4e3a-b3f5-13707bc8303d"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[No. Piezas]]></text>
-			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="0" y="0" width="128" height="34" forecolor="#333333" backcolor="#FFFFFF" uuid="bea44dbd-8eba-4f8b-8602-c8176c5a3c71"/>
+				<reportElement mode="Transparent" x="3" y="4" width="128" height="22" forecolor="#333333" backcolor="#FFFFFF" uuid="bea44dbd-8eba-4f8b-8602-c8176c5a3c71"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -78,33 +95,6 @@
 			</textField>
 		</band>
 	</columnHeader>
-	<detail>
-		<band height="22" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="2" width="100" height="20" uuid="44a94f8f-8c9e-421b-9c1c-f3c0a5df1107"/>
-				<textFieldExpression><![CDATA[$F{noPiezasActuales}]]></textFieldExpression>
-			</textField>
-		</band>
-	</detail>
-	<columnFooter>
-		<band height="22" splitType="Stretch">
-			<rectangle>
-				<reportElement x="0" y="0" width="572" height="20" backcolor="#FFFF99" uuid="98ac2845-05a4-4c04-bffd-10674f174946"/>
-			</rectangle>
-			<staticText>
-				<reportElement mode="Transparent" x="0" y="2" width="57" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="fafe9245-87d8-4903-948f-0d333020e30a"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Total piezas]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="57" y="0" width="100" height="20" uuid="932b46d1-c0d1-4200-8e64-6d954247e4f8"/>
-				<textFieldExpression><![CDATA[$V{noPiezasActuales_1}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnFooter>
 	<pageFooter>
 		<band height="26" splitType="Stretch">
 			<frame>

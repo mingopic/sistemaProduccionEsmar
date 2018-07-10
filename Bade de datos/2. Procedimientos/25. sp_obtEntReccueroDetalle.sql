@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtEntReccueroDetalle')
+begin 
+  drop
+    procedure sp_obtEntReccueroDetalle
+end
+go
+
 create procedure sp_obtEntReccueroDetalle
 (
   @idRecepcionCuero int

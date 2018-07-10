@@ -1,4 +1,4 @@
-usuarioPC:MINGO-LAP
+usuarioPC:EQUIPO-PC\SLQEXPRESS
 baseDatos:       esmarProd        
 usuario:sa
 password:root

@@ -1,5 +1,12 @@
 use esmarProd
 go
+
+if exists (select name from sys.sysobjects WHERE name = 'sp_agrPartida')
+begin 
+  drop
+    procedure sp_agrPartidas
+end
+go
   
 create procedure sp_agrPartida
 (

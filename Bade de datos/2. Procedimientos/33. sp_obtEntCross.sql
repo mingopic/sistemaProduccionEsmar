@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtEntCross')
+begin 
+  drop
+    procedure sp_obtEntCross
+end
+go
+
 create procedure sp_obtEntCross
 (
 	@tipoRecorte varchar(20)

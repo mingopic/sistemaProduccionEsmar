@@ -339,6 +339,10 @@ public class PnlCross extends javax.swing.JPanel {
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            parametros.put("fecha1", ic.getFecha());
+            parametros.put("fecha2", ic.getFecha1());
+            parametros.put("noPartida", p.getNoPartida());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

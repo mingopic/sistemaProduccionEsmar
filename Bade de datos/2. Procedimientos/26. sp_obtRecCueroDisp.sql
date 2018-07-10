@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtRecCueroDisp')
+begin 
+  drop
+    procedure sp_obtRecCueroDisp
+end
+go
+
 create procedure sp_obtRecCueroDisp
 as begin
 

@@ -1,6 +1,12 @@
 use esmarProd
 go
 
+if object_id('tr_insInvCueroCrudo') is not null
+begin
+	drop trigger tr_insInvCueroCrudo
+end
+go
+
 create trigger tr_insInvCueroCrudo
   on tb_recepcionCuero
   after insert

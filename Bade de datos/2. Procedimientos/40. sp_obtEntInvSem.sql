@@ -1,6 +1,13 @@
 use esmarProd
 go
 
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtEntInvSem')
+begin 
+  drop
+    procedure sp_obtEntInvSem
+end
+go
+
 create procedure sp_obtEntInvSem
 (
 	@tipoRecorte varchar(20)

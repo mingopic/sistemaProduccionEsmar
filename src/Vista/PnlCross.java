@@ -268,33 +268,42 @@ public class PnlCross extends javax.swing.JPanel {
     //Método para realizar entrada de material y actualizar inventarios
     public void realizarEntradaEnvSemi () throws Exception
     {
-        try 
+        if ( !txtNoPiezasEnvSemi.getText().isEmpty() && Integer.parseInt(txtNoPiezasEnvSemi.getText()) != 0)
         {
-            if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
+            try 
             {
-                JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
-            }
-            else
+                if (Integer.parseInt(txtNoPiezasEnvSemi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()))
+                {
+                    JOptionPane.showMessageDialog(dlgEnvSemi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+                }
+                else
+                {
+                    int fila = tblInvCross.getSelectedRow();
+                    ics = new InventarioCrossSemiterminado();
+                    icsc = new InventarioCrossSemiterminadoCommands();
+
+                    ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
+                    ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
+                    ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
+
+                    icsc.agregarInvCrossSemi(ics);
+                    icc.actualizarNoPiezasActual(ics);
+                    actualizarTablaCross();
+                    dlgEnvSemi.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
+                }
+            } 
+            catch (Exception e) 
             {
-                int fila = tblInvCross.getSelectedRow();
-                ics = new InventarioCrossSemiterminado();
-                icsc = new InventarioCrossSemiterminadoCommands();
-
-                ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
-                ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
-                ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasActualesEnvSemi.getText()));
-
-                icsc.agregarInvCrossSemi(ics);
-                icc.actualizarNoPiezasActual(ics);
-                actualizarTablaCross();
-                dlgEnvSemi.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
-            }
-        } 
-        catch (Exception e) 
+                dlgEnvSemi.setVisible(false);                
+                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+            }   
+        }
+        else
         {
-            dlgEnvSemi.setVisible(false);                
-            JOptionPane.showMessageDialog(null, "Error de conexión");
+            dlgEnvSemi.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Capture no. Piezas a enviar","Mensaje",JOptionPane.WARNING_MESSAGE);
+            dlgEnvSemi.setVisible(true);
         }
     }
     

@@ -969,7 +969,18 @@ try {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            abrirDialogoEnvSemi();
+            int fila = tblInvCross.getSelectedRow();
+            String piezas = (String.valueOf(tblInvCross.getValueAt(fila, 3)));
+            int numPiezasActuales = Integer.parseInt(piezas);
+            
+            if (numPiezasActuales != 0)
+            {
+                abrirDialogoEnvSemi();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
         }

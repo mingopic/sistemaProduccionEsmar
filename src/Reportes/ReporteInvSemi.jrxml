@@ -60,7 +60,7 @@
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
-						<text><![CDATA[calibre]]></text>
+						<text><![CDATA[Calibre]]></text>
 					</staticText>
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="113" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="87f5de8a-3ce4-4462-8e26-9bb7d610013b"/>
@@ -68,7 +68,7 @@
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
-						<text><![CDATA[seleccion]]></text>
+						<text><![CDATA[Selección]]></text>
 					</staticText>
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="224" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e28ec340-ee89-4caf-932e-b8a6fc70010a"/>
@@ -84,7 +84,7 @@
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
-						<text><![CDATA[peso]]></text>
+						<text><![CDATA[Peso]]></text>
 					</staticText>
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="442" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="2b89c7e8-da75-47a6-aaaa-becae79fb09e"/>
@@ -92,7 +92,7 @@
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
-						<text><![CDATA[pesoProm]]></text>
+						<text><![CDATA[Peso Prom]]></text>
 					</staticText>
 				</frame>
 			</band>

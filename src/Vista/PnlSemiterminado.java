@@ -486,7 +486,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                         is.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         is.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
                         is.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
-                        is.setNoPiezas(ics.getNoPiezasActuales());
+                        is.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
                         
                         isc.agregarInvSemiterminado(is);
                         icsc.actualizarNoPiezasActual(is);
@@ -1621,6 +1621,7 @@ try {
     }//GEN-LAST:event_txtNoPartidaKeyPressed
 
     private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
+        actualizarTablaSemiterminado();
         generarReporteInventarioSemiterminado();
     }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
 

@@ -26,7 +26,7 @@ public class SubProcesoCommands {
     
     //Método que se llama para obtener la lista de los cueros por trabajar
     public static String[][] obtenerListaSubprocesosXid(Proceso pr) throws Exception {
-        String query= "EXEC sp_obtSubProcXid "+pr.getIdProceso()+";";
+        String query= "execute sp_obtSubProcXid "+pr.getIdProceso()+";";
         
         String[][] datos = null;
         int renglones = 0;

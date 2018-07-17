@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c37aa757-aee4-455b-a410-98caee37556f">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="100"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -160,42 +160,42 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="797" height="18" uuid="28e9a0b1-f2c8-4b67-9a13-c67762ae6cae"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="113" height="18" uuid="78675559-5558-427c-82e7-51c737e4914a"/>
+					<reportElement style="Detail" positionType="Float" x="7" y="0" width="113" height="18" uuid="78675559-5558-427c-82e7-51c737e4914a"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{noPartida}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00">
-					<reportElement style="Detail" positionType="Float" x="339" y="0" width="113" height="18" uuid="d832a9e6-d366-44d4-8f69-ee4c52a4187f"/>
+					<reportElement style="Detail" positionType="Float" x="346" y="0" width="113" height="18" uuid="d832a9e6-d366-44d4-8f69-ee4c52a4187f"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{pesoProm}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="452" y="0" width="113" height="18" uuid="0a8d0e19-7bac-416e-9e00-7663a72375ba"/>
+					<reportElement style="Detail" positionType="Float" x="459" y="0" width="113" height="18" uuid="0a8d0e19-7bac-416e-9e00-7663a72375ba"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{seleccion}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="565" y="0" width="113" height="18" uuid="ef3cee64-c136-4018-a81b-1e26375dfe71"/>
+					<reportElement style="Detail" positionType="Float" x="572" y="0" width="113" height="18" uuid="ef3cee64-c136-4018-a81b-1e26375dfe71"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{calibre}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
-					<reportElement style="Detail" positionType="Float" x="678" y="0" width="113" height="18" uuid="fb543b36-c1c2-4af9-afd1-f5338481c203"/>
+					<reportElement style="Detail" positionType="Float" x="685" y="0" width="106" height="18" uuid="fb543b36-c1c2-4af9-afd1-f5338481c203"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fechaEntrada}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="113" y="0" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="ac0a55b4-f276-4ed3-8972-5b209389bad8"/>
+					<reportElement mode="Transparent" x="120" y="0" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="ac0a55b4-f276-4ed3-8972-5b209389bad8"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -203,7 +203,7 @@
 					<textFieldExpression><![CDATA[$F{noPiezas}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00">
-					<reportElement style="Detail" positionType="Float" x="212" y="0" width="113" height="18" uuid="672df747-25d2-48c1-99ec-d4e68aac2e0d"/>
+					<reportElement style="Detail" positionType="Float" x="233" y="0" width="113" height="18" uuid="672df747-25d2-48c1-99ec-d4e68aac2e0d"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>

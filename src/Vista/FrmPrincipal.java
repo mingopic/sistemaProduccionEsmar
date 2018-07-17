@@ -38,6 +38,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlImportar pnlImportar;
     PnlCross pnlCross;
     PnlSemiterminado pnlSemiterminado;
+    PnlFichaProduccion pnlFichaProduccion;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -399,7 +400,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnSemiterminado = new javax.swing.JButton();
         btnTerminado = new javax.swing.JButton();
         btnProdEnProc = new javax.swing.JButton();
-        btnPartidas1 = new javax.swing.JButton();
+        btnFichasProduccion = new javax.swing.JButton();
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
@@ -971,14 +972,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnPartidas1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnPartidas1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/document_index.png"))); // NOI18N
-        btnPartidas1.setText("Fichas de Producción");
-        btnPartidas1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnPartidas1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnPartidas1.addActionListener(new java.awt.event.ActionListener() {
+        btnFichasProduccion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnFichasProduccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/document_index.png"))); // NOI18N
+        btnFichasProduccion.setText("Fichas de Producción");
+        btnFichasProduccion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFichasProduccion.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnFichasProduccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPartidas1ActionPerformed(evt);
+                btnFichasProduccionActionPerformed(evt);
             }
         });
 
@@ -1000,7 +1001,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSemiterminado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProdEnProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPartidas1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnFichasProduccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -1015,7 +1016,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPartidas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPartidas1)
+                .addComponent(btnFichasProduccion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProdEnProc)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1441,9 +1442,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmInsumosXprocesoActionPerformed
 
-    private void btnPartidas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPartidas1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPartidas1ActionPerformed
+    private void btnFichasProduccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFichasProduccionActionPerformed
+        try {
+            pnlFichaProduccion = new PnlFichaProduccion();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
+            
+            lblVentana.setText("Fichas de Producción");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\document_index.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnFichasProduccionActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
@@ -1518,9 +1530,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCross;
     private javax.swing.JButton btnEntrar;
+    private javax.swing.JButton btnFichasProduccion;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnPartidas;
-    private javax.swing.JButton btnPartidas1;
     private javax.swing.JButton btnProdEnProc;
     private javax.swing.JButton btnRecepcionCuero;
     private javax.swing.JButton btnSalir;

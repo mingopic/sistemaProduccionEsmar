@@ -109,27 +109,11 @@ public class PnlInsXproc extends javax.swing.JPanel {
         }
     }
     
-    //Método para actualizar la tabla de las los subprocesos de cuero por trabajar, se inicializa al llamar la clase
+    //Método para actualizar la tabla de los subprocesos, se inicializa al llamar la clase
     public void actualizarTablaSubProc() 
     {
         pr = new Proceso();
-        String descripcion = "";
-        String idAux="";
-        int id=0;
-        
-        //validamos el proceso seleccionado para hacer filtro
-        descripcion = cmbProceso.getSelectedItem().toString();
-
-        for (int i = 0; i < proceso.length; i++) 
-        {
-            if (proceso[i][1] == descripcion) 
-            {
-                idAux=proceso[i][0];
-                id = Integer.parseInt(idAux);
-            }
-        }
-
-        pr.setIdProceso(id);
+        pr.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
 
         DefaultTableModel dtm = null;
         

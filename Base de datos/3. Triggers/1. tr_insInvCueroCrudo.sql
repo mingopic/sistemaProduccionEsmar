@@ -19,13 +19,15 @@ as begin
     tb_inventarioCrudo 
     (
       noPiezasActual
+      , kgTotalActual
       , idRecepcionCuero
     )
     
   select 
     noTotalPiezas
+    , kgTotal
     , idRecepcionCuero
-    
+   
   from 
     tb_recepcionCuero
     

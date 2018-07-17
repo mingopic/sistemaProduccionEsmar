@@ -1019,7 +1019,7 @@
                           <Component id="btnInicio" alignment="1" max="32767" attributes="0"/>
                           <Component id="btnSemiterminado" alignment="0" max="32767" attributes="0"/>
                           <Component id="btnProdEnProc" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnPartidas1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnFichasProduccion" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1037,7 +1037,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnPartidas" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnPartidas1" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnFichasProduccion" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnProdEnProc" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1172,7 +1172,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProdEnProcActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnPartidas1">
+            <Component class="javax.swing.JButton" name="btnFichasProduccion">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="14" style="0"/>
@@ -1185,7 +1185,7 @@
                 <Property name="horizontalTextPosition" type="int" value="4"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPartidas1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFichasProduccionActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

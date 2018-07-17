@@ -1,6 +1,0 @@
-usuarioPC:EQUIPO-PC\SLQEXPRESS
-baseDatos:       esmarProd        
-usuario:sa
-password:root
-baseDatosExportar:esmarProdClon
-puerto:1433

@@ -65,4 +65,53 @@ public class PartidaCommands {
         pstmt.executeUpdate();
         c.desconectar();
     }
+    
+     //Método que se llama para obtener el número de partidas registradas
+    public static String[][] obtenerPartidasDisponibles(Partida p) 
+    {
+        String[][] partidas = null;
+        String query = "execute sp_obtPartidaXproceso "+p.getIdProceso();
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        int renglones = 0;
+        int columnas = 7;
+        int i = 0;
+            
+        try 
+        {
+            c.conectar();
+            stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            System.out.println(query);
+            rs = stmt.executeQuery(query);
+
+            if (rs.last()) 
+            {
+                renglones = rs.getRow();
+
+                partidas = new String[renglones][columnas];
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    partidas[i][0]= rs.getString("NoPartida");
+                    partidas[i][1]= rs.getString("descripcion");
+                    partidas[i][2]= rs.getString("noPiezasAct");
+                    partidas[i][3]= rs.getString("KgTotal");
+                    partidas[i][4]= rs.getString("PesoProm");
+                    partidas[i][5]= rs.getString("idPartidaDet");
+                    partidas[i][6]= rs.getString("idPartida");
+                    i++;
+                }
+            }
+            rs.close();
+            stmt.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            
+        }
+        return partidas;
+    }
 }

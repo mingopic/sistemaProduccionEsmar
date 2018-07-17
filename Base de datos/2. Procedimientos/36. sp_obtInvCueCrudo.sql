@@ -51,5 +51,8 @@ as begin
       tb_proveedor as p
     on
       p.idProveedor = rc.idProveedor
+      
+  where
+    ic.noPiezasActual > 0
 end
 go

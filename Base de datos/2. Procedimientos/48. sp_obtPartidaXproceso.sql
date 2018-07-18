@@ -18,10 +18,9 @@ as begin
 		pa.NoPartida
 		, tr.descripcion
 		, pd.noPiezasAct
-    , pd.noPiezasAct * (rec.kgTotal/rec.noTotalPiezas) as 'KgTotal'
-    , (rec.kgTotal/rec.noTotalPiezas) as 'PesoProm'
     , pd.idPartidaDet
     , pa.idPartida
+    , tr.idTipoRecorte
     
 	from
 		tb_partidaDet as pd
@@ -36,11 +35,6 @@ as begin
     on
       pa.idPartida = pd.idPartidaDet
       and pa.idProceso = @idProceso -1
-      
-    inner join
-      tb_recepcionCuero as rec
-    on
-      rec.idRecepcionCuero = pd.idRecepcionCuero
   
 	where
 		pd.noPiezasAct > 0

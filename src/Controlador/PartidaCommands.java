@@ -97,10 +97,9 @@ public class PartidaCommands {
                     partidas[i][0]= rs.getString("NoPartida");
                     partidas[i][1]= rs.getString("descripcion");
                     partidas[i][2]= rs.getString("noPiezasAct");
-                    partidas[i][3]= rs.getString("KgTotal");
-                    partidas[i][4]= rs.getString("PesoProm");
-                    partidas[i][5]= rs.getString("idPartidaDet");
-                    partidas[i][6]= rs.getString("idPartida");
+                    partidas[i][3]= rs.getString("idPartidaDet");
+                    partidas[i][4]= rs.getString("idPartida");
+                    partidas[i][5]= rs.getString("idTipoRecorte");
                     i++;
                 }
             }

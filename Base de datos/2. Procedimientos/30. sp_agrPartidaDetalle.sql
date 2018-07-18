@@ -47,10 +47,18 @@ as begin
   
   insert into
     tb_partidaDet
+    (
+      noPiezas
+      , noPiezasAct
+      , idPartida
+      , idRecepcionCuero
+      , idTipoRecorte
+    )
     
   values
     (
       @noPiezas
+      , @noPiezas
       , @idPartida
       , @idRecepcionCuero
       , @idTipoRecorte

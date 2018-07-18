@@ -74,7 +74,7 @@ public class ConexionBD
         String[] datos = new String[6];
         int j=0;
         
-        FileReader f = new FileReader("datosBD -.txt");
+        FileReader f = new FileReader("datosBD.txt");
         BufferedReader b = new BufferedReader(f);
         while((cadena = b.readLine())!=null) {
             String[] palabra = cadena.split(":");

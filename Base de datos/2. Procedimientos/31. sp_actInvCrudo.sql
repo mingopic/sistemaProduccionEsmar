@@ -14,6 +14,7 @@ create procedure sp_actInvCrudo
   , @noCamion       int
   , @fecha          date
   , @piezasUtilizar int
+  , @kgDescontar	float
 )
 as begin
 
@@ -48,6 +49,7 @@ as begin
     
   set
     noPiezasActual = noPiezasActual-@piezasUtilizar
+	, kgTotalActual = kgTotalActual-@kgDescontar
     
   where
     idRecepcionCuero = @idRecepcionCuero

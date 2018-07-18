@@ -30,10 +30,10 @@ as begin
 		concat(@tipoRecorte,' ',tc.descripcion) as descripcion
     , p.nombreProveedor
     , ic.noPiezasActual
-    , rc.kgTotal
-    , (rc.kgTotal/ic.noPiezasActual) as pesoProm
+    , ic.kgTotalActual
+    , (ic.kgTotalActual/ic.noPiezasActual) as pesoProm
     , rc.precioXKilo
-    , rc.costoCamion
+    , (ic.kgTotalActual*rc.precioXKilo) as costoCamion
     
 	from
 		tb_inventarioCrudo as ic

@@ -47,7 +47,7 @@ public class InventarioCrudoCommands {
                 datos[i][1] = rs.getString("noCamion");
                 datos[i][2] = rs.getString("descripcion");
                 datos[i][3] = rs.getString("noPiezasActual");
-                datos[i][4] = rs.getString("kgTotal");
+                datos[i][4] = rs.getString("kgTotalActual");
                 datos[i][5] = (String.format("%.2f",Double.parseDouble(rs.getString("PromKgPieza"))));
                 datos[i][6] = rs.getString("fechaEntrada");
                 datos[i][7] = rs.getString("idRecepcionCuero");
@@ -65,7 +65,8 @@ public class InventarioCrudoCommands {
     public static void actualizarNoPiezasActual(String[][] datosPar) throws Exception {
         for (int i = 0; i < datosPar.length; i++) {
             String query = "exec sp_actInvCrudo '"+datosPar[i][0]+""
-                + "',"+datosPar[i][1]+",'"+datosPar[i][2]+"',"+datosPar[i][3];
+                + "',"+datosPar[i][1]+",'"+datosPar[i][2]+"',"+datosPar[i][3]+""
+                    + ","+datosPar[i][4];
             PreparedStatement pstmt = null;
             c.conectar();
             pstmt = c.getConexion().prepareStatement(query);

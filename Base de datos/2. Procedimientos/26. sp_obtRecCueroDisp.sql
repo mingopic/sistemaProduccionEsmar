@@ -16,8 +16,8 @@ as begin
     , rc.noCamion
     , tp.descripcion
     , ic.noPiezasActual
-    , rc.kgTotal
-    , rc.kgTotal/ic.noPiezasActual as PromKgPieza
+    , ic.kgTotalActual
+    , ic.kgTotalActual/ic.noPiezasActual as PromKgPieza
     , rc.fechaEntrada
     , rc.idRecepcionCuero
     

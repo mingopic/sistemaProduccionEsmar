@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b89c0d7c-07f4-4a1b-ae29-707f01fc8191">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="173"/>
+	<property name="ireport.x" value="171"/>
+	<property name="ireport.y" value="168"/>
 	<parameter name="imagen" class="java.lang.Object">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -12,11 +12,14 @@
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="nombreProveedor" class="java.lang.String"/>
 	<field name="noPiezasActual" class="java.lang.Integer"/>
-	<field name="kgTotal" class="java.lang.Double"/>
+	<field name="kgTotalActual" class="java.lang.Double"/>
 	<field name="pesoProm" class="java.lang.Double"/>
 	<field name="precioXKilo" class="java.lang.Double"/>
 	<field name="costoCamion" class="java.lang.Double"/>
 	<variable name="costoCamion_1" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{costoCamion}]]></variableExpression>
+	</variable>
+	<variable name="costoCamion_2" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{costoCamion}]]></variableExpression>
 	</variable>
 	<background>
@@ -84,7 +87,7 @@
 				<text><![CDATA[Kilos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="237" y="5" width="57" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="df1a472e-0403-4e0a-b732-3eef6ab44287"/>
+				<reportElement mode="Transparent" x="247" y="5" width="57" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="df1a472e-0403-4e0a-b732-3eef6ab44287"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -92,7 +95,7 @@
 				<text><![CDATA[Peso Prom.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="316" y="5" width="35" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="ea5cce8f-d979-4a82-9834-74749bfc7035"/>
+				<reportElement mode="Transparent" x="327" y="5" width="35" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="ea5cce8f-d979-4a82-9834-74749bfc7035"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -100,7 +103,7 @@
 				<text><![CDATA[$/PZA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="362" y="5" width="65" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="60d4393d-a4eb-4559-b04f-f965382f2cf4"/>
+				<reportElement mode="Transparent" x="383" y="6" width="65" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="60d4393d-a4eb-4559-b04f-f965382f2cf4"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -126,16 +129,28 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreProveedor}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="34" height="20" uuid="a3e8afce-53ba-4a98-859a-8d0aa7c5e17e"/>
+				<textFieldExpression><![CDATA[$F{noPiezasActual}]]></textFieldExpression>
+			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="195" y="0" width="28" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7578a8c0-7574-4353-9c00-fb54dfcdda3c"/>
+				<reportElement mode="Transparent" x="195" y="0" width="42" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="75c85ef8-42ec-4dbd-a9b0-ffa613ae86a9"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{kgTotal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{kgTotalActual}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="237" y="0" width="69" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="dc77a71a-e62a-4b0d-9c75-c6fca69d519d"/>
+				<reportElement mode="Transparent" x="383" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="eb72494a-bc0f-4860-bdf0-f38f88e0aa2a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costoCamion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="247" y="0" width="69" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="dc77a71a-e62a-4b0d-9c75-c6fca69d519d"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -143,24 +158,12 @@
 				<textFieldExpression><![CDATA[$F{pesoProm}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="316" y="0" width="35" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="362646ef-f51e-4c46-b3be-33569986e615"/>
+				<reportElement mode="Transparent" x="327" y="0" width="35" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="362646ef-f51e-4c46-b3be-33569986e615"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precioXKilo}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="362" y="0" width="84" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="c636c1d2-cccd-4c3b-9bdd-89f7282ea770"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{costoCamion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="150" y="0" width="34" height="20" uuid="a3e8afce-53ba-4a98-859a-8d0aa7c5e17e"/>
-				<textFieldExpression><![CDATA[$F{noPiezasActual}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -170,7 +173,7 @@
 				<reportElement x="0" y="0" width="750" height="20" backcolor="#FFFF99" uuid="04f48550-7779-4937-852a-6f5b13e1e5b4"/>
 			</rectangle>
 			<staticText>
-				<reportElement mode="Transparent" x="306" y="0" width="45" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7869ccbf-6cff-480f-9bc6-c946f1f4a595"/>
+				<reportElement mode="Transparent" x="317" y="0" width="45" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7869ccbf-6cff-480f-9bc6-c946f1f4a595"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -178,12 +181,12 @@
 				<text><![CDATA[$ TOTAL]]></text>
 			</staticText>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="362" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="a3b49877-4cd9-4efc-b190-ac04a23e48ee"/>
+				<reportElement mode="Transparent" x="383" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="d3d082f8-34fe-4155-a6be-a53b348426e1"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{costoCamion_1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{costoCamion_2}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

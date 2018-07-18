@@ -497,7 +497,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 PartidaDetalle[] datosPD = new PartidaDetalle[filas];
                 pdc = new PartidaDetalleCommands();
                 InventarioCrudo[] datosInC = new InventarioCrudo[filas];
-                String[][] datosPar = new String[filas][4];
+                String[][] datosPar = new String[filas][5];
 
                 try
                 {
@@ -515,6 +515,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                         datosPar[i][1] = tblPartida.getValueAt(i, 0).toString();
                         datosPar[i][2] = tblPartida.getValueAt(i, 6).toString();
                         datosPar[i][3] = tblPartida.getValueAt(i, 2).toString();
+                        datosPar[i][4] = tblPartida.getValueAt(i, 5).toString();
                     }
                     
                     p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));

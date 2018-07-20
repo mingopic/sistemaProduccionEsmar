@@ -1,0 +1,6 @@
+usuarioPC: MINGO-LAP
+baseDatos: esmarProd        
+usuario:sa
+password:root
+baseDatosExportar:esmarProdClon
+puerto:1433

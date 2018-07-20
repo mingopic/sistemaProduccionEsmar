@@ -1,6 +1,6 @@
-usuarioPC: MINGO-LAP
+usuarioPC:EQUIPO-PC\SQLEXPRESS
 baseDatos: esmarProd        
-usuario:sa
-password:root
-baseDatosExportar:esmarProdClon
-puerto:1433
+usuario: sa
+password: root
+baseDatosExportar: esmarProdClon
+puerto: 1433

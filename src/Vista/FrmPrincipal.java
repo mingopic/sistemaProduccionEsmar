@@ -36,6 +36,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlPartidas pnlPartidas;
     PnlExportar pnlExportar; 
     PnlImportar pnlImportar;
+    PnlTambores pnlTambores;
     PnlCross pnlCross;
     PnlSemiterminado pnlSemiterminado;
     PnlFichaProduccion pnlFichaProduccion;
@@ -414,6 +415,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpCatalogos = new javax.swing.JMenu();
         jmProveedores = new javax.swing.JMenuItem();
         jmSubProcesos = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
@@ -1149,6 +1151,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmSubProcesos);
 
+        jMenuItem3.setText("Tambores");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jmpCatalogos.add(jMenuItem3);
+
         jMenuBar1.add(jmpCatalogos);
 
         jmpConfiguraciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cog.png"))); // NOI18N
@@ -1487,6 +1497,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        try 
+        {
+            pnlTambores = new PnlTambores();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlTambores, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlTambores.getGraphics());
+            
+            lblVentana.setText("Catálogo de Tambores");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\group.png");
+            lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex) 
+        {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1565,6 +1594,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

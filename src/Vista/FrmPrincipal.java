@@ -9,6 +9,7 @@ import Controlador.ConexionBD;
 import Controlador.ConfiguracionMermaCommands;
 import Controlador.ControladorUsuario;
 import Controlador.RangoPesoCueroCommands;
+import Controlador.RolesCommands;
 import Modelo.ConfiguracionMerma;
 import Modelo.RangoPesoCuero;
 import Modelo.Usuario;
@@ -45,6 +46,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     ConfiguracionMermaCommands cmc;
     RangoPesoCuero rpc;
     RangoPesoCueroCommands rpcc;
+    public static String[] roles;
     /**
      * Creates new form FrmPrincipal
      */
@@ -73,6 +75,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         dlgLogin.setLocationRelativeTo(null);
         dlgLogin.setAlwaysOnTop(true);
         dlgLogin.setVisible(true);
+        
+        btnRecepcionCuero.setVisible(false);
+        btnPartidas.setVisible(false);
+        btnFichasProduccion.setVisible(false);
+        btnProdEnProc.setVisible(false);
+        btnCross.setVisible(false);
+        btnSemiterminado.setVisible(false);
+        btnTerminado.setVisible(false);
+        jmpCatalogos.setVisible(false);
+        jmpConfiguraciones.setVisible(false);
+        jmpBaseDeDatos.setVisible(false);
     }
     
     
@@ -86,7 +99,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try
         {
             if (controladorUsuario.validarUsuario(u))
-            {
+            {   
+                roles = RolesCommands.obtenerRolXUsuario(u);
+                
                 dlgLogin.setVisible(false);
                 this.setVisible(true);
                 this.setExtendedState(MAXIMIZED_BOTH);
@@ -99,17 +114,73 @@ public class FrmPrincipal extends javax.swing.JFrame {
 //                DateLabel();
                 lblNombreUsuario.setText(u.getNombre());
 //                lblIdUsuario.setText(u.getIdUsuario());
-                lblTipoUsuario.setText(u.getTipo());
+//                lblTipoUsuario.setText(u.getTipo());
 //                lblTipoUsuario.setVisible(false);
                 
-                if (lblTipoUsuario.getText().equals("produccion"))
+                for (int i = 0; i < roles.length; i++)
                 {
-//                    btnRecepcionSemiterminado.setVisible(false);
-//                    btnProductoProceso.setVisible(false);
+                    if (roles[i].equals("Semiterminado"))
+                    {
+                        btnSemiterminado.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Terminado"))
+                    {
+                        btnTerminado.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Cross"))
+                    {
+                        btnCross.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Produccion"))
+                    {
+                        btnRecepcionCuero.setVisible(true);
+                        btnPartidas.setVisible(true);
+                        btnFichasProduccion.setVisible(true);
+                        btnProdEnProc.setVisible(true);
+                        btnCross.setVisible(true);
+                        btnSemiterminado.setVisible(true);
+                        btnTerminado.setVisible(true);
+                        jmpCatalogos.setVisible(true);
+                        jmpConfiguraciones.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Sistemas"))
+                    {
+                        btnRecepcionCuero.setVisible(true);
+                        btnPartidas.setVisible(true);
+                        btnFichasProduccion.setVisible(true);
+                        btnProdEnProc.setVisible(true);
+                        btnCross.setVisible(true);
+                        btnSemiterminado.setVisible(true);
+                        btnTerminado.setVisible(true);
+                        jmpCatalogos.setVisible(true);
+                        jmpConfiguraciones.setVisible(true);
+                        jmpBaseDeDatos.setVisible(true);
+                        break;
+                    }
                 }
             }
             else
-                JOptionPane.showMessageDialog(dlgLogin, "Datos incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dlgLogin, "Datos incorrectos o usuario inactivo", "Error de Login", JOptionPane.ERROR_MESSAGE);
         }
         catch (Exception e)
         {
@@ -421,7 +492,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmRangosPeso = new javax.swing.JMenuItem();
         jmInsumosXproceso = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        jmpBaseDeDatos = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
 
@@ -1207,7 +1278,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenuBar1.add(jmpAcercaDe);
 
-        jMenu1.setText("Base de datos");
+        jmpBaseDeDatos.setText("Base de datos");
 
         jMenuItem1.setText("Exportar");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -1215,7 +1286,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jmpBaseDeDatos.add(jMenuItem1);
 
         jMenuItem2.setText("Importar");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -1223,9 +1294,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jmpBaseDeDatos.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jmpBaseDeDatos);
 
         setJMenuBar(jMenuBar1);
 
@@ -1590,7 +1661,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1616,6 +1686,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmSubProcesos;
     private javax.swing.JMenu jmpAcercaDe;
     private javax.swing.JMenu jmpArchivo;
+    private javax.swing.JMenu jmpBaseDeDatos;
     private javax.swing.JMenu jmpCatalogos;
     private javax.swing.JMenu jmpConfiguraciones;
     private javax.swing.JLabel lblContrasenia;

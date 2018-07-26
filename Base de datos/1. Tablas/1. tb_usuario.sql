@@ -14,7 +14,7 @@ create table tb_usuario
   , usuario     varchar(15)
   , contrasenia varchar(15)
   , nombre      varchar(25)
-  , tipo        varchar(10)
+  , estatus		int
   
   , constraint un_usuario unique(usuario)
 );

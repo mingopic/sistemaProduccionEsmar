@@ -32,7 +32,7 @@ public class UsuarioCommands
             u.setUserName(rs.getString("usuario"));
             u.setPassword(rs.getString("contrasenia"));
             u.setNombre(rs.getString("nombre"));
-            u.setTipo(rs.getString("tipo"));
+            u.setEstatus(Integer.parseInt(rs.getString("estatus")));
         }
         
         rs.close();

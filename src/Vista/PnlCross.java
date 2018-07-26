@@ -86,6 +86,15 @@ public class PnlCross extends javax.swing.JPanel {
         dcFecha2EntradaSemiterminado.setEnabled(false);
         llenarComboTipoRecorte();
         actualizarTablaCross();
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Cross") || FrmPrincipal.roles[i].equals("Sistemas"))
+            {
+                btnEnviarSemiterminado.setEnabled(true);
+                break;
+            }
+        }
     }
     
     //método que llena los combobox del tipo de recorte en la base de datos
@@ -629,6 +638,7 @@ public class PnlCross extends javax.swing.JPanel {
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
         jButton1.setText("Enviar a Semiterminado");
+        jButton1.setEnabled(false);
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

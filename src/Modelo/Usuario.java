@@ -16,7 +16,15 @@ public class Usuario
     String userName;
     String password;
     String nombre;
-    String Tipo;
+    int estatus;
+
+    public int getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(int estatus) {
+        this.estatus = estatus;
+    }
     
     public String getUserName()
     {
@@ -44,14 +52,6 @@ public class Usuario
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getTipo() {
-        return Tipo;
-    }
-
-    public void setTipo(String Tipo) {
-        this.Tipo = Tipo;
     }
 
     public String getIdUsuario() {
@@ -89,12 +89,14 @@ public class Usuario
             
             //Comparamos el userName de esta clase, con el del objeto uTmp y
             //Comparamos el password de esta clase, con el del objeto uTmp
+            //Comparamos el estatus de esta clase, para saber si el estatus es activo
             if (userName.equals(uTmp.getUserName()) && 
-                password.equals(uTmp.getPassword()))
+                password.equals(uTmp.getPassword()) &&
+                uTmp.getEstatus() == 1)
             {
                 nombre=uTmp.getNombre();
                 idUsuario=uTmp.getIdUsuario();
-                Tipo=uTmp.getTipo();
+                estatus = uTmp.getEstatus();
                 return true;
             }
             else

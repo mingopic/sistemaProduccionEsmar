@@ -112,6 +112,16 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         llenarComboCalibre();
         llenarComboSeleccion();
         actualizarTablaSemiterminado();
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Semiterminado") || FrmPrincipal.roles[i].equals("Sistemas"))
+            {
+                btnAgregarEntrada.setEnabled(true);
+                btnEnviarTerminado.setEnabled(true);
+                break;
+            }
+        }
     }
 //    
 //    
@@ -709,10 +719,10 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         jLabel57 = new javax.swing.JLabel();
         btnReporteEntrada6 = new javax.swing.JButton();
         jToolBar3 = new javax.swing.JToolBar();
-        btnEnviarSemiterminado1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        lblEnviarTerminado = new javax.swing.JLabel();
+        btnAgregarEntrada = new javax.swing.JButton();
         jLabel61 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnEnviarTerminado = new javax.swing.JButton();
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1444,39 +1454,41 @@ try {
     jToolBar3.setFloatable(false);
     jToolBar3.setRollover(true);
 
-    btnEnviarSemiterminado1.setText("   ");
-    jToolBar3.add(btnEnviarSemiterminado1);
+    lblEnviarTerminado.setText("   ");
+    jToolBar3.add(lblEnviarTerminado);
 
-    jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
-    jButton2.setText("Agregar Entrada");
-    jButton2.setFocusable(false);
-    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton2.addActionListener(new java.awt.event.ActionListener() {
+    btnAgregarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnAgregarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+    btnAgregarEntrada.setText("Agregar Entrada");
+    btnAgregarEntrada.setEnabled(false);
+    btnAgregarEntrada.setFocusable(false);
+    btnAgregarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnAgregarEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnAgregarEntrada.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton2ActionPerformed(evt);
+            btnAgregarEntradaActionPerformed(evt);
         }
     });
-    jToolBar3.add(jButton2);
+    jToolBar3.add(btnAgregarEntrada);
 
     jLabel61.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel61.setForeground(new java.awt.Color(227, 222, 222));
     jLabel61.setText("   ");
     jToolBar3.add(jLabel61);
 
-    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
-    jButton1.setText("Enviar a Terminado");
-    jButton1.setFocusable(false);
-    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
+    btnEnviarTerminado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnEnviarTerminado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+    btnEnviarTerminado.setText("Enviar a Terminado");
+    btnEnviarTerminado.setEnabled(false);
+    btnEnviarTerminado.setFocusable(false);
+    btnEnviarTerminado.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEnviarTerminado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEnviarTerminado.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
+            btnEnviarTerminadoActionPerformed(evt);
         }
     });
-    jToolBar3.add(jButton1);
+    jToolBar3.add(btnEnviarTerminado);
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
@@ -1551,13 +1563,13 @@ try {
         validarNumerosEnteros(evt, txtNoPartida.getText());
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEnviarTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTerminadoActionPerformed
 //        try {
 //            abrirDialogoEnvSemi();
 //        } catch (Exception ex) {
 //            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
 //        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEnviarTerminadoActionPerformed
 
     private void btnRealizarEntradaEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemiActionPerformed
 //        try
@@ -1633,14 +1645,14 @@ try {
         actualizarTablaSemiterminado();
     }//GEN-LAST:event_cmbSeleccionActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnAgregarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEntradaActionPerformed
         try {
             abrirDialogoAgregar();
         } catch (Exception ex) {
             System.out.println(ex);
             JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnAgregarEntradaActionPerformed
 
     private void btnRealizarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaActionPerformed
         realizarEntradaSemiterminado();
@@ -1696,10 +1708,11 @@ try {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarEntrada;
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
-    private javax.swing.JLabel btnEnviarSemiterminado1;
+    private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnReporteEntrada;
@@ -1716,8 +1729,6 @@ try {
     private javax.swing.JDialog dlgAgregar;
     private javax.swing.JDialog dlgBuscar;
     private javax.swing.JDialog dlgEnvSemi;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -1768,6 +1779,7 @@ try {
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
+    private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JTable tblBuscarPartidaInvCrossSemi;
     private javax.swing.JTable tblSemiterminado;
     private javax.swing.JTextField txtKgTotalesAgregar;

@@ -889,7 +889,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jmpAcercaDeMouseClicked"/>
           </Events>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="jmpBaseDeDatos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Base de datos"/>
           </Properties>

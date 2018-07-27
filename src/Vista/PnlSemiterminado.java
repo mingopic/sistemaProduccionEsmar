@@ -11,12 +11,16 @@ import Controlador.ConexionBD;
 import Controlador.InventarioCrossCommands;
 import Controlador.InventarioCrossSemiterminadoCommands;
 import Controlador.InventarioSemiterminadoCommands;
+import Controlador.InventarioSemiterminadoTerminadoCommands;
+import Controlador.InventarioTerminadoCommands;
 import Controlador.SeleccionCommands;
 import Controlador.TipoRecorteCommands;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.InventarioSemiterminado;
+import Modelo.InventarioSemiterminadoTerminado;
+import Modelo.InventarioTerminado;
 import Modelo.Partida;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
@@ -61,6 +65,10 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     InventarioCrossCommands icc;
     InventarioCrossSemiterminado ics;
     InventarioCrossSemiterminadoCommands icsc;
+    InventarioSemiterminadoTerminado ist;
+    InventarioTerminado it;
+    InventarioSemiterminadoTerminadoCommands istc;
+    InventarioTerminadoCommands itc;
     Partida p;
     String[][] datosSemiterminado = null;
     String[][] datos = null;
@@ -569,6 +577,41 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         }
     }
     
+    public void generarReporteSalidaSemiterminado()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteSalSemi.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            parametros.put("calibre", c.getDescripcion());
+            parametros.put("seleccion", s.getDescripcion());
+            parametros.put("fecha", is.getFecha());
+            parametros.put("fecha1", is.getFecha1());
+            parametros.put("noPartida", p.getNoPartida());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void generarReporteInventarioXTrabajar()
     {
         try
@@ -630,6 +673,74 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    //Metodo para inicializar los campos de dlgEnvTermi
+    public void inicializarCamposEnvTermi() throws Exception
+    {
+        txtNoPiezasEnvTermi.setText("");
+        
+        int fila = tblSemiterminado.getSelectedRow();
+        
+        txtNoPartidaEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 0)));
+        txtTipoRecorteEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 1)));
+        txtNoPiezasActualesEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 3)));
+    }
+    
+    //Método que abre el dialogo para enviar a terminado 
+    public void abrirDialogoEnvTermi() throws Exception
+    {
+        
+        inicializarCamposEnvTermi();
+        
+        dlgEnvTermi.setSize(400, 380);
+        dlgEnvTermi.setPreferredSize(dlgEnvTermi.getSize());
+        dlgEnvTermi.setLocationRelativeTo(null);
+        dlgEnvTermi.setAlwaysOnTop(true);
+        dlgEnvTermi.setVisible(true);
+    }
+    
+    //Método para realizar entrada de material y actualizar inventarios
+    public void realizarEntradaEnvTermi () throws Exception
+    {
+        if ( !txtNoPiezasEnvTermi.getText().isEmpty() && Integer.parseInt(txtNoPiezasEnvTermi.getText()) != 0)
+        {
+            try 
+            {
+                if (Integer.parseInt(txtNoPiezasEnvTermi.getText()) > Integer.parseInt(txtNoPiezasActualesEnvTermi.getText()))
+                {
+                    JOptionPane.showMessageDialog(dlgEnvTermi, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+                }
+                else
+                {
+                    int fila = tblSemiterminado.getSelectedRow();
+                    ist = new InventarioSemiterminadoTerminado();
+                    istc = new InventarioSemiterminadoTerminadoCommands();
+
+                    ist.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][9]));
+                    ist.setNoPiezas(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
+                    ist.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
+                    double kgTotales = (Double.parseDouble(datosSemiterminado[fila][5]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
+
+                    istc.agregarInvSemTer(ist,kgTotales);
+                    isc.actualizarNoPiezasActual(ist);
+                    actualizarTablaSemiterminado();
+                    dlgEnvTermi.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
+                }
+            } 
+            catch (Exception e) 
+            {
+                dlgEnvTermi.setVisible(false);                
+                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+            }   
+        }
+        else
+        {
+            dlgEnvTermi.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Capture no. Piezas a enviar mayores a 0","Mensaje",JOptionPane.WARNING_MESSAGE);
+            dlgEnvTermi.setVisible(true);
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -640,19 +751,19 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dlgEnvSemi = new javax.swing.JDialog();
+        dlgEnvTermi = new javax.swing.JDialog();
         jLabel14 = new javax.swing.JLabel();
-        btnRealizarEntradaEnvSemi = new javax.swing.JButton();
-        btnCancelarAgregarEnvSemi = new javax.swing.JButton();
+        btnRealizarEntradaEnvTermi = new javax.swing.JButton();
+        btnCancelarAgregarEnvTermi = new javax.swing.JButton();
         jLabel31 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel53 = new javax.swing.JLabel();
-        txtNoPiezasActualesEnvSemi = new javax.swing.JTextField();
-        txtNoPartidaEnvSemi = new javax.swing.JTextField();
+        txtNoPiezasActualesEnvTermi = new javax.swing.JTextField();
+        txtNoPartidaEnvTermi = new javax.swing.JTextField();
         jLabel54 = new javax.swing.JLabel();
-        txtNoPiezasEnvSemi = new javax.swing.JTextField();
+        txtNoPiezasEnvTermi = new javax.swing.JTextField();
         jLabel55 = new javax.swing.JLabel();
-        txtTipoRecorteEnvSemi = new javax.swing.JTextField();
+        txtTipoRecorteEnvTermi = new javax.swing.JTextField();
         dlgAgregar = new javax.swing.JDialog();
         jLabel13 = new javax.swing.JLabel();
         btnRealizarEntrada = new javax.swing.JButton();
@@ -726,21 +837,21 @@ public class PnlSemiterminado extends javax.swing.JPanel {
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("Agregar entrada semiterminado");
+        jLabel14.setText("Agregar entrada terminado");
 
-        btnRealizarEntradaEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnRealizarEntradaEnvSemi.setText("Aceptar");
-        btnRealizarEntradaEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+        btnRealizarEntradaEnvTermi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarEntradaEnvTermi.setText("Aceptar");
+        btnRealizarEntradaEnvTermi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRealizarEntradaEnvSemiActionPerformed(evt);
+                btnRealizarEntradaEnvTermiActionPerformed(evt);
             }
         });
 
-        btnCancelarAgregarEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCancelarAgregarEnvSemi.setText("Cancelar");
-        btnCancelarAgregarEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelarAgregarEnvTermi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarAgregarEnvTermi.setText("Cancelar");
+        btnCancelarAgregarEnvTermi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarAgregarEnvSemiActionPerformed(evt);
+                btnCancelarAgregarEnvTermiActionPerformed(evt);
             }
         });
 
@@ -750,122 +861,122 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         jLabel53.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel53.setText("No. Piezas Actuales:");
 
-        txtNoPiezasActualesEnvSemi.setEditable(false);
-        txtNoPiezasActualesEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNoPiezasActualesEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+        txtNoPiezasActualesEnvTermi.setEditable(false);
+        txtNoPiezasActualesEnvTermi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasActualesEnvTermi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoPiezasActualesEnvSemiActionPerformed(evt);
+                txtNoPiezasActualesEnvTermiActionPerformed(evt);
             }
         });
-        txtNoPiezasActualesEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNoPiezasActualesEnvTermi.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoPiezasActualesEnvSemiKeyTyped(evt);
+                txtNoPiezasActualesEnvTermiKeyTyped(evt);
             }
         });
 
-        txtNoPartidaEnvSemi.setEditable(false);
-        txtNoPartidaEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNoPartidaEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNoPartidaEnvTermi.setEditable(false);
+        txtNoPartidaEnvTermi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPartidaEnvTermi.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoPartidaEnvSemiKeyTyped(evt);
+                txtNoPartidaEnvTermiKeyTyped(evt);
             }
         });
 
         jLabel54.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel54.setText("No. Piezas a enviar:");
 
-        txtNoPiezasEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNoPiezasEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNoPiezasEnvTermi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasEnvTermi.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoPiezasEnvSemiKeyTyped(evt);
+                txtNoPiezasEnvTermiKeyTyped(evt);
             }
         });
 
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel55.setText("Tipo Recorte:");
 
-        txtTipoRecorteEnvSemi.setEditable(false);
-        txtTipoRecorteEnvSemi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtTipoRecorteEnvSemi.addActionListener(new java.awt.event.ActionListener() {
+        txtTipoRecorteEnvTermi.setEditable(false);
+        txtTipoRecorteEnvTermi.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTipoRecorteEnvTermi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTipoRecorteEnvSemiActionPerformed(evt);
+                txtTipoRecorteEnvTermiActionPerformed(evt);
             }
         });
-        txtTipoRecorteEnvSemi.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtTipoRecorteEnvTermi.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTipoRecorteEnvSemiKeyTyped(evt);
+                txtTipoRecorteEnvTermiKeyTyped(evt);
             }
         });
 
-        javax.swing.GroupLayout dlgEnvSemiLayout = new javax.swing.GroupLayout(dlgEnvSemi.getContentPane());
-        dlgEnvSemi.getContentPane().setLayout(dlgEnvSemiLayout);
-        dlgEnvSemiLayout.setHorizontalGroup(
-            dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+        javax.swing.GroupLayout dlgEnvTermiLayout = new javax.swing.GroupLayout(dlgEnvTermi.getContentPane());
+        dlgEnvTermi.getContentPane().setLayout(dlgEnvTermiLayout);
+        dlgEnvTermiLayout.setHorizontalGroup(
+            dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
             .addComponent(jSeparator5)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgEnvSemiLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgEnvTermiLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRealizarEntradaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRealizarEntradaEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnCancelarAgregarEnvSemi)
+                .addComponent(btnCancelarAgregarEnvTermi)
                 .addContainerGap())
-            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
-                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
+                .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                        .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                                 .addComponent(jLabel53)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNoPiezasActualesEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(txtNoPiezasActualesEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                                 .addComponent(jLabel54)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNoPiezasEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(txtNoPiezasEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgEnvTermiLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                        .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                                 .addComponent(jLabel55)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtTipoRecorteEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+                                .addComponent(txtTipoRecorteEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                                 .addComponent(jLabel31)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNoPartidaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtNoPartidaEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(2, 2, 2)))
                 .addContainerGap(140, Short.MAX_VALUE))
         );
-        dlgEnvSemiLayout.setVerticalGroup(
-            dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dlgEnvSemiLayout.createSequentialGroup()
+        dlgEnvTermiLayout.setVerticalGroup(
+            dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgEnvTermiLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
-                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
-                    .addComponent(txtNoPartidaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNoPartidaEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel55)
-                    .addComponent(txtTipoRecorteEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTipoRecorteEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel53)
-                    .addComponent(txtNoPiezasActualesEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNoPiezasActualesEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel54)
-                    .addComponent(txtNoPiezasEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNoPiezasEnvTermi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50)
-                .addGroup(dlgEnvSemiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRealizarEntradaEnvSemi)
-                    .addComponent(btnCancelarAgregarEnvSemi))
+                .addGroup(dlgEnvTermiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarEntradaEnvTermi)
+                    .addComponent(btnCancelarAgregarEnvTermi))
                 .addContainerGap())
         );
 
@@ -1556,7 +1667,8 @@ try {
     }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
-//        generarReporteSalidaCross();
+        actualizarTablaSemiterminado();
+        generarReporteSalidaSemiterminado();
     }//GEN-LAST:event_btnReporteEntrada3ActionPerformed
 
     private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
@@ -1564,30 +1676,42 @@ try {
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
     private void btnEnviarTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTerminadoActionPerformed
-//        try {
-//            abrirDialogoEnvSemi();
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
-//        }
+        try 
+        {
+            int fila = tblSemiterminado.getSelectedRow();
+            String piezas = (String.valueOf(tblSemiterminado.getValueAt(fila, 3)));
+            int numPiezasActuales = Integer.parseInt(piezas);
+            
+            if (numPiezasActuales != 0)
+            {
+                abrirDialogoEnvTermi();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnEnviarTerminadoActionPerformed
 
-    private void btnRealizarEntradaEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemiActionPerformed
-//        try
-//        {
-//            realizarEntradaEnvSemi();
-//        }
-//        catch (Exception ex)
-//        {
-//            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+    private void btnRealizarEntradaEnvTermiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvTermiActionPerformed
+        try
+        {
+            realizarEntradaEnvTermi();
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-    }//GEN-LAST:event_btnRealizarEntradaEnvSemiActionPerformed
+    }//GEN-LAST:event_btnRealizarEntradaEnvTermiActionPerformed
 
-    private void btnCancelarAgregarEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvSemiActionPerformed
-//        dlgEnvSemi.setVisible(false);
-    }//GEN-LAST:event_btnCancelarAgregarEnvSemiActionPerformed
+    private void btnCancelarAgregarEnvTermiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvTermiActionPerformed
+        dlgEnvTermi.setVisible(false);
+    }//GEN-LAST:event_btnCancelarAgregarEnvTermiActionPerformed
 
-    private void txtNoPiezasActualesEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvSemiKeyTyped
+    private void txtNoPiezasActualesEnvTermiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvTermiKeyTyped
 //        char c;
 //        c=evt.getKeyChar();
 //
@@ -1596,9 +1720,9 @@ try {
 //            getToolkit().beep();
 //            evt.consume();
 //        }
-    }//GEN-LAST:event_txtNoPiezasActualesEnvSemiKeyTyped
+    }//GEN-LAST:event_txtNoPiezasActualesEnvTermiKeyTyped
 
-    private void txtNoPartidaEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaEnvSemiKeyTyped
+    private void txtNoPartidaEnvTermiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaEnvTermiKeyTyped
 //        char c;
 //        c=evt.getKeyChar();
 //
@@ -1607,23 +1731,23 @@ try {
 //            getToolkit().beep();
 //            evt.consume();
 //        }
-    }//GEN-LAST:event_txtNoPartidaEnvSemiKeyTyped
+    }//GEN-LAST:event_txtNoPartidaEnvTermiKeyTyped
 
-    private void txtNoPiezasEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEnvSemiKeyTyped
-//        validarNumerosEnteros(evt, txtNoPiezasEnvSemi.getText());
-    }//GEN-LAST:event_txtNoPiezasEnvSemiKeyTyped
+    private void txtNoPiezasEnvTermiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEnvTermiKeyTyped
+        validarNumerosEnteros(evt, txtNoPiezasEnvTermi.getText());
+    }//GEN-LAST:event_txtNoPiezasEnvTermiKeyTyped
 
-    private void txtNoPiezasActualesEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvSemiActionPerformed
+    private void txtNoPiezasActualesEnvTermiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesEnvTermiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoPiezasActualesEnvSemiActionPerformed
+    }//GEN-LAST:event_txtNoPiezasActualesEnvTermiActionPerformed
 
-    private void txtTipoRecorteEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvSemiActionPerformed
+    private void txtTipoRecorteEnvTermiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvTermiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTipoRecorteEnvSemiActionPerformed
+    }//GEN-LAST:event_txtTipoRecorteEnvTermiActionPerformed
 
-    private void txtTipoRecorteEnvSemiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvSemiKeyTyped
+    private void txtTipoRecorteEnvTermiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteEnvTermiKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTipoRecorteEnvSemiKeyTyped
+    }//GEN-LAST:event_txtTipoRecorteEnvTermiKeyTyped
 
     private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
@@ -1711,10 +1835,10 @@ try {
     private javax.swing.JButton btnAgregarEntrada;
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnCancelarAgregar;
-    private javax.swing.JButton btnCancelarAgregarEnvSemi;
+    private javax.swing.JButton btnCancelarAgregarEnvTermi;
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.JButton btnRealizarEntrada;
-    private javax.swing.JButton btnRealizarEntradaEnvSemi;
+    private javax.swing.JButton btnRealizarEntradaEnvTermi;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
@@ -1728,7 +1852,7 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgAgregar;
     private javax.swing.JDialog dlgBuscar;
-    private javax.swing.JDialog dlgEnvSemi;
+    private javax.swing.JDialog dlgEnvTermi;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -1785,11 +1909,11 @@ try {
     private javax.swing.JTextField txtKgTotalesAgregar;
     private javax.swing.JTextField txtNoPartida;
     private javax.swing.JTextField txtNoPartidaAgregar;
-    private javax.swing.JTextField txtNoPartidaEnvSemi;
-    private javax.swing.JTextField txtNoPiezasActualesEnvSemi;
+    private javax.swing.JTextField txtNoPartidaEnvTermi;
+    private javax.swing.JTextField txtNoPiezasActualesEnvTermi;
     private javax.swing.JTextField txtNoPiezasAgregar;
-    private javax.swing.JTextField txtNoPiezasEnvSemi;
+    private javax.swing.JTextField txtNoPiezasEnvTermi;
     private javax.swing.JTextField txtTipoRecorteAgregar;
-    private javax.swing.JTextField txtTipoRecorteEnvSemi;
+    private javax.swing.JTextField txtTipoRecorteEnvTermi;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioSemiterminado;
+import Modelo.InventarioSemiterminadoTerminado;
 import Modelo.Partida;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
@@ -94,6 +95,19 @@ public class InventarioSemiterminadoCommands {
         c.conectar();
         System.out.println(query);
         pstmt = c.getConexion().prepareStatement(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para actualizar el número de piezas actuales
+    public static void actualizarNoPiezasActual(InventarioSemiterminadoTerminado ist) throws Exception
+    {
+        String query = "execute sp_actInvSemiterminado "+ist.getIdInvSemiterminado()+""
+            + ","+ist.getNoPiezas();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
         pstmt.executeUpdate();
         c.desconectar();
     }

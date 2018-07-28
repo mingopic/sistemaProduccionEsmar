@@ -1,0 +1,11 @@
+Tablas
+
+tb_invSemTer
+tb_invTerminado
+
+
+Procedimientos
+
+sp_agrInvSemTer
+sp_actInvSemiterminado
+sp_obtSalInvSemi

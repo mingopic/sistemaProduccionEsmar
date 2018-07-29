@@ -12,7 +12,7 @@ package Modelo;
  */
 public class Usuario
 {
-    String idUsuario;
+    int idUsuario;
     String userName;
     String password;
     String nombre;
@@ -54,11 +54,11 @@ public class Usuario
         this.nombre = nombre;
     }
 
-    public String getIdUsuario() {
+    public int getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(String idUsuario) {
+    public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
     

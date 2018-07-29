@@ -9,16 +9,25 @@ package Modelo;
  *
  * @author EQUIPO-PC
  */
-public class Roles {
-    int idRol;
+public class RolesXUsuario {
+    int idRolXUsuario;
+    int idUsuario;
     String nombreRol;
 
-    public int getIdRol() {
-        return idRol;
+    public int getIdRolXUsuario() {
+        return idRolXUsuario;
     }
 
-    public void setIdRol(int idRol) {
-        this.idRol = idRol;
+    public void setIdRolXUsuario(int idRolXUsuario) {
+        this.idRolXUsuario = idRolXUsuario;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombreRol() {

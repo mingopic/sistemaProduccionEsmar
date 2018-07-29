@@ -9,7 +9,7 @@ import Controlador.ConexionBD;
 import Controlador.ConfiguracionMermaCommands;
 import Controlador.ControladorUsuario;
 import Controlador.RangoPesoCueroCommands;
-import Controlador.RolesCommands;
+import Controlador.RolesXUsuarioCommands;
 import Modelo.ConfiguracionMerma;
 import Modelo.RangoPesoCuero;
 import Modelo.Usuario;
@@ -41,6 +41,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlCross pnlCross;
     PnlSemiterminado pnlSemiterminado;
     PnlFichaProduccion pnlFichaProduccion;
+    PnlUsuarios pnlUsuarios;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -100,7 +101,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         {
             if (controladorUsuario.validarUsuario(u))
             {   
-                roles = RolesCommands.obtenerRolXUsuario(u);
+                roles = RolesXUsuarioCommands.obtenerRolXUsuario(u);
                 
                 dlgLogin.setVisible(false);
                 this.setVisible(true);
@@ -486,7 +487,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpCatalogos = new javax.swing.JMenu();
         jmProveedores = new javax.swing.JMenuItem();
         jmSubProcesos = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jmTambores = new javax.swing.JMenuItem();
+        Usuarios = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
@@ -1222,13 +1224,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmSubProcesos);
 
-        jMenuItem3.setText("Tambores");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jmTambores.setText("Tambores");
+        jmTambores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jmTamboresActionPerformed(evt);
             }
         });
-        jmpCatalogos.add(jMenuItem3);
+        jmpCatalogos.add(jmTambores);
+
+        Usuarios.setText("Usuarios");
+        Usuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UsuariosActionPerformed(evt);
+            }
+        });
+        jmpCatalogos.add(Usuarios);
 
         jMenuBar1.add(jmpCatalogos);
 
@@ -1568,7 +1578,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void jmTamboresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmTamboresActionPerformed
         try 
         {
             pnlTambores = new PnlTambores();
@@ -1585,7 +1595,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
             System.out.println(ex);
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_jmTamboresActionPerformed
+
+    private void UsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsuariosActionPerformed
+        try 
+        {
+            pnlUsuarios = new PnlUsuarios();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlUsuarios, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlUsuarios.getGraphics());
+            
+            lblVentana.setText("Catálogo de Usuarios");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\group.png");
+            lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex) 
+        {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_UsuariosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1628,6 +1657,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Usuarios;
     private javax.swing.JButton btnCross;
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnFichasProduccion;
@@ -1664,7 +1694,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1684,6 +1713,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmRangosPeso;
     private javax.swing.JMenuItem jmSalir;
     private javax.swing.JMenuItem jmSubProcesos;
+    private javax.swing.JMenuItem jmTambores;
     private javax.swing.JMenu jmpAcercaDe;
     private javax.swing.JMenu jmpArchivo;
     private javax.swing.JMenu jmpBaseDeDatos;

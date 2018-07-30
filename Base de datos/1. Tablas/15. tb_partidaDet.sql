@@ -16,5 +16,6 @@ create table tb_partidaDet
   , idPartida        int not null foreign key references tb_partida(idPartida)
   , idRecepcionCuero int not null foreign key references tb_recepcionCuero(idRecepcionCuero)
   , idTipoRecorte    int not null foreign key references tb_tipoRecorte(idTipoRecorte)
+  , idProceso        int not null foreign key references tb_proceso(idProceso)
 );
 go

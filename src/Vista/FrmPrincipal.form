@@ -824,6 +824,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jmTambores">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Imagenes/barril.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Tambores"/>
               </Properties>
               <Events>
@@ -832,6 +835,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="Usuarios">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Imagenes/status_online.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Usuarios"/>
               </Properties>
               <Events>
@@ -886,6 +892,38 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jmpBaseDeDatos">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Imagenes/database.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Base de datos"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Imagenes/database_save.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Exportar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Imagenes/database_cleanup.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Importar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jmpAcercaDe">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -896,29 +934,6 @@
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jmpAcercaDeMouseClicked"/>
           </Events>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jmpBaseDeDatos">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Base de datos"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Exportar"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Importar"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>
@@ -996,7 +1011,7 @@
                       <Group type="102" attributes="0">
                           <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="pnlPrincipalx" pref="493" max="32767" attributes="0"/>
+                          <Component id="pnlPrincipalx" pref="495" max="32767" attributes="0"/>
                       </Group>
                       <Component id="pnlMenu" max="32767" attributes="0"/>
                   </Group>
@@ -1062,7 +1077,7 @@
                       <Component id="btnSemiterminado" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnTerminado" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="242" max="32767" attributes="0"/>
+                      <EmptySpace pref="244" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1230,8 +1245,6 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="lblTipoUsuario" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lblNombreUsuario" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   </Group>
@@ -1241,10 +1254,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblNombreUsuario" alignment="1" max="32767" attributes="0"/>
-                          <Component id="lblTipoUsuario" alignment="1" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="lblNombreUsuario" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1253,11 +1263,6 @@
             <Component class="javax.swing.JLabel" name="lblNombreUsuario">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nombre usuario"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblTipoUsuario">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Tipo Usuario"/>
               </Properties>
             </Component>
           </SubComponents>

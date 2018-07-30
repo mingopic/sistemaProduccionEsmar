@@ -6,9 +6,12 @@
 package Controlador;
 
 import Modelo.Partida;
+import Modelo.PartidaDisp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -67,17 +70,14 @@ public class PartidaCommands {
     }
     
      //Método que se llama para obtener el número de partidas registradas
-    public static String[][] obtenerPartidasDisponibles(Partida p) 
+    public static List<PartidaDisp> obtenerPartidasDisponibles(Partida p) 
     {
-        String[][] partidas = null;
+        List<PartidaDisp> partidas = null;
         String query = "execute sp_obtPartidaXproceso "+p.getIdProceso();
 
         Statement stmt = null;
         ResultSet rs = null;
-        int renglones = 0;
-        int columnas = 7;
-        int i = 0;
-            
+        
         try 
         {
             c.conectar();
@@ -85,22 +85,21 @@ public class PartidaCommands {
             System.out.println(query);
             rs = stmt.executeQuery(query);
 
+            partidas = new ArrayList<>();
             if (rs.last()) 
             {
-                renglones = rs.getRow();
-
-                partidas = new String[renglones][columnas];
                 rs.beforeFirst();
 
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
-                    partidas[i][0]= rs.getString("NoPartida");
-                    partidas[i][1]= rs.getString("descripcion");
-                    partidas[i][2]= rs.getString("noPiezasAct");
-                    partidas[i][3]= rs.getString("idPartidaDet");
-                    partidas[i][4]= rs.getString("idPartida");
-                    partidas[i][5]= rs.getString("idTipoRecorte");
-                    i++;
+                    PartidaDisp pd = new PartidaDisp();
+                    pd.setNoPartida(rs.getInt("NoPartida"));
+                    pd.setTipoRecorte(rs.getString("descripcion"));
+                    pd.setNoPiezasAct(rs.getInt("noPiezasAct"));
+                    pd.setIdPartidaDet(rs.getInt("idPartidaDet"));
+                    pd.setIdPartida(rs.getInt("idPartida"));
+                    pd.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                    partidas.add(pd);
                 }
             }
             rs.close();
@@ -109,7 +108,7 @@ public class PartidaCommands {
         } 
         catch (Exception e) 
         {
-            
+            System.err.println(e);
         }
         return partidas;
     }

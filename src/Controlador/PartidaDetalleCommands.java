@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.PartidaDetalle;
+import Modelo.PartidaDisp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -31,6 +32,33 @@ public class PartidaDetalleCommands {
             System.out.println(query);
             pstmt.executeUpdate();
             c.desconectar();
+        }
+    }
+    
+    //Método para agregar una entrada a la tabla entradaProductoAlmacen
+    public void agregarRecorte(PartidaDisp datosPartida, int noPiezasAct, int noPiezas, int idProceso)
+    {
+        try 
+        {
+            String query = "exec sp_insRecorte "
+                    + datosPartida.getIdPartidaDet()
+                    + "," + datosPartida.getIdTipoRecorte()
+                    + "," + noPiezasAct
+                    + "," + noPiezas
+                    + "," + datosPartida.getIdPartida()
+                    + "," + idProceso;
+            
+            PreparedStatement pstmt = null;
+            
+            c.conectar();
+            pstmt = c.getConexion().prepareStatement(query);
+            System.out.println(query);
+            pstmt.executeUpdate();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
         }
     }
 }

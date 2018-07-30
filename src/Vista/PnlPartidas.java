@@ -12,12 +12,8 @@ import Controlador.PartidaDetalleCommands;
 import Modelo.InventarioCrudo;
 import Modelo.Partida;
 import Modelo.PartidaDetalle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**

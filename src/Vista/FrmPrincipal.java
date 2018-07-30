@@ -477,7 +477,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
-        lblTipoUsuario = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         lblVentana = new javax.swing.JLabel();
         lblLogoSistema = new javax.swing.JLabel();
@@ -493,10 +492,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
         jmInsumosXproceso = new javax.swing.JMenuItem();
-        jmpAcercaDe = new javax.swing.JMenu();
         jmpBaseDeDatos = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jmpAcercaDe = new javax.swing.JMenu();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         dlgLogin.setTitle("Login");
@@ -1100,7 +1099,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnSemiterminado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTerminado)
-                .addContainerGap(242, Short.MAX_VALUE))
+                .addContainerGap(244, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -1109,16 +1108,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         lblNombreUsuario.setText("Nombre usuario");
 
-        lblTipoUsuario.setText("Tipo Usuario");
-
         javax.swing.GroupLayout pnlFooterLayout = new javax.swing.GroupLayout(pnlFooter);
         pnlFooter.setLayout(pnlFooterLayout);
         pnlFooterLayout.setHorizontalGroup(
             pnlFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFooterLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblTipoUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblNombreUsuario)
                 .addGap(18, 18, 18))
         );
@@ -1126,9 +1121,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFooterLayout.createSequentialGroup()
                 .addGap(0, 1, Short.MAX_VALUE)
-                .addGroup(pnlFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblNombreUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTipoUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(lblNombreUsuario))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1178,7 +1171,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE))
+                        .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
                     .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1224,6 +1217,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmSubProcesos);
 
+        jmTambores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/barril.png"))); // NOI18N
         jmTambores.setText("Tambores");
         jmTambores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1232,6 +1226,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmTambores);
 
+        Usuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"))); // NOI18N
         Usuarios.setText("Usuarios");
         Usuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1279,17 +1274,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jmpConfiguraciones);
 
-        jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
-        jmpAcercaDe.setText("Acerca de");
-        jmpAcercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jmpAcercaDeMouseClicked(evt);
-            }
-        });
-        jMenuBar1.add(jmpAcercaDe);
-
+        jmpBaseDeDatos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database.png"))); // NOI18N
         jmpBaseDeDatos.setText("Base de datos");
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_save.png"))); // NOI18N
         jMenuItem1.setText("Exportar");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1298,6 +1286,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpBaseDeDatos.add(jMenuItem1);
 
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_cleanup.png"))); // NOI18N
         jMenuItem2.setText("Importar");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1307,6 +1296,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpBaseDeDatos.add(jMenuItem2);
 
         jMenuBar1.add(jmpBaseDeDatos);
+
+        jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
+        jmpAcercaDe.setText("Acerca de");
+        jmpAcercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jmpAcercaDeMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jmpAcercaDe);
 
         setJMenuBar(jMenuBar1);
 
@@ -1587,7 +1585,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlTambores.getGraphics());
             
             lblVentana.setText("Catálogo de Tambores");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\group.png");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\barril.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
@@ -1606,7 +1604,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlUsuarios.getGraphics());
             
             lblVentana.setText("Catálogo de Usuarios");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\group.png");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\status_online.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
@@ -1724,7 +1722,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogoSistema;
     private javax.swing.JLabel lblMenui;
     private javax.swing.JLabel lblNombreUsuario;
-    private javax.swing.JLabel lblTipoUsuario;
     private javax.swing.JLabel lblUsuario;
     public static javax.swing.JLabel lblVentana;
     private javax.swing.JPanel pnlFooter;

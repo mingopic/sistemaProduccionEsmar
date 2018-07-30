@@ -9,6 +9,8 @@ import Modelo.Tambor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -63,39 +65,36 @@ public class TamborCommands {
     }
     
     //Método para traer los tambores activos
-    public static String[][] llenarComboboxTambores() throws Exception
+    public List llenarComboboxTambores() throws Exception
     {
-        String[][] tambores=null;
+        List<Tambor> lstTambores = new ArrayList<>();
+        Tambor obj;
         
         String query="execute sp_obtTambAct";
         
         Statement stmt = null;
         ResultSet rs = null;
-        int renglones = 0;
-        int columnas = 2;
-        int i = 0;
-        
+
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         rs = stmt.executeQuery(query);
         
         if (rs.last()) {
-            renglones = rs.getRow();
-            tambores = new String[renglones][columnas];
             rs.beforeFirst();
 
             //Recorremos el ResultSet registro a registro
             while (rs.next()) {
-                tambores[i][0]= rs.getString("idTambor");
-                tambores[i][1]= rs.getString("nombreTambor");
-                i++;
+                obj = new Tambor();
+                obj.setIdTambor(rs.getInt("idTambor"));
+                obj.setNombreTambor(rs.getString("nombreTambor"));
+                lstTambores.add(obj);
             }
         }
         
         rs.close();
         stmt.close();
         c.desconectar();
-        return tambores;
+        return lstTambores;
     }
     
     //Método para buscar datos de un tambor en BD

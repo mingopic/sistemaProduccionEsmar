@@ -9,9 +9,9 @@ package Modelo;
  *
  * @author Mingo
  */
-public class PartidaDisponible {
+public class PartidaDisp {
     int noPartida;
-    String recorte;
+    String tipoRecorte;
     int noPiezasAct;
     int idPartidaDet;
     int idPartida;
@@ -25,12 +25,12 @@ public class PartidaDisponible {
         this.noPartida = noPartida;
     }
 
-    public String getRecorte() {
-        return recorte;
+    public String getTipoRecorte() {
+        return tipoRecorte;
     }
 
-    public void setRecorte(String recorte) {
-        this.recorte = recorte;
+    public void setTipoRecorte(String tipoRecorte) {
+        this.tipoRecorte = tipoRecorte;
     }
 
     public int getNoPiezasAct() {
@@ -64,4 +64,6 @@ public class PartidaDisponible {
     public void setIdTipoRecorte(int idTipoRecorte) {
         this.idTipoRecorte = idTipoRecorte;
     }
+    
+    
 }

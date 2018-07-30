@@ -33,9 +33,9 @@ as begin
     inner join
       tb_partida as pa
     on
-      pa.idPartida = pd.idPartidaDet
-      and pa.idProceso = @idProceso -1
+      pa.idPartida = pd.idPartida
   
 	where
 		pd.noPiezasAct > 0
+    and pd.idProceso = @idProceso - 1
 end

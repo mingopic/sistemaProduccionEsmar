@@ -53,6 +53,7 @@ as begin
       , idPartida
       , idRecepcionCuero
       , idTipoRecorte
+      , idProceso
     )
     
   values
@@ -62,6 +63,7 @@ as begin
       , @idPartida
       , @idRecepcionCuero
       , @idTipoRecorte
+      , 1
     )
 end
 go

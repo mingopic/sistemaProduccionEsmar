@@ -2,5 +2,5 @@ usuarioPC:EQUIPO-PC\SQLEXPRESS
 baseDatos: esmarProd        
 usuario: sa
 password: root
-baseDatosExportar: esmarProdClon
+baseDatosExportar: esmarProd
 puerto: 1433

@@ -42,7 +42,12 @@ create procedure sp_obtFormInsXSubProc
     
     
     select
-      *
+      idInsumXProc
+      , idFormXSubProc
+      , clave
+      , porcentaje
+      , idInsumo
+      , nombreProducto
       
     from 
       tb_insumXproc

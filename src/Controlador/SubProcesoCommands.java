@@ -68,7 +68,7 @@ public class SubProcesoCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 5;
+        int columnas = 6;
         int i = 0;
 
         c.conectar();
@@ -87,9 +87,10 @@ public class SubProcesoCommands {
             {
                 datos[i][0] = rs.getString("clave");
                 datos[i][1] = rs.getString("porcentaje");
-                datos[i][2] = rs.getString("idInsumo");
-                datos[i][3] = rs.getString("idFormXSubProc");
-                datos[i][4] = rs.getString("idInsumXProc");
+                datos[i][2] = rs.getString("nombreProducto");
+                datos[i][3] = rs.getString("idInsumo");
+                datos[i][4] = rs.getString("idFormXSubProc");
+                datos[i][5] = rs.getString("idInsumXProc");
                 i++; 
             }
         }

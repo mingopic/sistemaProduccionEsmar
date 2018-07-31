@@ -15,6 +15,7 @@ public class InsumoPorProceso {
     String clave;
     float porcentaje;
     int idInsumo;
+    String nombreProducto;
 
     public int getIdInsumXProc() {
         return idInsumXProc;
@@ -54,5 +55,13 @@ public class InsumoPorProceso {
 
     public void setIdInsumo(int idInsumo) {
         this.idInsumo = idInsumo;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 }

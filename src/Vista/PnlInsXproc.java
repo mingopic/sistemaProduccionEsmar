@@ -12,9 +12,12 @@ import Controlador.InsumoPorProcesoCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Modelo.FormulaXSubProceso;
+import Modelo.Insumo;
 import Modelo.InsumoPorProceso;
 import Modelo.Proceso;
 import Modelo.SubProceso;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,6 +38,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
     int idSubproceso = 0;
     DefaultTableModel dtms=new DefaultTableModel();
     DefaultTableModel dtmInsumos=new DefaultTableModel();
+    List<Insumo> lstInsumo;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -44,7 +48,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
     
     String[] cols2 = new String[]
     {
-        "Clave","Porcentaje","Insumo"
+        "Clave","Porcentaje","Insumo","idInsumo"
     };
     
     boolean[] editables = new boolean[]
@@ -70,7 +74,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
         actualizarTablaSubProc();
         btnAgregarInsumo.setEnabled(false);
         btnQuitarInsumo.setEnabled(false);
-        btnAgregarEspacio.setEnabled(false);
         btnGuardarInsumo.setEnabled(false);
         cmbInsumo.setEnabled(false);
     }
@@ -78,20 +81,15 @@ public class PnlInsXproc extends javax.swing.JPanel {
     //método que llena los combobox de los insumos en la base de datos
     public void llenarComboInsumos() throws Exception
     {
-        String[][] insumos = new String [3][2];
-        insumos[0][0] = "1";
-        insumos[0][1] = "1";
+        ippc = new InsumoPorProcesoCommands();
+        lstInsumo = new ArrayList<>();
         
-        insumos[1][0] = "2";
-        insumos[1][1] = "2";
-        
-        insumos[2][0] = "3";
-        insumos[2][1] = "3";
+        lstInsumo = ippc.ObtenerInsumos();
         
         int i=0;
-        while (i<insumos.length)
+        while (i < lstInsumo.size())
         {
-            cmbInsumo.addItem(insumos[i][1]);
+            cmbInsumo.addItem(lstInsumo.get(i).getCNOMBREPRODUCTO());
             i++;
         }
     }
@@ -157,7 +155,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
         cmbInsumo = new javax.swing.JComboBox<>();
         btnAgregarInsumo = new javax.swing.JButton();
         btnQuitarInsumo = new javax.swing.JButton();
-        btnAgregarEspacio = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInsXSubProc = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
@@ -235,9 +232,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
             }
         });
 
-        btnAgregarEspacio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/note_add.png"))); // NOI18N
-        btnAgregarEspacio.setText("Añadir Espacio");
-
         tblInsXSubProc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -272,9 +266,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                         .addComponent(btnAgregarInsumo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnQuitarInsumo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAgregarEspacio)
-                        .addGap(0, 145, Short.MAX_VALUE)))
+                        .addGap(0, 278, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -286,10 +278,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(cmbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregarInsumo)
-                    .addComponent(btnQuitarInsumo)
-                    .addComponent(btnAgregarEspacio))
+                    .addComponent(btnQuitarInsumo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -409,10 +400,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
     private void tblSubprocesoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubprocesoMouseClicked
       
       subP = new SubProceso();
-      if(evt.getClickCount()==2){
+      if(evt.getClickCount() == 2){
           btnAgregarInsumo.setEnabled(true);
           btnQuitarInsumo.setEnabled(true);
-          btnAgregarEspacio.setEnabled(true);
           btnGuardarInsumo.setEnabled(true);
           cmbInsumo.setEnabled(true);
           lblSubProceso.setText(tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString());
@@ -420,13 +410,12 @@ public class PnlInsXproc extends javax.swing.JPanel {
           String idAux = "";
 //        JOptionPane.showMessageDialog(null, "Se ha seleccionado "+tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString());
           String descripcion = tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString();
-            if (subProceso[tblSubproceso.getSelectedRow()][0] == descripcion)
+            if (subProceso[tblSubproceso.getSelectedRow()][0].equals(descripcion))
             {
                 idAux = subProceso[tblSubproceso.getSelectedRow()][1];
                 idSubproceso = Integer.parseInt(idAux);
+                subP.setIdSubProceso(idSubproceso);
             }
-            
-            subP.setIdSubProceso(idSubproceso);
             
             DefaultTableModel dtm = null;
         
@@ -441,6 +430,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 };
                 tblInsXSubProc.setModel(dtmInsumos);
                 tblInsXSubProc.getTableHeader().setReorderingAllowed(false);
+                tblInsXSubProc.getColumnModel().getColumn(3).setMaxWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(3).setMinWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(3).setPreferredWidth(0);
 
             } catch (Exception e) {
 
@@ -469,16 +461,16 @@ public class PnlInsXproc extends javax.swing.JPanel {
         {
             btnAgregarInsumo.setEnabled(true);
             btnQuitarInsumo.setEnabled(true);
-            btnAgregarEspacio.setEnabled(true);
         }
     }//GEN-LAST:event_tblInsXSubProcMouseClicked
 
     private void btnAgregarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInsumoActionPerformed
         int n;
-        String datos[]=new String[3];
+        String datos[]=new String[4];
         datos[0]= "";
         datos[1]= "";
         datos[2]= cmbInsumo.getSelectedItem().toString();
+        datos[3]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getCIDPRODUCTO());
         dtmInsumos.addRow(datos);
     }//GEN-LAST:event_btnAgregarInsumoActionPerformed
 
@@ -495,7 +487,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         {
             if (JOptionPane.showConfirmDialog(null, "Realmente desea guardar las modificaciones", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
             {
-                int idSubProceso = subP.getIdSubProceso();
+                int idSubProceso = idSubproceso;
                 int filas = tblInsXSubProc.getRowCount();
                 FormulaXSubProceso fxs = new FormulaXSubProceso();
                 FormulaXSubProcesoCommands fxsc = new FormulaXSubProcesoCommands();
@@ -519,7 +511,8 @@ public class PnlInsXproc extends javax.swing.JPanel {
                             datosIXP[i].setClave("");
                         }
                         datosIXP[i].setPorcentaje(Float.parseFloat(tblInsXSubProc.getValueAt(i, 1).toString()));
-                        datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 2).toString()));
+                        datosIXP[i].setNombreProducto(tblInsXSubProc.getValueAt(i, 2).toString());
+                        datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 3).toString()));
                     }
                     fxs.setIdSubproceso(idSubProceso);
                     fxsc.agregarFormXSubProc(fxs);
@@ -536,7 +529,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarEspacio;
     private javax.swing.JButton btnAgregarInsumo;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardarInsumo;

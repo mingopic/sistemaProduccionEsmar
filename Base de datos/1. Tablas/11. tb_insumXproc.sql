@@ -15,5 +15,6 @@ create table tb_insumXproc
   , clave          varchar(10)
   , porcentaje     float
   , idInsumo       int
+  , nombreProducto varchar(60)
 );
 go

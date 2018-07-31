@@ -10,10 +10,11 @@ go
  
 create procedure sp_agrInsumXProc 
   (
-    @idSubProceso int
-    , @clave      varchar(10)
-    , @porcentaje float
-    , @idInsumo   int
+    @idSubProceso     int
+    , @clave          varchar(10)
+    , @porcentaje     float
+    , @nombreProducto varchar(60)
+    , @idInsumo       int
   )
   as begin
   
@@ -50,6 +51,7 @@ create procedure sp_agrInsumXProc
         , @clave
         , @porcentaje
         , @idInsumo
+        , @nombreProducto
       )
   end
 go

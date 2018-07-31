@@ -49,8 +49,21 @@ public class ConexionBD
     public void conectar() throws Exception
     {
         
-//        String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
+        //String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
         String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[1];
+        String usuario = datosBD[2];
+        String password = datosBD[3];
+        
+        //Generamos una conexión solo si no existe alguna ó, si existe y ya está cerrada.
+        if (conn == null || conn.isClosed())
+            conn = DriverManager.getConnection(url, usuario, password);
+    }
+    
+    public void conectarCompaq() throws Exception
+    {
+        
+        //String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
+        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[6];
         String usuario = datosBD[2];
         String password = datosBD[3];
         
@@ -71,14 +84,17 @@ public class ConexionBD
     
     public String[] buscaDatos() throws FileNotFoundException, IOException {
         String cadena;
-        String[] datos = new String[6];
+        String[] datos = new String[7];
         int j=0;
         
         FileReader f = new FileReader("datosBD.txt");
         BufferedReader b = new BufferedReader(f);
-        while((cadena = b.readLine())!=null) {
+        while((cadena = b.readLine())!=null) 
+        {
             String[] palabra = cadena.split(":");
-            for (int i = 0; i < palabra.length; i++) {
+            
+            for (int i = 0; i < palabra.length; i++) 
+            {
                 datos[j]=palabra[1].replaceAll("^\\s*","");
             }
             //System.out.println(datos[j]);

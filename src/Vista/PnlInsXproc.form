@@ -80,9 +80,7 @@
                               <Component id="btnAgregarInsumo" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btnQuitarInsumo" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnAgregarEspacio" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="145" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="278" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -99,10 +97,9 @@
                           <Component id="cmbInsumo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnAgregarInsumo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnQuitarInsumo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnAgregarEspacio" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="426" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -217,14 +214,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarInsumoActionPerformed"/>
               </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnAgregarEspacio">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/note_add.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir Espacio"/>
-              </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
               <AuxValues>

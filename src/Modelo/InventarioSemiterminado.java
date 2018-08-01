@@ -20,6 +20,15 @@ public class InventarioSemiterminado {
     String fechaEntrada;
     String fecha;
     String fecha1;
+    int noPartida;
+
+    public int getNoPartida() {
+        return noPartida;
+    }
+
+    public void setNoPartida(int noPartida) {
+        this.noPartida = noPartida;
+    }
 
     public int getIdInvSemiterminado() {
         return idInvSemiterminado;

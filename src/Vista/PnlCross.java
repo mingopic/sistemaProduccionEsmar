@@ -437,8 +437,8 @@ public class PnlCross extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInvCross = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        btnEnviarSemiterminado = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        EnviarSemiterminado = new javax.swing.JLabel();
+        btnEnviarSemiterminado = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -632,22 +632,22 @@ public class PnlCross extends javax.swing.JPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        btnEnviarSemiterminado.setText("   ");
-        jToolBar1.add(btnEnviarSemiterminado);
+        EnviarSemiterminado.setText("   ");
+        jToolBar1.add(EnviarSemiterminado);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
-        jButton1.setText("Enviar a Semiterminado");
-        jButton1.setEnabled(false);
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEnviarSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEnviarSemiterminado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+        btnEnviarSemiterminado.setText("Enviar a Semiterminado");
+        btnEnviarSemiterminado.setEnabled(false);
+        btnEnviarSemiterminado.setFocusable(false);
+        btnEnviarSemiterminado.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnEnviarSemiterminado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEnviarSemiterminado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEnviarSemiterminadoActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(btnEnviarSemiterminado);
 
         jLabel12.setText("   ");
         jToolBar1.add(jLabel12);
@@ -977,7 +977,7 @@ try {
         validarNumerosEnteros(evt, txtNoPartida.getText());
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEnviarSemiterminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarSemiterminadoActionPerformed
         try {
             int fila = tblInvCross.getSelectedRow();
             String piezas = (String.valueOf(tblInvCross.getValueAt(fila, 3)));
@@ -994,7 +994,7 @@ try {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEnviarSemiterminadoActionPerformed
 
     private void btnRealizarEntradaEnvSemiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemiActionPerformed
         try
@@ -1059,9 +1059,10 @@ try {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel EnviarSemiterminado;
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
-    private javax.swing.JLabel btnEnviarSemiterminado;
+    private javax.swing.JButton btnEnviarSemiterminado;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
@@ -1070,7 +1071,6 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgEnvSemi;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;

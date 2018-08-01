@@ -61,12 +61,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     {
         conexionBD = new ConexionBD();
         //Colocar icono de la aplicación
-        Image ico = new ImageIcon(getClass().getResource("/imagenes/esmar.png")).getImage();
+        Image ico = new ImageIcon(getClass().getResource("/Imagenes/esmar.png")).getImage();
         setIconImage(ico);        
         //Titulo de la aplicación
         this.setTitle("Sistema de producción V.1.0");
         
-        ImageIcon fot = new ImageIcon("src/imagenes/logoEsmar_CH.png");
+        ImageIcon fot = new ImageIcon("src/Imagenes/logoEsmar_CH.png");
         Icon icono = new ImageIcon(fot.getImage().getScaledInstance(lblLogoSistema.getWidth(), lblLogoSistema.getHeight(), Image.SCALE_DEFAULT));
         lblLogoSistema.setIcon(icono);
         this.repaint();
@@ -111,7 +111,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 pnlPrincipalx.removeAll();        
                 pnlPrincipalx.add(pnlPrincipal, BorderLayout.CENTER);
                 pnlPrincipalx.paintAll(pnlPrincipal.getGraphics());
-                ImageIcon ico=new ImageIcon(".\\src\\imagenes\\house.png");
+                ImageIcon ico=new ImageIcon(".\\src\\Imagenes\\house.png");
                 lblVentana.setIcon(ico);
 //                DateLabel();
                 lblNombreUsuario.setText(u.getNombre());

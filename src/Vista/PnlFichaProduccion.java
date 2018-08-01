@@ -1034,7 +1034,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         } catch (Exception e)
         {
             System.err.println(e);
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario de Cuero Crudo","Advertencia",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario de Partidas Disponibles","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnAsignarActionPerformed
 

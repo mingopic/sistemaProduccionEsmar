@@ -557,19 +557,19 @@ public class PnlTerminado extends javax.swing.JPanel {
         }
     }
     
-    public void generarReporteEntradaSemiterminado()
+    public void generarReporteEntradaTerminado()
     {
         try
         {
-            URL path = this.getClass().getResource("/Reportes/ReporteEntSemi.jasper");
+            URL path = this.getClass().getResource("/Reportes/ReporteEntTermi.jasper");
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
             parametros.put("tipoRecorte", tr.getDescripcion());
             parametros.put("calibre", c.getDescripcion());
             parametros.put("seleccion", s.getDescripcion());
-            parametros.put("fecha", is.getFecha());
-            parametros.put("fecha1", is.getFecha1());
+            parametros.put("fecha", it.getFecha());
+            parametros.put("fecha1", it.getFecha1());
             parametros.put("noPartida", p.getNoPartida());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
@@ -592,19 +592,19 @@ public class PnlTerminado extends javax.swing.JPanel {
         }
     }
     
-    public void generarReporteSalidaSemiterminado()
+    public void generarReporteSalidaTerminado()
     {
         try
         {
-            URL path = this.getClass().getResource("/Reportes/ReporteSalSemi.jasper");
+            URL path = this.getClass().getResource("/Reportes/ReporteSalTermi.jasper");
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
             parametros.put("tipoRecorte", tr.getDescripcion());
             parametros.put("calibre", c.getDescripcion());
             parametros.put("seleccion", s.getDescripcion());
-            parametros.put("fecha", is.getFecha());
-            parametros.put("fecha1", is.getFecha1());
+            parametros.put("fecha", it.getFecha());
+            parametros.put("fecha1", it.getFecha1());
             parametros.put("noPartida", p.getNoPartida());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
@@ -631,7 +631,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     {
         try
         {
-            URL path = this.getClass().getResource("/Reportes/ReporteInvCrossSemi.jasper");
+            URL path = this.getClass().getResource("/Reportes/ReporteInvSemTer.jasper");
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
@@ -657,11 +657,11 @@ public class PnlTerminado extends javax.swing.JPanel {
         }
     }
     
-    public void generarReporteInventarioSemiterminado()
+    public void generarReporteInventarioTerminado()
     {
         try
         {
-            URL path = this.getClass().getResource("/Reportes/ReporteInvSemi.jasper");
+            URL path = this.getClass().getResource("/Reportes/ReporteInvTermi.jasper");
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
@@ -1650,7 +1650,7 @@ try {
 
     btnReporteEntrada6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnReporteEntrada6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntrada6.setText("Reporte Inventario Semiterminado");
+    btnReporteEntrada6.setText("Reporte Inventario Terminado");
     btnReporteEntrada6.setFocusable(false);
     btnReporteEntrada6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     btnReporteEntrada6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -1760,7 +1760,7 @@ try {
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
         actualizarTablaTerminado();
-        generarReporteEntradaSemiterminado();
+        generarReporteEntradaTerminado();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
     private void btnReporteEntrada2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada2ActionPerformed
@@ -1769,7 +1769,7 @@ try {
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
         actualizarTablaTerminado();
-        generarReporteSalidaSemiterminado();
+        generarReporteSalidaTerminado();
     }//GEN-LAST:event_btnReporteEntrada3ActionPerformed
 
     private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
@@ -1805,7 +1805,7 @@ try {
 
     private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
         actualizarTablaTerminado();
-        generarReporteInventarioSemiterminado();
+        generarReporteInventarioTerminado();
     }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
 
     private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed

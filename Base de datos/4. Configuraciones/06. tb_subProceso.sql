@@ -2,7 +2,7 @@ use esmarProd
 go
 
 insert into
-  tb_subProceso ("idProceso", "descripcion") 
+  tb_subProceso (idProceso, descripcion) 
 values 
   ('2', 'REMOJO 1'),('2', 'REMOJO 2')
   ,('3', 'PELAMBRE 1'),('3', 'PELAMBRE 2')

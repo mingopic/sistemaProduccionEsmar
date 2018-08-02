@@ -4,7 +4,7 @@ go
 if exists (select name from sys.sysobjects WHERE name = 'sp_agrPartida')
 begin 
   drop
-    procedure sp_agrPartidas
+    procedure sp_agrPartida
 end
 go
   

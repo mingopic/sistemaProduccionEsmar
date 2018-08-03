@@ -10,11 +10,11 @@ go
 
 create table tb_invSemTer
 (
-  idInvSemTer         		   int not null identity(1,1) primary key
-  , idInvSemiterminado         int not null foreign key references tb_invSemiterminado(idInvSemiterminado)
+  idInvSemTer          int not null identity(1,1) primary key
+  , idInvSemiterminado int not null foreign key references tb_invSemiterminado(idInvSemiterminado)
   , noPiezas				   int
-  , noPiezasActuales		   int
-  , kgTotales 		  		   float
-  , fechaEntrada			   date
-);
+  , noPiezasActuales	 int
+  , kgTotales 		  	 float
+  , fechaEntrada		   date
+)
 go

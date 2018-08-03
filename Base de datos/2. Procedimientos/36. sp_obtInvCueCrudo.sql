@@ -27,7 +27,7 @@ as begin
 	)
 
 	select
-		concat(@tipoRecorte,' ',tc.descripcion) as descripcion
+		@tipoRecorte + ' ' + tc.descripcion as descripcion
     , p.nombreProveedor
     , ic.noPiezasActual
     , ic.kgTotalActual

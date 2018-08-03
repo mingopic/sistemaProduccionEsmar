@@ -10,13 +10,13 @@ go
 
 create table tb_invTerminado
 (
-  idInvTerminado         	   int not null identity(1,1) primary key
-  , idInvSemTer         	   int not null foreign key references tb_invSemTer(idInvSemTer)
-  , idCalibre         		   int not null foreign key references tb_calibre(idCalibre)
-  , idSeleccion         	   int not null foreign key references tb_seleccion(idSeleccion)
-  , noPiezas				   int
-  , noPiezasActuales		   int
-  , kgTotales 		  		   float
-  , fechaEntrada			   date
+  idInvTerminado     int not null identity(1,1) primary key
+  , idInvSemTer      int not null foreign key references tb_invSemTer(idInvSemTer)
+  , idCalibre        int not null foreign key references tb_calibre(idCalibre)
+  , idSeleccion      int not null foreign key references tb_seleccion(idSeleccion)
+  , noPiezas				 int
+  , noPiezasActuales int
+  , kgTotales 		   float
+  , fechaEntrada		 date
 );
 go

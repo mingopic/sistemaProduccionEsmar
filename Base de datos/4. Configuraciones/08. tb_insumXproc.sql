@@ -2,7 +2,7 @@ use esmarProd
 go
 
 insert into
-  tb_insumXproc ("idFormXSubProc", "clave", "porcentaje", "idInsumo") 
+  tb_insumXproc (idFormXSubProc, clave, porcentaje, idInsumo) 
 values 
   ('1','', '100', '1'),('1','1', '50', '2')
   ,('2','', '70', '2'),('2','1', '60', '3')

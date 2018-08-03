@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24af15e0-de4c-4d94-990b-025efedb3c5f">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="33"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -47,7 +47,7 @@
 				<frame>
 					<reportElement mode="Opaque" x="0" y="0" width="555" height="42" forecolor="#000000" backcolor="#CCCCFF" uuid="09eb1fd7-f089-40fb-9c76-1637c53e1834"/>
 					<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-						<reportElement style="SubTitle" isPrintRepeatedValues="false" mode="Transparent" x="2" y="0" width="479" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="6e2557c0-fb7c-4fda-9866-7bb681451233"/>
+						<reportElement style="SubTitle" isPrintRepeatedValues="false" mode="Transparent" x="2" y="0" width="551" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="6e2557c0-fb7c-4fda-9866-7bb681451233"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -98,14 +98,14 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="28">
+			<band height="34">
 				<rectangle>
 					<reportElement x="0" y="2" width="555" height="20" backcolor="#FFFF99" uuid="0d4d5ee6-3a38-4048-8866-e4f33a9902b9"/>
 				</rectangle>
 				<staticText>
 					<reportElement mode="Transparent" x="3" y="2" width="77" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="95619611-9f81-4830-b8aa-eca5ba6d3603"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<text><![CDATA[Totales]]></text>
@@ -113,7 +113,7 @@
 				<textField pattern="#,##0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="222" y="2" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="a59f1dbc-e3f5-47b8-a137-378bdc6c139a"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{noPiezas_1}]]></textFieldExpression>

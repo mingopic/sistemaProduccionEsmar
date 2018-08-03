@@ -35,7 +35,10 @@
 		<groupHeader>
 			<band height="52">
 				<rectangle>
-					<reportElement x="0" y="28" width="557" height="20" backcolor="#FFFF99" uuid="8548110e-ec8e-412e-a369-fc83c5373f93"/>
+					<reportElement mode="Opaque" x="0" y="29" width="556" height="20" backcolor="#FFFF99" uuid="8548110e-ec8e-412e-a369-fc83c5373f93"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
 				</rectangle>
 				<frame>
 					<reportElement mode="Opaque" x="0" y="0" width="557" height="28" forecolor="#B89F7D" backcolor="#CCCCFF" uuid="d54061c8-dc06-4ad1-a9f0-d28bc67ccaa6"/>
@@ -87,7 +90,7 @@
 						<font fontName="Arial" size="24" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[Inventario Cuero x Trabajar]]></text>
+					<text><![CDATA[Inventario Terminado x Trabajar]]></text>
 				</staticText>
 			</frame>
 			<frame>

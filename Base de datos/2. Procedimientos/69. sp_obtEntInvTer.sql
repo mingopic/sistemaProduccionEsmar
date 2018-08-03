@@ -75,13 +75,13 @@ as begin
       inner join
         tb_calibre as c
       on
-        c.idCalibre = ins.idCalibre
+        c.idCalibre = it.idCalibre
         and c.descripcion like @calibre
       
       inner join
         tb_seleccion as s
       on
-        s.idSeleccion = ins.idSeleccion
+        s.idSeleccion = it.idSeleccion
         and s.descripcion like @seleccion
         
     where
@@ -146,13 +146,13 @@ as begin
       inner join
         tb_calibre as c
       on
-        c.idCalibre = ins.idCalibre
+        c.idCalibre = it.idCalibre
         and c.descripcion like @calibre
       
       inner join
         tb_seleccion as s
       on
-        s.idSeleccion = ins.idSeleccion
+        s.idSeleccion = it.idSeleccion
         and s.descripcion like @seleccion
         
     where

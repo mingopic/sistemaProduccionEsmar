@@ -93,7 +93,7 @@
 						<text><![CDATA[Peso Prom]]></text>
 					</staticText>
 					<textField pattern="" isBlankWhenNull="false">
-						<reportElement mode="Transparent" x="2" y="0" width="479" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="44ec3db4-34db-43a9-86a3-a633b52803da"/>
+						<reportElement mode="Transparent" x="2" y="0" width="553" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="44ec3db4-34db-43a9-86a3-a633b52803da"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -104,14 +104,14 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="28">
+			<band height="39">
 				<rectangle>
 					<reportElement x="0" y="2" width="555" height="20" backcolor="#FFFF99" uuid="0d4d5ee6-3a38-4048-8866-e4f33a9902b9"/>
 				</rectangle>
 				<staticText>
 					<reportElement mode="Transparent" x="3" y="2" width="77" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="95619611-9f81-4830-b8aa-eca5ba6d3603"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<text><![CDATA[Totales]]></text>
@@ -119,7 +119,7 @@
 				<textField pattern="#,##0" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="224" y="2" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="14a29a26-0fc7-4578-870e-d50efb8b2bdb"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{noPiezas_2}]]></textFieldExpression>
@@ -127,7 +127,7 @@
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="335" y="2" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2f678182-5cbd-49d3-aeff-ce249e9b7a56"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{peso_2}]]></textFieldExpression>

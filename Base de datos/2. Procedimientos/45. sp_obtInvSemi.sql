@@ -26,39 +26,42 @@ as begin
 	from
 		tb_invSemiterminado as ins
 		
-	inner join
-		tb_invCrossSemi as ics
-	on
-		ics.idInvCrossSemi = ins.idInvCrossSemi
+    inner join
+      tb_invCrossSemi as ics
+    on
+      ics.idInvCrossSemi = ins.idInvCrossSemi
 
-	inner join
-		tb_invCross ic
-	on
-		ic.idInvPCross = ics.idInvPCross
+    inner join
+      tb_invCross ic
+    on
+      ic.idInvPCross = ics.idInvPCross
 
-	inner join
-		tb_partidaDet pd
-	on
-		pd.idPartidaDet = ic.idPartidaDet
+    inner join
+      tb_partidaDet pd
+    on
+      pd.idPartidaDet = ic.idPartidaDet
 
-	inner join
-		tb_tipoRecorte tr
-	on
-		tr.idTipoRecorte = pd.idTipoRecorte
-		and tr.descripcion like @tipoRecorte
+    inner join
+      tb_tipoRecorte tr
+    on
+      tr.idTipoRecorte = pd.idTipoRecorte
+      and tr.descripcion like @tipoRecorte
 
-	inner join
-		tb_calibre c
-	on
-		c.idCalibre = ins.idCalibre
-		and c.descripcion like @calibre
+    inner join
+      tb_calibre c
+    on
+      c.idCalibre = ins.idCalibre
+      and c.descripcion like @calibre
 
-	inner join
-		tb_seleccion s
-	on
-		s.idSeleccion = ins.idSeleccion
-		and s.descripcion like @seleccion
+    inner join
+      tb_seleccion s
+    on
+      s.idSeleccion = ins.idSeleccion
+      and s.descripcion like @seleccion
 	
+	where
+    ins.noPiezasActuales > 0
+    
 	group by
 		tr.descripcion, c.descripcion, s.descripcion;
 end

@@ -28,63 +28,66 @@ as begin
 			, s.descripcion as seleccion
 			, c.descripcion as calibre
 			, isalt.fechaEntrada
+      
 		from
 			tb_invSalTerminado as isalt
-		inner join
-			tb_invTerminado as it
-		on
-			it.idInvTerminado = isalt.idInvTerminado
-		
-		inner join
-			tb_invSemTer as ist
-		on
-			ist.idInvSemTer = it.idInvSemTer
-			
-		inner join
-			tb_invSemiterminado as ins
-		on
-			ins.idInvSemiterminado = ist.idInvSemiterminado
-			
-		inner join
-			tb_invCrossSemi as ics
-		on
-			ics.idInvCrossSemi = ins.idInvCrossSemi
-		
-		inner join
-			tb_invCross as ic
-		on
-			ic.idInvPCross = ics.idInvPCross
-		
-		inner join
-			tb_partidaDet as pd
-		on
-			pd.idPartidaDet = ic.idPartidaDet
-		
-		inner join
-			tb_partida as p
-		on
-			p.idPartida = pd.idPartida
-		
-		inner join
-			tb_tipoRecorte as tr
-		on
-			tr.idTipoRecorte = pd.idTipoRecorte
-			and tr.descripcion like @tipoRecorte
-		
-		inner join
-			tb_calibre as c
-		on
-			c.idCalibre = ins.idCalibre
-			and c.descripcion like @calibre
-		
-		inner join
-			tb_seleccion as s
-		on
-			s.idSeleccion = ins.idSeleccion
-			and s.descripcion like @seleccion
+      
+      inner join
+        tb_invTerminado as it
+      on
+        it.idInvTerminado = isalt.idInvTerminado
+      
+      inner join
+        tb_invSemTer as ist
+      on
+        ist.idInvSemTer = it.idInvSemTer
+        
+      inner join
+        tb_invSemiterminado as ins
+      on
+        ins.idInvSemiterminado = ist.idInvSemiterminado
+        
+      inner join
+        tb_invCrossSemi as ics
+      on
+        ics.idInvCrossSemi = ins.idInvCrossSemi
+      
+      inner join
+        tb_invCross as ic
+      on
+        ic.idInvPCross = ics.idInvPCross
+      
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = ic.idPartidaDet
+      
+      inner join
+        tb_partida as p
+      on
+        p.idPartida = pd.idPartida
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = pd.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = it.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = it.idSeleccion
+        and s.descripcion like @seleccion
 		
 		where
 			isalt.fechaEntrada between @fecha and @fecha1
+      
 	end
 	
 	else
@@ -143,13 +146,13 @@ as begin
 		inner join
 			tb_calibre as c
 		on
-			c.idCalibre = ins.idCalibre
+			c.idCalibre = it.idCalibre
 			and c.descripcion like @calibre
 		
 		inner join
 			tb_seleccion as s
 		on
-			s.idSeleccion = ins.idSeleccion
+			s.idSeleccion = it.idSeleccion
 			and s.descripcion like @seleccion
 		
 		where

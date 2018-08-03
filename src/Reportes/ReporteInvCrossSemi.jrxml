@@ -33,11 +33,14 @@
 			<band height="52">
 				<rectangle>
 					<reportElement x="0" y="28" width="557" height="20" backcolor="#FFFF99" uuid="8548110e-ec8e-412e-a369-fc83c5373f93"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
 				</rectangle>
 				<frame>
 					<reportElement mode="Opaque" x="0" y="0" width="557" height="28" forecolor="#B89F7D" backcolor="#CCCCFF" uuid="d54061c8-dc06-4ad1-a9f0-d28bc67ccaa6"/>
 					<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-						<reportElement style="SubTitle" isPrintRepeatedValues="false" mode="Transparent" x="2" y="0" width="128" height="24" forecolor="#333333" backcolor="#FFFFFF" uuid="6e24661f-11c4-424d-823b-0a3ca106a695"/>
+						<reportElement style="SubTitle" isPrintRepeatedValues="false" mode="Transparent" x="2" y="0" width="551" height="24" forecolor="#333333" backcolor="#FFFFFF" uuid="6e24661f-11c4-424d-823b-0a3ca106a695"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -79,12 +82,12 @@
 			<frame>
 				<reportElement mode="Opaque" x="0" y="0" width="456" height="46" backcolor="#009900" uuid="24e319be-a3d9-48e7-b4aa-1af36c53e4e3"/>
 				<staticText>
-					<reportElement style="Title" mode="Transparent" x="12" y="0" width="370" height="42" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="244b1e92-fdf0-440c-92f6-ab017faa01bb"/>
+					<reportElement style="Title" mode="Transparent" x="14" y="0" width="419" height="42" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="244b1e92-fdf0-440c-92f6-ab017faa01bb"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Arial" size="24" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[Inventario Cuero x Trabajar]]></text>
+					<text><![CDATA[Inventario Semiterminado x Trabajar]]></text>
 				</staticText>
 			</frame>
 			<frame>

@@ -8,11 +8,14 @@ package Vista;
 
 import Controlador.ConexionBD;
 import Controlador.ConfiguracionMermaCommands;
+import Controlador.InventarioCrudoCommands;
+import Controlador.PartidaDetalleCommands;
 import Controlador.ProveedorCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.RecepcionCueroCommands;
 import Controlador.TipoCueroCommands;
 import Modelo.ConfiguracionMerma;
+import Modelo.InventarioCrudo;
 import Modelo.Proveedor;
 import Modelo.RangoPesoCuero;
 import Modelo.RecepcionCuero;
@@ -57,6 +60,9 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     RangoPesoCueroCommands rpcc;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
+    PartidaDetalleCommands pdc;
+    InventarioCrudo ic;
+    InventarioCrudoCommands icc;
     String[][] proveedoresAgregar = null;
     String[][] tipoCueroAgregar = null;
     String[][] rangoPesoCuero = null;
@@ -366,6 +372,47 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void eliminarRecepcionCuero()
+    {
+        try
+        {
+            int fila = tblRecepcionCuero.getSelectedRow();
+            
+            if (fila != -1)
+            {
+                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la recepción de cuero seleccionada?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                {
+                    rc = new RecepcionCuero();
+                    ic = new InventarioCrudo();
+
+                    rc.setIdRecepcionCuero(Integer.parseInt(datosEntRecCuero[fila][8]));
+
+                    int idRecepcionCuero = pdc.obtenerRecepcionCueroEliminar(rc);
+
+                    if (idRecepcionCuero == 0)
+                    {
+                        icc.eliminarInventarioCrudo(rc);
+                        rcc.eliminarRecepcionCuero(rc);
+                        actualizarTablaRecepcionCuero();
+                        JOptionPane.showMessageDialog(null, "Recepción de cuero eliminada");
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "La recepción de cuero que desea eliminar ya sido utilizada en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Recepción Cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -381,7 +428,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRecepcionCuero = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        btnAgregarEntrada = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -408,6 +454,12 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         btnReporteEntrada1 = new javax.swing.JButton();
         jLabel48 = new javax.swing.JLabel();
         btnReporteEntrada2 = new javax.swing.JButton();
+        jToolBar3 = new javax.swing.JToolBar();
+        jLabel51 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        btnAgregarEntrada = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        btnEliminarEntrada = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -429,22 +481,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
-
-        btnAgregarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnAgregarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
-        btnAgregarEntrada.setText("Agregar Recepción");
-        btnAgregarEntrada.setFocusable(false);
-        btnAgregarEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnAgregarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnAgregarEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAgregarEntrada.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarEntradaActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnAgregarEntrada);
-
-        jLabel1.setText("   ");
         jToolBar1.add(jLabel1);
 
         jLabel10.setText("   ");
@@ -556,7 +592,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                 false,
                 true)));
     dcFecha1EntradaSemiterminado.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-    dcFecha1EntradaSemiterminado.setFormat(2);
     dcFecha1EntradaSemiterminado.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
     try {
         dcFecha1EntradaSemiterminado.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
@@ -695,6 +730,49 @@ try {
     });
     jToolBar2.add(btnReporteEntrada2);
 
+    jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jToolBar3.setFloatable(false);
+    jToolBar3.setRollover(true);
+
+    jLabel51.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel51.setForeground(new java.awt.Color(227, 222, 222));
+    jToolBar3.add(jLabel51);
+
+    jLabel49.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel49.setForeground(new java.awt.Color(227, 222, 222));
+    jToolBar3.add(jLabel49);
+
+    btnAgregarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnAgregarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+    btnAgregarEntrada.setText("Agregar Recepción");
+    btnAgregarEntrada.setFocusable(false);
+    btnAgregarEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnAgregarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnAgregarEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnAgregarEntrada.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnAgregarEntradaActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnAgregarEntrada);
+
+    jLabel30.setText("   ");
+    jToolBar3.add(jLabel30);
+
+    btnEliminarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnEliminarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    btnEliminarEntrada.setText("Eliminar Recepción");
+    btnEliminarEntrada.setFocusable(false);
+    btnEliminarEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnEliminarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEliminarEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEliminarEntrada.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEliminarEntradaActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnEliminarEntrada);
+
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
@@ -702,6 +780,7 @@ try {
         .addComponent(jScrollPane1)
         .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
         .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
+        .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
     );
     jPanel4Layout.setVerticalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -710,7 +789,9 @@ try {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+            .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -783,10 +864,15 @@ try {
         generarReporteInventarioCueroCrudo(rc, tc);
     }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
 
+    private void btnEliminarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEntradaActionPerformed
+        eliminarRecepcionCuero();
+    }//GEN-LAST:event_btnEliminarEntradaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAgregarEntrada;
     private javax.swing.JButton btnBuscarEntrada;
+    public javax.swing.JButton btnEliminarEntrada;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada1;
@@ -801,11 +887,14 @@ try {
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel4;
@@ -814,6 +903,7 @@ try {
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
     private javax.swing.JTable tblRecepcionCuero;

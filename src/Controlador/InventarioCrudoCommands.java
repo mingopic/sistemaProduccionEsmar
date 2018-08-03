@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.InventarioCrudo;
+import Modelo.RecepcionCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -74,5 +75,16 @@ public class InventarioCrudoCommands {
             pstmt.executeUpdate();
             c.desconectar();
         }
+    }
+    
+    //Método para eliminar una recepcion de cuero que aún no está en uso
+    public static void eliminarInventarioCrudo(RecepcionCuero rc) throws Exception {
+        String query = "exec sp_EliInvCrudo "+rc.getIdRecepcionCuero();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

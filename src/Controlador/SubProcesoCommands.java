@@ -4,14 +4,14 @@
  * and open the template in the editor.
  */
 package Controlador;
-
-import static Controlador.ProcesoCommands.c;
+import Modelo.InsumosXFichaProd;
 import Modelo.Proceso;
-import Modelo.Proveedor;
 import Modelo.SubProceso;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -61,11 +61,7 @@ public class SubProcesoCommands {
     
     //Método que se llama para obtener la lista de las formulas pertenecientes al subProceso señalado
     public static String[][] obtenerListaInsXSubProc(SubProceso subP) throws Exception {
-        String query;
-        
-        query= "EXEC sp_obtFormInsXSubProc "+subP.getIdSubProceso()+";";
-
-        
+        String query = "execute sp_obtFormInsXSubProc "+subP.getIdSubProceso()+";";
         String[][] datos = null;
         int renglones = 0;
         int columnas = 6;
@@ -99,6 +95,92 @@ public class SubProcesoCommands {
         stmt.close();
         c.desconectar();
         return datos;
+    }
+    
+    //Método que se llama para obtener la fórmula de insumos del subproceso seleccionado
+    public static List<InsumosXFichaProd> obtInsXSubProcList(int idSubProceso) throws Exception 
+    {
+        List<InsumosXFichaProd> lstInsumos = new ArrayList<>();
+//        InsumosXFichaProd obj = new InsumosXFichaProd();
+//        obj.setClave("Remojo");
+//        obj.setPorcentaje(100.0);
+//        obj.setMaterial("Agua");
+//        obj.setPrecioUnitario(0.04);
+//        lstInsumos.add(obj);
+        
+        String query = "execute sp_obtFormInsXSubProc "+idSubProceso;
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try 
+        {
+            c.conectar();
+            stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            System.out.println(query);
+            rs = stmt.executeQuery(query);
+
+            lstInsumos = new ArrayList<>();
+            if (rs.last()) 
+            {
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    InsumosXFichaProd obj = new InsumosXFichaProd();
+                    obj.setClave(rs.getString("clave"));
+                    obj.setPorcentaje(rs.getDouble("porcentaje"));
+                    obj.setMaterial(rs.getString("nombreProducto"));
+                    obj.setIdProducto(rs.getInt("idInsumo"));
+                    obj.setIdFormXSubProc(rs.getInt("IdFormXSubProc"));
+                    lstInsumos.add(obj);
+                }
+            }
+            rs.close();
+            stmt.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return lstInsumos;
+    }
+    
+    //Método que se llama para obtener la fórmula de insumos del subproceso seleccionado
+    public static Double obtPrecioProducto(int idProducto) throws Exception 
+    {
+        String query = "execute sp_Compaq_ObtPrecioInsumo "+idProducto;
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        Double precioProducto = 0.0;
+        
+        try 
+        {
+            c.conectarCompaq();
+            stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            System.out.println(query);
+            rs = stmt.executeQuery(query);
+
+            if (rs.last()) 
+            {
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    precioProducto = rs.getDouble("precio");
+                }
+            }
+            rs.close();
+            stmt.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return precioProducto;
     }
     
     //Método para obtener todos los subprocesos registrados de BD

@@ -1334,7 +1334,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jmpAcercaDeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpAcercaDeMouseClicked
         JOptionPane.showMessageDialog(null, "'Sistema de Producción ESMAR V.1.0' \n"
-            + "Julio 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez \n\n"
+            + "Julio 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
+            + "\nIng. Mario Daniel Luna Gutiérrez \n\n"
             + "Dudas, comentarios o reportes de errores: \n"
             + "mingo.utl@gmail.com", "Acerca de...",
             JOptionPane.INFORMATION_MESSAGE);

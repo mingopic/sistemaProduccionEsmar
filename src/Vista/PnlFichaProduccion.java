@@ -10,6 +10,7 @@ import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TamborCommands;
+import Modelo.InsumosXFichaProd;
 import Modelo.Partida;
 import Modelo.PartidaDetalle;
 import Modelo.PartidaDisp;
@@ -42,10 +43,13 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     String[][] proceso = null;
     String[][] subProceso = null;
     List<Tambor> lstTambor;
-    List<PartidaDisp> partidas = null;
+    List<PartidaDisp> lstPartidas = null;
     String recorteSeleccionado = null;
     String[][] asignados;
     DefaultTableModel dtms;
+    DefaultTableModel dtmInsumos;
+    int idSubproceso = 0;
+    List<InsumosXFichaProd> lstInsumos;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -68,6 +72,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             llenarComboTambores();
             actualizarTablaSubProc();
             inicializarTablaPartidasAgregadas();
+            actualizarTablaInsumos();
         } 
         catch (Exception e)
         {
@@ -138,7 +143,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     }
     
     //Método para actualizar la tabla de las partidas disponibles por proceso
-    public void actualizarTablaPartidas() 
+    public void actualizarTablaPartidasDisponibles() 
     {
         p = new Partida();
         p.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
@@ -149,11 +154,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             
             pc = new PartidaCommands();
-            partidas = pc.obtenerPartidasDisponibles(p);
+            lstPartidas = pc.obtenerPartidasDisponibles(p);
             
-            if (partidas != null)
+            if (lstPartidas != null)
             {
-                asignados = new String[partidas.size()][1];
+                asignados = new String[lstPartidas.size()][1];
                 
                 for (int i = 0; i < asignados.length; i++)
                 {
@@ -172,12 +177,57 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
             };
             dtm.setColumnIdentifiers(cols);
-            dtm.setRowCount(partidas.size());
-            for (int i = 0; i < partidas.size(); i++)
+            dtm.setRowCount(lstPartidas.size());
+            for (int i = 0; i < lstPartidas.size(); i++)
             {
-                dtm.setValueAt(partidas.get(i).getNoPartida(), i, 0);
-                dtm.setValueAt(partidas.get(i).getTipoRecorte(), i, 1);
-                dtm.setValueAt(partidas.get(i).getNoPiezasAct(), i, 2);
+                dtm.setValueAt(lstPartidas.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 1);
+                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 2);
+            }
+            tblPartidasDisponibles.setModel(dtm);
+            tblPartidasDisponibles.getTableHeader().setReorderingAllowed(false);
+        } 
+        catch (Exception e) 
+        {   
+            e.printStackTrace();   
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD" , "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    //Método para actualizar la tabla de las partidas disponibles por proceso
+    public void actualizarPartidasDisponibles() 
+    {
+        p = new Partida();
+        p.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+
+        DefaultTableModel dtm = null;
+        
+        try 
+        {
+            pc = new PartidaCommands();
+            lstPartidas = pc.obtenerPartidasDisponibles(p);
+            
+            if (lstPartidas != null)
+            {
+                asignados = new String[lstPartidas.size()][1];
+                
+                for (int i = 0; i < asignados.length; i++)
+                {
+                    asignados[i][0] = "0";
+                }
+            }
+            
+            dtm = new DefaultTableModel(){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            dtm.setRowCount(lstPartidas.size());
+            for (int i = 0; i < lstPartidas.size(); i++)
+            {
+                dtm.setValueAt(lstPartidas.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 1);
+                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 2);
             }
             tblPartidasDisponibles.setModel(dtm);
             tblPartidasDisponibles.getTableHeader().setReorderingAllowed(false);
@@ -313,6 +363,187 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void actualizarTablaInsumos()
+    {
+        subP = new SubProceso();
+        String idAux = "";
+        String descripcion = tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString();
+        if (subProceso[tblSubproceso.getSelectedRow()][0].equals(descripcion))
+        {
+            idAux = subProceso[tblSubproceso.getSelectedRow()][1];
+            idSubproceso = Integer.parseInt(idAux);
+        }
+
+        try {
+            lstInsumos = new ArrayList<>();
+            lstInsumos = subPc.obtInsXSubProcList(idSubproceso);
+            for (int i = 0; i < lstInsumos.size(); i++)
+            {
+                lstInsumos.get(i).setPrecioUnitario(subPc.obtPrecioProducto(lstInsumos.get(i).getIdProducto()));
+            }
+            
+            String[] cols = new String[]
+            {
+                "Clave", "%", "Material", "Temp", "Rodar", "Cantidad", "Observaciones", "P/U", "Total"
+            };
+
+            dtmInsumos = new DefaultTableModel()
+            {
+                public boolean isCellEditable (int row, int column)
+                {
+                    // Aquí devolvemos true o false según queramos que una celda
+                    // identificada por fila,columna (row,column), sea o no editable
+                    if (column == 3 || column == 4 || column == 6 || column == 7)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            };
+            dtmInsumos.setColumnIdentifiers(cols);
+            dtmInsumos.setRowCount(lstInsumos.size());
+            for (int i = 0; i < lstInsumos.size(); i++)
+            {
+                dtmInsumos.setValueAt(lstInsumos.get(i).getClave(), i, 0);
+                dtmInsumos.setValueAt(lstInsumos.get(i).getPorcentaje(), i, 1);
+                dtmInsumos.setValueAt(lstInsumos.get(i).getMaterial(), i, 2);
+                dtmInsumos.setValueAt(lstInsumos.get(i).getPrecioUnitario(), i, 7);
+            }
+            tblInsXproc.getTableHeader().setReorderingAllowed(false);
+            tblInsXproc.setModel(dtmInsumos);
+            actualizarTotalInsumos();
+            lblSubProceso.setText(subProceso[tblSubproceso.getSelectedRow()][0]);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
+    }
+    
+    private void actualizarTotalInsumos()
+    {
+        try 
+        {
+            //Validar que se hayan agregado elementos a la tabla tblPartidasAgregadas
+            if (tblPartidasAgregadas.getRowCount() != 0)
+            {
+                //Se suma el total de kg de los elementos en la tabla tblPartidasAgregadas
+                Double totalKg = 0.0;
+                for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
+                {
+                    totalKg += Double.parseDouble(String.valueOf(tblPartidasAgregadas.getValueAt(i, 3)));
+                }
+                //Se calcula la cantidad y total de cada elemento de la tabla tblInsXproc
+                for (int i = 0; i < lstInsumos.size(); i++)
+                {
+                    
+                    String precioUnitario = (String.format("%.2f",Double.parseDouble(String.valueOf(tblInsXproc.getValueAt(i, 7)))));
+                    lstInsumos.get(i).setPrecioUnitario(Double.parseDouble(precioUnitario));
+                    
+                    String cantidad = (String.format("%.2f",Double.parseDouble(String.valueOf((lstInsumos.get(i).getPorcentaje()*totalKg)/100))));
+                    lstInsumos.get(i).setCantidad(Double.parseDouble(cantidad));
+                    
+                    String total = (String.format("%.2f",Double.parseDouble(String.valueOf(lstInsumos.get(i).getCantidad()*lstInsumos.get(i).getPrecioUnitario()))));
+                    lstInsumos.get(i).setTotal(Double.parseDouble(total));
+
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getCantidad(), i, 5);
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getTotal(), i, 8);
+                }
+            }
+            else
+            {
+                /*En caso de no tener elementos en la tabla tblPartidasAgregadas,
+                se pone en 0 la cantidad y total de cada elemento de la tabla tblInsXproc */ 
+                for (int i = 0; i < lstInsumos.size(); i++)
+                {
+                    lstInsumos.get(i).setCantidad(0.0);
+                    lstInsumos.get(i).setTotal(0.0);
+
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getCantidad(), i, 5);
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getTotal(), i, 8);
+                }
+            }
+            //obtener costo total de insumos
+            Double total = 0.0;
+            for (int i = 0; i < lstInsumos.size(); i++)
+            {
+                total += lstInsumos.get(i).getTotal();
+            }
+            String costoTotal = (String.format("%.2f",total));
+            txtTotal.setText(costoTotal);
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al calcular costos de ficha de producción","Error",JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+    
+    private void validarPiezasPartidaAgregar()
+    {
+        for (int fila = 0; fila < tblPartidasAgregadas.getRowCount(); fila++)
+        {
+            try
+            {
+                int piezasUtilizar = Integer.parseInt(tblPartidasAgregadas.getValueAt(fila, 2).toString());
+                Double kgUtilizar = Double.parseDouble(tblPartidasAgregadas.getValueAt(fila, 3).toString());
+
+                if (piezasUtilizar < 0)
+                {
+                    tblPartidasAgregadas.setValueAt("0", fila, 2);
+                }
+                else
+                {
+                    //obtener número de piezas originales de la tabla tblPartidasDisponibles
+                    int piezasOriginal = 0;
+                    for (int i = 0; i < lstPartidas.size(); i++)
+                    {
+                        if (lstPartidas.get(i).getIdPartidaDet() == Integer.parseInt(tblPartidasAgregadas.getValueAt(fila, 4).toString()))
+                        {
+                            piezasOriginal = lstPartidas.get(i).getNoPiezasAct();
+                        }
+                    }
+
+                    if (piezasUtilizar > piezasOriginal)
+                    {
+                        JOptionPane.showMessageDialog(null, "El número de piezas ingresado no puede ser mayor al número de piezas original");
+                        tblPartidasAgregadas.setValueAt("0", fila, 2);
+                    }
+                    actualizarTotalInsumos();
+                }
+            } catch (Exception e)
+            {
+                JOptionPane.showMessageDialog(null, "Ingrese números validos en los campos \nNo. Piezas y Peso (Kg)","Error",JOptionPane.ERROR_MESSAGE);
+                tblPartidasAgregadas.setValueAt("0", fila, 2);
+                tblPartidasAgregadas.setValueAt("0", fila, 3);
+            }
+        }
+    }
+    
+    private void validarPrecioInsumos()
+    {
+        for (int fila = 0; fila < tblInsXproc.getRowCount(); fila++)
+        {
+            try 
+            {
+                Double pu = Double.parseDouble(tblInsXproc.getValueAt(fila, 7).toString());
+                lstInsumos.get(fila).setPrecioUnitario(pu);
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Ingrese un precio válido", "Advertencia", JOptionPane.ERROR_MESSAGE);
+                tblInsXproc.setValueAt("0.0", fila, 7);
+                lstInsumos.get(fila).setPrecioUnitario(0.0);
+            }
+        }
+        actualizarTotalInsumos();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -360,10 +591,13 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel12 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        lblSubProceso = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblInsXproc = new javax.swing.JTable();
+        txtTotal = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton2 = new javax.swing.JButton();
+        btnGenerarFicha = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -583,8 +817,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -655,14 +889,14 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
-            .addComponent(jScrollPane2)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnRecortar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAsignar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -673,7 +907,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     .addComponent(btnRecortar)
                     .addComponent(btnAsignar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -703,15 +937,23 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         tblPartidasAgregadas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "No. Partida", "Recorte", "No. Piezas", "Peso (Kg)"
             }
         ));
+        tblPartidasAgregadas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblPartidasAgregadas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblPartidasAgregadasMousePressed(evt);
+            }
+        });
+        tblPartidasAgregadas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblPartidasAgregadasKeyReleased(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblPartidasAgregadas);
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -727,8 +969,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
-            .addComponent(jScrollPane3)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEliminar)
@@ -752,8 +994,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
-        jLabel4.setText("Insumos por Proceso");
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/flask.png"))); // NOI18N
+        jLabel4.setText("Insumos por Proceso:");
+
+        lblSubProceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSubProceso.setText("Insumo");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -761,52 +1006,95 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblSubProceso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addComponent(lblSubProceso))
         );
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblInsXproc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Clave", "%", "Material", "Temp", "Rodar", "Cantidad", "Observaciones", "P/U", "Total"
             }
-        ));
-        jScrollPane4.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true, false, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblInsXproc.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblInsXproc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblInsXprocMousePressed(evt);
+            }
+        });
+        tblInsXproc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblInsXprocKeyReleased(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tblInsXproc);
+
+        txtTotal.setEditable(false);
+        txtTotal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setText("TOTAL $");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6))
         );
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/document_next.png"))); // NOI18N
-        jButton2.setText("Generar Ficha");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        btnGenerarFicha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnGenerarFicha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/document_next.png"))); // NOI18N
+        btnGenerarFicha.setText("Generar Ficha");
+        btnGenerarFicha.setEnabled(false);
+        btnGenerarFicha.setFocusable(false);
+        btnGenerarFicha.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGenerarFicha.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGenerarFicha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarFichaActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnGenerarFicha);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText("   ");
@@ -854,10 +1142,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -877,11 +1165,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
     private void cmbProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProcesoActionPerformed
         actualizarTablaSubProc();
-        actualizarTablaPartidas();
+        actualizarTablaPartidasDisponibles();
     }//GEN-LAST:event_cmbProcesoActionPerformed
 
     private void tblSubprocesoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubprocesoMouseClicked
-        
+        actualizarTablaInsumos();
     }//GEN-LAST:event_tblSubprocesoMouseClicked
 
     private void btnRecortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecortarActionPerformed
@@ -890,12 +1178,12 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             pad = new PartidaDisp();
             int i = tblPartidasDisponibles.getSelectedRow();
             
-            pad.setNoPartida(partidas.get(i).getNoPartida());
-            pad.setTipoRecorte(partidas.get(i).getTipoRecorte());
-            pad.setNoPiezasAct(partidas.get(i).getNoPiezasAct());
-            pad.setIdPartidaDet(partidas.get(i).getIdPartidaDet());
-            pad.setIdPartida(partidas.get(i).getIdPartida());
-            pad.setIdTipoRecorte(partidas.get(i).getIdTipoRecorte());
+            pad.setNoPartida(lstPartidas.get(i).getNoPartida());
+            pad.setTipoRecorte(lstPartidas.get(i).getTipoRecorte());
+            pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
+            pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
+            pad.setIdPartida(lstPartidas.get(i).getIdPartida());
+            pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
             
             abrirDialogoRecortar();
         } 
@@ -947,7 +1235,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 pdc.agregarRecorte(pad, noPiezasRecortar, noPiezas, Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0])-1);
                 dlgRecortar.setVisible(false);
                 JOptionPane.showMessageDialog(null,"Recorte relizado correctamente");
-                actualizarTablaPartidas();
+                actualizarTablaPartidasDisponibles();
                 inicializarTablaPartidasAgregadas();
             } 
             catch (Exception e) 
@@ -1022,14 +1310,16 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 String datosPartidas[];
                 datosPartidas = new String[5];
 
-                datosPartidas[0]= String.valueOf(partidas.get(fila).getNoPartida());
-                datosPartidas[1]= partidas.get(fila).getTipoRecorte();
-                datosPartidas[2]= String.valueOf(partidas.get(fila).getNoPiezasAct());
+                datosPartidas[0]= String.valueOf(lstPartidas.get(fila).getNoPartida());
+                datosPartidas[1]= lstPartidas.get(fila).getTipoRecorte();
+                datosPartidas[2]= String.valueOf(lstPartidas.get(fila).getNoPiezasAct());
                 datosPartidas[3]= "0";
-                datosPartidas[4]= String.valueOf(partidas.get(fila).getIdPartidaDet());
+                datosPartidas[4]= String.valueOf(lstPartidas.get(fila).getIdPartidaDet());
 
                 dtms.addRow(datosPartidas);
                 asignados[fila][0] = "1";
+                actualizarTotalInsumos();
+                btnGenerarFicha.setEnabled(true);
             }
         } catch (Exception e)
         {
@@ -1044,15 +1334,20 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             fila = this.tblPartidasAgregadas.getSelectedRow();
             
-            for (int i = 0; i < partidas.size(); i++)
+            for (int i = 0; i < lstPartidas.size(); i++)
             {
-                if (String.valueOf(partidas.get(i).getIdPartidaDet()).equals(tblPartidasAgregadas.getValueAt(fila, 4)))
+                if (String.valueOf(lstPartidas.get(i).getIdPartidaDet()).equals(tblPartidasAgregadas.getValueAt(fila, 4)))
                 {
                     asignados[i][0] = "0";
                 }
             }
             
             dtms.removeRow(fila);
+            actualizarTotalInsumos();
+            if (tblPartidasAgregadas.getRowCount() == 0)
+            {
+                btnGenerarFicha.setEnabled(false);
+            }
         }
         catch (Exception e)
         {
@@ -1061,16 +1356,66 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void tblPartidasAgregadasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPartidasAgregadasKeyReleased
+        validarPiezasPartidaAgregar();
+    }//GEN-LAST:event_tblPartidasAgregadasKeyReleased
+
+    private void tblPartidasAgregadasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPartidasAgregadasMousePressed
+        if(evt.getClickCount()==1)
+        {
+            validarPiezasPartidaAgregar();
+        }
+    }//GEN-LAST:event_tblPartidasAgregadasMousePressed
+
+    private void tblInsXprocKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblInsXprocKeyReleased
+        validarPrecioInsumos();
+    }//GEN-LAST:event_tblInsXprocKeyReleased
+
+    private void tblInsXprocMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInsXprocMousePressed
+        validarPrecioInsumos();
+    }//GEN-LAST:event_tblInsXprocMousePressed
+
+    private void btnGenerarFichaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarFichaActionPerformed
+        try 
+        {
+            for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++) 
+            {
+                Double noPiezas = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 2).toString());
+                Double peso = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
+                if (noPiezas <= 0 || peso <= 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Todos los campos No. Piezas y Peso (Kg), \nde la tabla Partidas agregadas deben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+            for (int i = 0; i < lstInsumos.size(); i++) 
+            {
+                Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
+                if (precioUnitario <= 0.0)
+                {
+                    JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(null, "No trono :D");
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al generar ficha de producción \nVerifique la información capturada","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGenerarFichaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGenerarFicha;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnRecortar;
     private javax.swing.JComboBox<String> cmbProceso;
     private javax.swing.JComboBox<String> cmbTambores;
     private javax.swing.JDialog dlgRecortar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1083,6 +1428,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel10;
@@ -1099,18 +1445,20 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblPiezasDe2;
+    private javax.swing.JLabel lblSubProceso;
     private javax.swing.JLabel lblTipoCuero1;
     private javax.swing.JLabel lblTipoCuero2;
     private javax.swing.JLabel lblTipoCueroRecortar;
     private javax.swing.JLabel lblyRecortar;
+    private javax.swing.JTable tblInsXproc;
     private javax.swing.JTable tblPartidasAgregadas;
     private javax.swing.JTable tblPartidasDisponibles;
     private javax.swing.JTable tblSubproceso;
     private javax.swing.JTextField txtNoPiezasRecortar;
     private javax.swing.JTextField txtNoPiezasRecortar1;
     private javax.swing.JTextField txtNoPiezasRecortar2;
+    private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }

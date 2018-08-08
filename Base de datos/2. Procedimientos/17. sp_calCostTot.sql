@@ -284,7 +284,7 @@ as begin
   if (@tarimasDescontar > 0)
   begin
   
-    select @totalDescontar = @totalDescontar+@tarimasDescontar
+    select @kgTotales = @kgTotales+@tarimasDescontar
   end
   
   set @totalKgDescontar = @kgTotales-@totalDescontar

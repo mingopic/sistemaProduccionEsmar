@@ -277,12 +277,12 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             txtMermaCacheteDescontar.setText(String.format("%.1f", ((cacheteDescontar))));
             txtTarimasDescontar.setText(String.format("%.1f", ((tarimasDescontar))));
             txtTotalKgDescontar.setText(String.format("%.1f", ((totalDescontar))));
-            txtPesoCamionKg.setText(String.format("%.2f", (Double.parseDouble(txtKgTotales.getText()))));
+            txtPesoCamionKg.setText(String.format("%.2f", (Double.parseDouble(txtKgTotales.getText()))+tarimasDescontar));
             lblDeKgTotal.setText("");
             lblDeKgTotal.setText((humedadAcepCalc*100)+"% de Kg Total");
             lblCostoTotalCamion.setText("");
             lblCostoTotalCamion.setText("$"+String.format("%.2f",costoTotalCamion));
-            txtCostoTotalCamion.setText(String.format("%.2f",(kgTotales-totalDescontar)));
+            txtCostoTotalCamion.setText(String.format("%.2f",((kgTotales+tarimasDescontar)-totalDescontar)));
         }
         catch (Exception e)
         {
@@ -552,7 +552,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         txtMermaCacheteDescontar = new javax.swing.JTextField();
         jPanel8 = new javax.swing.JPanel();
         jLabel85 = new javax.swing.JLabel();
-        jLabel86 = new javax.swing.JLabel();
         txtTarimas = new javax.swing.JTextField();
         jLabel87 = new javax.swing.JLabel();
         jLabel88 = new javax.swing.JLabel();
@@ -1275,11 +1274,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel85.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel85.setText("Merma de");
-
-        jLabel86.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel86.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel86.setText("Tarimas");
+        jLabel85.setText("Tarimas");
 
         txtTarimas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtTarimas.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -1351,9 +1346,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel85, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel85)
                 .addGap(10, 10, 10)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel88)
@@ -1383,14 +1376,11 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                     .addComponent(jLabel94, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(txtTarimasDescontar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jLabel85)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel86))
+            .addComponent(jLabel85)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
@@ -1702,7 +1692,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
-    private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel89;

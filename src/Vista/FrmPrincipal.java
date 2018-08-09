@@ -510,7 +510,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel7.setText("Contraseña:");
 
         txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtUsuario.setText("Mario");
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
@@ -539,7 +538,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         ptxtContrasenia.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        ptxtContrasenia.setText("MarioDL96");
         ptxtContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ptxtContraseniaActionPerformed(evt);

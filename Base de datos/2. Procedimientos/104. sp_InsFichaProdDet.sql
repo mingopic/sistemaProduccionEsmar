@@ -10,30 +10,82 @@ go
 
 create procedure sp_InsFichaProdDet
   (
-    @idFichaProd      int not null foreign key references tb_proceso(idProceso)
-    , @idPartidaDet   int not null foreign key references tb_proceso(idProceso)
-    , @noPiezasTotal  int
-    , @kgTotal        float
-    , @costoInsumos   float
+    @idFichaProd          int 
+    , @idPartidaDet       int
+    , @noPiezasPartida    int
+    , @noPiezasTotal      int
+    , @kgPartida          float
+    , @kgTotal            float
+    , @costoInsumosFicha  float
   )
 
 as begin
   
-  insert into
-    tb_fichaProd
+  declare
+    @idTipoRecorte          int
+    , @costoXkg             float
+    , @costoInsumosPartida  float
+    , @precioXpiezaRecCuero float
+    , @porcentajePrecioXpza float
+    , @costoCueroRecorte    float
+  
+  set
+    @costoXkg = @costoInsumosFicha / @kgTotal
+  
+  set
+    @costoInsumosPartida = @costoXkg * @kgPartida
+  
+  --Obtener precio de cada pieza entera
+  select
+    @precioXpiezaRecCuero = 
     (
-      idTambor
+      rc.costocamion / rc.noTotalPiezas
+    )
+    , @idTipoRecorte = pd.idTipoRecorte
+    
+  from
+    idPartidaDet pd
+    
+    inner join
+      tb_recepcionCuero rc
+    on
+      rc.idRecepcionCuero = pd.idRecepcionCuero
+  
+  where
+    idPartidaDet = @idPartidaDet
+  
+  --Obtener el porcentaje del costo del tipo de recorte
+  select
+    @porcentajePrecioXpza = porcentaje
+    
+  from
+    tb_confPrecioCuero
+    
+  where
+    idTipoRecorte = @idTipoRecorte
+
+  set
+    @costoCueroRecorte = (@noPiezasTotal * @porcentajePrecioXpza) * @precioXpiezaRecCuero
+  
+  insert into
+    tb_fichaProdDet
+    (
+      idFichaProd
+      , idPartidaDet
       , noPiezasTotal
       , kgTotal
-      , fechaCreacion
+      , costoTotalCuero
+      , costoInsumos
     )
-  
+    
   values
-   (
-     @idTambor
-      , @noPiezasTotal
-      , @kgTotal
-      , @fechaCreacion 
-   )
+  (
+    @idFichaProd
+    , @idPartidaDet
+    , @noPiezasPartida
+    , @kgPartida
+    , @costoCueroRecorte
+    , @costoInsumosPartida
+  )
 end
 go

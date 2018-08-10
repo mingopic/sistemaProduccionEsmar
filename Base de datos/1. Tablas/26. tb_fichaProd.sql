@@ -14,6 +14,7 @@ create table tb_fichaProd
   , idTambor       int not null foreign key references tb_Tambor(idTambor)
   , noPiezasTotal  int
   , kgTotal        float
+  , costoInsumos   float
   , fechaCreacion  date
 )
 go

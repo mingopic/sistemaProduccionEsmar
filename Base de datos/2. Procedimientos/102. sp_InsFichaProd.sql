@@ -12,8 +12,9 @@ create procedure sp_InsFichaProd
   (
     @idTambor        int
     , @noPiezasTotal int
-    , @kgTotal        float
-    , @fechaCreacion  date
+    , @kgTotal       float
+    , @costoInsumos  float
+    , @fechaCreacion date
   )
 
 as begin
@@ -24,6 +25,7 @@ as begin
       idTambor
       , noPiezasTotal
       , kgTotal
+      , costoInsumos
       , fechaCreacion
     )
   
@@ -32,6 +34,7 @@ as begin
      @idTambor
       , @noPiezasTotal
       , @kgTotal
+      , @costoInsumos
       , @fechaCreacion 
    )
 end

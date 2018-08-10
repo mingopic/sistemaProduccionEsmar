@@ -14,7 +14,6 @@ create procedure sp_InsFichaProd
     , @noPiezasTotal int
     , @kgTotal       float
     , @costoInsumos  float
-    , @fechaCreacion date
   )
 
 as begin
@@ -35,7 +34,7 @@ as begin
       , @noPiezasTotal
       , @kgTotal
       , @costoInsumos
-      , @fechaCreacion 
+      , getdate() 
    )
 end
 go

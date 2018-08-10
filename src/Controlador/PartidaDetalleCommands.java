@@ -90,4 +90,47 @@ public class PartidaDetalleCommands {
         c.desconectar();
         return datos;
     }
+    
+    //Método para agregar una entrada a la tabla entradaProductoAlmacen
+    public static void insPartidaDetFicha(PartidaDetalle pd) throws Exception {
+        String query = "exec sp_InsPartidaDetalleFicha "
+                + pd.getNoPiezas()
+                + ", " + pd.getIdPartida()
+                + ", " + pd.getIdPartidaDet()
+                + ", " + pd.getIdTipoRecorte();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método que se llama para obtener la idRecepcionCuero a eliminar
+    public static int obtenerUltPartidaDet() throws Exception {
+        String query= "execute sp_ObtUltPartidaDet ";
+        
+        int id = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                id = rs.getInt("idPartidaDet");
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return id;
+    }
 }

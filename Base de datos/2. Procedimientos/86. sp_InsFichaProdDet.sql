@@ -66,7 +66,7 @@ as begin
   where
     idTipoRecorte = @idTipoRecorte
   
-  if @idProceso = 1
+  if @idProceso = 2
   begin
     
     set

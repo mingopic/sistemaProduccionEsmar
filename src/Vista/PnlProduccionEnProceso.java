@@ -5,17 +5,178 @@
  */
 package Vista;
 
+import Controlador.ConexionBD;
+import Controlador.FichaProduccionCommands;
+import Controlador.ProcesoCommands;
+import Modelo.FichaProduccion;
+import Modelo.Proceso;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Mingo
  */
 public class PnlProduccionEnProceso extends javax.swing.JPanel {
-
-    /**
-     * Creates new form PnlProduccionEnProceso
-     */
-    public PnlProduccionEnProceso() {
+    ConexionBD conexion;
+    Proceso pr;
+    ProcesoCommands prc;
+    FichaProduccion fp;
+    FichaProduccionCommands fpc;
+    String[][] proceso = null;
+    String[][] datosProduccionProceso = null;
+    
+    //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
+    String[] cols = new String[]
+    {
+        "No. Ficha","No. Partida","Tipo Recorte","No. Piezas","Kg","Costo Cuero","Costo Insumos","Tambor","Fecha"
+    };
+    
+    
+    public PnlProduccionEnProceso() throws Exception {
         initComponents();
+        inicializar();
+    }
+    
+    //Método que se realiza al inicializar el sistema, inicializa todas las clases a utilizar
+    public void inicializar() throws Exception
+    {
+        conexion = new ConexionBD();
+        fp = new FichaProduccion();
+        pr = new Proceso();
+        
+        jrFiltroFechasEntrada.setSelected(false);
+        dcFecha1EntradaProduccionProceso.setEnabled(false);
+        dcFecha2EntradaProduccionProceso.setEnabled(false);
+        
+        llenarComboProcesos();
+        actualizarTablaProduccionProceso();
+    }
+    
+    public void llenarComboProcesos() throws Exception
+    {
+        prc = new ProcesoCommands();
+        proceso = prc.llenarComboboxProcesos();
+        
+        int i=0;
+        while (i<proceso.length)
+        {
+            cmbProceso.addItem(proceso[i][1]);
+            i++;
+        }
+    }
+    
+    //Método para actualizar la tabla de las entradas de producción en proceso, se inicializa al llamar la clase
+    public void actualizarTablaProduccionProceso() 
+    {
+        //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
+        //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
+        if (jrFiltroFechasEntrada.isSelected())
+        {
+            try {
+                    String fechaAux="";
+                    String fecha=dcFecha1EntradaProduccionProceso.getText();
+                    
+                    if (fecha.length()<10)
+                    {
+                        fecha="0"+fecha;
+                    }
+                    
+                    for (int i=6; i<fecha.length(); i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    for (int i=3; i<5; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    for (int i=0; i<2; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                            
+                    fp.setFecha(fechaAux);
+                }
+            catch (Exception ex) 
+                {
+                    fp.setFecha("0");
+                }
+            
+            try {
+                    String fechaAux="";
+                    String fecha=dcFecha2EntradaProduccionProceso.getText();
+                    
+                    if (fecha.length()<10)
+                    {
+                        fecha="0"+fecha;
+                    }
+                    
+                    //obtiene año
+                    for (int i=6; i<fecha.length(); i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+                    
+                    //obtiene mes
+                    for (int i=3; i<5; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                    fechaAux=fechaAux+"-";
+//                    
+//                    //obtiene día
+                    for (int i=0; i<2; i++)
+                    {
+                        fechaAux=fechaAux+fecha.charAt(i);
+                    }
+                            
+                    fp.setFecha1(fechaAux);
+                }
+            catch (Exception ex) 
+                {
+                    fp.setFecha1("0");
+                }
+        }
+        else
+        {
+            fp.setFecha("1900-01-01");
+            fp.setFecha1("2040-01-01");
+        }
+        
+        if (cmbProceso.getSelectedItem().toString().equals("<Todos>"))
+        {
+            pr.setDescripcion("%%");
+        }
+        else
+        {
+            pr.setDescripcion(cmbProceso.getSelectedItem().toString());
+        }
+        
+        DefaultTableModel dtm = null;
+        
+        try {
+            
+            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp,pr);
+            
+            dtm = new DefaultTableModel(datosProduccionProceso, cols){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            tblProduccionProceso.setModel(dtm);
+            tblProduccionProceso.getTableHeader().setReorderingAllowed(false);
+
+        } catch (Exception e) {
+           
+            e.printStackTrace();
+            
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
     }
 
     /**
@@ -32,16 +193,16 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbProceso = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel6 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
-        dcFecha1EntradaSemiterminado = new datechooser.beans.DateChooserCombo();
+        dcFecha1EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
         lbl = new javax.swing.JLabel();
         jrFiltroFechasEntrada = new javax.swing.JRadioButton();
         jLabel25 = new javax.swing.JLabel();
-        dcFecha2EntradaSemiterminado = new datechooser.beans.DateChooserCombo();
+        dcFecha2EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnBuscarEntrada = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
@@ -49,7 +210,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblProduccionProceso = new javax.swing.JTable();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
@@ -65,9 +226,14 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel3.setText("  ");
         jToolBar1.add(jLabel3);
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione..." }));
-        jToolBar1.add(jComboBox1);
+        cmbProceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbProceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbProceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProcesoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cmbProceso);
 
         jLabel5.setText("   ");
         jToolBar1.add(jLabel5);
@@ -81,7 +247,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar.png"))); // NOI18N
         jToolBar1.add(jLabel27);
 
-        dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+        dcFecha1EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
                     new java.awt.Color(0, 0, 0),
@@ -122,15 +288,16 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                 (datechooser.view.BackRenderer)null,
                 false,
                 true)));
-    dcFecha1EntradaSemiterminado.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-    dcFecha1EntradaSemiterminado.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
+    dcFecha1EntradaProduccionProceso.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
+    dcFecha1EntradaProduccionProceso.setFormat(2);
+    dcFecha1EntradaProduccionProceso.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
     try {
-        dcFecha1EntradaSemiterminado.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
+        dcFecha1EntradaProduccionProceso.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
     } catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
         e1.printStackTrace();
     }
-    dcFecha1EntradaSemiterminado.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
-    jToolBar1.add(dcFecha1EntradaSemiterminado);
+    dcFecha1EntradaProduccionProceso.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+    jToolBar1.add(dcFecha1EntradaProduccionProceso);
 
     lbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     lbl.setForeground(new java.awt.Color(227, 222, 222));
@@ -154,7 +321,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     jLabel25.setText("Hasta:");
     jToolBar1.add(jLabel25);
 
-    dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+    dcFecha2EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
                 new java.awt.Color(0, 0, 0),
@@ -195,14 +362,14 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             (datechooser.view.BackRenderer)null,
             false,
             true)));
-dcFecha2EntradaSemiterminado.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
+dcFecha2EntradaProduccionProceso.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
 try {
-    dcFecha2EntradaSemiterminado.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
+    dcFecha2EntradaProduccionProceso.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
     } catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
         e1.printStackTrace();
     }
-    dcFecha2EntradaSemiterminado.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
-    jToolBar1.add(dcFecha2EntradaSemiterminado);
+    dcFecha2EntradaProduccionProceso.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+    jToolBar1.add(dcFecha2EntradaProduccionProceso);
     jToolBar1.add(jSeparator1);
 
     btnBuscarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -242,7 +409,7 @@ try {
     jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
     jToolBar2.add(jButton2);
 
-    jTable1.setModel(new javax.swing.table.DefaultTableModel(
+    tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
             {null, null, null, null, null, null, null, null, null}
         },
@@ -250,7 +417,7 @@ try {
             "No. Ficha", "No. Partida", "Tipo Recorte", "No. Piezas", "Kg", "Costo Cuero", "Costo Insumos", "Tambor", "Fecha"
         }
     ));
-    jScrollPane1.setViewportView(jTable1);
+    jScrollPane1.setViewportView(tblProduccionProceso);
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -283,32 +450,36 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jrFiltroFechasEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrFiltroFechasEntradaActionPerformed
-        if (dcFecha1EntradaSemiterminado.isEnabled() && dcFecha2EntradaSemiterminado.isEnabled())
+        if (dcFecha1EntradaProduccionProceso.isEnabled() && dcFecha2EntradaProduccionProceso.isEnabled())
         {
-            dcFecha1EntradaSemiterminado.setEnabled(false);
-            dcFecha1EntradaSemiterminado.setCurrent(null);
-            dcFecha2EntradaSemiterminado.setEnabled(false);
-            dcFecha2EntradaSemiterminado.setCurrent(null);
+            dcFecha1EntradaProduccionProceso.setEnabled(false);
+            dcFecha1EntradaProduccionProceso.setCurrent(null);
+            dcFecha2EntradaProduccionProceso.setEnabled(false);
+            dcFecha2EntradaProduccionProceso.setCurrent(null);
         }
         else
         {
-            dcFecha1EntradaSemiterminado.setEnabled(true);
-            dcFecha2EntradaSemiterminado.setEnabled(true);
+            dcFecha1EntradaProduccionProceso.setEnabled(true);
+            dcFecha2EntradaProduccionProceso.setEnabled(true);
         }
     }//GEN-LAST:event_jrFiltroFechasEntradaActionPerformed
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed
-        
+        actualizarTablaProduccionProceso();
     }//GEN-LAST:event_btnBuscarEntradaActionPerformed
+
+    private void cmbProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProcesoActionPerformed
+        actualizarTablaProduccionProceso();
+    }//GEN-LAST:event_cmbProcesoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
-    private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
-    private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
+    private javax.swing.JComboBox<String> cmbProceso;
+    private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
+    private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
@@ -321,10 +492,10 @@ try {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
+    private javax.swing.JTable tblProduccionProceso;
     // End of variables declaration//GEN-END:variables
 }

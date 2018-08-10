@@ -43,6 +43,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlFichaProduccion pnlFichaProduccion;
     PnlUsuarios pnlUsuarios;
     PnlTerminado pnlTerminado;
+    PnlProduccionEnProceso pnlProduccionEnProceso;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -1356,7 +1357,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_ptxtContraseniaActionPerformed
 
     private void btnProdEnProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdEnProcActionPerformed
-        // TODO add your handling code here:
+        try {
+            pnlProduccionEnProceso = new PnlProduccionEnProceso();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlProduccionEnProceso, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlProduccionEnProceso.getGraphics());
+            
+            lblVentana.setText("Producción en proceso");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\document_index.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnProdEnProcActionPerformed
 
     private void btnTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminadoActionPerformed

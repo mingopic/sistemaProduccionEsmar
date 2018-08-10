@@ -28,8 +28,7 @@ public class FichaProdCommands {
                 + fp.getIdTambor()
                 + ", " + fp.getNoPiezasTotal()
                 + ", " + fp.getKgTotal()
-                + ", " + fp.getCostoInsumos()
-                + ", '" + fp.getFechaCreacion() + "'";
+                + ", " + fp.getCostoInsumos();
         
         PreparedStatement pstmt = null;
         c.conectar();
@@ -49,7 +48,7 @@ public class FichaProdCommands {
         Statement stmt = null;
         ResultSet rs = null;
 
-        c.conectarCompaq();
+        c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         rs = stmt.executeQuery(query);
         

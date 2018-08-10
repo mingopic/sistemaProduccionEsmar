@@ -25,6 +25,7 @@ as begin
     @idTipoRecorte          int
     , @costoXkg             float
     , @costoInsumosPartida  float
+    , @idProceso            int
     , @precioXpiezaRecCuero float
     , @porcentajePrecioXpza float
     , @costoCueroRecorte    float
@@ -41,10 +42,11 @@ as begin
     (
       rc.costocamion / rc.noTotalPiezas
     )
+    , @idProceso = pd.idProceso
     , @idTipoRecorte = pd.idTipoRecorte
     
   from
-    idPartidaDet pd
+    tb_partidaDet pd
     
     inner join
       tb_recepcionCuero rc
@@ -52,7 +54,7 @@ as begin
       rc.idRecepcionCuero = pd.idRecepcionCuero
   
   where
-    idPartidaDet = @idPartidaDet
+    pd.idPartidaDet = @idPartidaDet
   
   --Obtener el porcentaje del costo del tipo de recorte
   select
@@ -63,9 +65,21 @@ as begin
     
   where
     idTipoRecorte = @idTipoRecorte
-
-  set
-    @costoCueroRecorte = (@noPiezasTotal * @porcentajePrecioXpza) * @precioXpiezaRecCuero
+  
+  if @idProceso = 1
+  begin
+    
+    set
+      @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * @precioXpiezaRecCuero
+  end
+  
+  else 
+  begin
+  
+    set
+      @costoCueroRecorte = 0.0
+  end
+  
   
   insert into
     tb_fichaProdDet

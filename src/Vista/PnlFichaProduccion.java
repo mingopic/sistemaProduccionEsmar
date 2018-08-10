@@ -5,11 +5,15 @@
  */
 package Vista;
 
+import Controlador.FichaProdCommands;
+import Controlador.FichaProdDetCommands;
 import Controlador.PartidaCommands;
 import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TamborCommands;
+import Modelo.FichaProd;
+import Modelo.FichaProdDet;
 import Modelo.InsumosXFichaProd;
 import Modelo.Partida;
 import Modelo.PartidaDetalle;
@@ -17,6 +21,8 @@ import Modelo.PartidaDisp;
 import Modelo.Proceso;
 import Modelo.SubProceso;
 import Modelo.Tambor;
+import static Vista.FrmPrincipal.pnlPrincipalx;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,7 +82,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         } 
         catch (Exception e)
         {
-            System.err.println(e);
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error de BD","Error",JOptionPane.ERROR_MESSAGE);
         }
         
@@ -85,6 +91,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     public void llenarComboProcesos() throws Exception
     {
         prc = new ProcesoCommands();
+        cmbProceso.removeAllItems();
         proceso = prc.llenarComboboxProcesos();
         
         int i=0;
@@ -152,7 +159,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         
         try 
         {
-            
             pc = new PartidaCommands();
             lstPartidas = pc.obtenerPartidasDisponibles(p);
             
@@ -164,6 +170,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 {
                     asignados[i][0] = "0";
                 }
+            }
+            else
+            {
+                asignados = new String[0][0];
             }
             
             String[] cols = new String[]
@@ -262,6 +272,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         };
         dtms.setColumnIdentifiers(columnas);
+        tblPartidasAgregadas.removeAll();
         tblPartidasAgregadas.setModel(dtms);
         tblPartidasAgregadas.getColumnModel().getColumn(4).setMaxWidth(0);
         tblPartidasAgregadas.getColumnModel().getColumn(4).setMinWidth(0);
@@ -429,7 +440,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         try 
         {
             //Validar que se hayan agregado elementos a la tabla tblPartidasAgregadas
-            if (tblPartidasAgregadas.getRowCount() != 0)
+            if (tblPartidasAgregadas.getRowCount() > 0)
             {
                 //Se suma el total de kg de los elementos en la tabla tblPartidasAgregadas
                 Double totalKg = 0.0;
@@ -937,7 +948,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         tblPartidasAgregadas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null}
+
             },
             new String [] {
                 "No. Partida", "Recorte", "No. Piezas", "Peso (Kg)"
@@ -1166,6 +1177,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private void cmbProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProcesoActionPerformed
         actualizarTablaSubProc();
         actualizarTablaPartidasDisponibles();
+        inicializarTablaPartidasAgregadas();
+        actualizarTablaInsumos();
     }//GEN-LAST:event_cmbProcesoActionPerformed
 
     private void tblSubprocesoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubprocesoMouseClicked
@@ -1240,7 +1253,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             } 
             catch (Exception e) 
             {
-                System.err.println(e);
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null,"Error al realizar recorte","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -1323,7 +1336,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         } catch (Exception e)
         {
-            System.err.println(e);
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario de Partidas Disponibles","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnAsignarActionPerformed
@@ -1351,7 +1364,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
         catch (Exception e)
         {
-            System.err.println(e);
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas Agregadas","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -1397,7 +1410,61 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     return;
                 }
             }
-            JOptionPane.showMessageDialog(null, "No trono :D");
+            FichaProd fp = new FichaProd();
+            FichaProdCommands fpc = new FichaProdCommands();
+            
+            fp.setIdTambor(lstTambor.get(cmbTambores.getSelectedIndex()).getIdTambor());
+            fp.setNoPiezasTotal(0);
+            fp.setKgTotal(0.0);
+            for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
+            {
+                fp.setNoPiezasTotal(fp.getNoPiezasTotal() + Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString()));
+                fp.setKgTotal(fp.getKgTotal() + Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString()));
+            }
+            fp.setCostoInsumos(Double.parseDouble(txtTotal.getText()));
+            
+            fpc.agregarFichaProd(fp);
+            
+            PartidaDetalle pd = new PartidaDetalle();
+            PartidaDetalleCommands pdc = new PartidaDetalleCommands();
+            
+            FichaProdDet fpd = new FichaProdDet();
+            FichaProdDetCommands fpdc = new FichaProdDetCommands();
+            
+            fpd.setIdFichaProd(fpc.obtenerUltFichaProduccion());
+            Double costoInsumosFicha = Double.parseDouble(txtTotal.getText());
+            for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
+            {
+                int noPiezasPartida = Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString());
+                
+                pd.setNoPiezas(noPiezasPartida);
+                for (int j = 0; j < lstPartidas.size(); j++)
+                {
+                    if (Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) == lstPartidas.get(j).getIdPartidaDet())
+                    {
+                        pd.setIdPartida(lstPartidas.get(j).getIdPartida());
+                        pd.setIdTipoRecorte(lstPartidas.get(j).getIdTipoRecorte());
+                    }
+                }
+                pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
+             
+                pdc.insPartidaDetFicha(pd);
+                
+                
+                fpd.setIdPartidaDet(pdc.obtenerUltPartidaDet());
+                fpd.setNoPiezasTotal(fp.getNoPiezasTotal());
+                Double kgPartida = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
+                fpd.setKgTotal(fp.getKgTotal());
+                
+                fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
+                
+            }
+            JOptionPane.showMessageDialog(null, "Se generó correctamente la ficha no. "+ fpd.getIdFichaProd());
+            
+            PnlFichaProduccion pnlFichaProduccion =  new PnlFichaProduccion();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
         } 
         catch (Exception e) 
         {

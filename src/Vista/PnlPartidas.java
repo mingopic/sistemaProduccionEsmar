@@ -496,14 +496,20 @@ public class PnlPartidas extends javax.swing.JPanel {
                 String[][] datosPar = new String[filas][5];
 
                 try
-                {
+                {   
+                    p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));
+                    p.setNoTotalPiezas(Integer.parseInt(txtTotalPiezas.getText()));
+                    p.setIdProceso(1);
+                    
+                    pc.agregarPartida(p);
+                    
                     for (int i = 0; i < filas; i++)
                     {
                         datosPD[i] = new PartidaDetalle();
                         datosInC[i] = new InventarioCrudo();
                         
                         datosPD[i].setNoPiezas(Integer.parseInt(tblPartida.getValueAt(i, 2).toString()));
-                        datosPD[i].setIdPartida(Integer.parseInt(txtNoPartida.getText()));
+                        datosPD[i].setIdPartida(pc.obtenerUltIdPartida());
                         datosPD[i].setIdTipoRecorte(1);
                         
                         
@@ -514,11 +520,6 @@ public class PnlPartidas extends javax.swing.JPanel {
                         datosPar[i][4] = tblPartida.getValueAt(i, 5).toString();
                     }
                     
-                    p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));
-                    p.setNoTotalPiezas(Integer.parseInt(txtTotalPiezas.getText()));
-                    p.setIdProceso(1);
-                    
-                    pc.agregarPartida(p);
                     pdc.agregarPartidaDetalle(datosPD,datosPar);
                     icc.actualizarNoPiezasActual(datosPar);
                     JOptionPane.showMessageDialog(null, "Registro insertado correctamente");

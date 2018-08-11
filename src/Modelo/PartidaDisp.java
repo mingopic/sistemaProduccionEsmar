@@ -16,6 +16,7 @@ public class PartidaDisp {
     int idPartidaDet;
     int idPartida;
     int idTipoRecorte;
+    String proveedor;
 
     public int getNoPartida() {
         return noPartida;
@@ -64,6 +65,12 @@ public class PartidaDisp {
     public void setIdTipoRecorte(int idTipoRecorte) {
         this.idTipoRecorte = idTipoRecorte;
     }
-    
-    
+
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
+    }
 }

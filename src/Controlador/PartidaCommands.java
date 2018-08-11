@@ -99,6 +99,7 @@ public class PartidaCommands {
                     pd.setIdPartidaDet(rs.getInt("idPartidaDet"));
                     pd.setIdPartida(rs.getInt("idPartida"));
                     pd.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                    pd.setProveedor(rs.getString("Proveedor"));
                     partidas.add(pd);
                 }
             }
@@ -111,5 +112,31 @@ public class PartidaCommands {
             System.err.println(e);
         }
         return partidas;
+    }
+    
+    //Método que se llama para obtener la idPartidaDet a eliminar
+    public static int obtenerUltIdPartida() throws Exception {
+        String query= "execute sp_obtUltIdPartida";
+        int idPartida = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+            rs.beforeFirst();
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                idPartida = rs.getInt("idPartida");
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return idPartida;
     }
 }

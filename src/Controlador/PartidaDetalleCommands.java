@@ -106,7 +106,7 @@ public class PartidaDetalleCommands {
         c.desconectar();
     }
     
-    //Método que se llama para obtener la idRecepcionCuero a eliminar
+    //Método que se llama para validar la partidaDet a eliminar
     public static int obtenerUltPartidaDet() throws Exception {
         String query= "execute sp_ObtUltPartidaDet ";
         
@@ -132,5 +132,45 @@ public class PartidaDetalleCommands {
         stmt.close();
         c.desconectar();
         return id;
+    }
+    
+    //Método que se llama para obtener la idPartidaDet a eliminar
+    public static int obtenerPartidaDetalleEliminar(PartidaDetalle pd) throws Exception {
+        String query= "execute sp_obtPartDetEli "+pd.getIdPartidaDet()+","+pd.getIdPartida();
+        
+        int datos = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos = rs.getInt("eliminar");
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
+    }
+    
+    //Método que se llama eliminar una partidaDet
+    public void eliminarPartidaDet(PartidaDetalle pd) throws Exception {
+        String query = "exec sp_eliPartidaDet "
+                + pd.getIdPartidaDet();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

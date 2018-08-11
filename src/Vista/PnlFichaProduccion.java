@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -154,6 +155,15 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     {
         p = new Partida();
         p.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+        
+        if (p.getIdProceso() == 2)
+        {
+            btnEliminarPartida.setEnabled(true);
+        }
+        else
+        {
+            btnEliminarPartida.setEnabled(false);
+        }
 
         DefaultTableModel dtm = null;
         
@@ -178,7 +188,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             
             String[] cols = new String[]
             {
-                "No. Partida", "Recorte", "No. Piezas",
+                "No. Partida", "Proveedor - No. Camión", "Recorte", "No. Piezas"
             };
             
             dtm = new DefaultTableModel(){
@@ -191,10 +201,19 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             for (int i = 0; i < lstPartidas.size(); i++)
             {
                 dtm.setValueAt(lstPartidas.get(i).getNoPartida(), i, 0);
-                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 1);
-                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 2);
+                dtm.setValueAt(lstPartidas.get(i).getProveedor(), i, 1);
+                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 2);
+                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 3);
             }
             tblPartidasDisponibles.setModel(dtm);
+            
+            TableColumnModel columnModel = tblPartidasDisponibles.getColumnModel();
+
+            columnModel.getColumn(0).setPreferredWidth(120);
+            columnModel.getColumn(1).setPreferredWidth(260);
+            columnModel.getColumn(2).setPreferredWidth(150);
+            columnModel.getColumn(3).setPreferredWidth(120);
+            
             tblPartidasDisponibles.getTableHeader().setReorderingAllowed(false);
         } 
         catch (Exception e) 
@@ -555,6 +574,60 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
         actualizarTotalInsumos();
     }
+    
+    public void eliminarPartida()
+    {
+        try
+        {
+            int fila = tblPartidasDisponibles.getSelectedRow();
+            
+            if (fila != -1)
+            {
+                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la partida seleccionada?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                {
+                    pd = new PartidaDetalle();
+                    pdc = new PartidaDetalleCommands();
+
+                    pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
+                    pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
+                    
+                    for (int i = 0; i < lstPartidas.size(); i++)
+                    {
+                        if(lstPartidas.get(i).getIdPartida() == pd.getIdPartida() && lstPartidas.get(i).getIdTipoRecorte() != 1)
+                        {
+                            JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+                    }
+
+                    int eliminar = pdc.obtenerPartidaDetalleEliminar(pd);
+
+                    if (eliminar == 1)
+                    {
+                        pdc.eliminarPartidaDet(pd);
+                        JOptionPane.showMessageDialog(null, "Detalle de partida eliminada");
+                        
+                        PnlFichaProduccion pnlFichaProduccion = new PnlFichaProduccion();
+                        pnlPrincipalx.removeAll();
+                        pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+                        pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "La partida que desea eliminar ya esta siendo utilizada en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -593,6 +666,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPartidasDisponibles = new javax.swing.JTable();
         btnAsignar = new javax.swing.JButton();
+        btnEliminarPartida = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -828,8 +902,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -896,18 +970,30 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         });
 
+        btnEliminarPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEliminarPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btnEliminarPartida.setText("Eliminar Partida");
+        btnEliminarPartida.setEnabled(false);
+        btnEliminarPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarPartidaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnRecortar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAsignar)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminarPartida)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -916,9 +1002,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addGap(8, 8, 8)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRecortar)
-                    .addComponent(btnAsignar))
+                    .addComponent(btnAsignar)
+                    .addComponent(btnEliminarPartida))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
         );
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -980,8 +1067,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEliminar)
@@ -1068,8 +1155,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jScrollPane4)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel7)
@@ -1150,9 +1237,9 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1473,10 +1560,15 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnGenerarFichaActionPerformed
 
+    private void btnEliminarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPartidaActionPerformed
+        eliminarPartida();
+    }//GEN-LAST:event_btnEliminarPartidaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarPartida;
     private javax.swing.JButton btnGenerarFicha;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnRecortar;

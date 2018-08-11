@@ -21,6 +21,7 @@ as begin
     , pd.idPartidaDet
     , pa.idPartida
     , tr.idTipoRecorte
+    , [Proveedor] = pr.nombreProveedor + ' - ' + cast(rc.noCamion as varchar)
     
 	from
 		tb_partidaDet as pd
@@ -34,7 +35,17 @@ as begin
       tb_partida as pa
     on
       pa.idPartida = pd.idPartida
-  
+    
+    inner join
+      tb_recepcionCuero rc
+    on
+      rc.idRecepcionCuero = pd.idRecepcionCuero
+    
+    inner join
+      tb_proveedor pr
+    on
+      pr.idProveedor = rc.idProveedor
+    
 	where
 		pd.noPiezasAct > 0
     and pd.idProceso = @idProceso - 1

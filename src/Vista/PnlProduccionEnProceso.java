@@ -10,8 +10,20 @@ import Controlador.FichaProduccionCommands;
 import Controlador.ProcesoCommands;
 import Modelo.FichaProduccion;
 import Modelo.Proceso;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -25,6 +37,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     FichaProduccionCommands fpc;
     String[][] proceso = null;
     String[][] datosProduccionProceso = null;
+    private final String imagen="/Imagenes/logo_esmar.png";
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -178,6 +191,38 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
         }
     }
+    
+    public void generarReporteListaPartidasProdProc()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteListaParProdProc.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("proceso", pr.getDescripcion());
+            parametros.put("fecha", fp.getFecha());
+            parametros.put("fecha1", fp.getFecha1());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -206,9 +251,9 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnBuscarEntrada = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        btnReporteFichaProd = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnReporteListaPartProdProc = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProduccionProceso = new javax.swing.JTable();
 
@@ -389,24 +434,34 @@ try {
     jToolBar2.setFloatable(false);
     jToolBar2.setRollover(true);
 
-    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    jButton1.setText("Reporte de Ficha de Producción");
-    jButton1.setFocusable(false);
-    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jToolBar2.add(jButton1);
+    btnReporteFichaProd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteFichaProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+    btnReporteFichaProd.setText("Reporte de Ficha de Producción");
+    btnReporteFichaProd.setFocusable(false);
+    btnReporteFichaProd.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteFichaProd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteFichaProd.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteFichaProdActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteFichaProd);
 
     jLabel1.setText("   ");
     jToolBar2.add(jLabel1);
 
-    jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    jButton2.setText("Reporte de Listado de Partidas");
-    jButton2.setFocusable(false);
-    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jToolBar2.add(jButton2);
+    btnReporteListaPartProdProc.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteListaPartProdProc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+    btnReporteListaPartProdProc.setText("Reporte de Listado de Partidas");
+    btnReporteListaPartProdProc.setFocusable(false);
+    btnReporteListaPartProdProc.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteListaPartProdProc.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteListaPartProdProc.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteListaPartProdProcActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteListaPartProdProc);
 
     tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
@@ -471,14 +526,23 @@ try {
         actualizarTablaProduccionProceso();
     }//GEN-LAST:event_cmbProcesoActionPerformed
 
+    private void btnReporteFichaProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteFichaProdActionPerformed
+        
+    }//GEN-LAST:event_btnReporteFichaProdActionPerformed
+
+    private void btnReporteListaPartProdProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteListaPartProdProcActionPerformed
+        actualizarTablaProduccionProceso();
+        generarReporteListaPartidasProdProc();
+    }//GEN-LAST:event_btnReporteListaPartProdProcActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
+    private javax.swing.JButton btnReporteFichaProd;
+    private javax.swing.JButton btnReporteListaPartProdProc;
     private javax.swing.JComboBox<String> cmbProceso;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;

@@ -261,4 +261,26 @@ public class SubProcesoCommands {
         pstmt.executeUpdate();
         c.desconectar();
     }
+    
+    //Método para buscar datos de un subProceso en BD
+    public String obtenerSubProcesoXidFichaProd(int idFichaProd) throws Exception
+    {   
+        String query="execute sp_ObtSubProcesoXfichaProd " + idFichaProd;
+        String subproceso = "";
+        
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.next())
+        {
+            subproceso = (rs.getString("descripcion"));
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return subproceso;
+    }
 }

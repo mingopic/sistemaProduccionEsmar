@@ -11,7 +11,7 @@ go
 create table tb_InsumosFichaProdDet
 (
   idIsumoFichaProdDet int not null identity(1,1) primary key
-  , idInsumoFichaProd int not null foreign key references tb_InsumoFichaProd(idInsumoFichaProd)
+  , idInsumoFichaProd int not null foreign key references tb_InsumosFichaProd(idInsumoFichaProd)
   , clave             varchar(50)
   , porcentaje        float
   , Material          varchar(60)

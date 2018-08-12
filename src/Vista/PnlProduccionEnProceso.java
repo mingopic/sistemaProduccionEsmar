@@ -6,12 +6,17 @@
 package Vista;
 
 import Controlador.ConexionBD;
+import Controlador.FichaProdDetCommands;
 import Controlador.FichaProduccionCommands;
 import Controlador.ProcesoCommands;
+import Controlador.SubProcesoCommands;
+import Modelo.FichaProdDet;
 import Modelo.FichaProduccion;
 import Modelo.Proceso;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -203,6 +208,40 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             parametros.put("proceso", pr.getDescripcion());
             parametros.put("fecha", fp.getFecha());
             parametros.put("fecha1", fp.getFecha1());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void generarReporteFichaProd(String idFicha, String noPartida, String subproceso, String tambor, String fecha)
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteFichaProd.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("Fecha", fecha);
+            parametros.put("idFicha",idFicha);
+            parametros.put("noPartida", noPartida);
+            parametros.put("SubProceso", subproceso);
+            parametros.put("Tambor", tambor);
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             
@@ -527,7 +566,58 @@ try {
     }//GEN-LAST:event_cmbProcesoActionPerformed
 
     private void btnReporteFichaProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteFichaProdActionPerformed
-        
+        if (tblProduccionProceso.getSelectedRow() != -1)
+        {
+            try 
+            {
+                int fila = tblProduccionProceso.getSelectedRow();
+                FichaProdDetCommands fpdc = new FichaProdDetCommands();
+                SubProcesoCommands spc= new SubProcesoCommands();
+                List<String> lstPartidas = new ArrayList<>();
+                String noPartida = "";
+                
+                String idFicha = tblProduccionProceso.getValueAt(fila, 0).toString();
+                for (int i = 0; i < tblProduccionProceso.getRowCount(); i++)
+                {
+                    if (tblProduccionProceso.getValueAt(i, 0).toString().equals(idFicha))
+                    {
+                        if (lstPartidas.size() > 0)
+                        {
+                            for (int j = 0; j < lstPartidas.size(); j++)
+                            {
+                                if (!lstPartidas.get(j).equals(tblProduccionProceso.getValueAt(j, 1)))
+                                {
+                                    if (!noPartida.equals(""))
+                                    {
+                                        noPartida = noPartida + ", ";
+                                    }
+                                    noPartida = noPartida + "No. " + tblProduccionProceso.getValueAt(i, 1).toString();
+                                    lstPartidas.add(tblProduccionProceso.getValueAt(i, 1).toString());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            noPartida = "No. " + tblProduccionProceso.getValueAt(i, 1).toString();
+                            lstPartidas.add(tblProduccionProceso.getValueAt(i, 1).toString());
+                        }
+                        
+                    }
+                }
+                String subproceso = spc.obtenerSubProcesoXidFichaProd(Integer.parseInt(idFicha));
+                String tambor = tblProduccionProceso.getValueAt(fila, 7).toString();
+                String fecha = tblProduccionProceso.getValueAt(fila, 8).toString();
+                        
+                generarReporteFichaProd(idFicha, noPartida, subproceso, tambor, fecha);
+            } catch (Exception ex) 
+            {
+                Logger.getLogger(PnlProduccionEnProceso.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnReporteFichaProdActionPerformed
 
     private void btnReporteListaPartProdProcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteListaPartProdProcActionPerformed

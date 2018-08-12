@@ -7,6 +7,8 @@ package Vista;
 
 import Controlador.FichaProdCommands;
 import Controlador.FichaProdDetCommands;
+import Controlador.InsumosFichaProdCommands;
+import Controlador.InsumosFichaProdDetCommands;
 import Controlador.PartidaCommands;
 import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
@@ -14,6 +16,8 @@ import Controlador.SubProcesoCommands;
 import Controlador.TamborCommands;
 import Modelo.FichaProd;
 import Modelo.FichaProdDet;
+import Modelo.InsumosFichaProd;
+import Modelo.InsumosFichaProdDet;
 import Modelo.InsumosXFichaProd;
 import Modelo.Partida;
 import Modelo.PartidaDetalle;
@@ -441,6 +445,9 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 dtmInsumos.setValueAt(lstInsumos.get(i).getClave(), i, 0);
                 dtmInsumos.setValueAt(lstInsumos.get(i).getPorcentaje(), i, 1);
                 dtmInsumos.setValueAt(lstInsumos.get(i).getMaterial(), i, 2);
+                dtmInsumos.setValueAt("", i, 3);
+                dtmInsumos.setValueAt("", i, 4);
+                dtmInsumos.setValueAt("", i, 6);
                 dtmInsumos.setValueAt(lstInsumos.get(i).getPrecioUnitario(), i, 7);
             }
             tblInsXproc.getTableHeader().setReorderingAllowed(false);
@@ -1546,6 +1553,37 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
                 
             }
+            
+            InsumosFichaProd ifp = new InsumosFichaProd();
+            InsumosFichaProdCommands ifpc = new InsumosFichaProdCommands();
+            
+            ifp.setIdFichaProd(fpd.getIdFichaProd());
+            ifp.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+            ifp.setIdSubproceso(Integer.parseInt(subProceso[tblSubproceso.getSelectedRow()][1]));
+            ifp.setIdFormXSubProc(lstInsumos.get(0).getIdFormXSubProc());
+            ifp.setTotalInsumos(costoInsumosFicha);
+            
+            ifpc.agregarInsumosFichaProd(ifp);
+            
+            InsumosFichaProdDet ifpd = new InsumosFichaProdDet();
+            InsumosFichaProdDetCommands ifpdc = new InsumosFichaProdDetCommands();
+            
+            ifpd.setIdInsumoFichaProd(ifpc.obtenerUltIdInsumoFichaProd());
+            for (int i = 0; i < tblInsXproc.getRowCount(); i++)
+            {
+                ifpd.setClave(tblInsXproc.getValueAt(i, 0).toString());
+                ifpd.setPorcentaje(Double.parseDouble(tblInsXproc.getValueAt(i, 1).toString()));
+                ifpd.setMaterial(tblInsXproc.getValueAt(i, 2).toString());
+                ifpd.setTemperatura(tblInsXproc.getValueAt(i, 3).toString());
+                ifpd.setRodar(tblInsXproc.getValueAt(i, 4).toString());
+                ifpd.setCantidad(Double.parseDouble(tblInsXproc.getValueAt(i, 5).toString()));
+                ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
+                ifpd.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i, 7).toString()));
+                ifpd.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i, 8).toString()));
+                
+                ifpdc.insertarInsumosFichaProdDet(ifpd);
+            }
+            
             JOptionPane.showMessageDialog(null, "Se generó correctamente la ficha no. "+ fpd.getIdFichaProd());
             
             PnlFichaProduccion pnlFichaProduccion =  new PnlFichaProduccion();

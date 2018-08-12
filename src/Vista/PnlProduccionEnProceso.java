@@ -510,6 +510,7 @@ try {
             "No. Ficha", "No. Partida", "Tipo Recorte", "No. Piezas", "Kg", "Costo Cuero", "Costo Insumos", "Tambor", "Fecha"
         }
     ));
+    tblProduccionProceso.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane1.setViewportView(tblProduccionProceso);
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

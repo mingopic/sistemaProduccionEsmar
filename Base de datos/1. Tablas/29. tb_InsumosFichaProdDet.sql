@@ -14,12 +14,12 @@ create table tb_InsumosFichaProdDet
   , idInsumoFichaProd int not null foreign key references tb_InsumosFichaProd(idInsumoFichaProd)
   , clave             varchar(50)
   , porcentaje        float
-  , Material          varchar(60)
-  , Temperatura       varchar(50)
-  , Rodar             varchar(50)
+  , material          varchar(60)
+  , temperatura       varchar(50)
+  , rodar             varchar(50)
   , cantidad          float
-  , Observaciones     varchar(100)
-  , PrecioUnitario    float
+  , observaciones     varchar(100)
+  , precioUnitario    float
   , total             float
 )
 go

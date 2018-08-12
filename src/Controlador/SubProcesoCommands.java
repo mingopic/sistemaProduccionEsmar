@@ -101,12 +101,6 @@ public class SubProcesoCommands {
     public static List<InsumosXFichaProd> obtInsXSubProcList(int idSubProceso) throws Exception 
     {
         List<InsumosXFichaProd> lstInsumos = new ArrayList<>();
-//        InsumosXFichaProd obj = new InsumosXFichaProd();
-//        obj.setClave("Remojo");
-//        obj.setPorcentaje(100.0);
-//        obj.setMaterial("Agua");
-//        obj.setPrecioUnitario(0.04);
-//        lstInsumos.add(obj);
         
         String query = "execute sp_obtFormInsXSubProc "+idSubProceso;
 

@@ -64,7 +64,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/group.png"/>
+                  <Image iconType="3" name="/Imagenes/user_add.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Agregar Usuario"/>
               </Properties>
@@ -394,7 +394,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/group.png"/>
+                  <Image iconType="3" name="/Imagenes/user_edit.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Editar Usuario"/>
               </Properties>
@@ -769,7 +769,7 @@
                   <Font name="Tahoma" size="12" style="0"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/add.png"/>
+                  <Image iconType="3" name="/Imagenes/user_add.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Agregar Usuario"/>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -795,7 +795,7 @@
                   <Font name="Tahoma" size="12" style="0"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/pencil.png"/>
+                  <Image iconType="3" name="/Imagenes/user_edit.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Editar"/>
                 <Property name="focusable" type="boolean" value="false"/>

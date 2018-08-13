@@ -13,6 +13,7 @@ import Controlador.SubProcesoCommands;
 import Modelo.FichaProdDet;
 import Modelo.FichaProduccion;
 import Modelo.Proceso;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,7 +203,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         try
         {
             URL path = this.getClass().getResource("/Reportes/ReporteListaParProdProc.jasper");
-            
+
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
             parametros.put("proceso", pr.getDescripcion());
@@ -234,6 +235,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         try
         {
             URL path = this.getClass().getResource("/Reportes/ReporteFichaProd.jasper");
+            InputStream subInputStream = this.getClass().getResourceAsStream("ReporteFichaProd_sub.jasper");
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
@@ -242,6 +244,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             parametros.put("noPartida", noPartida);
             parametros.put("SubProceso", subproceso);
             parametros.put("Tambor", tambor);
+            parametros.put("ruta_subreporte",  getClass().getResource("/Reportes/ReporteFichaProd_sub.jasper").openStream());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             
@@ -280,11 +283,11 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         cmbProceso = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
-        jLabel6 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
+        jrFiltroFechasEntrada = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
         dcFecha1EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
         lbl = new javax.swing.JLabel();
-        jrFiltroFechasEntrada = new javax.swing.JRadioButton();
         jLabel25 = new javax.swing.JLabel();
         dcFecha2EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
         jSeparator1 = new javax.swing.JToolBar.Separator();
@@ -323,13 +326,26 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jToolBar1.add(jLabel5);
         jToolBar1.add(jSeparator2);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("De:");
-        jToolBar1.add(jLabel6);
-
         jLabel27.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar.png"))); // NOI18N
         jToolBar1.add(jLabel27);
+
+        jrFiltroFechasEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jrFiltroFechasEntrada.setFocusable(false);
+        jrFiltroFechasEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jrFiltroFechasEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jrFiltroFechasEntrada.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jrFiltroFechasEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jrFiltroFechasEntrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrFiltroFechasEntradaActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jrFiltroFechasEntrada);
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setText("De:");
+        jToolBar1.add(jLabel6);
 
         dcFecha1EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
@@ -386,19 +402,6 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     lbl.setForeground(new java.awt.Color(227, 222, 222));
     lbl.setText("   ");
     jToolBar1.add(lbl);
-
-    jrFiltroFechasEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jrFiltroFechasEntrada.setFocusable(false);
-    jrFiltroFechasEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    jrFiltroFechasEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    jrFiltroFechasEntrada.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-    jrFiltroFechasEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jrFiltroFechasEntrada.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jrFiltroFechasEntradaActionPerformed(evt);
-        }
-    });
-    jToolBar1.add(jrFiltroFechasEntrada);
 
     jLabel25.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel25.setText("Hasta:");
@@ -584,17 +587,10 @@ try {
                     {
                         if (lstPartidas.size() > 0)
                         {
-                            for (int j = 0; j < lstPartidas.size(); j++)
+                            if (!lstPartidas.contains(tblProduccionProceso.getValueAt(i, 1).toString()))
                             {
-                                if (!lstPartidas.get(j).equals(tblProduccionProceso.getValueAt(j, 1)))
-                                {
-                                    if (!noPartida.equals(""))
-                                    {
-                                        noPartida = noPartida + ", ";
-                                    }
-                                    noPartida = noPartida + "No. " + tblProduccionProceso.getValueAt(i, 1).toString();
-                                    lstPartidas.add(tblProduccionProceso.getValueAt(i, 1).toString());
-                                }
+                                noPartida = noPartida + ", No. " + tblProduccionProceso.getValueAt(i, 1).toString();
+                                lstPartidas.add(tblProduccionProceso.getValueAt(i, 1).toString());
                             }
                         }
                         else
@@ -602,7 +598,6 @@ try {
                             noPartida = "No. " + tblProduccionProceso.getValueAt(i, 1).toString();
                             lstPartidas.add(tblProduccionProceso.getValueAt(i, 1).toString());
                         }
-                        
                     }
                 }
                 String subproceso = spc.obtenerSubProcesoXidFichaProd(Integer.parseInt(idFicha));

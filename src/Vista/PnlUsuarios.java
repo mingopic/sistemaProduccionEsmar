@@ -461,7 +461,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/user_add.png"))); // NOI18N
         jLabel2.setText("Agregar Usuario");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -644,7 +644,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/user_edit.png"))); // NOI18N
         jLabel10.setText("Editar Usuario");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -847,7 +847,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
         jToolBar1.setRollover(true);
 
         btnAgregarUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnAgregarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+        btnAgregarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/user_add.png"))); // NOI18N
         btnAgregarUsuario.setText("Agregar Usuario");
         btnAgregarUsuario.setFocusable(false);
         btnAgregarUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -864,7 +864,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
         jToolBar1.add(jLabel1);
 
         btnEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/user_edit.png"))); // NOI18N
         btnEditar.setText("Editar");
         btnEditar.setFocusable(false);
         btnEditar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

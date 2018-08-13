@@ -495,13 +495,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmRangosPeso = new javax.swing.JMenuItem();
         jmInsumosXproceso = new javax.swing.JMenuItem();
         jmpBaseDeDatos = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jmiExportar = new javax.swing.JMenuItem();
+        jmiImportar = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         dlgLogin.setTitle("Login");
         dlgLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -548,9 +550,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logoEsmar.png"))); // NOI18N
 
-        lblUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"))); // NOI18N
+        lblUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/users_men_women.png"))); // NOI18N
 
-        lblContrasenia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lock.png"))); // NOI18N
+        lblContrasenia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/textfield_password.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1226,7 +1228,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmTambores);
 
-        Usuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/status_online.png"))); // NOI18N
+        Usuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/users_4.png"))); // NOI18N
         Usuarios.setText("Usuarios");
         Usuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1277,23 +1279,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpBaseDeDatos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database.png"))); // NOI18N
         jmpBaseDeDatos.setText("Base de datos");
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_save.png"))); // NOI18N
-        jMenuItem1.setText("Exportar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jmiExportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_save.png"))); // NOI18N
+        jmiExportar.setText("Exportar");
+        jmiExportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jmiExportarActionPerformed(evt);
             }
         });
-        jmpBaseDeDatos.add(jMenuItem1);
+        jmpBaseDeDatos.add(jmiExportar);
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_cleanup.png"))); // NOI18N
-        jMenuItem2.setText("Importar");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jmiImportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/database_cleanup.png"))); // NOI18N
+        jmiImportar.setText("Importar");
+        jmiImportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jmiImportarActionPerformed(evt);
             }
         });
-        jmpBaseDeDatos.add(jMenuItem2);
+        jmpBaseDeDatos.add(jmiImportar);
 
         jMenuBar1.add(jmpBaseDeDatos);
 
@@ -1333,9 +1335,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jmpAcercaDeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpAcercaDeMouseClicked
         JOptionPane.showMessageDialog(null, "'Sistema de Producción ESMAR V.1.0' \n"
-            + "Julio 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
+            + "Agosto 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
             + "\nIng. Mario Daniel Luna Gutiérrez \n\n"
-            + "Dudas, comentarios o reportes de errores: \n"
+            + "Dudas o comentarios: \n"
             + "mingo.utl@gmail.com", "Acerca de...",
             JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jmpAcercaDeMouseClicked
@@ -1364,7 +1366,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlProduccionEnProceso.getGraphics());
             
             lblVentana.setText("Producción en proceso");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\document_index.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cog.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1379,7 +1381,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlTerminado.getGraphics());
             
             lblVentana.setText("Terminado");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cuero.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1394,7 +1396,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlSemiterminado.getGraphics());
             
             lblVentana.setText("Semiterminado");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cuero.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1409,7 +1411,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlCross.getGraphics());
             
             lblVentana.setText("Cross");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cuero.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1424,7 +1426,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlPartidas.getGraphics());
             
             lblVentana.setText("Partidas");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cueroProceso.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1439,7 +1441,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlRecepcionCuero.getGraphics());
             
             lblVentana.setText("Recepción de Cuero");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\lorry.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/lorry.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1453,7 +1455,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlPrincipalx.paintAll(pnlPrincipal.getGraphics());
 
         lblVentana.setText("Inicio");
-        ImageIcon ico=new ImageIcon(".\\src\\imagenes\\house.png");
+        ImageIcon ico=new ImageIcon("src/Imagenes/house.png");
         lblVentana.setIcon(ico);
     }//GEN-LAST:event_btnInicioActionPerformed
 
@@ -1470,7 +1472,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlProveedores.getGraphics());
             
             lblVentana.setText("Catálogo de Proveedores");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\group.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/group.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
@@ -1489,7 +1491,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlSubProcesos.getGraphics());
             
             lblVentana.setText("Catálogo de SubProcesos");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\cueroProceso.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cueroProceso.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
@@ -1547,7 +1549,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlInsXproc.getGraphics());
             
             lblVentana.setText("Insumos Por Proceso");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/flask.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1562,14 +1564,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
             
             lblVentana.setText("Fichas de Producción");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\document_index.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/document_index.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnFichasProduccionActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jmiExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiExportarActionPerformed
         try {
             pnlExportar = new PnlExportar();
             pnlPrincipalx.removeAll();
@@ -1577,14 +1579,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlExportar.getGraphics());
             
             lblVentana.setText("Exportar base de datos");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\database_save.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jmiExportarActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jmiImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiImportarActionPerformed
         try {
             pnlImportar = new PnlImportar();
             pnlPrincipalx.removeAll();
@@ -1592,12 +1594,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlImportar.getGraphics());
             
             lblVentana.setText("Importar Base de datos");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\flask.png");
+            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\database_cleanup.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_jmiImportarActionPerformed
 
     private void jmTamboresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmTamboresActionPerformed
         try 
@@ -1608,7 +1610,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlTambores.getGraphics());
             
             lblVentana.setText("Catálogo de Tambores");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\barril.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/barril.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
@@ -1627,7 +1629,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlUsuarios.getGraphics());
             
             lblVentana.setText("Catálogo de Usuarios");
-            ImageIcon ico=new ImageIcon(".\\src\\imagenes\\status_online.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/users_4.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
@@ -1713,8 +1715,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1735,6 +1735,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmSalir;
     private javax.swing.JMenuItem jmSubProcesos;
     private javax.swing.JMenuItem jmTambores;
+    private javax.swing.JMenuItem jmiExportar;
+    private javax.swing.JMenuItem jmiImportar;
     private javax.swing.JMenu jmpAcercaDe;
     private javax.swing.JMenu jmpArchivo;
     private javax.swing.JMenu jmpBaseDeDatos;

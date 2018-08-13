@@ -668,23 +668,23 @@ public class PnlSubProcesos extends javax.swing.JPanel {
             txtSubProcesoEditar.setText(spr.getDescripcion());
             lblIdSubProceso.setText(String.valueOf(spr.getIdSubProceso()));
             lblIdSubProceso.setVisible(false);
-            if (spr.getIdProceso() == 1)
+            if (spr.getIdProceso() == 2)
             {
                 cmbProcesoEditar.setSelectedIndex(0);
             }
-            else if (spr.getIdProceso() == 2)
+            else if (spr.getIdProceso() == 3)
             {
                 cmbProcesoEditar.setSelectedIndex(1);
             }
-            else if (spr.getIdProceso() == 3)
+            else if (spr.getIdProceso() == 4)
             {
                 cmbProcesoEditar.setSelectedIndex(2);
             }
-            else if (spr.getIdProceso() == 4)
+            else if (spr.getIdProceso() == 5)
             {
                 cmbProcesoEditar.setSelectedIndex(3);
             }
-            else if (spr.getIdProceso() == 5)
+            else if (spr.getIdProceso() == 6)
             {
                 cmbProcesoEditar.setSelectedIndex(4);
             }

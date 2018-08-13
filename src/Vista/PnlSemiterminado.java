@@ -374,7 +374,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     {
         inicializarCamposAgregar();
         
-        dlgAgregar.setSize(400, 400);
+        dlgAgregar.setSize(380, 370);
         dlgAgregar.setPreferredSize(dlgAgregar.getSize());
         dlgAgregar.setLocationRelativeTo(null);
         dlgAgregar.setAlwaysOnTop(true);
@@ -692,7 +692,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         
         inicializarCamposEnvTermi();
         
-        dlgEnvTermi.setSize(400, 380);
+        dlgEnvTermi.setSize(330, 310);
         dlgEnvTermi.setPreferredSize(dlgEnvTermi.getSize());
         dlgEnvTermi.setLocationRelativeTo(null);
         dlgEnvTermi.setAlwaysOnTop(true);
@@ -998,6 +998,8 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
         btnRealizarEntrada.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRealizarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
         btnRealizarEntrada.setText("Aceptar");
@@ -1097,7 +1099,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -1144,7 +1146,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1177,7 +1179,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRealizarEntrada)
                     .addComponent(btnCancelarAgregar))
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout dlgAgregarLayout = new javax.swing.GroupLayout(dlgAgregar.getContentPane());

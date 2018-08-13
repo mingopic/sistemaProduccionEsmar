@@ -358,7 +358,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
     public void abrirDialogoAgregar()
     {   try 
         {
-            dlgAgregarUsuario.setSize(580, 310);
+            dlgAgregarUsuario.setSize(580, 290);
             dlgAgregarUsuario.setPreferredSize(dlgAgregarUsuario.getSize());
             dlgAgregarUsuario.setLocationRelativeTo(null);
             dlgAgregarUsuario.setAlwaysOnTop(true);
@@ -379,7 +379,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
     public void abrirDialogoEditar()
     {   try 
         {
-            dlgEditarUsuario.setSize(580, 310);
+            dlgEditarUsuario.setSize(580, 290);
             dlgEditarUsuario.setPreferredSize(dlgEditarUsuario.getSize());
             dlgEditarUsuario.setLocationRelativeTo(null);
             dlgEditarUsuario.setAlwaysOnTop(true);
@@ -532,13 +532,13 @@ public class PnlUsuarios extends javax.swing.JPanel {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(chkContabilidadAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(chkCrossAgregar))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkProduccionAgregar)
                             .addComponent(chkSistemasAgregar))
-                        .addGap(8, 8, 8)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkSemiterminadoAgregar)
                             .addComponent(chkTerminadoAgregar))))
@@ -591,7 +591,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
                                 .addComponent(cmbEstatusAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -718,13 +718,13 @@ public class PnlUsuarios extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(chkContabilidadEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(chkCrossEditar))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkProduccionEditar)
                             .addComponent(chkSistemasEditar))
-                        .addGap(8, 8, 8)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkSemiterminadoEditar)
                             .addComponent(chkTerminadoEditar))))

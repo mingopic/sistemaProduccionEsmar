@@ -1125,7 +1125,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         tblInsXproc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Clave", "%", "Material", "Temp", "Rodar", "Cantidad", "Observaciones", "P/U", "Total"
@@ -1485,111 +1485,118 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private void btnGenerarFichaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarFichaActionPerformed
         try 
         {
-            for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++) 
+            if (tblInsXproc.getRowCount() > 0)
             {
-                Double noPiezas = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 2).toString());
-                Double peso = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
-                if (noPiezas <= 0 || peso <= 0)
+                for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++) 
                 {
-                    JOptionPane.showMessageDialog(null, "Todos los campos No. Piezas y Peso (Kg), \nde la tabla Partidas agregadas deben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-            }
-            for (int i = 0; i < lstInsumos.size(); i++) 
-            {
-                Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
-                if (precioUnitario <= 0.0)
-                {
-                    JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-            }
-            FichaProd fp = new FichaProd();
-            FichaProdCommands fpc = new FichaProdCommands();
-            
-            fp.setIdTambor(lstTambor.get(cmbTambores.getSelectedIndex()).getIdTambor());
-            fp.setNoPiezasTotal(0);
-            fp.setKgTotal(0.0);
-            for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
-            {
-                fp.setNoPiezasTotal(fp.getNoPiezasTotal() + Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString()));
-                fp.setKgTotal(fp.getKgTotal() + Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString()));
-            }
-            fp.setCostoInsumos(Double.parseDouble(txtTotal.getText()));
-            
-            fpc.agregarFichaProd(fp);
-            
-            PartidaDetalle pd = new PartidaDetalle();
-            PartidaDetalleCommands pdc = new PartidaDetalleCommands();
-            
-            FichaProdDet fpd = new FichaProdDet();
-            FichaProdDetCommands fpdc = new FichaProdDetCommands();
-            
-            fpd.setIdFichaProd(fpc.obtenerUltFichaProduccion());
-            Double costoInsumosFicha = Double.parseDouble(txtTotal.getText());
-            for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
-            {
-                int noPiezasPartida = Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString());
-                
-                pd.setNoPiezas(noPiezasPartida);
-                for (int j = 0; j < lstPartidas.size(); j++)
-                {
-                    if (Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) == lstPartidas.get(j).getIdPartidaDet())
+                    Double noPiezas = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 2).toString());
+                    Double peso = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
+                    if (noPiezas <= 0 || peso <= 0)
                     {
-                        pd.setIdPartida(lstPartidas.get(j).getIdPartida());
-                        pd.setIdTipoRecorte(lstPartidas.get(j).getIdTipoRecorte());
+                        JOptionPane.showMessageDialog(null, "Todos los campos No. Piezas y Peso (Kg), \nde la tabla Partidas agregadas deben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
                 }
-                pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
-             
-                pdc.insPartidaDetFicha(pd);
-                
-                
-                fpd.setIdPartidaDet(pdc.obtenerUltPartidaDet());
-                fpd.setNoPiezasTotal(fp.getNoPiezasTotal());
-                Double kgPartida = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
-                fpd.setKgTotal(fp.getKgTotal());
-                
-                fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
-                
+                for (int i = 0; i < lstInsumos.size(); i++) 
+                {
+                    Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
+                    if (precioUnitario <= 0.0)
+                    {
+                        JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+                FichaProd fp = new FichaProd();
+                FichaProdCommands fpc = new FichaProdCommands();
+
+                fp.setIdTambor(lstTambor.get(cmbTambores.getSelectedIndex()).getIdTambor());
+                fp.setNoPiezasTotal(0);
+                fp.setKgTotal(0.0);
+                for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
+                {
+                    fp.setNoPiezasTotal(fp.getNoPiezasTotal() + Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString()));
+                    fp.setKgTotal(fp.getKgTotal() + Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString()));
+                }
+                fp.setCostoInsumos(Double.parseDouble(txtTotal.getText()));
+
+                fpc.agregarFichaProd(fp);
+
+                PartidaDetalle pd = new PartidaDetalle();
+                PartidaDetalleCommands pdc = new PartidaDetalleCommands();
+
+                FichaProdDet fpd = new FichaProdDet();
+                FichaProdDetCommands fpdc = new FichaProdDetCommands();
+
+                fpd.setIdFichaProd(fpc.obtenerUltFichaProduccion());
+                Double costoInsumosFicha = Double.parseDouble(txtTotal.getText());
+                for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
+                {
+                    int noPiezasPartida = Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString());
+
+                    pd.setNoPiezas(noPiezasPartida);
+                    for (int j = 0; j < lstPartidas.size(); j++)
+                    {
+                        if (Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) == lstPartidas.get(j).getIdPartidaDet())
+                        {
+                            pd.setIdPartida(lstPartidas.get(j).getIdPartida());
+                            pd.setIdTipoRecorte(lstPartidas.get(j).getIdTipoRecorte());
+                        }
+                    }
+                    pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
+
+                    pdc.insPartidaDetFicha(pd);
+
+
+                    fpd.setIdPartidaDet(pdc.obtenerUltPartidaDet());
+                    fpd.setNoPiezasTotal(fp.getNoPiezasTotal());
+                    Double kgPartida = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
+                    fpd.setKgTotal(fp.getKgTotal());
+
+                    fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
+
+                }
+
+                InsumosFichaProd ifp = new InsumosFichaProd();
+                InsumosFichaProdCommands ifpc = new InsumosFichaProdCommands();
+
+                ifp.setIdFichaProd(fpd.getIdFichaProd());
+                ifp.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+                ifp.setIdSubproceso(Integer.parseInt(subProceso[tblSubproceso.getSelectedRow()][1]));
+                ifp.setIdFormXSubProc(lstInsumos.get(0).getIdFormXSubProc());
+                ifp.setTotalInsumos(costoInsumosFicha);
+
+                ifpc.agregarInsumosFichaProd(ifp);
+
+                InsumosFichaProdDet ifpd = new InsumosFichaProdDet();
+                InsumosFichaProdDetCommands ifpdc = new InsumosFichaProdDetCommands();
+
+                ifpd.setIdInsumoFichaProd(ifpc.obtenerUltIdInsumoFichaProd());
+                for (int i = 0; i < tblInsXproc.getRowCount(); i++)
+                {
+                    ifpd.setClave(tblInsXproc.getValueAt(i, 0).toString());
+                    ifpd.setPorcentaje(Double.parseDouble(tblInsXproc.getValueAt(i, 1).toString()));
+                    ifpd.setMaterial(tblInsXproc.getValueAt(i, 2).toString());
+                    ifpd.setTemperatura(tblInsXproc.getValueAt(i, 3).toString());
+                    ifpd.setRodar(tblInsXproc.getValueAt(i, 4).toString());
+                    ifpd.setCantidad(Double.parseDouble(tblInsXproc.getValueAt(i, 5).toString()));
+                    ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
+                    ifpd.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i, 7).toString()));
+                    ifpd.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i, 8).toString()));
+
+                    ifpdc.insertarInsumosFichaProdDet(ifpd);
+                }
+
+                JOptionPane.showMessageDialog(null, "Se generó correctamente la ficha no. "+ fpd.getIdFichaProd());
+
+                PnlFichaProduccion pnlFichaProduccion =  new PnlFichaProduccion();
+                pnlPrincipalx.removeAll();
+                pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+                pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
             }
-            
-            InsumosFichaProd ifp = new InsumosFichaProd();
-            InsumosFichaProdCommands ifpc = new InsumosFichaProdCommands();
-            
-            ifp.setIdFichaProd(fpd.getIdFichaProd());
-            ifp.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
-            ifp.setIdSubproceso(Integer.parseInt(subProceso[tblSubproceso.getSelectedRow()][1]));
-            ifp.setIdFormXSubProc(lstInsumos.get(0).getIdFormXSubProc());
-            ifp.setTotalInsumos(costoInsumosFicha);
-            
-            ifpc.agregarInsumosFichaProd(ifp);
-            
-            InsumosFichaProdDet ifpd = new InsumosFichaProdDet();
-            InsumosFichaProdDetCommands ifpdc = new InsumosFichaProdDetCommands();
-            
-            ifpd.setIdInsumoFichaProd(ifpc.obtenerUltIdInsumoFichaProd());
-            for (int i = 0; i < tblInsXproc.getRowCount(); i++)
+            else
             {
-                ifpd.setClave(tblInsXproc.getValueAt(i, 0).toString());
-                ifpd.setPorcentaje(Double.parseDouble(tblInsXproc.getValueAt(i, 1).toString()));
-                ifpd.setMaterial(tblInsXproc.getValueAt(i, 2).toString());
-                ifpd.setTemperatura(tblInsXproc.getValueAt(i, 3).toString());
-                ifpd.setRodar(tblInsXproc.getValueAt(i, 4).toString());
-                ifpd.setCantidad(Double.parseDouble(tblInsXproc.getValueAt(i, 5).toString()));
-                ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
-                ifpd.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i, 7).toString()));
-                ifpd.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i, 8).toString()));
-                
-                ifpdc.insertarInsumosFichaProdDet(ifpd);
+                JOptionPane.showMessageDialog(null, "Es necesario configurar insumos \npara generar fichas de este subProceso","Error",JOptionPane.ERROR_MESSAGE);
             }
-            
-            JOptionPane.showMessageDialog(null, "Se generó correctamente la ficha no. "+ fpd.getIdFichaProd());
-            
-            PnlFichaProduccion pnlFichaProduccion =  new PnlFichaProduccion();
-            pnlPrincipalx.removeAll();
-            pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
-            pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
         } 
         catch (Exception e) 
         {

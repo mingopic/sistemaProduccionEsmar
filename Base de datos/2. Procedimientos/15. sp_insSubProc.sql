@@ -10,7 +10,7 @@ go
 
 create procedure sp_insSubProc
   (
-    @subProceso varchar(20)
+    @subProceso varchar(50)
     , @proceso  varchar(20)
   )
   as begin

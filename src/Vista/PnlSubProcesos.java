@@ -197,8 +197,8 @@ public class PnlSubProcesos extends javax.swing.JPanel {
                     return;
                 }
 
-                //Validar que el nombre del subProceso no sea mayor a 20 caracteres
-                if (spr.getDescripcion().length() > 20)
+                //Validar que el nombre del subProceso no sea mayor a 50 caracteres
+                if (spr.getDescripcion().length() > 50)
                 {   
                     dlgEditarProveedor.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Solo se admiten 20 caracteres \npara el nombre del subProceso","Mensaje",JOptionPane.WARNING_MESSAGE);

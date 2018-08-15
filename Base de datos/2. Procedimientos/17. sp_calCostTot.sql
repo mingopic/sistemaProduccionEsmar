@@ -89,7 +89,15 @@ as begin
       )
   )
   
-  set @humedadAcepCalc = @humedadAcep * @kgTotales
+  if (@tarimas = 0)
+  begin
+    set @humedadAcepCalc = @humedadAcep * @kgTotales
+  end
+  
+  else
+  begin
+    set @humedadAcepCalc = @humedadAcep * (@kgTotales+@tarimas)
+  end
   
   set @cacheteAcep =
   (

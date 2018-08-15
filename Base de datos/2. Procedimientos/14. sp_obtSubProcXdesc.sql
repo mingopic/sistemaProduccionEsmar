@@ -10,7 +10,7 @@ go
 
 create procedure sp_obtSubProcXdesc
   (
-    @subProceso varchar(20)
+    @subProceso varchar(50)
   )
   as begin
   

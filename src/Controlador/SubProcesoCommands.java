@@ -81,8 +81,17 @@ public class SubProcesoCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) 
             {
-                datos[i][0] = rs.getString("clave");
-                datos[i][1] = rs.getString("porcentaje");
+                
+                if (rs.getString("idInsumo").equals("0"))
+                {
+                    datos[i][0] = "";
+                    datos[i][1] = "";
+                }
+                else
+                {
+                    datos[i][0] = rs.getString("clave");
+                    datos[i][1] = rs.getString("porcentaje");
+                }
                 datos[i][2] = rs.getString("nombreProducto");
                 datos[i][3] = rs.getString("idInsumo");
                 datos[i][4] = rs.getString("idFormXSubProc");
@@ -122,8 +131,16 @@ public class SubProcesoCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     InsumosXFichaProd obj = new InsumosXFichaProd();
-                    obj.setClave(rs.getString("clave"));
-                    obj.setPorcentaje(rs.getDouble("porcentaje"));
+                    if (rs.getInt("idInsumo") == 0)
+                    {
+                        obj.setPorcentaje(0.0);
+                        obj.setClave("");
+                    }
+                    else
+                    {
+                        obj.setPorcentaje(rs.getDouble("porcentaje"));
+                        obj.setClave(rs.getString("clave"));
+                    }
                     obj.setMaterial(rs.getString("nombreProducto"));
                     obj.setIdProducto(rs.getInt("idInsumo"));
                     obj.setIdFormXSubProc(rs.getInt("IdFormXSubProc"));

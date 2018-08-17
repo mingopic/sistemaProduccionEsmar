@@ -16,6 +16,7 @@ import Modelo.Insumo;
 import Modelo.InsumoPorProceso;
 import Modelo.Proceso;
 import Modelo.SubProceso;
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -73,8 +74,10 @@ public class PnlInsXproc extends javax.swing.JPanel {
         llenarComboInsumos();
         actualizarTablaSubProc();
         btnAgregarInsumo.setEnabled(false);
+        btnAgregarEspacio.setEnabled(false);
         btnQuitarInsumo.setEnabled(false);
         btnGuardarInsumo.setEnabled(false);
+        btnCopiarFormula.setEnabled(false);
         cmbInsumo.setEnabled(false);
     }
     
@@ -134,6 +137,72 @@ public class PnlInsXproc extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
         }
     }
+    
+    private void guardarFormula(int idSubProceso)
+    {
+        if (tblInsXSubProc.getRowCount() <= 0)
+        {
+            JOptionPane.showMessageDialog(null, "No hay registros para guardar","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+        else
+        {
+            if (JOptionPane.showConfirmDialog(null, "Realmente desea guardar las modificaciones", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+            {
+                int filas = tblInsXSubProc.getRowCount();
+                FormulaXSubProceso fxs = new FormulaXSubProceso();
+                FormulaXSubProcesoCommands fxsc = new FormulaXSubProcesoCommands();
+                InsumoPorProceso[] datosIXP = new InsumoPorProceso[filas];
+                ippc = new InsumoPorProcesoCommands();
+
+                try
+                {
+                    for (int i = 0; i < filas; i++)
+                    {
+                        datosIXP[i] = new InsumoPorProceso();
+                        try 
+                        {
+                            if (tblInsXSubProc.getValueAt(i, 0).toString().length() > 50) {
+                                JOptionPane.showMessageDialog(null, "La clave no puede superar los 50 caracteres","Error",JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                            if (tblInsXSubProc.getValueAt(i, 3).toString().equals("0"))
+                            {
+                                datosIXP[i].setClave("");
+                            }
+                            else
+                            {
+                                datosIXP[i].setClave(tblInsXSubProc.getValueAt(i, 0).toString());
+                            }
+                        } catch (Exception e)
+                        {
+                            datosIXP[i].setClave("");
+                        }
+                        //validar si el renglon se agrego por presionar btnAgregarEspacio
+                        if (tblInsXSubProc.getValueAt(i, 3).toString().equals("0"))
+                        {
+                            datosIXP[i].setPorcentaje((float) 0.0);
+                            datosIXP[i].setNombreProducto("");
+                            datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 3).toString()));
+                        }
+                        else
+                        {
+                            datosIXP[i].setPorcentaje(Float.parseFloat(tblInsXSubProc.getValueAt(i, 1).toString()));
+                            datosIXP[i].setNombreProducto(tblInsXSubProc.getValueAt(i, 2).toString());
+                            datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 3).toString()));
+                        } 
+                    }
+                    fxs.setIdSubproceso(idSubProceso);
+                    fxsc.agregarFormXSubProc(fxs);
+                    ippc.agregarInsumoXProc(datosIXP, idSubProceso);
+                    JOptionPane.showMessageDialog(null, "Fórmula guardada correctamente");
+                } catch (Exception e)
+                {
+                    System.err.println(e);
+                    JOptionPane.showMessageDialog(null, "Ingrese datos validos","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
             
     /**
      * This method is called from within the constructor to initialize the form.
@@ -151,12 +220,14 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         btnGuardarInsumo = new javax.swing.JButton();
         lblSubProceso = new javax.swing.JLabel();
+        btnCopiarFormula = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         cmbInsumo = new javax.swing.JComboBox<>();
         btnAgregarInsumo = new javax.swing.JButton();
         btnQuitarInsumo = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInsXSubProc = new javax.swing.JTable();
+        btnAgregarEspacio = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -186,6 +257,14 @@ public class PnlInsXproc extends javax.swing.JPanel {
 
         lblSubProceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
+        btnCopiarFormula.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar_copy.png"))); // NOI18N
+        btnCopiarFormula.setText("Copiar Fórmula");
+        btnCopiarFormula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopiarFormulaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -194,16 +273,19 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblSubProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblSubProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(btnGuardarInsumo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCopiarFormula)
+                .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                .addComponent(btnGuardarInsumo))
+                .addComponent(btnGuardarInsumo)
+                .addComponent(btnCopiarFormula))
             .addComponent(lblSubProceso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -249,6 +331,14 @@ public class PnlInsXproc extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tblInsXSubProc);
 
+        btnAgregarEspacio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/note_add.png"))); // NOI18N
+        btnAgregarEspacio.setText("Agregar Espacio");
+        btnAgregarEspacio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarEspacioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -262,11 +352,12 @@ public class PnlInsXproc extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAgregarInsumo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnQuitarInsumo)
-                        .addGap(0, 278, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgregarEspacio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnQuitarInsumo)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -278,7 +369,8 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(cmbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregarInsumo)
-                    .addComponent(btnQuitarInsumo))
+                    .addComponent(btnQuitarInsumo)
+                    .addComponent(btnAgregarEspacio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                 .addContainerGap())
@@ -342,16 +434,16 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(cmbProceso, 0, 168, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -402,13 +494,14 @@ public class PnlInsXproc extends javax.swing.JPanel {
       subP = new SubProceso();
       if(evt.getClickCount() == 2){
           btnAgregarInsumo.setEnabled(true);
+          btnAgregarEspacio.setEnabled(true);
           btnQuitarInsumo.setEnabled(true);
           btnGuardarInsumo.setEnabled(true);
+          btnCopiarFormula.setEnabled(true);
           cmbInsumo.setEnabled(true);
           lblSubProceso.setText(tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString());
           
           String idAux = "";
-//        JOptionPane.showMessageDialog(null, "Se ha seleccionado "+tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString());
           String descripcion = tblSubproceso.getValueAt(tblSubproceso.getSelectedRow(), 0).toString();
             if (subProceso[tblSubproceso.getSelectedRow()][0].equals(descripcion))
             {
@@ -479,57 +572,64 @@ public class PnlInsXproc extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbInsumoActionPerformed
 
     private void btnGuardarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarInsumoActionPerformed
-        if (tblInsXSubProc.getRowCount() <= 0)
-        {
-            JOptionPane.showMessageDialog(null, "No hay registros para guardar","Advertencia",JOptionPane.WARNING_MESSAGE);
-        }
-        else
-        {
-            if (JOptionPane.showConfirmDialog(null, "Realmente desea guardar las modificaciones", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
-            {
-                int idSubProceso = idSubproceso;
-                int filas = tblInsXSubProc.getRowCount();
-                FormulaXSubProceso fxs = new FormulaXSubProceso();
-                FormulaXSubProcesoCommands fxsc = new FormulaXSubProcesoCommands();
-                InsumoPorProceso[] datosIXP = new InsumoPorProceso[filas];
-                ippc = new InsumoPorProcesoCommands();
-
-                try
-                {
-                    for (int i = 0; i < filas; i++)
-                    {
-                        datosIXP[i] = new InsumoPorProceso();
-                        try 
-                        {
-                            if (tblInsXSubProc.getValueAt(i, 0).toString().length() > 10) {
-                                JOptionPane.showMessageDialog(null, "La clave no puede superar los 10 caracteres","Error",JOptionPane.ERROR_MESSAGE);
-                                return;
-                            }
-                            datosIXP[i].setClave(tblInsXSubProc.getValueAt(i, 0).toString());
-                        } catch (Exception e)
-                        {
-                            datosIXP[i].setClave("");
-                        }
-                        datosIXP[i].setPorcentaje(Float.parseFloat(tblInsXSubProc.getValueAt(i, 1).toString()));
-                        datosIXP[i].setNombreProducto(tblInsXSubProc.getValueAt(i, 2).toString());
-                        datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 3).toString()));
-                    }
-                    fxs.setIdSubproceso(idSubProceso);
-                    fxsc.agregarFormXSubProc(fxs);
-                    ippc.agregarInsumoXProc(datosIXP, idSubProceso);
-                    JOptionPane.showMessageDialog(null, "Registro insertado correctamente");
-                } catch (Exception e)
-                {
-                    System.err.println(e);
-                    JOptionPane.showMessageDialog(null, "Ingrese datos validos","Error",JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+        guardarFormula(idSubproceso);
     }//GEN-LAST:event_btnGuardarInsumoActionPerformed
+
+    private void btnAgregarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEspacioActionPerformed
+        String datos[]=new String[4];
+        datos[0]= "";
+        datos[1]= "";
+        datos[2]= "";
+        datos[3]= "0";
+        dtmInsumos.addRow(datos);
+    }//GEN-LAST:event_btnAgregarEspacioActionPerformed
+
+    private void btnCopiarFormulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarFormulaActionPerformed
+        try 
+        {
+            int idSubProceso = 0;
+            String subProceso;
+            pr = new Proceso();
+            pr.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+            
+            String[][] subprocesosAux = subPc.obtenerListaSubprocesosXid(pr);
+            
+            String[] subprocesos = new String[subprocesosAux.length];
+            for (int i = 0; i < subprocesosAux.length; i++)
+            {
+                subprocesos[i] = subprocesosAux[i][0];
+            }
+            
+            subProceso = (String) JOptionPane.showInputDialog(null, "Seleccione el SubProceso al que será copiada la fórmula","Copiar Fórmula",JOptionPane.INFORMATION_MESSAGE, null, subprocesos, subprocesos[0]);
+            
+            if (subProceso != null)
+            {
+                for (int i = 0; i < subprocesosAux.length; i++) 
+                {
+                    if (subprocesosAux[i][0].equals(subProceso)) 
+                    {
+                        idSubProceso = Integer.parseInt(subprocesosAux[i][1]);
+                    }
+                }
+                guardarFormula(idSubProceso);   
+            }
+            else
+            {
+                return;
+            }
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_btnCopiarFormulaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarEspacio;
     private javax.swing.JButton btnAgregarInsumo;
+    private javax.swing.JButton btnCopiarFormula;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardarInsumo;
     private javax.swing.JButton btnQuitarInsumo;

@@ -10,10 +10,23 @@ go
 
 create procedure sp_ObtInsumosFichaProd
 (
-  @idInsumoFichaProd int
+  @idFichaProd int
 )
 as begin
-
+  
+  declare
+    @idInsumoFichaProd int
+  
+  select
+    @idInsumoFichaProd = idInsumoFichaProd
+  
+  from
+    tb_InsumosFichaProd
+  
+  where
+    idFichaProd = @idFichaProd
+   
+   
   select
     clave
     , porcentaje

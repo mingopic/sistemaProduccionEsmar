@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a33bdac8-c79c-41df-a36d-9ac589d49aa8">
 	<property name="ireport.zoom" value="1.610510000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="95"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -205,7 +205,7 @@
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{porcentaje}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{porcentaje}.equals( 0.0 ) ? "" : $F{porcentaje}.toString()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="101" y="0" width="61" height="18" uuid="de546cdc-be7f-4080-b052-26e70f565c05"/>
@@ -233,7 +233,7 @@
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{cantidad}.equals( 0.0 ) ? "" : $F{cantidad}.toString()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="345" y="0" width="98" height="18" uuid="19df3c6f-b6b8-470b-8cda-c405151d4a37"/>
@@ -247,14 +247,14 @@
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PrecioUnitario}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PrecioUnitario}.equals( 0.0 ) ? "" : $F{PrecioUnitario}.toString()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="488" y="0" width="61" height="18" uuid="f9b30cd4-9670-4fee-a523-5d04015858ab"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{total}.equals( 0.0 ) ? "" : $F{total}.toString()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

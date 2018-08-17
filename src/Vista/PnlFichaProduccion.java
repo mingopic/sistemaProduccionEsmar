@@ -442,13 +442,23 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             dtmInsumos.setRowCount(lstInsumos.size());
             for (int i = 0; i < lstInsumos.size(); i++)
             {
-                dtmInsumos.setValueAt(lstInsumos.get(i).getClave(), i, 0);
-                dtmInsumos.setValueAt(lstInsumos.get(i).getPorcentaje(), i, 1);
+                if (lstInsumos.get(i).getIdProducto() == 0)
+                {
+                    dtmInsumos.setValueAt("", i, 0);
+                    dtmInsumos.setValueAt("", i, 1);
+                    dtmInsumos.setValueAt("", i, 7);
+                }
+                else
+                {
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getClave(), i, 0);
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getPorcentaje(), i, 1);
+                    dtmInsumos.setValueAt(lstInsumos.get(i).getPrecioUnitario(), i, 7);
+                }
                 dtmInsumos.setValueAt(lstInsumos.get(i).getMaterial(), i, 2);
                 dtmInsumos.setValueAt("", i, 3);
                 dtmInsumos.setValueAt("", i, 4);
                 dtmInsumos.setValueAt("", i, 6);
-                dtmInsumos.setValueAt(lstInsumos.get(i).getPrecioUnitario(), i, 7);
+                
             }
             tblInsXproc.getTableHeader().setReorderingAllowed(false);
             tblInsXproc.setModel(dtmInsumos);
@@ -477,18 +487,29 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 //Se calcula la cantidad y total de cada elemento de la tabla tblInsXproc
                 for (int i = 0; i < lstInsumos.size(); i++)
                 {
-                    
-                    String precioUnitario = (String.format("%.2f",Double.parseDouble(String.valueOf(tblInsXproc.getValueAt(i, 7)))));
-                    lstInsumos.get(i).setPrecioUnitario(Double.parseDouble(precioUnitario));
-                    
-                    String cantidad = (String.format("%.2f",Double.parseDouble(String.valueOf((lstInsumos.get(i).getPorcentaje()*totalKg)/100))));
-                    lstInsumos.get(i).setCantidad(Double.parseDouble(cantidad));
-                    
-                    String total = (String.format("%.2f",Double.parseDouble(String.valueOf(lstInsumos.get(i).getCantidad()*lstInsumos.get(i).getPrecioUnitario()))));
-                    lstInsumos.get(i).setTotal(Double.parseDouble(total));
+                    if (lstInsumos.get(i).getIdProducto() != 0)
+                    {
+                        String precioUnitario = (String.format("%.2f",Double.parseDouble(String.valueOf(tblInsXproc.getValueAt(i, 7)))));
+                        lstInsumos.get(i).setPrecioUnitario(Double.parseDouble(precioUnitario));
 
-                    dtmInsumos.setValueAt(lstInsumos.get(i).getCantidad(), i, 5);
-                    dtmInsumos.setValueAt(lstInsumos.get(i).getTotal(), i, 8);
+                        String cantidad = (String.format("%.2f",Double.parseDouble(String.valueOf((lstInsumos.get(i).getPorcentaje()*totalKg)/100))));
+                        lstInsumos.get(i).setCantidad(Double.parseDouble(cantidad));
+
+                        String total = (String.format("%.2f",Double.parseDouble(String.valueOf(lstInsumos.get(i).getCantidad()*lstInsumos.get(i).getPrecioUnitario()))));
+                        lstInsumos.get(i).setTotal(Double.parseDouble(total));
+
+                        dtmInsumos.setValueAt(lstInsumos.get(i).getCantidad(), i, 5);
+                        dtmInsumos.setValueAt(lstInsumos.get(i).getTotal(), i, 8);
+                    }
+                    else
+                    {
+                        lstInsumos.get(i).setPrecioUnitario(0.0);
+                        lstInsumos.get(i).setCantidad(0.0);
+                        lstInsumos.get(i).setTotal(0.0);
+                        
+                        dtmInsumos.setValueAt("", i, 5);
+                        dtmInsumos.setValueAt("", i, 8);
+                    }
                 }
             }
             else
@@ -499,9 +520,17 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 {
                     lstInsumos.get(i).setCantidad(0.0);
                     lstInsumos.get(i).setTotal(0.0);
-
-                    dtmInsumos.setValueAt(lstInsumos.get(i).getCantidad(), i, 5);
-                    dtmInsumos.setValueAt(lstInsumos.get(i).getTotal(), i, 8);
+                    
+                    if (lstInsumos.get(i).getIdProducto() == 0)
+                    {
+                        dtmInsumos.setValueAt("", i, 5);
+                        dtmInsumos.setValueAt("", i, 8);
+                    }
+                    else
+                    {
+                        dtmInsumos.setValueAt(lstInsumos.get(i).getCantidad(), i, 5);
+                        dtmInsumos.setValueAt(lstInsumos.get(i).getTotal(), i, 8);
+                    }
                 }
             }
             //obtener costo total de insumos
@@ -568,8 +597,15 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             try 
             {
-                Double pu = Double.parseDouble(tblInsXproc.getValueAt(fila, 7).toString());
-                lstInsumos.get(fila).setPrecioUnitario(pu);
+                if (lstInsumos.get(fila).getIdProducto() != 0)
+                {
+                    Double pu = Double.parseDouble(tblInsXproc.getValueAt(fila, 7).toString());
+                    lstInsumos.get(fila).setPrecioUnitario(pu);
+                }
+                else
+                {
+                    tblInsXproc.setValueAt("", fila, 7);
+                }
             } 
             catch (Exception e) 
             {
@@ -1499,11 +1535,14 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 }
                 for (int i = 0; i < lstInsumos.size(); i++) 
                 {
-                    Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
-                    if (precioUnitario <= 0.0)
+                    if (lstInsumos.get(i).getIdProducto() != 0)
                     {
-                        JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-                        return;
+                        Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
+                        if (precioUnitario <= 0.0)
+                        {
+                            JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
                     }
                 }
                 FichaProd fp = new FichaProd();
@@ -1553,7 +1592,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     fpd.setKgTotal(fp.getKgTotal());
 
                     fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
-
                 }
 
                 InsumosFichaProd ifp = new InsumosFichaProd();
@@ -1573,15 +1611,30 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 ifpd.setIdInsumoFichaProd(ifpc.obtenerUltIdInsumoFichaProd());
                 for (int i = 0; i < tblInsXproc.getRowCount(); i++)
                 {
-                    ifpd.setClave(tblInsXproc.getValueAt(i, 0).toString());
-                    ifpd.setPorcentaje(Double.parseDouble(tblInsXproc.getValueAt(i, 1).toString()));
-                    ifpd.setMaterial(tblInsXproc.getValueAt(i, 2).toString());
-                    ifpd.setTemperatura(tblInsXproc.getValueAt(i, 3).toString());
-                    ifpd.setRodar(tblInsXproc.getValueAt(i, 4).toString());
-                    ifpd.setCantidad(Double.parseDouble(tblInsXproc.getValueAt(i, 5).toString()));
-                    ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
-                    ifpd.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i, 7).toString()));
-                    ifpd.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i, 8).toString()));
+                    if (lstInsumos.get(i).getIdProducto() != 0)
+                    {
+                        ifpd.setClave(tblInsXproc.getValueAt(i, 0).toString());
+                        ifpd.setPorcentaje(Double.parseDouble(tblInsXproc.getValueAt(i, 1).toString()));
+                        ifpd.setMaterial(tblInsXproc.getValueAt(i, 2).toString());
+                        ifpd.setTemperatura(tblInsXproc.getValueAt(i, 3).toString());
+                        ifpd.setRodar(tblInsXproc.getValueAt(i, 4).toString());
+                        ifpd.setCantidad(Double.parseDouble(tblInsXproc.getValueAt(i, 5).toString()));
+                        ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
+                        ifpd.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i, 7).toString()));
+                        ifpd.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i, 8).toString()));
+                    }
+                    else
+                    {
+                        ifpd.setClave("");
+                        ifpd.setPorcentaje(0.0);
+                        ifpd.setMaterial("");
+                        ifpd.setTemperatura(tblInsXproc.getValueAt(i, 3).toString());
+                        ifpd.setRodar(tblInsXproc.getValueAt(i, 4).toString());
+                        ifpd.setCantidad(0.0);
+                        ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
+                        ifpd.setPrecioUnitario(0.0);
+                        ifpd.setTotal(0.0);
+                    }
 
                     ifpdc.insertarInsumosFichaProdDet(ifpd);
                 }

@@ -41,6 +41,7 @@ as begin
   declare @totalPagar float
   declare @precio float
   declare @kgTotal float
+  declare @kgTotalesConTarimas  float
   
   set @sal =
   (
@@ -92,6 +93,8 @@ as begin
       idRecepcionCuero = @idRecepcionCuero
   )
   
+  set @kgTotalesConTarimas = @kgTotal
+  
   set @salAcep =
   (
     select
@@ -120,7 +123,15 @@ as begin
       idRecepcionCuero = @idRecepcionCuero
   )
   
-  set @humedadAcepCalc = @humedadAcep*@kgTotal
+  if (@tarimas = 0)
+  begin
+    set @humedadAcepCalc = @humedadAcep*@kgTotal
+  end
+  
+  else
+  begin
+    set @humedadAcepCalc = @humedadAcep*(@kgTotal+@tarimas)
+  end
   
   set @cacheteAcep =
   (
@@ -231,7 +242,7 @@ as begin
   
   if (@tarimasDesc > 0)
   begin
-    select @totalDescKg = @totalDescKg+@tarimasDesc
+    select @kgTotalesConTarimas = @kgTotal+@tarimasDesc
   end
   
   set @totalPagarKg = @kgTotal-@totalDescKg
@@ -270,7 +281,7 @@ as begin
     , @cacheteDesc as cacheteDesc
     , @tarimasDesc as tarimasDesc
     , @totalDescKg as totalDescKg
-    , @kgTotal as pesoCamion
+    , @kgTotalesConTarimas as pesoCamion
     , @totalPagarKg as totalPagarKg
     , @totalPagar as totalPagar
     , @refParaMerma as refParaMerma

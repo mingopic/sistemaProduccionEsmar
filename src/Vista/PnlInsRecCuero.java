@@ -259,6 +259,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             double tarimasDescontar = (Double.parseDouble(datosConfMerma[0][16]));
             double totalDescontar = (Double.parseDouble(datosConfMerma[0][17]));
             double humedadAcepCalc = (Double.parseDouble(datosConfMerma[0][18]));
+            double kgTotalesConTarimas = (Double.parseDouble(datosConfMerma[0][23]));
             
             txtMermaSalAceptada.setText(String.format("%.3f", ((salAcep))));
             txtMermaHumedadAceptada.setText(String.format("%.3f", ((humedadAcep))));
@@ -277,12 +278,12 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             txtMermaCacheteDescontar.setText(String.format("%.1f", ((cacheteDescontar))));
             txtTarimasDescontar.setText(String.format("%.1f", ((tarimasDescontar))));
             txtTotalKgDescontar.setText(String.format("%.1f", ((totalDescontar))));
-            txtPesoCamionKg.setText(String.format("%.2f", (Double.parseDouble(txtKgTotales.getText()))+tarimasDescontar));
+            txtPesoCamionKg.setText(String.format("%.2f", (kgTotalesConTarimas)));
             lblDeKgTotal.setText("");
             lblDeKgTotal.setText((humedadAcepCalc*100)+"% de Kg Total");
             lblCostoTotalCamion.setText("");
             lblCostoTotalCamion.setText("$"+String.format("%.2f",costoTotalCamion));
-            txtCostoTotalCamion.setText(String.format("%.2f",((kgTotales+tarimasDescontar)-totalDescontar)));
+            txtCostoTotalCamion.setText(String.format("%.2f",(kgTotales-totalDescontar)));
         }
         catch (Exception e)
         {

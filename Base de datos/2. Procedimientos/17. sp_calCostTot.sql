@@ -44,6 +44,9 @@ as begin
   declare @idConfigMermaHumedad int
   declare @idConfigMermaCachete int
   declare @idConfigMermaTarimas int
+  declare @kgTotalesConTarimas  float
+  
+  set @kgTotalesConTarimas = @kgTotales
   
   set @salAcep =
   (
@@ -292,7 +295,7 @@ as begin
   if (@tarimasDescontar > 0)
   begin
   
-    select @kgTotales = @kgTotales+@tarimasDescontar
+    select @kgTotalesConTarimas = @kgTotales+@tarimasDescontar
   end
   
   set @totalKgDescontar = @kgTotales-@totalDescontar
@@ -322,5 +325,6 @@ as begin
     , @idConfigMermaHumedad as idConfigMermaHumedad
     , @idConfigMermaCachete as idConfigMermaCachete
     , @idConfigMermaTarimas as idConfigMermaTarimas
+    , @kgTotalesConTarimas as kgTotalesConTarimas
 end
 go

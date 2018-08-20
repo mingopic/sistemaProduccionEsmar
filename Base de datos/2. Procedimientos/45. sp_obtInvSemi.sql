@@ -1,3 +1,4 @@
+/*
 use esmarProd
 go
 
@@ -65,3 +66,4 @@ as begin
 	group by
 		tr.descripcion, c.descripcion, s.descripcion;
 end
+*/

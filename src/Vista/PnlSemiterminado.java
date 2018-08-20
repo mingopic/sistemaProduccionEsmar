@@ -1844,8 +1844,17 @@ try {
     }//GEN-LAST:event_txtNoPartidaKeyPressed
 
     private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
-        actualizarTablaSemiterminado();
-        generarReporteInventarioSemiterminado();
+        try 
+        {
+            InventarioSemiterminadoCommands invSem = new InventarioSemiterminadoCommands();
+            actualizarTablaSemiterminado();
+            invSem.insInvSemiCompleto(tr.getDescripcion(), c.getDescripcion(), s.getDescripcion());
+            generarReporteInventarioSemiterminado();
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
 
     private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed

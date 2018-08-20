@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import static Controlador.InventarioSemiterminadoTerminadoCommands.c;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioSemiterminado;
@@ -80,6 +81,21 @@ public class InventarioSemiterminadoCommands {
         stmt.close();
         c.desconectar();
         return datos;
+    }
+    
+    //Método para insertar el inventario completo de semiterminado
+    public static void insInvSemiCompleto(String tipoRecorte, String calibre, String seleccion) throws Exception
+    {
+        String query = "execute sp_insInvSemiCompleto "
+                + "'" + tipoRecorte + "'"
+                + ", '" + calibre + "'"
+                + ", '" + seleccion + "'";
+        PreparedStatement pstmt = null;
+         c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
     
     //Método para agregar una entrada a la tabla tb_invSemiterminado

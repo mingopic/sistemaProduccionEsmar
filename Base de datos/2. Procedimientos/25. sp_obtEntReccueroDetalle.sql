@@ -245,7 +245,7 @@ as begin
     select @kgTotalesConTarimas = @kgTotal+@tarimasDesc
   end
   
-  set @totalPagarKg = @kgTotal-@totalDescKg
+  set @totalPagarKg = @kgTotalesConTarimas-@totalDescKg
   set @totalPagar = @totalPagarKg*@precio
   
   select

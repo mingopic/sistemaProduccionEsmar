@@ -39,11 +39,48 @@ as begin
   if @precio is null
   begin
     
-    if @idProducto in (1,2)
+    if @idProducto in (2138) /*AGUA*/
     begin
-      -- lo que tiene que hacer
+      set
+        @precio = 0.4
+    end
+    /*
+    else if @idProducto in (1480)
+    begin
+      set
+        @precio = 49.92
     end
     
+    else if @idProducto in (1477)
+    begin
+      set
+        @precio = 37.44
+    end
+    
+    else if @idProducto in (1478)
+    begin
+      set
+        @precio = 37.82
+    end
+    
+    else if @idProducto in (1481)
+    begin
+      set
+        @precio = 36.48
+    end
+    
+    else if @idProducto in (1473)
+    begin
+      set
+        @precio = 24
+    end
+    
+    else if @idProducto in (1472)
+    begin
+      set
+        @precio = 33
+    end
+    */
     else begin
       set
         @precio = 0.0

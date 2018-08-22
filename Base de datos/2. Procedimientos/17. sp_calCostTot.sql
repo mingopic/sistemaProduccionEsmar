@@ -295,10 +295,11 @@ as begin
   if (@tarimasDescontar > 0)
   begin
   
-    select @kgTotalesConTarimas = @kgTotales+@tarimasDescontar
+    select @kgTotales = @kgTotales+@tarimasDescontar
+    set @kgTotalesConTarimas = @kgTotales
   end
   
-  set @totalKgDescontar = @kgTotales-@totalDescontar
+  set @totalKgDescontar = @kgTotalesConTarimas-@totalDescontar
   set @totalPagar = @totalKgDescontar*@precio
   
   select

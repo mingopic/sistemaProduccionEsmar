@@ -283,7 +283,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             lblDeKgTotal.setText((humedadAcepCalc*100)+"% de Kg Total");
             lblCostoTotalCamion.setText("");
             lblCostoTotalCamion.setText("$"+String.format("%.2f",costoTotalCamion));
-            txtCostoTotalCamion.setText(String.format("%.2f",(kgTotales-totalDescontar)));
+            txtCostoTotalCamion.setText(String.format("%.2f",(kgTotalesConTarimas-totalDescontar)));
         }
         catch (Exception e)
         {

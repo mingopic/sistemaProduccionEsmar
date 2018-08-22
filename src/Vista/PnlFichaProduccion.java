@@ -192,7 +192,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             
             String[] cols = new String[]
             {
-                "No. Partida", "Proveedor - No. Camión", "Recorte", "No. Piezas"
+                "No. Partida", "Prov - Camión", "Recorte", "No. Piezas"
             };
             
             dtm = new DefaultTableModel(){
@@ -1456,7 +1456,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 datosPartidas[0]= String.valueOf(lstPartidas.get(fila).getNoPartida());
                 datosPartidas[1]= lstPartidas.get(fila).getTipoRecorte();
                 datosPartidas[2]= String.valueOf(lstPartidas.get(fila).getNoPiezasAct());
-                datosPartidas[3]= "0";
+                datosPartidas[3]= "0.0";
                 datosPartidas[4]= String.valueOf(lstPartidas.get(fila).getIdPartidaDet());
 
                 dtms.addRow(datosPartidas);
@@ -1533,18 +1533,18 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                         return;
                     }
                 }
-                for (int i = 0; i < lstInsumos.size(); i++) 
-                {
-                    if (lstInsumos.get(i).getIdProducto() != 0)
-                    {
-                        Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
-                        if (precioUnitario <= 0.0)
-                        {
-                            JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-                            return;
-                        }
-                    }
-                }
+//                for (int i = 0; i < lstInsumos.size(); i++) 
+//                {
+//                    if (lstInsumos.get(i).getIdProducto() != 0)
+//                    {
+//                        Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
+//                        if (precioUnitario <= 0.0)
+//                        {
+//                            JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                            return;
+//                        }
+//                    }
+//                }
                 FichaProd fp = new FichaProd();
                 FichaProdCommands fpc = new FichaProdCommands();
 

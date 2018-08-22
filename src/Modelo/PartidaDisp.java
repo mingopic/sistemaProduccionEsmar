@@ -17,6 +17,7 @@ public class PartidaDisp {
     int idPartida;
     int idTipoRecorte;
     String proveedor;
+    Double kgXpieza;
 
     public int getNoPartida() {
         return noPartida;
@@ -73,4 +74,14 @@ public class PartidaDisp {
     public void setProveedor(String proveedor) {
         this.proveedor = proveedor;
     }
+
+    public Double getKgXpieza() {
+        return kgXpieza;
+    }
+
+    public void setKgXpieza(Double kgXpieza) {
+        this.kgXpieza = kgXpieza;
+    }
+    
+    
 }

@@ -33,7 +33,7 @@ public class FichaProduccionCommands {
 
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 10;
+        int columnas = 13;
         int i = 0;
 
         c.conectar();
@@ -52,17 +52,20 @@ public class FichaProduccionCommands {
             {
                 datos[i][0] = rs.getString("idFichaProd");
                 datos[i][1] = rs.getString("noPartida");
-                datos[i][2] = rs.getString("tipoRecorte");
-                datos[i][3] = rs.getString("noPiezasTotal");
-                datos[i][4] = rs.getString("kgTotal");
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("costoTotalCuero")));
-                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("costoInsumos")));
-                datos[i][7] = rs.getString("tambor");
+                datos[i][2] = rs.getString("proceso");
+                datos[i][3] = rs.getString("tipoRecorte");
+                datos[i][4] = rs.getString("noPiezasTotal");
+                datos[i][5] = rs.getString("kgTotal");
+                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("costoTotalCuero")));
+                datos[i][7] = String.format("%.2f",Double.parseDouble(rs.getString("costoCueroXpza")));
+                datos[i][8] = String.format("%.2f",Double.parseDouble(rs.getString("costoInsumos")));
+                datos[i][9] = String.format("%.2f",Double.parseDouble(rs.getString("costoInsumoxKg")));
+                datos[i][10] = rs.getString("tambor");
                 
                 Date sqlDate = rs.getDate("fechaCreacion");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][8] = sdf.format(sqlDate);
-                datos[i][9] = rs.getString("idFichaProdDet");
+                datos[i][11] = sdf.format(sqlDate);
+                datos[i][12] = rs.getString("idFichaProdDet");
                 i++; 
             }
         }

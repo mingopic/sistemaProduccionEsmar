@@ -58,13 +58,13 @@ as begin
       idPartida = @idPartida
   end
   
-  -- Obtener kilosXpieza
+  -- Obtener promedio de kilos por pieza
   select
-    @kilosXpieza = kgTotalActual / noPiezasActual
+    @kilosXpieza = kgTotal / noTotalPiezas
   
   from
-    tb_inventarioCrudo
-    
+    tb_recepcionCuero
+  
   where
     idRecepcionCuero = @idRecepcionCuero
   

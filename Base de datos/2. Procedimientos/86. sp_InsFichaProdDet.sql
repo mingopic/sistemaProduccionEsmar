@@ -65,7 +65,8 @@ as begin
     
   where
     idTipoRecorte = @idTipoRecorte
-  
+    
+  /*
   if @idProceso = 2
   begin
     
@@ -79,7 +80,10 @@ as begin
     set
       @costoCueroRecorte = 0.0
   end
+  */
   
+  set
+    @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * @precioXpiezaRecCuero
   
   insert into
     tb_fichaProdDet

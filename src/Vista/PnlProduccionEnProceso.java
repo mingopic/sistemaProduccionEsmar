@@ -48,7 +48,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Ficha","No. Partida","Tipo Recorte","No. Piezas","Kg","Costo Cuero","Costo Insumos","Tambor","Fecha"
+        "No. Ficha","No. Partida","Proceso","Tipo Recorte","No. Piezas","Kg","Costo Cuero","$ Cuero/Pza","Costo Insumos","$ Insumo/Kg","Tambor","Fecha"
     };
     
     
@@ -507,10 +507,10 @@ try {
 
     tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
-            {null, null, null, null, null, null, null, null, null}
+            {null, null, null, null, null, null, null, null, null, null, null, null}
         },
         new String [] {
-            "No. Ficha", "No. Partida", "Tipo Recorte", "No. Piezas", "Kg", "Costo Cuero", "Costo Insumos", "Tambor", "Fecha"
+            "No. Ficha", "No. Partida", "Proceso", "Tipo Recorte", "No. Piezas", "Kg", "Costo Cuero", "$ Cuero/Pza", "Costo Insumos", "$ Insumo/Kg", "Tambor", "Fecha"
         }
     ));
     tblProduccionProceso.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -601,8 +601,8 @@ try {
                     }
                 }
                 String subproceso = spc.obtenerSubProcesoXidFichaProd(Integer.parseInt(idFicha));
-                String tambor = tblProduccionProceso.getValueAt(fila, 7).toString();
-                String fecha = tblProduccionProceso.getValueAt(fila, 8).toString();
+                String tambor = tblProduccionProceso.getValueAt(fila, 10).toString();
+                String fecha = tblProduccionProceso.getValueAt(fila, 11).toString();
                         
                 generarReporteFichaProd(idFicha, noPartida, subproceso, tambor, fecha);
             } catch (Exception ex) 

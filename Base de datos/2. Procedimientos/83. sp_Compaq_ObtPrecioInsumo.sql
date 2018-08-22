@@ -38,8 +38,17 @@ as begin
   
   if @precio is null
   begin
-    set
-      @precio = 0.0
+    
+    if @idProducto in (1,2)
+    begin
+      -- lo que tiene que hacer
+    end
+    
+    else begin
+      set
+        @precio = 0.0
+    end
+    
   end
   
   select

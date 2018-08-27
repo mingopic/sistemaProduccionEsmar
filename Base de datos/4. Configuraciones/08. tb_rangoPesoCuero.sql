@@ -4,4 +4,4 @@ go
 insert into
   tb_rangoPesoCuero
 values
-  ('20','100',getdate());
+  ('30','30',getdate());

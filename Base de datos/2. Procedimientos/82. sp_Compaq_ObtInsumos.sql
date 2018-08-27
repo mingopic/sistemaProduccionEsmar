@@ -26,5 +26,8 @@ as begin
 
   where
     CIDVALORCLASIFICACION6 = 44 --Insumo
+  
+  order by
+    pr.CNOMBREPRODUCTO asc
 end
 go

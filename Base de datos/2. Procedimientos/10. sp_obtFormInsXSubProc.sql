@@ -38,6 +38,7 @@ create procedure sp_obtFormInsXSubProc
             where 
               idSubproceso = @idSubProceso
           )
+          and idSubproceso = @idSubProceso
       )
     
     

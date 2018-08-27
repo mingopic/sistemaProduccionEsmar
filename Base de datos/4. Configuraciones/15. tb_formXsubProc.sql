@@ -1,5 +1,9 @@
-INSERT INTO "tb_formXsubProc" ("idSubproceso", "fechaCreacion") VALUES (1, '2018-08-14 15:50:17.050');
-INSERT INTO "tb_formXsubProc" ("idSubproceso", "fechaCreacion") VALUES (11, '2018-08-14 17:14:24.923');
-INSERT INTO "tb_formXsubProc" ("idSubproceso", "fechaCreacion") VALUES (5, '2018-08-14 17:29:34.410');
-INSERT INTO "tb_formXsubProc" ("idSubproceso", "fechaCreacion") VALUES (7, '2018-08-14 17:42:11.923');
-INSERT INTO "tb_formXsubProc" ("idSubproceso", "fechaCreacion") VALUES (9, '2018-08-14 17:48:06.250');
+use esmarProd
+go
+
+insert into "tb_formxsubproc" ("idsubproceso", "fechacreacion") values (1, getdate());
+insert into "tb_formxsubproc" ("idsubproceso", "fechacreacion") values (2, getdate());
+insert into "tb_formxsubproc" ("idsubproceso", "fechacreacion") values (3, getdate());
+insert into "tb_formxsubproc" ("idsubproceso", "fechacreacion") values (4, getdate());
+insert into "tb_formxsubproc" ("idsubproceso", "fechacreacion") values (5, getdate());
+insert into "tb_formxsubproc" ("idsubproceso", "fechacreacion") values (6, getdate());

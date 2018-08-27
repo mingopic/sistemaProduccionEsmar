@@ -11,14 +11,14 @@ go
 create procedure sp_insCuePesado
 (
   @idInventario         int
-    , @noPartida        int
-    , @tipoRecorte      varchar(100)
-    , @calibre          varchar(100)
-    , @seleccion        varchar(100)
-    , @kg               float
-    , @noPiezas         int
-    , @noPiezasActuales int
-    , @descripcion      varchar(100)
+  , @noPartida        int
+  , @tipoRecorte      varchar(100)
+  , @calibre          varchar(100)
+  , @seleccion        varchar(100)
+  , @kg               float
+  , @noPiezas         int
+  , @noPiezasActuales int
+  , @descripcion      varchar(100)
 )
 as begin
   

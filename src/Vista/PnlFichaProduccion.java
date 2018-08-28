@@ -27,6 +27,7 @@ import Modelo.SubProceso;
 import Modelo.Tambor;
 import static Vista.FrmPrincipal.pnlPrincipalx;
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -591,8 +592,35 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
     }
     
-    private void validarPrecioInsumos()
+    private void validarPrecioInsumos(int accion)
     {
+        int idProducto = 0;
+        Double precio = 0.0;
+        
+        if (accion == 1)
+        {
+            try
+            {
+                idProducto = lstInsumos.get(tblInsXproc.getSelectedRow()).getIdProducto();
+                precio = Double.parseDouble(tblInsXproc.getValueAt(tblInsXproc.getSelectedRow(), 7).toString());
+                
+                for (int fila = 0; fila < tblInsXproc.getRowCount(); fila++)
+                {
+                    if (lstInsumos.get(fila).getIdProducto() == idProducto)
+                    {
+                        tblInsXproc.setValueAt(precio, fila, 7);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Ingrese un precio válido", "Advertencia", JOptionPane.ERROR_MESSAGE);
+                tblInsXproc.setValueAt("0.0", tblInsXproc.getSelectedRow(), 7);
+                return;
+            }
+        }
+        
         for (int fila = 0; fila < tblInsXproc.getRowCount(); fila++)
         {
             try 
@@ -1511,11 +1539,18 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     }//GEN-LAST:event_tblPartidasAgregadasMousePressed
 
     private void tblInsXprocKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblInsXprocKeyReleased
-        validarPrecioInsumos();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            validarPrecioInsumos(1);
+        }
+        else
+        {
+            validarPrecioInsumos(0);
+        }
     }//GEN-LAST:event_tblInsXprocKeyReleased
 
     private void tblInsXprocMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInsXprocMousePressed
-        validarPrecioInsumos();
+        validarPrecioInsumos(0);
     }//GEN-LAST:event_tblInsXprocMousePressed
 
     private void btnGenerarFichaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarFichaActionPerformed

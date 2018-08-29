@@ -30,6 +30,7 @@ create table tb_recepcionCuero
   , idMerHum         int
   , idMerCac         int
   , idMerTar         int
+  , origen           varchar(50)
   , fechaEntrada     date
 );
 go

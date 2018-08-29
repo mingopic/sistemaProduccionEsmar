@@ -51,7 +51,7 @@ $P{tipoRecorte}, $P{noPartida}, $P{fecha}, $P{fecha1}]]>
 					<textElement>
 						<font fontName="Arial" size="24"/>
 					</textElement>
-					<text><![CDATA[Salidas de Cross]]></text>
+					<text><![CDATA[Salidas de Desvenado]]></text>
 				</staticText>
 			</frame>
 			<image>

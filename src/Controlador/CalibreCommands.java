@@ -5,6 +5,8 @@
  */
 package Controlador;
 
+import Modelo.Calibre;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -51,5 +53,84 @@ public class CalibreCommands {
         stmt.close();
         c.desconectar();
         return calibre;
+    }
+    
+    //Método para obtener todos los calibres en BD
+    public static String[][] obtenerCalibres() throws Exception
+    {
+        String[][] calibres=null;
+        
+        String query="execute sp_obtCalibre";
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+        int renglones = 0;
+        int columnas = 1;
+        int i = 0;
+        
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) {
+            renglones = rs.getRow();
+            calibres = new String[renglones][columnas];
+            rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                calibres[i][0]= rs.getString("descripcion");
+                i++;
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return calibres;
+    }
+    
+    //Método para buscar datos de un calibre en BD
+    public static Calibre obtenerCalibreXNombre(Calibre ca) throws Exception
+    {   
+        String query="execute sp_obtCalXnombre '"+ca.getDescripcion()+"'";
+        
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.next())
+        {
+            ca.setIdCalibre(Integer.parseInt(rs.getString("idCalibre")));
+            ca.setDescripcion(rs.getString("descripcion"));
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return ca;
+    }
+    
+    //Método que se llama para insertar un calibre
+    public static void insertarCalibre(Calibre ca) throws Exception {
+        String query= "execute sp_insCal '"+ca.getDescripcion();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método que se llama para actualizar detos de un calibre
+    public static void actualizarCalibre(Calibre ca) throws Exception {
+        String query= "execute sp_actCal '"+ca.getDescripcion()+","+ca.getIdCalibre();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

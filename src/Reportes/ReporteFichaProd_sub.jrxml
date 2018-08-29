@@ -82,21 +82,21 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Tipo de Cuero}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" pattern="#,##0">
 					<reportElement style="Detail" positionType="Float" x="222" y="0" width="55" height="18" uuid="423d4da9-8b04-4184-8686-baaadd307b82"/>
 					<textElement textAlignment="Center">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{noPiezasTotal}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" pattern="#,##0.00">
 					<reportElement style="Detail" positionType="Float" x="319" y="0" width="64" height="18" uuid="da296f37-7e70-4e01-b415-46ce6becf149"/>
 					<textElement textAlignment="Center">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{KgXPieza}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" pattern="#,##0.00">
 					<reportElement style="Detail" positionType="Float" x="277" y="0" width="42" height="18" uuid="bb72e200-1726-4bea-a3ce-689b2815b1dc"/>
 					<textElement textAlignment="Center">
 						<font size="12"/>

@@ -44,6 +44,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlExportar pnlExportar; 
     PnlImportar pnlImportar;
     PnlTambores pnlTambores;
+    PnlCalibres pnlCalibres;
     PnlCross pnlCross;
     PnlSemiterminado pnlSemiterminado;
     PnlFichaProduccion pnlFichaProduccion;
@@ -567,6 +568,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmSubProcesos = new javax.swing.JMenuItem();
         jmTambores = new javax.swing.JMenuItem();
         Usuarios = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
@@ -1200,7 +1202,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         btnCross.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCross.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cuero.png"))); // NOI18N
-        btnCross.setText("Cross");
+        btnCross.setText("Desvenado");
         btnCross.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCross.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnCross.addActionListener(new java.awt.event.ActionListener() {
@@ -1431,6 +1433,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(Usuarios);
 
+        jMenuItem1.setText("Calibres");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jmpCatalogos.add(jMenuItem1);
+
         jMenuBar1.add(jmpCatalogos);
 
         jmpConfiguraciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cog.png"))); // NOI18N
@@ -1613,7 +1623,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.add(pnlCross, BorderLayout.CENTER);
             pnlPrincipalx.paintAll(pnlCross.getGraphics());
             
-            lblVentana.setText("Cross");
+            lblVentana.setText("Desvenado");
             ImageIcon ico=new ImageIcon("src/Imagenes/cuero.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
@@ -1883,6 +1893,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
         validarPorcentaje();
     }//GEN-LAST:event_tblConfCostoCueroMouseClicked
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try 
+        {
+            pnlCalibres = new PnlCalibres();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlCalibres, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlCalibres.getGraphics());
+            
+            lblVentana.setText("Catálogo de Calibres");
+            ImageIcon ico=new ImageIcon("src/Imagenes/barril.png");
+            lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex) 
+        {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1962,6 +1991,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

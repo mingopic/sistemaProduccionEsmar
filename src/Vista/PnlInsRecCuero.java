@@ -133,6 +133,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             int noPiezasPesados;
             int noTotalPiezas;
             int refMerma;
+            String tipoCamion;
 
             if (txtKgTotales.getText().isEmpty())
             {
@@ -237,8 +238,10 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             txtCostoCamion.setText(String.valueOf(costoCamion));
 
             txtNoTotalPiezas.setText(String.valueOf(noTotalPiezas));
+            
+            tipoCamion = cmbTipoCamion.getSelectedItem().toString();
 
-            datosConfMerma = cmc.obtenerConfiguracionMerma(mermaSal,mermaHumedad,mermaCachete,tarimas,kgTotales,precio,noTotalPiezas,refMerma);
+            datosConfMerma = cmc.obtenerConfiguracionMerma(mermaSal,mermaHumedad,mermaCachete,tarimas,kgTotales,precio,noTotalPiezas,refMerma,tipoCamion);
             
             double costoTotalCamion = (Double.parseDouble(datosConfMerma[0][0]));
             double salAcep = (Double.parseDouble(datosConfMerma[0][1]));
@@ -371,6 +374,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         
                 String proveedor = cmbProveedorAgregar.getSelectedItem().toString();
                 String tipoCuero = cmbTipoCueroAgregar.getSelectedItem().toString();
+                String tipoCamion = cmbTipoCamion.getSelectedItem().toString();
                 int idProveedor=0;
                 int noCamion;
                 int idTipoCuero=0;
@@ -423,6 +427,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 idMerHum = Integer.parseInt(datosConfMerma[0][20]);
                 idMerCac = Integer.parseInt(datosConfMerma[0][21]);
                 idMerTar = Integer.parseInt(datosConfMerma[0][22]);
+                tipoCamion = cmbTipoCamion.getSelectedItem().toString();
 
                 rc.setIdProveedor(idProveedor);
                 rc.setNoCamion(noCamion);
@@ -442,6 +447,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 rc.setIdMerHum(idMerHum);
                 rc.setIdMerCac(idMerCac);
                 rc.setIdMerTar(idMerTar);
+                rc.setTipoCamion(tipoCamion);
 
                 rcc.InsertarEntradaRecepcionCuero(rc);
                 
@@ -499,6 +505,8 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         txtNoTotalPiezas = new javax.swing.JTextField();
         txtRefMerma = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        cmbTipoCamion = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
@@ -732,6 +740,17 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText("Ref. P/Merma");
 
+        cmbTipoCamion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbTipoCamion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nacional", "Americano" }));
+        cmbTipoCamion.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbTipoCamionItemStateChanged(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setText("Tipo de camión");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -770,30 +789,38 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNoTotalPiezas, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtRefMerma, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtRefMerma, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNoTotalPiezas, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cmbTipoCamion, 0, 111, Short.MAX_VALUE))))
+                .addGap(117, 117, 117))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbProveedorAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel11)
-                    .addComponent(txtKgTotales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbProveedorAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel11)
+                        .addComponent(txtKgTotales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel5))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -803,7 +830,8 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                             .addComponent(txtNoPiezasLigeros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
                             .addComponent(jLabel63)
-                            .addComponent(txtNoTotalPiezas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNoTotalPiezas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbTipoCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCostoCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1641,9 +1669,18 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         validarNumeros(evt, txtTarimas.getText());
     }//GEN-LAST:event_txtTarimasKeyTyped
 
+    private void cmbTipoCamionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbTipoCamionItemStateChanged
+        try {
+            calcularCostoTotalCamion();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlInsRecCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cmbTipoCamionItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbProveedorAgregar;
+    private javax.swing.JComboBox<String> cmbTipoCamion;
     private javax.swing.JComboBox<String> cmbTipoCueroAgregar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -1665,6 +1702,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;

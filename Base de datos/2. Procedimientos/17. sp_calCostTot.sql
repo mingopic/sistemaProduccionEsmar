@@ -18,6 +18,7 @@ create procedure sp_calCostTot
   , @precio        float
   , @piezasTotales int
   , @refParaMerma  int
+  , @tipoCamion    varchar(50)
 )
 as begin
   declare @salAcep              float
@@ -92,14 +93,32 @@ as begin
       )
   )
   
-  if (@tarimas = 0)
+  if (@tipoCamion = 'Nacional')
   begin
-    set @humedadAcepCalc = @humedadAcep * @kgTotales
+  
+    if (@tarimas = 0)
+    begin
+      set @humedadAcepCalc = @humedadAcep * @kgTotales
+    end
+    
+    else
+    begin
+      set @humedadAcepCalc = @humedadAcep * (@kgTotales+@tarimas)
+    end
   end
   
-  else
+  else if (@tipoCamion = 'Americano')
   begin
-    set @humedadAcepCalc = @humedadAcep * (@kgTotales+@tarimas)
+  
+    if (@tarimas = 0)
+    begin
+      set @humedadAcepCalc = @humedadAcep * @kgTotales
+    end
+    
+    else
+    begin
+      set @humedadAcepCalc = @humedadAcep * (@kgTotales-@tarimas)
+    end
   end
   
   set @cacheteAcep =
@@ -292,11 +311,26 @@ as begin
     select @totalDescontar = @totalDescontar+@cacheteDescontar
   end
   
-  if (@tarimasDescontar > 0)
+  if (@tipoCamion = 'Nacional')
+  begin
+    
+    if (@tarimasDescontar > 0)
+    begin
+    
+      select @kgTotales = @kgTotales+@tarimasDescontar
+      set @kgTotalesConTarimas = @kgTotales
+    end
+  end
+  
+  else if (@tipoCamion = 'Americano')
   begin
   
-    select @kgTotales = @kgTotales+@tarimasDescontar
-    set @kgTotalesConTarimas = @kgTotales
+    if (@tarimasDescontar > 0)
+    begin
+    
+      select @kgTotales = @kgTotales-@tarimasDescontar
+      set @kgTotalesConTarimas = @kgTotales
+    end
   end
   
   set @totalKgDescontar = @kgTotalesConTarimas-@totalDescontar

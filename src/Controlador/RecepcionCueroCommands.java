@@ -31,7 +31,7 @@ public class RecepcionCueroCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 9;
+        int columnas = 10;
         int i = 0;
 
         c.conectar();
@@ -55,11 +55,12 @@ public class RecepcionCueroCommands {
                 datos[i][4] = rs.getString("kgTotal");
                 datos[i][5] = rs.getString("precioXKilo");
                 datos[i][6] = rs.getString("costoCamion");
+                datos[i][7] = rs.getString("origen");
                 
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][7] = sdf.format(sqlDate);
-                datos[i][8] = rs.getString("idRecepcionCuero");
+                datos[i][8] = sdf.format(sqlDate);
+                datos[i][9] = rs.getString("idRecepcionCuero");
                 i++; 
             }
         }
@@ -83,8 +84,8 @@ public class RecepcionCueroCommands {
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = stmt.executeQuery(query);
         System.out.println(query);
+        rs = stmt.executeQuery(query);
         
         if (rs.last()) 
         {
@@ -114,7 +115,7 @@ public class RecepcionCueroCommands {
                 +rc.getIdRangoPesoCuero()+","+rc.getNoPiezasLigero()+","+rc.getNoPiezasPesado()+","
                 +rc.getNoTotalPiezas()+","+rc.getKgTotal()+","+rc.getPrecioXKilo()+","+rc.getMermaSal()+","
                 +rc.getMermaHumedad()+","+rc.getMermaCachete()+","+rc.getMermaTarimas()+","+rc.getRefParaMerma()+","
-                +rc.getIdMerSal()+","+rc.getIdMerHum()+","+rc.getIdMerCac()+","+rc.getIdMerTar();
+                +rc.getIdMerSal()+","+rc.getIdMerHum()+","+rc.getIdMerCac()+","+rc.getIdMerTar()+", '"+rc.getTipoCamion()+"'";
 
         
         PreparedStatement pstmt = null;

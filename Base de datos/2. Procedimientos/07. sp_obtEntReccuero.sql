@@ -26,6 +26,7 @@ create procedure sp_obtEntReccuero
       , rc.kgtotal
       , rc.precioxkilo 
       ,(rc.kgtotal*rc.precioxkilo) as costocamion
+      , rc.origen
       , rc.fechaentrada
       
     from 

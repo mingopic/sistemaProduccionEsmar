@@ -74,7 +74,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "Provedor","Tipo Cuero","No. Camión","Total Piezas","Total Kg","Precio x Kg","Costo Camión","Fecha de Entrada"
+        "Provedor","Tipo Cuero","No. Camión","Total Piezas","Total Kg","Precio x Kg","Costo Camión","Origen","Fecha de Entrada"
     };
    
     /**
@@ -95,12 +95,12 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         tc = new TipoCuero();
         tcc = new TipoCueroCommands();
         
-        actualizarTablaRecepcionCuero();
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
         dcFecha2EntradaSemiterminado.setEnabled(false);
         llenarComboProveedores();
         llenarComboTipoCuero();
+        actualizarTablaRecepcionCuero();
     }
     
     
@@ -338,7 +338,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             int idRecepcionCuero = 0;
             try 
             {
-                idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblRecepcionCuero.getSelectedRow()][8]);
+                idRecepcionCuero = Integer.parseInt(datosEntRecCuero[tblRecepcionCuero.getSelectedRow()][9]);
             } 
             catch (Exception e) 
             {
@@ -386,7 +386,7 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                     rc = new RecepcionCuero();
                     ic = new InventarioCrudo();
 
-                    rc.setIdRecepcionCuero(Integer.parseInt(datosEntRecCuero[fila][8]));
+                    rc.setIdRecepcionCuero(Integer.parseInt(datosEntRecCuero[fila][9]));
 
                     int idRecepcionCuero = pdc.obtenerRecepcionCueroEliminar(rc);
 

@@ -28,6 +28,7 @@ create procedure sp_agrEntRecCuero
   ,@idMerHum         int
   ,@idMerCac         int
   ,@idMerTar         int
+  ,@tipoCamion       varchar(50)
 )
 as begin
   declare @fechaEntrada datetime
@@ -65,6 +66,7 @@ as begin
       , @idMerHum
       , @idMerCac
       , @idMerTar
+      , @tipoCamion
       , @fechaEntrada
     )
 end

@@ -20,10 +20,10 @@ public class ConfiguracionMermaCommands  {
     static ConexionBD c=new ConexionBD();
     
     //Método que se llama para obtener la configuracion de la merma de acuerdo a su fecha de configuracion mas reciente
-    public static String[][] obtenerConfiguracionMerma(double sal, double humedad, double cachete, double tarimas, double kgTotales, double precio, int totalPiezas, int refMerma) throws Exception {
+    public static String[][] obtenerConfiguracionMerma(double sal, double humedad, double cachete, double tarimas, double kgTotales, double precio, int totalPiezas, int refMerma, String tipoCamion) throws Exception {
         String query;
         
-        query= "EXEC sp_calCostTot "+sal+","+humedad+","+cachete+","+tarimas+","+kgTotales+","+precio+","+totalPiezas+","+refMerma;
+        query= "EXEC sp_calCostTot "+sal+","+humedad+","+cachete+","+tarimas+","+kgTotales+","+precio+","+totalPiezas+","+refMerma+", '"+tipoCamion+"'";
 
         
         String[][] datos = null;

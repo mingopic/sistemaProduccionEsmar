@@ -921,7 +921,7 @@ try {
 
     btnReporteEntrada2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnReporteEntrada2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntrada2.setText("Reporte Inventario Cross");
+    btnReporteEntrada2.setText("Reporte Inventario Desvenado");
     btnReporteEntrada2.setFocusable(false);
     btnReporteEntrada2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     btnReporteEntrada2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

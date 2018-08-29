@@ -114,7 +114,7 @@ public class CalibreCommands {
     
     //Método que se llama para insertar un calibre
     public static void insertarCalibre(Calibre ca) throws Exception {
-        String query= "execute sp_insCal '"+ca.getDescripcion();
+        String query= "execute sp_insCal '"+ca.getDescripcion()+"'";
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -125,7 +125,7 @@ public class CalibreCommands {
     
     //Método que se llama para actualizar detos de un calibre
     public static void actualizarCalibre(Calibre ca) throws Exception {
-        String query= "execute sp_actCal '"+ca.getDescripcion()+","+ca.getIdCalibre();
+        String query= "execute sp_actCal '"+ca.getDescripcion()+"',"+ca.getIdCalibre();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

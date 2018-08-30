@@ -28,6 +28,7 @@ as begin
       , ins.noPiezas
       , ins.noPiezasActuales
       , ins.kgTotales
+      , ins.kgTotalesActuales
       , (ins.kgTotales/ins.noPiezas) as PesoPromXPza
       , s.descripcion as seleccion
       , c.descripcion as calibre

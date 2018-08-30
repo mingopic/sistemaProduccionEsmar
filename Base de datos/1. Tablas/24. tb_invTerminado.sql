@@ -17,6 +17,11 @@ create table tb_invTerminado
   , noPiezas				 int
   , noPiezasActuales int
   , kgTotales 		   float
+  , kgTotalesActual  float
+  , decimetros       float
+  , decimetrosActual float
+  , pies             float
+  , piesActual       float
   , fechaEntrada		 date
 );
 go

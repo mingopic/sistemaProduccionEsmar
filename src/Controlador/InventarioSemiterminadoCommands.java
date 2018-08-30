@@ -43,7 +43,7 @@ public class InventarioSemiterminadoCommands {
 
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 10;
+        int columnas = 11;
         int i = 0;
 
         c.conectar();
@@ -65,14 +65,15 @@ public class InventarioSemiterminadoCommands {
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
                 datos[i][4] = rs.getString("kgTotales");
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
-                datos[i][6] = rs.getString("seleccion");
-                datos[i][7] = rs.getString("calibre");
+                datos[i][5] = rs.getString("kgTotalesActuales");
+                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
+                datos[i][7] = rs.getString("seleccion");
+                datos[i][8] = rs.getString("calibre");
                 
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][8] = sdf.format(sqlDate);
-                datos[i][9] = rs.getString("idInvSemiterminado");
+                datos[i][9] = sdf.format(sqlDate);
+                datos[i][10] = rs.getString("idInvSemiterminado");
                 i++; 
             }
         }

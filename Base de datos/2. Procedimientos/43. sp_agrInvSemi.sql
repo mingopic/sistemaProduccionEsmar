@@ -29,6 +29,7 @@ as begin
       , @noPiezas
       , @noPiezas
       , @kgTotales
+      , @kgTotales
       , getdate()
     )
 end

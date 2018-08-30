@@ -28,7 +28,12 @@ as begin
       , it.noPiezas
       , it.noPiezasActuales
       , it.kgTotales
+      , it.kgTotalesActual
       , (it.kgTotales/it.noPiezas) as PesoPromXPza
+      , it.decimetros
+      , it.decimetrosActual
+      , it.pies
+      , it.piesActual
       , s.descripcion as seleccion
       , c.descripcion as calibre
       , it.fechaEntrada
@@ -99,6 +104,8 @@ as begin
       , it.noPiezasActuales
       , it.kgTotales
       , (it.kgTotales/it.noPiezas) as PesoPromXPza
+      , it.decimetros
+      , it.pies
       , s.descripcion as seleccion
       , c.descripcion as calibre
       , it.fechaEntrada

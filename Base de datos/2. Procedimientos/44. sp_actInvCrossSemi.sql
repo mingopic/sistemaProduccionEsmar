@@ -10,8 +10,8 @@ go
 
 create procedure sp_actInvCrossSemi
 (
-  @idInvCrossSemi   int
-  , @piezasUtilizar int
+  @idInvCrossSemi      int
+  , @piezasUtilizar    int
 )
 as begin
 

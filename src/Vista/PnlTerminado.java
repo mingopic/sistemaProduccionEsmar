@@ -86,7 +86,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso Actual","Peso prom. X pieza","Decimetros","Decimetros Actuales","Pies","Pies Actuales","Selección","Calibre","Fecha Entrada"
     };
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
@@ -338,10 +338,19 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Metodo para inicializar los campos de dlgAgregar
     public void inicializarCamposAgregar() throws Exception
     {
+        btnGroup.add(jrKg);
+        btnGroup.add(jrArea);
+        
+        jrKg.setSelected(true);
         txtNoPartidaAgregar.setText("");
         txtTipoRecorteAgregar.setText("");
         txtNoPiezasAgregar.setText("");
         txtKgTotalesAgregar.setText("");
+        txtDecimetrosAgregar.setText("");
+        txtPiesCuadradosAgregar.setText("");
+        
+        txtDecimetrosAgregar.setEnabled(false);
+        txtPiesCuadradosAgregar.setEnabled(false);
         
         //Llenar comboBox con los tipos de calibre
         //----------------------------------------------------------------------
@@ -375,7 +384,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     {
         inicializarCamposAgregar();
         
-        dlgAgregar.setSize(370, 370);
+        dlgAgregar.setSize(370, 490);
         dlgAgregar.setPreferredSize(dlgAgregar.getSize());
         dlgAgregar.setLocationRelativeTo(null);
         dlgAgregar.setAlwaysOnTop(true);
@@ -507,7 +516,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     
     public void realizarEntradaTerminado()
     {
-        if (!txtNoPartidaAgregar.getText().equals("") && !txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals("") && !txtKgTotalesAgregar.getText().equals(""))
+        if (!txtNoPartidaAgregar.getText().equals("") && !txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals(""))
         {
             if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
             {
@@ -519,7 +528,21 @@ public class PnlTerminado extends javax.swing.JPanel {
                         it.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         it.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
                         it.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
-                        it.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
+                        
+                        if (jrKg.isSelected())
+                        {
+                            it.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
+                            
+                            it.setDecimetros(0);
+                            it.setPies(0);
+                        }
+                        else if (jrArea.isSelected())
+                        {
+                            it.setDecimetros(Double.parseDouble(txtDecimetrosAgregar.getText()));
+                            it.setPies(Double.parseDouble(txtPiesCuadradosAgregar.getText()));
+                            
+                            it.setKgTotales(0);
+                        }
                         
                         itc.agregarInvTerminado(it);
                         istc.actualizarNoPiezasActual(it);
@@ -692,8 +715,16 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Metodo para inicializar los campos de dlgEnvTermi
     public void inicializarCamposEnvSal() throws Exception
     {
+        btnGroup1.add(jrkgEnvSal);
+        btnGroup1.add(jrAreaEnvSal);
+        
         txtNoPiezasEnvSal.setText("");
-        txtKgTotalesEnvSal.setText("0");
+        txtKgTotalesEnvSal.setText("");
+        txtDecimetrosEnvSal.setText("");
+        txtPiesEnvSal.setText("");
+        jrkgEnvSal.setSelected(true);
+        txtDecimetrosEnvSal.setEnabled(false);
+        txtPiesEnvSal.setEnabled(false);
         
         int fila = tblTerminado.getSelectedRow();
         
@@ -724,8 +755,8 @@ public class PnlTerminado extends javax.swing.JPanel {
         
         txtNoPartidaEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
         txtTipoRecorteEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
-        cmbCalibreEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 7)));
-        cmbSeleccionEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 6)));
+        cmbCalibreEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 9)));
+        cmbSeleccionEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 8)));
         txtNoPiezasActualesEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 3)));
     }
     
@@ -735,7 +766,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         
         inicializarCamposEnvSal();
         
-        dlgEnvSal.setSize(360, 400);
+        dlgEnvSal.setSize(360, 540);
         dlgEnvSal.setPreferredSize(dlgEnvSal.getSize());
         dlgEnvSal.setLocationRelativeTo(null);
         dlgEnvSal.setAlwaysOnTop(true);
@@ -759,7 +790,7 @@ public class PnlTerminado extends javax.swing.JPanel {
                     isalt = new InventarioSalTerminado();
                     isaltc = new InventarioSalTerminadoCommands();
 
-                    isalt.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][9]));
+                    isalt.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][14]));
                     isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
 
                     isaltc.agregarInvSalTer(isalt);
@@ -811,6 +842,62 @@ public class PnlTerminado extends javax.swing.JPanel {
             txtKgTotalesEnvSal.setText("0");
         }
     }
+    
+    public void calcPiesTotalesAgregar()
+    {
+        try
+        {
+            double decimetros = Double.parseDouble(txtDecimetrosAgregar.getText());
+            double pies = decimetros * 0.328084;
+            txtPiesCuadradosAgregar.setText(String.valueOf(pies));
+        }
+        catch (Exception e)
+        {
+            txtPiesCuadradosAgregar.setText("");
+        }
+    }
+    
+    public void calcDecimetrosTotalesAgregar()
+    {
+        try
+        {
+            double pies = Double.parseDouble(txtPiesCuadradosAgregar.getText());
+            double decimetros = pies * 3.048;
+            txtDecimetrosAgregar.setText(String.valueOf(decimetros));
+        }
+        catch (Exception e)
+        {
+            txtDecimetrosAgregar.setText("");
+        }
+    }
+    
+    public void calcPiesTotalesEnvSal()
+    {
+        try
+        {
+            double decimetros = Double.parseDouble(txtDecimetrosEnvSal.getText());
+            double pies = decimetros * 0.328084;
+            txtPiesEnvSal.setText(String.valueOf(pies));
+        }
+        catch (Exception e)
+        {
+            txtPiesEnvSal.setText("");
+        }
+    }
+    
+    public void calcDecimetrosTotalesEnvSal()
+    {
+        try
+        {
+            double pies = Double.parseDouble(txtPiesEnvSal.getText());
+            double decimetros = pies * 3.048;
+            txtDecimetrosEnvSal.setText(String.valueOf(decimetros));
+        }
+        catch (Exception e)
+        {
+            txtDecimetrosEnvSal.setText("");
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -840,6 +927,12 @@ public class PnlTerminado extends javax.swing.JPanel {
         txtKgTotalesAgregar = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
+        jrKg = new javax.swing.JRadioButton();
+        jrArea = new javax.swing.JRadioButton();
+        txtDecimetrosAgregar = new javax.swing.JTextField();
+        txtPiesCuadradosAgregar = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         dlgBuscar = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -868,6 +961,14 @@ public class PnlTerminado extends javax.swing.JPanel {
         txtNoPiezasEnvSal = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
+        txtDecimetrosEnvSal = new javax.swing.JTextField();
+        txtPiesEnvSal = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jrkgEnvSal = new javax.swing.JRadioButton();
+        jrAreaEnvSal = new javax.swing.JRadioButton();
+        btnGroup = new javax.swing.ButtonGroup();
+        btnGroup1 = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTerminado = new javax.swing.JTable();
@@ -991,7 +1092,6 @@ public class PnlTerminado extends javax.swing.JPanel {
         jLabel65.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel65.setText("Kg Totales:");
 
-        txtKgTotalesAgregar.setEditable(false);
         txtKgTotalesAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtKgTotalesAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -1025,6 +1125,44 @@ public class PnlTerminado extends javax.swing.JPanel {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
+        jrKg.setText("Kilogramos");
+        jrKg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrKgActionPerformed(evt);
+            }
+        });
+
+        jrArea.setText("Área");
+        jrArea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrAreaActionPerformed(evt);
+            }
+        });
+
+        txtDecimetrosAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDecimetrosAgregarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDecimetrosAgregarKeyTyped(evt);
+            }
+        });
+
+        txtPiesCuadradosAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPiesCuadradosAgregarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPiesCuadradosAgregarKeyTyped(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Decimetros:");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Pies:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1032,11 +1170,20 @@ public class PnlTerminado extends javax.swing.JPanel {
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnRealizarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelarAgregar))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnRealizarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCancelarAgregar)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jrKg)
+                                .addGap(61, 61, 61)
+                                .addComponent(jrArea)
+                                .addGap(82, 82, 82))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel63)
@@ -1044,24 +1191,32 @@ public class PnlTerminado extends javax.swing.JPanel {
                             .addComponent(jLabel32)
                             .addComponent(jLabel62)
                             .addComponent(jLabel64)
-                            .addComponent(jLabel65))
+                            .addComponent(jLabel65)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtKgTotalesAgregar)
-                            .addComponent(cmbSeleccionAgregar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNoPiezasAgregar, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNoPartidaAgregar, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPiesCuadradosAgregar)
+                            .addComponent(txtDecimetrosAgregar)
+                            .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtNoPiezasAgregar)
+                            .addComponent(txtNoPartidaAgregar)
+                            .addComponent(txtTipoRecorteAgregar)
+                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton3)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrKg)
+                    .addComponent(jrArea))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1090,11 +1245,19 @@ public class PnlTerminado extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel65))
-                .addGap(17, 17, 17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDecimetrosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPiesCuadradosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRealizarEntrada)
                     .addComponent(btnCancelarAgregar))
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout dlgAgregarLayout = new javax.swing.GroupLayout(dlgAgregar.getContentPane());
@@ -1277,8 +1440,12 @@ public class PnlTerminado extends javax.swing.JPanel {
         jLabel70.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel70.setText("Kg Totales:");
 
-        txtKgTotalesEnvSal.setEditable(false);
         txtKgTotalesEnvSal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtKgTotalesEnvSal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtKgTotalesEnvSalKeyTyped(evt);
+            }
+        });
 
         jLabel71.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel71.setText("No. Piezas:");
@@ -1316,43 +1483,98 @@ public class PnlTerminado extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        txtDecimetrosEnvSal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDecimetrosEnvSalKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDecimetrosEnvSalKeyTyped(evt);
+            }
+        });
+
+        txtPiesEnvSal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPiesEnvSalKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPiesEnvSalKeyTyped(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setText("Decimetros:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Pies:");
+
+        jrkgEnvSal.setText("Kilogramos");
+        jrkgEnvSal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrkgEnvSalActionPerformed(evt);
+            }
+        });
+
+        jrAreaEnvSal.setText("Área");
+        jrAreaEnvSal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrAreaEnvSalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel71)
-                    .addComponent(jLabel68)
-                    .addComponent(jLabel70)
-                    .addComponent(jLabel33)
-                    .addComponent(jLabel66)
-                    .addComponent(jLabel67)
-                    .addComponent(jLabel69))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNoPartidaEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNoPiezasEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNoPiezasActualesEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSeleccionEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCalibreEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTipoRecorteEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtKgTotalesEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(68, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRealizarEntrada1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancelarAgregar1)
-                .addGap(24, 24, 24))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel71)
+                            .addComponent(jLabel68)
+                            .addComponent(jLabel70)
+                            .addComponent(jLabel33)
+                            .addComponent(jLabel67)
+                            .addComponent(jLabel69)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel66))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPiesEnvSal)
+                            .addComponent(txtNoPartidaEnvSal, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(txtNoPiezasEnvSal, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(txtNoPiezasActualesEnvSal, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(cmbSeleccionEnvSal, 0, 122, Short.MAX_VALUE)
+                            .addComponent(cmbCalibreEnvSal, 0, 122, Short.MAX_VALUE)
+                            .addComponent(txtTipoRecorteEnvSal, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(txtKgTotalesEnvSal, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(txtDecimetrosEnvSal))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(0, 74, Short.MAX_VALUE)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(btnRealizarEntrada1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCancelarAgregar1)
+                                .addGap(24, 24, 24))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jrkgEnvSal)
+                                .addGap(63, 63, 63)
+                                .addComponent(jrAreaEnvSal)
+                                .addGap(57, 57, 57))))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrkgEnvSal)
+                    .addComponent(jrAreaEnvSal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNoPartidaEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel33))
@@ -1376,11 +1598,19 @@ public class PnlTerminado extends javax.swing.JPanel {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNoPiezasEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel71))
-                .addGap(16, 16, 16)
+                .addGap(13, 13, 13)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel70)
+                    .addComponent(txtKgTotalesEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtKgTotalesEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel70))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                    .addComponent(txtDecimetrosEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(13, 13, 13)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPiesEnvSal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRealizarEntrada1)
                     .addComponent(btnCancelarAgregar1))
@@ -1963,7 +2193,7 @@ try {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void txtNoPiezasAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasAgregarKeyReleased
-        calcKgTotales();
+//        calcKgTotales();
     }//GEN-LAST:event_txtNoPiezasAgregarKeyReleased
 
     private void btnRealizarEntrada1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntrada1ActionPerformed
@@ -1998,7 +2228,7 @@ try {
     }//GEN-LAST:event_txtNoPiezasActualesEnvSalKeyTyped
 
     private void txtNoPiezasEnvSalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEnvSalKeyReleased
-        calcKgTotalesEnvSal();
+//        calcKgTotalesEnvSal();
     }//GEN-LAST:event_txtNoPiezasEnvSalKeyReleased
 
     private void txtNoPiezasEnvSalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEnvSalKeyTyped
@@ -2012,6 +2242,82 @@ try {
         }
     }//GEN-LAST:event_txtNoPiezasEnvSalKeyTyped
 
+    private void jrAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrAreaActionPerformed
+        txtKgTotalesAgregar.setEnabled(false);
+        txtKgTotalesAgregar.setText("");
+        
+        txtDecimetrosAgregar.setEnabled(true);
+        txtDecimetrosAgregar.setText("");
+        txtPiesCuadradosAgregar.setEnabled(true);
+        txtPiesCuadradosAgregar.setText("");
+    }//GEN-LAST:event_jrAreaActionPerformed
+
+    private void jrKgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrKgActionPerformed
+        txtKgTotalesAgregar.setEnabled(true);
+        txtKgTotalesAgregar.setText("");
+        
+        txtDecimetrosAgregar.setEnabled(false);
+        txtDecimetrosAgregar.setText("");
+        txtPiesCuadradosAgregar.setEnabled(false);
+        txtPiesCuadradosAgregar.setText("");
+    }//GEN-LAST:event_jrKgActionPerformed
+
+    private void txtDecimetrosAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosAgregarKeyReleased
+        calcPiesTotalesAgregar();
+    }//GEN-LAST:event_txtDecimetrosAgregarKeyReleased
+
+    private void txtPiesCuadradosAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesCuadradosAgregarKeyReleased
+        calcDecimetrosTotalesAgregar();
+    }//GEN-LAST:event_txtPiesCuadradosAgregarKeyReleased
+
+    private void txtDecimetrosAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosAgregarKeyTyped
+        validarNumeros(evt, txtDecimetrosAgregar.getText());
+    }//GEN-LAST:event_txtDecimetrosAgregarKeyTyped
+
+    private void txtPiesCuadradosAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesCuadradosAgregarKeyTyped
+        validarNumeros(evt, txtPiesCuadradosAgregar.getText());
+    }//GEN-LAST:event_txtPiesCuadradosAgregarKeyTyped
+
+    private void txtKgTotalesEnvSalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKgTotalesEnvSalKeyTyped
+        validarNumeros(evt, txtKgTotalesEnvSal.getText());
+    }//GEN-LAST:event_txtKgTotalesEnvSalKeyTyped
+
+    private void txtPiesEnvSalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesEnvSalKeyTyped
+        validarNumeros(evt, txtPiesEnvSal.getText());
+    }//GEN-LAST:event_txtPiesEnvSalKeyTyped
+
+    private void txtDecimetrosEnvSalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosEnvSalKeyTyped
+        validarNumeros(evt, txtDecimetrosEnvSal.getText());
+    }//GEN-LAST:event_txtDecimetrosEnvSalKeyTyped
+
+    private void jrkgEnvSalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrkgEnvSalActionPerformed
+        txtKgTotalesEnvSal.setEnabled(true);
+        txtKgTotalesEnvSal.setText("");
+        
+        txtDecimetrosEnvSal.setEnabled(false);
+        txtDecimetrosEnvSal.setText("");
+        txtPiesEnvSal.setEnabled(false);
+        txtPiesEnvSal.setText("");
+    }//GEN-LAST:event_jrkgEnvSalActionPerformed
+
+    private void jrAreaEnvSalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrAreaEnvSalActionPerformed
+        txtKgTotalesEnvSal.setEnabled(false);
+        txtKgTotalesEnvSal.setText("");
+        
+        txtDecimetrosEnvSal.setEnabled(true);
+        txtDecimetrosEnvSal.setText("");
+        txtPiesEnvSal.setEnabled(true);
+        txtPiesEnvSal.setText("");
+    }//GEN-LAST:event_jrAreaEnvSalActionPerformed
+
+    private void txtDecimetrosEnvSalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosEnvSalKeyReleased
+        calcPiesTotalesEnvSal();
+    }//GEN-LAST:event_txtDecimetrosEnvSalKeyReleased
+
+    private void txtPiesEnvSalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesEnvSalKeyReleased
+        calcDecimetrosTotalesEnvSal();
+    }//GEN-LAST:event_txtPiesEnvSalKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEntrada;
@@ -2019,6 +2325,8 @@ try {
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregar1;
     private javax.swing.JButton btnEnviarTerminado;
+    private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.ButtonGroup btnGroup1;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntrada1;
     private javax.swing.JButton btnReporteEntrada;
@@ -2040,6 +2348,7 @@ try {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -2048,12 +2357,15 @@ try {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
@@ -2091,11 +2403,17 @@ try {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
+    private javax.swing.JRadioButton jrArea;
+    private javax.swing.JRadioButton jrAreaEnvSal;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
+    private javax.swing.JRadioButton jrKg;
+    private javax.swing.JRadioButton jrkgEnvSal;
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JTable tblBuscarPartidaInvSemTer;
     private javax.swing.JTable tblTerminado;
+    private javax.swing.JTextField txtDecimetrosAgregar;
+    private javax.swing.JTextField txtDecimetrosEnvSal;
     private javax.swing.JTextField txtKgTotalesAgregar;
     private javax.swing.JTextField txtKgTotalesEnvSal;
     private javax.swing.JTextField txtNoPartida;
@@ -2104,6 +2422,8 @@ try {
     private javax.swing.JTextField txtNoPiezasActualesEnvSal;
     private javax.swing.JTextField txtNoPiezasAgregar;
     private javax.swing.JTextField txtNoPiezasEnvSal;
+    private javax.swing.JTextField txtPiesCuadradosAgregar;
+    private javax.swing.JTextField txtPiesEnvSal;
     private javax.swing.JTextField txtTipoRecorteAgregar;
     private javax.swing.JTextField txtTipoRecorteEnvSal;
     // End of variables declaration//GEN-END:variables

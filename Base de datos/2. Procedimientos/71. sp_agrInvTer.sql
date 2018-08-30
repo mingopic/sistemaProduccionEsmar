@@ -15,6 +15,8 @@ create procedure sp_agrInvTer
 	, @idSeleccion  int
 	, @noPiezas     int
 	, @kgTotales    float
+  , @decimetros   float
+  , @pies         float
 )
 as begin
 
@@ -29,6 +31,11 @@ as begin
       , @noPiezas
       , @noPiezas
       , @kgTotales
+      , @kgTotales
+      , @decimetros
+      , @decimetros
+      , @pies
+      , @pies
       , getdate()
     )
 end

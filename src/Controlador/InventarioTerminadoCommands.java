@@ -41,7 +41,7 @@ public class InventarioTerminadoCommands {
 
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 10;
+        int columnas = 15;
         int i = 0;
 
         c.conectar();
@@ -63,14 +63,19 @@ public class InventarioTerminadoCommands {
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
                 datos[i][4] = rs.getString("kgTotales");
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
-                datos[i][6] = rs.getString("seleccion");
-                datos[i][7] = rs.getString("calibre");
+                datos[i][5] = rs.getString("kgTotalesActual");
+                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
+                datos[i][7] = String.format("%.2f",Double.parseDouble(rs.getString("decimetros")));
+                datos[i][8] = String.format("%.2f",Double.parseDouble(rs.getString("decimetrosActual")));
+                datos[i][9] = String.format("%.2f",Double.parseDouble(rs.getString("pies")));
+                datos[i][10] = String.format("%.2f",Double.parseDouble(rs.getString("piesActual")));
+                datos[i][11] = rs.getString("seleccion");
+                datos[i][12] = rs.getString("calibre");
                 
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][8] = sdf.format(sqlDate);
-                datos[i][9] = rs.getString("idInvTerminado");
+                datos[i][13] = sdf.format(sqlDate);
+                datos[i][14] = rs.getString("idInvTerminado");
                 i++; 
             }
         }
@@ -89,7 +94,9 @@ public class InventarioTerminadoCommands {
                 + "," + it.getIdCalibre()
                 + ","+ it.getIdSeleccion()
                 + ","+ it.getNoPiezas()
-                + "," + it.getKgTotales();
+                + "," + it.getKgTotales()
+                + "," + it.getDecimetros()
+                + "," + it.getPies();
         PreparedStatement pstmt = null;
         c.conectar();
         System.out.println(query);

@@ -32,7 +32,7 @@ as begin
       @idInvSemiterminado
       , @noPiezas
       , @noPiezasActuales
-	  , @kgTotales
+	    , @kgTotales
       , @fechaEntrada
     )
 end

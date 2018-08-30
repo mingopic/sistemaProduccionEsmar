@@ -20,6 +20,24 @@ public class InventarioTerminado {
     String fechaEntrada;
     String fecha;
     String fecha1;
+    double decimetros;
+    double pies;
+
+    public double getDecimetros() {
+        return decimetros;
+    }
+
+    public void setDecimetros(double decimetros) {
+        this.decimetros = decimetros;
+    }
+
+    public double getPies() {
+        return pies;
+    }
+
+    public void setPies(double pies) {
+        this.pies = pies;
+    }
 
     public String getFecha() {
         return fecha;

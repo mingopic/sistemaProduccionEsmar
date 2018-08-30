@@ -15,11 +15,24 @@ create procedure sp_actInvSemiterminado
 )
 as begin
 
+  declare @promKg float
+  
+  set @promKg =
+  (
+    select
+      (kgTotales/noPiezas)
+    from
+      tb_invSemiterminado
+    where
+      idInvSemiterminado = @idInvSemiterminado
+  )
+
   update
     tb_invSemiterminado
     
   set
     noPiezasActuales = noPiezasActuales-@piezasUtilizar
+    , kgTotalesActuales = kgTotalesActuales-(@promKg*@piezasUtilizar)
     
   where
     idInvSemiterminado = @idInvSemiterminado

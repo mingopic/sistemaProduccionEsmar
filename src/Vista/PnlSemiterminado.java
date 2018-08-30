@@ -81,7 +81,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso Actual","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
     };
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
@@ -716,7 +716,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     ist = new InventarioSemiterminadoTerminado();
                     istc = new InventarioSemiterminadoTerminadoCommands();
 
-                    ist.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][9]));
+                    ist.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
                     ist.setNoPiezas(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
                     ist.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
                     double kgTotales = (Double.parseDouble(datosSemiterminado[fila][5]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));

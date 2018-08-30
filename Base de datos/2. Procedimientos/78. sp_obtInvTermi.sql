@@ -20,8 +20,10 @@ as begin
 		, c.descripcion as calibre
 		, s.descripcion as seleccion
 		, sum(it.noPiezasActuales) as noPiezas
-		, sum(it.kgTotales) as peso
-	    , sum(it.kgTotales)/sum(it.noPiezasActuales) as pesoProm
+		, sum(it.kgTotalesActual) as peso
+	  , sum(it.kgTotalesActual)/sum(it.noPiezasActuales) as pesoProm
+    , sum(it.decimetrosActual) as decimetros
+    , sum(it.piesActual) as pies
 
 	from
 		tb_invTerminado as it

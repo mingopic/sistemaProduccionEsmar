@@ -92,7 +92,7 @@ as begin
 		, pd.idTipoRecorte
 		, ins.idCalibre
 		, ins.idSeleccion
-		, ins.kgTotales
+		, ins.kgTotalesActuales
 		, ins.noPiezas
 		, ins.noPiezasActuales
     , ''

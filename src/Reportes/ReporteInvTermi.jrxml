@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24af15e0-de4c-4d94-990b-025efedb3c5f">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="27"/>
+	<property name="ireport.y" value="48"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -34,6 +34,8 @@
 	<field name="noPiezas" class="java.lang.Integer"/>
 	<field name="peso" class="java.lang.Double"/>
 	<field name="pesoProm" class="java.lang.Double"/>
+	<field name="decimetros" class="java.lang.Double"/>
+	<field name="pies" class="java.lang.Double"/>
 	<variable name="noPiezas_1" class="java.lang.Integer" resetType="Group" resetGroup="tipoRecorte" calculation="Sum">
 		<variableExpression><![CDATA[$F{noPiezas}]]></variableExpression>
 	</variable>
@@ -46,6 +48,12 @@
 	<variable name="peso_2" class="java.lang.Double" resetType="Group" resetGroup="tipoRecorte" calculation="Sum">
 		<variableExpression><![CDATA[$F{peso}]]></variableExpression>
 	</variable>
+	<variable name="decimetros_1" class="java.lang.Double" resetType="Group" resetGroup="tipoRecorte" calculation="Sum">
+		<variableExpression><![CDATA[$F{decimetros}]]></variableExpression>
+	</variable>
+	<variable name="pies_1" class="java.lang.Double" resetType="Group" resetGroup="tipoRecorte" calculation="Sum">
+		<variableExpression><![CDATA[$F{pies}]]></variableExpression>
+	</variable>
 	<group name="tipoRecorte">
 		<groupExpression><![CDATA[$F{tipoRecorte}]]></groupExpression>
 		<groupHeader>
@@ -53,7 +61,7 @@
 				<frame>
 					<reportElement mode="Opaque" x="0" y="0" width="555" height="42" forecolor="#000000" backcolor="#CCCCFF" uuid="09eb1fd7-f089-40fb-9c76-1637c53e1834"/>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="2" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="64448509-e320-43b1-8210-f7fed471c0b6"/>
+						<reportElement style="Column header" mode="Transparent" x="2" y="24" width="66" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="64448509-e320-43b1-8210-f7fed471c0b6"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -61,7 +69,7 @@
 						<text><![CDATA[Calibre]]></text>
 					</staticText>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="113" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="87f5de8a-3ce4-4462-8e26-9bb7d610013b"/>
+						<reportElement style="Column header" mode="Transparent" x="68" y="24" width="71" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="87f5de8a-3ce4-4462-8e26-9bb7d610013b"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -69,7 +77,7 @@
 						<text><![CDATA[Selección]]></text>
 					</staticText>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="224" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e28ec340-ee89-4caf-932e-b8a6fc70010a"/>
+						<reportElement style="Column header" mode="Transparent" x="139" y="24" width="74" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e28ec340-ee89-4caf-932e-b8a6fc70010a"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -77,7 +85,7 @@
 						<text><![CDATA[No. Piezas]]></text>
 					</staticText>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="335" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f1761e64-bf24-46ae-baad-8d4835e25985"/>
+						<reportElement style="Column header" mode="Transparent" x="213" y="24" width="75" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f1761e64-bf24-46ae-baad-8d4835e25985"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -85,7 +93,7 @@
 						<text><![CDATA[Peso]]></text>
 					</staticText>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="442" y="24" width="111" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="2b89c7e8-da75-47a6-aaaa-becae79fb09e"/>
+						<reportElement style="Column header" mode="Transparent" x="288" y="24" width="83" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="2b89c7e8-da75-47a6-aaaa-becae79fb09e"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -100,6 +108,22 @@
 						</textElement>
 						<textFieldExpression><![CDATA[$F{tipoRecorte}]]></textFieldExpression>
 					</textField>
+					<staticText>
+						<reportElement style="Column header" mode="Transparent" x="371" y="24" width="83" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="0f708b9d-2fe3-4c77-8fb2-ad9942ece9b4"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<paragraph lineSpacing="Single"/>
+						</textElement>
+						<text><![CDATA[Decimetros]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="Column header" mode="Transparent" x="455" y="24" width="83" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d8f35080-e82f-482e-9597-02d1ca2289b8"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<paragraph lineSpacing="Single"/>
+						</textElement>
+						<text><![CDATA[Pies]]></text>
+					</staticText>
 				</frame>
 			</band>
 		</groupHeader>
@@ -117,7 +141,7 @@
 					<text><![CDATA[Totales]]></text>
 				</staticText>
 				<textField pattern="#,##0" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="224" y="2" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="14a29a26-0fc7-4578-870e-d50efb8b2bdb"/>
+					<reportElement mode="Transparent" x="139" y="2" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="14a29a26-0fc7-4578-870e-d50efb8b2bdb"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -125,12 +149,28 @@
 					<textFieldExpression><![CDATA[$V{noPiezas_2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="335" y="2" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2f678182-5cbd-49d3-aeff-ce249e9b7a56"/>
+					<reportElement mode="Transparent" x="213" y="2" width="75" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2f678182-5cbd-49d3-aeff-ce249e9b7a56"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{peso_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="371" y="0" width="80" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="fb80af1b-8932-45cd-be9b-0e38d057531f"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{decimetros_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="454" y="0" width="84" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e0b81f14-1358-4817-8915-13d6c04ae4be"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{pies_1}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -173,7 +213,7 @@
 	<detail>
 		<band height="25" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="2" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5e1a3bc5-be79-44b6-b8f5-356dfafe4b7e"/>
+				<reportElement mode="Transparent" x="2" y="0" width="66" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5e1a3bc5-be79-44b6-b8f5-356dfafe4b7e"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -181,7 +221,7 @@
 				<textFieldExpression><![CDATA[$F{calibre}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="113" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4dc652b1-9f08-4e10-a884-4aeaa78cf43c"/>
+				<reportElement mode="Transparent" x="68" y="0" width="71" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4dc652b1-9f08-4e10-a884-4aeaa78cf43c"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -189,7 +229,7 @@
 				<textFieldExpression><![CDATA[$F{seleccion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="224" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="1c32208c-7547-499f-8987-5e3a799395b3"/>
+				<reportElement mode="Transparent" x="139" y="0" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="1c32208c-7547-499f-8987-5e3a799395b3"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -197,7 +237,7 @@
 				<textFieldExpression><![CDATA[$F{noPiezas}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="335" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="1e2d44ea-0874-4029-a615-ef450209bda7"/>
+				<reportElement mode="Transparent" x="213" y="0" width="75" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="1e2d44ea-0874-4029-a615-ef450209bda7"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -205,12 +245,28 @@
 				<textFieldExpression><![CDATA[$F{peso}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="442" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4b64e276-fa03-4a77-a51d-8a2e3efc7a0e"/>
+				<reportElement mode="Transparent" x="288" y="0" width="83" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4b64e276-fa03-4a77-a51d-8a2e3efc7a0e"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pesoProm}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="371" y="0" width="80" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="d7e15e53-e0bd-4a5f-9d24-6ab15416541a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{decimetros}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="452" y="0" width="86" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="8926333d-9840-4e63-bf13-c02600c2fffc"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pies}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

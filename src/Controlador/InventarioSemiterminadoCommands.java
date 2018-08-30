@@ -65,7 +65,7 @@ public class InventarioSemiterminadoCommands {
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
                 datos[i][4] = rs.getString("kgTotales");
-                datos[i][5] = rs.getString("kgTotalesActuales");
+                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActuales")));
                 datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
                 datos[i][7] = rs.getString("seleccion");
                 datos[i][8] = rs.getString("calibre");

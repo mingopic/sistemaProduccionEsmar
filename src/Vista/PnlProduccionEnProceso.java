@@ -265,6 +265,36 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void generarReporteInventario()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/InvEnProceso.jasper");
+
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("idProceso", pr.getDescripcion());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -296,6 +326,8 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         btnReporteFichaProd = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnReporteListaPartProdProc = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        btnReporteListaPartProdProc1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProduccionProceso = new javax.swing.JTable();
 
@@ -505,6 +537,22 @@ try {
     });
     jToolBar2.add(btnReporteListaPartProdProc);
 
+    jLabel7.setText("   ");
+    jToolBar2.add(jLabel7);
+
+    btnReporteListaPartProdProc1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteListaPartProdProc1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+    btnReporteListaPartProdProc1.setText("Reporte de Inventario");
+    btnReporteListaPartProdProc1.setFocusable(false);
+    btnReporteListaPartProdProc1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteListaPartProdProc1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteListaPartProdProc1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteListaPartProdProc1ActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteListaPartProdProc1);
+
     tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
             {null, null, null, null, null, null, null, null, null, null, null, null}
@@ -621,11 +669,16 @@ try {
         generarReporteListaPartidasProdProc();
     }//GEN-LAST:event_btnReporteListaPartProdProcActionPerformed
 
+    private void btnReporteListaPartProdProc1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteListaPartProdProc1ActionPerformed
+        generarReporteInventario();
+    }//GEN-LAST:event_btnReporteListaPartProdProc1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnReporteFichaProd;
     private javax.swing.JButton btnReporteListaPartProdProc;
+    private javax.swing.JButton btnReporteListaPartProdProc1;
     private javax.swing.JComboBox<String> cmbProceso;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
@@ -637,6 +690,7 @@ try {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;

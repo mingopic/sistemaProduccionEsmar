@@ -18,6 +18,7 @@ public class PartidaDisp {
     int idTipoRecorte;
     String proveedor;
     Double kgXpieza;
+    int idRecepcionCuero;
 
     public int getNoPartida() {
         return noPartida;
@@ -82,6 +83,12 @@ public class PartidaDisp {
     public void setKgXpieza(Double kgXpieza) {
         this.kgXpieza = kgXpieza;
     }
-    
-    
+
+    public int getIdRecepcionCuero() {
+        return idRecepcionCuero;
+    }
+
+    public void setIdRecepcionCuero(int idRecepcionCuero) {
+        this.idRecepcionCuero = idRecepcionCuero;
+    }
 }

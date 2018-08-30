@@ -100,6 +100,7 @@ public class PartidaCommands {
                     pd.setIdPartida(rs.getInt("idPartida"));
                     pd.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
                     pd.setProveedor(rs.getString("Proveedor"));
+                    pd.setIdRecepcionCuero(rs.getInt("idRecepcionCuero"));
                     partidas.add(pd);
                 }
             }

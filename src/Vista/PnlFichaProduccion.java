@@ -164,10 +164,12 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         if (p.getIdProceso() == 2)
         {
             btnEliminarPartida.setEnabled(true);
+            btnEliminarRecorte.setEnabled(true);
         }
         else
         {
             btnEliminarPartida.setEnabled(false);
+            btnEliminarRecorte.setEnabled(false);
         }
 
         DefaultTableModel dtm = null;
@@ -699,6 +701,68 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
+    
+    public void eliminarRecorte()
+    {
+        try
+        {
+            int fila = tblPartidasDisponibles.getSelectedRow();
+            
+            if (fila != -1)
+            {
+                if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el recorte seleccionado?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                {
+                    pd = new PartidaDetalle();
+                    pdc = new PartidaDetalleCommands();
+
+                    pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
+                    pd.setNoPiezas(lstPartidas.get(fila).getNoPiezasAct());
+                    pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
+                    pd.setIdRecepcionCuero(lstPartidas.get(fila).getIdRecepcionCuero());
+                    pd.setIdTipoRecorte(lstPartidas.get(fila).getIdTipoRecorte());
+                    
+                    if (pd.getIdTipoRecorte() == 1)
+                    {
+                        JOptionPane.showMessageDialog(null, "No se puede eliminar este tipo de recorte","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    }
+                    else
+                    {
+                        int eliminar = pdc.validarBorrarRecorte(pd);
+
+                        if (eliminar == 1)
+                        {
+                            pdc.eliminarRecorte(pd);
+                            JOptionPane.showMessageDialog(null, "Recorte eliminado correctamente");
+
+                            PnlFichaProduccion pnlFichaProduccion = new PnlFichaProduccion();
+                            pnlPrincipalx.removeAll();
+                            pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+                            pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
+                        }
+                        else
+                        {
+                            if (pd.getIdTipoRecorte() == 2 || pd.getIdTipoRecorte() == 3)
+                            {
+                                JOptionPane.showMessageDialog(null, "El recorte Delantero Sillero o Crupon Sillero ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "El recorte que desea eliminar ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -738,6 +802,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         tblPartidasDisponibles = new javax.swing.JTable();
         btnAsignar = new javax.swing.JButton();
         btnEliminarPartida = new javax.swing.JButton();
+        btnEliminarRecorte = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -1020,13 +1085,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         tblPartidasDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "No. Partida", "Prov - Camión", "Recorte", "No. Piezas"
             }
         ));
         tblPartidasDisponibles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -1051,20 +1113,33 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         });
 
+        btnEliminarRecorte.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEliminarRecorte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btnEliminarRecorte.setText("Eliminar Recorte");
+        btnEliminarRecorte.setEnabled(false);
+        btnEliminarRecorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarRecorteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnRecortar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAsignar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminarPartida)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(btnRecortar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAsignar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminarRecorte))
+                    .addComponent(btnEliminarPartida))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1074,9 +1149,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRecortar)
                     .addComponent(btnAsignar)
-                    .addComponent(btnEliminarPartida))
+                    .addComponent(btnEliminarRecorte))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                .addComponent(btnEliminarPartida)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
         );
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1240,7 +1317,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1697,11 +1774,16 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         eliminarPartida();
     }//GEN-LAST:event_btnEliminarPartidaActionPerformed
 
+    private void btnEliminarRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarRecorteActionPerformed
+        eliminarRecorte();
+    }//GEN-LAST:event_btnEliminarRecorteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarPartida;
+    private javax.swing.JButton btnEliminarRecorte;
     private javax.swing.JButton btnGenerarFicha;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnRecortar;

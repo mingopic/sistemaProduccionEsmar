@@ -173,4 +173,53 @@ public class PartidaDetalleCommands {
         pstmt.executeUpdate();
         c.desconectar();
     }
+    
+    //Método que se llama para obtener la bandera para saber si se puede eliminar un tipo de recorte
+    public static int validarBorrarRecorte(PartidaDetalle pd) throws Exception {
+        String query= "execute sp_valBorrarRecorte "
+                + pd.getIdPartidaDet()
+                +", " + pd.getNoPiezas()
+                +", " + pd.getIdPartida()
+                +", " + pd.getIdRecepcionCuero()
+                +", " + pd.getIdTipoRecorte();
+        
+        int datos = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) 
+        {
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos = rs.getInt("borrar");
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
+    }
+    
+    //Método que se llama eliminar una partidaDet
+    public void eliminarRecorte(PartidaDetalle pd) throws Exception {
+        String query = "exec sp_eliRecorte "
+                + pd.getIdPartidaDet()
+                +", " + pd.getNoPiezas()
+                +", " + pd.getIdPartida()
+                +", " + pd.getIdRecepcionCuero()
+                +", " + pd.getIdTipoRecorte();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
 }

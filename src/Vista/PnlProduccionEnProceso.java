@@ -274,7 +274,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
 
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            parametros.put("idProceso", pr.getDescripcion());
+            parametros.put("idProceso", 0);
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

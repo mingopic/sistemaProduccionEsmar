@@ -15,6 +15,8 @@ create table tb_invCross
   , idPartida        int not null foreign key references tb_partida(idPartida)
   , noPiezas         int
   , noPiezasActuales int
+  , kgTotal          float
+  , kgActual         float
   , fechaEntrada     date
 )
 go

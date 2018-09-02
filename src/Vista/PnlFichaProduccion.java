@@ -1645,18 +1645,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                         return;
                     }
                 }
-//                for (int i = 0; i < lstInsumos.size(); i++) 
-//                {
-//                    if (lstInsumos.get(i).getIdProducto() != 0)
-//                    {
-//                        Double precioUnitario = lstInsumos.get(i).getPrecioUnitario();
-//                        if (precioUnitario <= 0.0)
-//                        {
-//                            JOptionPane.showMessageDialog(null,"Todos los campos P/U de la tabla Insumos por Proceso \ndeben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-//                            return;
-//                        }
-//                    }
-//                }
+                
                 FichaProd fp = new FichaProd();
                 FichaProdCommands fpc = new FichaProdCommands();
 

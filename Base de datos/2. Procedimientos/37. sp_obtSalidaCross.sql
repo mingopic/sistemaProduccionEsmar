@@ -21,7 +21,7 @@ as begin
 	begin
 	
 		select
-			p.noPartida, tr.descripcion, ics.noPiezas, ics.fechaEntrada
+			p.noPartida, tr.descripcion, ics.noPiezas, ics.kgTotal, ics.fechaEntrada
 		from
 			tb_invCrossSemi as ics
 		inner join
@@ -53,7 +53,7 @@ as begin
 	begin
 		
 		select
-			p.noPartida, tr.descripcion, ics.noPiezas, ics.fechaEntrada
+			p.noPartida, tr.descripcion, ics.noPiezas, ics.kgTotal, ics.fechaEntrada
 		from
 			tb_invCrossSemi as ics
 		inner join

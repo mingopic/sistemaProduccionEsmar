@@ -8,7 +8,7 @@ end
 go
 
 create trigger tr_insInvCross
-  on tb_partidaDet
+  on tb_fichaProdDet
   after insert
 as begin
   
@@ -17,16 +17,25 @@ as begin
     , @idPartida  int
     , @noPiezas   int
     , @idProceso  int
-    
-    
+    , @kg         float
+  
   select
     @idPartidaDet = idPartidaDet
-    , @idPartida = idPartida
+    , @kg = kgTotal
+  
+  from
+    inserted
+    
+  select
+    @idPartida = idPartida
     , @noPiezas = noPiezas
     , @idProceso = idProceso
   
   from
-    inserted
+    tb_partidaDet
+  
+  where
+    idPartidaDet = @idPartidaDet
     
   if @idProceso = 6
   begin
@@ -37,8 +46,10 @@ as begin
         idPartidaDet     
         , idPartida        
         , noPiezas         
-        , noPiezasActuales 
-        , fechaEntrada     
+        , noPiezasActuales
+        , kgTotal
+        , kgActual
+        , fechaEntrada   
       )
     values
       (
@@ -46,6 +57,8 @@ as begin
         , @idPartida
         , @noPiezas
         , @noPiezas
+        , @kg
+        , @kg
         , getdate()
       )
   end

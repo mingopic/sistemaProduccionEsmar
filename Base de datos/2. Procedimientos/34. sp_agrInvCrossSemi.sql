@@ -13,6 +13,7 @@ create procedure sp_agrInvCrossSemi
 	@idInvPCross        int
 	, @noPiezas         int
 	, @noPiezasActuales int
+  , @kg               float
 )
 as begin
 	declare @fechaEntrada datetime
@@ -31,6 +32,8 @@ as begin
       @idInvPCross
       , @noPiezas
       , @noPiezasActuales
+      , @kg
+      , @kg
       , @fechaEntrada
     )
 end

@@ -14,6 +14,8 @@ create table tb_invCrossSemi
   , idInvPCross      int not null foreign key references tb_partidaDet(idPartidaDet)
   , noPiezas         int
   , noPiezasActuales int
+  , kgTotal          float
+  , kgActual         float
   , fechaEntrada     date
 )
 go

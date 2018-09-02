@@ -25,6 +25,9 @@ as begin
 			p.noPartida
 			, tr.descripcion as tipoRecorte
 			, isalt.noPiezas
+      , isalt.kg
+      , isalt.decimetros
+      , isalt.pies
 			, s.descripcion as seleccion
 			, c.descripcion as calibre
 			, isalt.fechaEntrada
@@ -96,6 +99,9 @@ as begin
 			p.noPartida
 			, tr.descripcion as tipoRecorte
 			, isalt.noPiezas
+      , isalt.kg
+      , isalt.decimetros
+      , isalt.pies
 			, s.descripcion as seleccion
 			, c.descripcion as calibre
 			, isalt.fechaEntrada

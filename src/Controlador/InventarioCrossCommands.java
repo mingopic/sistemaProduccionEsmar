@@ -37,7 +37,7 @@ public class InventarioCrossCommands {
 
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 6;
+        int columnas = 8;
         int i = 0;
 
         c.conectar();
@@ -58,11 +58,13 @@ public class InventarioCrossCommands {
                 datos[i][1] = rs.getString("descripcion");
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
+                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotal")));
+                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgActual")));
                 
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][4] = sdf.format(sqlDate);
-                datos[i][5] = rs.getString("idInvPCross");
+                datos[i][6] = sdf.format(sqlDate);
+                datos[i][7] = rs.getString("idInvPCross");
                 i++; 
             }
         }
@@ -77,7 +79,7 @@ public class InventarioCrossCommands {
     public static void actualizarNoPiezasActual(InventarioCrossSemiterminado ics) throws Exception
     {
         String query = "exec sp_actInvCross "+ics.getIdInvPCross()+""
-            + ","+ics.getNoPiezas();
+            + ","+ics.getNoPiezas()+","+ics.getKgTotal();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

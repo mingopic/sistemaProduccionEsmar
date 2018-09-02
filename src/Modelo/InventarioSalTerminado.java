@@ -14,6 +14,33 @@ public class InventarioSalTerminado {
     int idInvTerminado;
     int noPiezas;
     String fechaEntrada;
+    double kg;
+    double decimetros;
+    double pies;
+
+    public double getDecimetros() {
+        return decimetros;
+    }
+
+    public void setDecimetros(double decimetros) {
+        this.decimetros = decimetros;
+    }
+
+    public double getPies() {
+        return pies;
+    }
+
+    public void setPies(double pies) {
+        this.pies = pies;
+    }
+
+    public double getKg() {
+        return kg;
+    }
+
+    public void setKg(double kg) {
+        this.kg = kg;
+    }
 
     public int getIdInvSalTerminado() {
         return idInvSalTerminado;

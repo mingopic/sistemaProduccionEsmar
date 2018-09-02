@@ -29,7 +29,7 @@ public class InventarioCrossSemiterminadoCommands {
     public static void agregarInvCrossSemi(InventarioCrossSemiterminado ics) throws Exception
     {
         String query = "exec sp_agrInvCrossSemi "+ics.getIdInvPCross()+""
-            + ","+ics.getNoPiezas()+","+ics.getNoPiezasActuales();
+            + ","+ics.getNoPiezas()+","+ics.getNoPiezasActuales()+","+ics.getKgTotal();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

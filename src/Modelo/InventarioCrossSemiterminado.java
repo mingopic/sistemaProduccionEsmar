@@ -17,6 +17,24 @@ public class InventarioCrossSemiterminado {
     String fechaEntrada;
     String fecha;
     String fecha1;
+    double kgTotal;
+    double kgActual;
+
+    public double getKgTotal() {
+        return kgTotal;
+    }
+
+    public void setKgTotal(double kgTotal) {
+        this.kgTotal = kgTotal;
+    }
+
+    public double getKgActual() {
+        return kgActual;
+    }
+
+    public void setKgActual(double kgActual) {
+        this.kgActual = kgActual;
+    }
 
     public String getFecha() {
         return fecha;

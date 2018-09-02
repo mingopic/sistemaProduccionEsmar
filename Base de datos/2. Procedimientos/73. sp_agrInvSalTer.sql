@@ -11,7 +11,10 @@ go
 create procedure sp_agrInvSalTer
 (
 	@idInvTerminado 	int
-	, @noPiezas         int
+	, @noPiezas       int
+  , @kg             float
+  , @decimetros     float
+  , @pies           float
 )
 as begin
 	declare @fechaEntrada datetime
@@ -29,6 +32,9 @@ as begin
 	(
       @idInvTerminado
       , @noPiezas
+      , @kg
+      , @decimetros
+      , @pies
       , @fechaEntrada
     )
 end

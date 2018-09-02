@@ -60,7 +60,7 @@ public class PnlCross extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas","No. Piezas Actuales","Fecha de Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas","No. Piezas Actuales","Kg Totales","Kg Actuales","Fecha de Entrada"
     };
    
     /**
@@ -289,10 +289,14 @@ public class PnlCross extends javax.swing.JPanel {
                     int fila = tblInvCross.getSelectedRow();
                     ics = new InventarioCrossSemiterminado();
                     icsc = new InventarioCrossSemiterminadoCommands();
+                    
+                    double promKg = Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString()) / Integer.parseInt(tblInvCross.getValueAt(fila, 2).toString());
+                    double kg = promKg * Integer.parseInt(txtNoPiezasEnvSemi.getText());
 
-                    ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][5]));
+                    ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][7]));
                     ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
                     ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
+                    ics.setKgTotal(kg);
 
                     icsc.agregarInvCrossSemi(ics);
                     icc.actualizarNoPiezasActual(ics);
@@ -1017,7 +1021,7 @@ try {
                 JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Cross","Advertencia",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Desvenado","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEnviarSemiterminadoActionPerformed
 

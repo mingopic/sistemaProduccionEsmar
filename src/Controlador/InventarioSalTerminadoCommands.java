@@ -23,7 +23,7 @@ public class InventarioSalTerminadoCommands {
     public static void agregarInvSalTer(InventarioSalTerminado isalt) throws Exception
     {
         String query = "execute sp_agrInvSalTer "+isalt.getIdInvTerminado()+""
-            + ","+isalt.getNoPiezas();
+            + ","+isalt.getNoPiezas()+","+isalt.getKg()+","+isalt.getDecimetros()+","+isalt.getPies();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

@@ -25,6 +25,8 @@ as begin
       , tr.descripcion
       , ic.noPiezas
       , ic.noPiezasActuales
+      , ic.kgTotal
+      , ic.kgActual
       , ic.fechaentrada
       , ic.idInvPCross
       
@@ -59,6 +61,8 @@ as begin
       , tr.descripcion
       , ic.noPiezas
       , ic.noPiezasActuales
+      , ic.kgTotal
+      , ic.kgActual
       , ic.fechaentrada
       , ic.idInvPCross
       

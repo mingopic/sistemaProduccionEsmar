@@ -12,6 +12,7 @@ create procedure sp_actInvCross
 (
   @idInvPCross      int
   , @piezasUtilizar int
+  , @kgDescontar    float
 )
 as begin
 
@@ -20,6 +21,7 @@ as begin
     
   set
     noPiezasActuales = noPiezasActuales-@piezasUtilizar
+    , kgActual = kgActual-@kgDescontar
     
   where
     idInvPCross = @idInvPCross

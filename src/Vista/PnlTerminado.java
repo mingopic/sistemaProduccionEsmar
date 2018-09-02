@@ -776,11 +776,11 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Método para realizar entrada de material y actualizar inventarios
     public void realizarEntradaEnvSal () throws Exception
     {
-        if ( !txtNoPiezasActualesEnvSal.getText().isEmpty() && Integer.parseInt(txtNoPiezasActualesEnvSal.getText()) != 0)
+        if ( !txtNoPiezasEnvSal.getText().isEmpty() && Integer.parseInt(txtNoPiezasEnvSal.getText()) != 0)
         {
             try 
             {
-                if (Integer.parseInt(txtNoPiezasActualesEnvSal.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSal.getText()))
+                if (Integer.parseInt(txtNoPiezasEnvSal.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSal.getText()))
                 {
                     JOptionPane.showMessageDialog(dlgEnvSal, "El numero de piezas debe ser menor o igual al número de piezas actuales");
                 }
@@ -792,6 +792,21 @@ public class PnlTerminado extends javax.swing.JPanel {
 
                     isalt.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][14]));
                     isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
+                    
+                    if (jrKg.isSelected())
+                    {
+                        isalt.setKg(Double.parseDouble(txtKgTotalesEnvSal.getText()));
+
+                        isalt.setDecimetros(0);
+                        isalt.setPies(0);
+                    }
+                    else if (jrArea.isSelected())
+                    {
+                        isalt.setDecimetros(Double.parseDouble(txtDecimetrosEnvSal.getText()));
+                        isalt.setPies(Double.parseDouble(txtPiesEnvSal.getText()));
+
+                        isalt.setKg(0);
+                    }
 
                     isaltc.agregarInvSalTer(isalt);
                     itc.actualizarNoPiezasActual(isalt);

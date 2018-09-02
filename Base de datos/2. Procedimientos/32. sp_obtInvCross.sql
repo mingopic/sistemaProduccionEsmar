@@ -14,6 +14,7 @@ as begin
 	select
 		tr.descripcion
     , ic.noPiezasActuales
+    , ic.kgActual
     
 	from
 		tb_tipoRecorte as tr

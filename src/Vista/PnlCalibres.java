@@ -27,7 +27,7 @@ public class PnlCalibres extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols_tblCalibres = new String[]
     {
-        "Calibre"
+        "Calibre" , "Estatus"
     };
    
     /**
@@ -52,7 +52,7 @@ public class PnlCalibres extends javax.swing.JPanel {
         try 
         {   
             cc = new CalibreCommands();
-            datos = cc.obtenerCalibres();
+            datos = cc.obtenerTodosCalibres();
             
             dtm = new DefaultTableModel(datos, cols_tblCalibres){
             public boolean isCellEditable(int row, int column) {
@@ -91,11 +91,11 @@ public class PnlCalibres extends javax.swing.JPanel {
                 return;
             }
             
-            //Validar que el nombre del calibre no sea mayor a 100 caracteres
-            if (c.getDescripcion().length() > 100)
+            //Validar que el nombre del calibre no sea mayor a 15 caracteres
+            if (c.getDescripcion().length() > 15)
             {   
                 dlgAgregarCalibre.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Solo se admiten 100 caracteres \npara el nombre del calibre","Mensaje",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Solo se admiten 15 caracteres \npara el nombre del calibre","Mensaje",JOptionPane.WARNING_MESSAGE);
                 dlgAgregarCalibre.setVisible(true);
                 return;
             }
@@ -106,6 +106,14 @@ public class PnlCalibres extends javax.swing.JPanel {
             if (c.getIdCalibre()== 0) 
             {
                 c.setDescripcion(nombre);
+                if (cmbEstatusAgregar.getSelectedItem().toString().equals("Activo"))
+                {
+                    c.setEstatus(1);
+                }
+                else
+                {
+                    c.setEstatus(0);
+                }
                 cc.insertarCalibre(c);
                 dlgAgregarCalibre.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Calibre registrado correctamente");
@@ -151,11 +159,11 @@ public class PnlCalibres extends javax.swing.JPanel {
                     return;
                 }
 
-                //Validar que el nombre del calibre no sea mayor a 100 caracteres
-                if (c.getDescripcion().length() > 100)
+                //Validar que el nombre del calibre no sea mayor a 15 caracteres
+                if (c.getDescripcion().length() > 15)
                 {   
                     dlgEditarCalibre.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Solo se admiten 100 caracteres \npara el nombre del calibre","Mensaje",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Solo se admiten 15 caracteres \npara el nombre del calibre","Mensaje",JOptionPane.WARNING_MESSAGE);
                     dlgEditarCalibre.setVisible(true);
                     return;
                 }
@@ -167,6 +175,14 @@ public class PnlCalibres extends javax.swing.JPanel {
                 {
                     c.setIdCalibre(Integer.parseInt(lblIdCalibre.getText()));
                     c.setDescripcion(nombre);
+                    if (cmbEstatusEditar.getSelectedItem().toString().equals("Activo"))
+                    {
+                        c.setEstatus(1);
+                    }
+                    else
+                    {
+                        c.setEstatus(0);
+                    }
                     cc.actualizarCalibre(c);
                     dlgEditarCalibre.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Calibre actualizado correctamente");
@@ -202,6 +218,7 @@ public class PnlCalibres extends javax.swing.JPanel {
             dlgAgregarCalibre.setVisible(true);
 
             txtNombreCalAgregar.setText("");
+            cmbEstatusAgregar.setSelectedIndex(0);
         } 
         catch (Exception e) 
         {
@@ -248,6 +265,8 @@ public class PnlCalibres extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         txtNombreCalAgregar = new javax.swing.JTextField();
         btnGuardarAgregar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        cmbEstatusAgregar = new javax.swing.JComboBox<>();
         dlgEditarCalibre = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -256,6 +275,8 @@ public class PnlCalibres extends javax.swing.JPanel {
         txtNombreCalEditar = new javax.swing.JTextField();
         btnGuardarEditar = new javax.swing.JButton();
         lblIdCalibre = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cmbEstatusEditar = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCalibres = new javax.swing.JTable();
@@ -272,7 +293,7 @@ public class PnlCalibres extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ruler.png"))); // NOI18N
         jLabel2.setText("Agregar Calibre");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -305,19 +326,31 @@ public class PnlCalibres extends javax.swing.JPanel {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setText("Estatus:");
+
+        cmbEstatusAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbEstatusAgregar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtNombreCalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardarAgregar)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGuardarAgregar))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbEstatusAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreCalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -327,7 +360,11 @@ public class PnlCalibres extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtNombreCalAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbEstatusAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(btnGuardarAgregar)
                 .addContainerGap())
         );
@@ -355,7 +392,7 @@ public class PnlCalibres extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ruler.png"))); // NOI18N
         jLabel5.setText("Editar Calibre");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -377,6 +414,7 @@ public class PnlCalibres extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Nombre Calibre:");
 
+        txtNombreCalEditar.setEditable(false);
         txtNombreCalEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         btnGuardarEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -389,6 +427,12 @@ public class PnlCalibres extends javax.swing.JPanel {
         });
 
         lblIdCalibre.setText("idCalibre");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setText("Estatus:");
+
+        cmbEstatusEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbEstatusEditar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -407,6 +451,12 @@ public class PnlCalibres extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGuardarEditar)))
                 .addContainerGap())
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmbEstatusEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,7 +465,11 @@ public class PnlCalibres extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtNombreCalEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbEstatusEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnGuardarEditar, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblIdCalibre, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -525,6 +579,14 @@ public class PnlCalibres extends javax.swing.JPanel {
         {
             c = new Calibre();
             c.setDescripcion(tblCalibres.getValueAt(tblCalibres.getSelectedRow(), 0).toString());
+            if (tblCalibres.getValueAt(tblCalibres.getSelectedRow(), 1).toString().equals("Activo"))
+            {
+                c.setEstatus(1);
+            }
+            else
+            {
+                c.setEstatus(0);
+            }
         }
         catch (Exception e)
         {
@@ -563,6 +625,8 @@ public class PnlCalibres extends javax.swing.JPanel {
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardarAgregar;
     private javax.swing.JButton btnGuardarEditar;
+    private javax.swing.JComboBox<String> cmbEstatusAgregar;
+    private javax.swing.JComboBox<String> cmbEstatusEditar;
     private javax.swing.JDialog dlgAgregarCalibre;
     private javax.swing.JDialog dlgEditarCalibre;
     private javax.swing.JLabel jLabel1;
@@ -570,6 +634,8 @@ public class PnlCalibres extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

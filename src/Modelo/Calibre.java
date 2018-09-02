@@ -12,6 +12,7 @@ package Modelo;
 public class Calibre {
     int idCalibre;
     String descripcion;
+    int estatus;
 
     public int getIdCalibre() {
         return idCalibre;
@@ -28,4 +29,13 @@ public class Calibre {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public int getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(int estatus) {
+        this.estatus = estatus;
+    }
+    
 }

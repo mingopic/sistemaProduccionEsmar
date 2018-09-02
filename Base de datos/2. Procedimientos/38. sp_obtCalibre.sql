@@ -9,12 +9,31 @@ end
 go
 
 create procedure sp_obtCalibre
+(
+  @accion int = 0
+)
 as begin
-
-	select
-		*
+  
+  if @accion = 1
+  begin
+  
+    select
+      *
+      
+    from
+      tb_calibre
+  end  
+  
+  else begin
     
-	from
-		tb_calibre
+    select
+      *
+      
+    from
+      tb_calibre
+    
+    where
+      estatus = 1
+  end
 end
 go

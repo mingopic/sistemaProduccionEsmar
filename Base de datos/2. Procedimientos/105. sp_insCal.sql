@@ -10,7 +10,8 @@ go
 
 create procedure sp_insCal
   (
-    @calibre varchar(100)
+    @calibre   varchar(100)
+    , @estatus int
   )
   as begin
   
@@ -20,6 +21,7 @@ create procedure sp_insCal
     values
       (
         @calibre
+        , @estatus
       )
   end
 go

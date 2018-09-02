@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="404c68b2-b89e-4cd5-a896-e47c6b554b03">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="404c68b2-b89e-4cd5-a896-e47c6b554b03">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="9"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -26,8 +26,19 @@
 	<field name="Piezas" class="java.lang.Integer"/>
 	<field name="Proceso" class="java.lang.String"/>
 	<field name="idProceso" class="java.lang.Integer"/>
+	<field name="noPartida" class="java.lang.String"/>
+	<field name="Kg" class="java.lang.Float"/>
 	<variable name="Piezas_1" class="java.lang.Integer" resetType="Group" resetGroup="Proceso" calculation="Sum">
 		<variableExpression><![CDATA[$F{Piezas}]]></variableExpression>
+	</variable>
+	<variable name="Kg_1" class="java.lang.Integer" resetType="Group" resetGroup="Proceso" calculation="Count">
+		<variableExpression><![CDATA[$F{Kg}]]></variableExpression>
+	</variable>
+	<variable name="Kg_2" class="java.lang.Integer" resetType="Group" resetGroup="Proceso" calculation="Count">
+		<variableExpression><![CDATA[$F{Kg}]]></variableExpression>
+	</variable>
+	<variable name="Kg_3" class="java.lang.Float" resetType="Group" resetGroup="Proceso" calculation="Sum">
+		<variableExpression><![CDATA[$F{Kg}]]></variableExpression>
 	</variable>
 	<group name="Proceso">
 		<groupExpression><![CDATA[$F{Proceso}]]></groupExpression>
@@ -36,7 +47,7 @@
 				<frame>
 					<reportElement mode="Opaque" x="0" y="0" width="555" height="42" forecolor="#000000" backcolor="#CCCCFF" uuid="a904eb1b-f83c-4b89-b11b-4301907148ec"/>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="2" y="24" width="275" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="23b7a567-49c6-485c-afdf-250a6900af02"/>
+						<reportElement style="Column header" mode="Transparent" x="147" y="24" width="163" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="23b7a567-49c6-485c-afdf-250a6900af02"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -44,7 +55,7 @@
 						<text><![CDATA[Recorte]]></text>
 					</staticText>
 					<staticText>
-						<reportElement style="Column header" mode="Transparent" x="277" y="24" width="276" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f22076cc-ecb0-4f6c-8371-3719a555bd75"/>
+						<reportElement style="Column header" mode="Transparent" x="310" y="24" width="103" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f22076cc-ecb0-4f6c-8371-3719a555bd75"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
@@ -58,6 +69,22 @@
 						</textElement>
 						<textFieldExpression><![CDATA[$F{Proceso}]]></textFieldExpression>
 					</textField>
+					<staticText>
+						<reportElement style="Column header" mode="Transparent" x="2" y="24" width="145" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e819580a-963f-477a-8706-18df2602ebc6"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<paragraph lineSpacing="Single"/>
+						</textElement>
+						<text><![CDATA[No. Partida]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="Column header" mode="Transparent" x="413" y="24" width="142" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e58f264a-041f-4f1d-9d32-c08a1b7b0836"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+							<font fontName="Times New Roman" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<paragraph lineSpacing="Single"/>
+						</textElement>
+						<text><![CDATA[Peso (kg)]]></text>
+					</staticText>
 				</frame>
 			</band>
 		</groupHeader>
@@ -75,11 +102,18 @@
 					<text><![CDATA[Totales]]></text>
 				</staticText>
 				<textField pattern="#,##0.00">
-					<reportElement x="277" y="3" width="218" height="20" uuid="648951ef-31d2-4d9a-9cba-bc1a18496236"/>
+					<reportElement x="310" y="3" width="103" height="20" uuid="648951ef-31d2-4d9a-9cba-bc1a18496236"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{Piezas_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="413" y="3" width="140" height="20" uuid="5401a13a-8c03-4b4b-9241-9e5130bca031"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Kg_3}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -123,18 +157,32 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="31cf725d-cd9a-422a-9e08-257605f4822b"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="277" y="0" width="277" height="18" uuid="165be873-e021-45a7-9f8a-df2deb09a0e2"/>
+					<reportElement style="Detail" positionType="Float" x="310" y="0" width="103" height="18" uuid="165be873-e021-45a7-9f8a-df2deb09a0e2"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Piezas}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="277" height="18" uuid="4ee15f5f-4429-4314-99f8-13560b067e0e"/>
+					<reportElement style="Detail" positionType="Float" x="147" y="0" width="163" height="18" uuid="4ee15f5f-4429-4314-99f8-13560b067e0e"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{TipoRecorte}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="147" height="18" uuid="b2a55fab-d099-4f3c-917e-99dcff0f473c"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{noPartida}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="413" y="0" width="140" height="18" uuid="3c0066f5-3729-495e-a0df-2eb233f0c098"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Kg}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

@@ -564,11 +564,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpArchivo = new javax.swing.JMenu();
         jmSalir = new javax.swing.JMenuItem();
         jmpCatalogos = new javax.swing.JMenu();
-        jmProveedores = new javax.swing.JMenuItem();
-        jmSubProcesos = new javax.swing.JMenuItem();
-        jmTambores = new javax.swing.JMenuItem();
-        Usuarios = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jmTambores = new javax.swing.JMenuItem();
+        jmSubProcesos = new javax.swing.JMenuItem();
+        jmProveedores = new javax.swing.JMenuItem();
+        Usuarios = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
@@ -1235,7 +1235,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         btnProdEnProc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnProdEnProc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cog.png"))); // NOI18N
-        btnProdEnProc.setText("Producción en proceso");
+        btnProdEnProc.setText("Fichas Generadas");
         btnProdEnProc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnProdEnProc.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnProdEnProc.addActionListener(new java.awt.event.ActionListener() {
@@ -1397,23 +1397,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jmProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
-        jmProveedores.setText("Proveedores");
-        jmProveedores.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ruler.png"))); // NOI18N
+        jMenuItem1.setText("Calibres");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmProveedoresActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        jmpCatalogos.add(jmProveedores);
-
-        jmSubProcesos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
-        jmSubProcesos.setText("SubProcesos");
-        jmSubProcesos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmSubProcesosActionPerformed(evt);
-            }
-        });
-        jmpCatalogos.add(jmSubProcesos);
+        jmpCatalogos.add(jMenuItem1);
 
         jmTambores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/barril.png"))); // NOI18N
         jmTambores.setText("Tambores");
@@ -1424,6 +1415,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmTambores);
 
+        jmSubProcesos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
+        jmSubProcesos.setText("SubProcesos");
+        jmSubProcesos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmSubProcesosActionPerformed(evt);
+            }
+        });
+        jmpCatalogos.add(jmSubProcesos);
+
+        jmProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/group.png"))); // NOI18N
+        jmProveedores.setText("Proveedores");
+        jmProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmProveedoresActionPerformed(evt);
+            }
+        });
+        jmpCatalogos.add(jmProveedores);
+
         Usuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/users_4.png"))); // NOI18N
         Usuarios.setText("Usuarios");
         Usuarios.addActionListener(new java.awt.event.ActionListener() {
@@ -1432,14 +1441,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jmpCatalogos.add(Usuarios);
-
-        jMenuItem1.setText("Calibres");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jmpCatalogos.add(jMenuItem1);
 
         jMenuBar1.add(jmpCatalogos);
 
@@ -1578,7 +1579,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.add(pnlProduccionEnProceso, BorderLayout.CENTER);
             pnlPrincipalx.paintAll(pnlProduccionEnProceso.getGraphics());
             
-            lblVentana.setText("Producción en proceso");
+            lblVentana.setText("Fichas Generadas");
             ImageIcon ico=new ImageIcon("src/Imagenes/cog.png");
             lblVentana.setIcon(ico);
         } catch (Exception ex) {
@@ -1902,7 +1903,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlCalibres.getGraphics());
             
             lblVentana.setText("Catálogo de Calibres");
-            ImageIcon ico=new ImageIcon("src/Imagenes/barril.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/ruler.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 

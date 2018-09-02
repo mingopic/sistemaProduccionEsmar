@@ -526,7 +526,7 @@ try {
 
     btnReporteListaPartProdProc.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnReporteListaPartProdProc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    btnReporteListaPartProdProc.setText("Reporte de Listado de Partidas");
+    btnReporteListaPartProdProc.setText("Reporte de Listado de Fichas");
     btnReporteListaPartProdProc.setFocusable(false);
     btnReporteListaPartProdProc.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
     btnReporteListaPartProdProc.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

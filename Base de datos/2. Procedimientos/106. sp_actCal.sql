@@ -10,8 +10,9 @@ go
 
 create procedure sp_actCal
   (
-    @calibre varchar(100)
-    , @idCalibre   int
+    @calibre      varchar(100)
+    , @estatus    int
+    , @idCalibre  int
   )
   as begin
   
@@ -20,6 +21,7 @@ create procedure sp_actCal
       
     set
       descripcion = @calibre
+      , estatus = @estatus
       
     where
       idCalibre = @idCalibre

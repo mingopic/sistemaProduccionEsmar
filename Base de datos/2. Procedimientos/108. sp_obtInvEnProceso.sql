@@ -15,23 +15,35 @@ create procedure sp_obtInvEnProceso
 as begin
 
   select
-    [Piezas] = sum(pd.noPiezasAct)
+    pa.noPartida
     , tr.descripcion as 'TipoRecorte'
+    , [Piezas] = pd.noPiezasAct
+    , [Kg] = pd.noPiezasAct * (fpd.kgTotal/fpd.noPiezasTotal)
     , pr.descripcion as 'Proceso'
     , pr.idProceso
 
   from
     tb_partidaDet pd
-
+    
+    inner join
+      tb_partida pa
+    on
+      pa.idPartida = pd.idPartida
+      
     inner join
       tb_tipoRecorte as tr
     on
-      tr.idTipoRecorte = pd.idTipoRecorte
-      
+      tr.idTipoRecorte = pd.idTipoRecorte  
+    
     inner join
       tb_proceso pr
     on
       pr.idProceso = pd.idProceso
+      
+    inner join
+      tb_fichaProdDet fpd
+    on
+      fpd.idPartidaDet = pd.idPartidaDet
 
   where
     pd.noPiezasAct > 0
@@ -47,11 +59,6 @@ as begin
         and pd.idProceso = @idProceso
       )
     )
-
-  group by
-    tr.descripcion
-    , pr.descripcion
-    , pr.idProceso
 
   order by
     pr.idProceso asc

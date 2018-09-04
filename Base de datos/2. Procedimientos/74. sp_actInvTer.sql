@@ -12,12 +12,18 @@ create procedure sp_actInvTer
 (
   @idInvTerminado   int
   , @piezasUtilizar int
+  , @kg             float
+  , @decimetros     float
+  , @pies           float
 )
 as begin
 
   declare @promKg         float
   declare @promDecimetros float
   declare @promPies       float
+  declare @kgDesc         float
+  declare @decimetrosDesc float
+  declare @piesDesc       float
   
   set @promKg =
   (
@@ -48,15 +54,36 @@ as begin
     where
       idInvTerminado = @idInvTerminado
   )
+  
+  set @kgDesc = @promKg*@piezasUtilizar
+  
+  if (@kgDesc > @kg)
+  begin
+    set @kgDesc = @kg
+  end
+  
+  set @decimetrosDesc = @promDecimetros*@piezasUtilizar
+  
+  if (@decimetrosDesc > @decimetros)
+  begin
+    set @decimetrosDesc = @decimetros
+  end
+  
+  set @piesDesc = @promPies*@piezasUtilizar
+  
+  if (@piesDesc > @pies)
+  begin
+    set @piesDesc = @pies
+  end
 
   update
     tb_invTerminado
     
   set
     noPiezasActuales = noPiezasActuales-@piezasUtilizar
-    , kgTotalesActual = kgTotalesActual-(@promKg*@piezasUtilizar)
-    , decimetrosActual = decimetrosActual-(@promDecimetros*@piezasUtilizar)
-    , piesActual = piesActual-(@promPies*@piezasUtilizar)
+    , kgTotalesActual = kgTotalesActual-(@kgDesc)
+    , decimetrosActual = decimetrosActual-(@decimetrosDesc)
+    , piesActual = piesActual-(@piesDesc)
     
   where
     idInvTerminado = @idInvTerminado

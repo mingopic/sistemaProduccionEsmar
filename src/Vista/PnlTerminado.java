@@ -594,6 +594,7 @@ public class PnlTerminado extends javax.swing.JPanel {
             parametros.put("fecha", it.getFecha());
             parametros.put("fecha1", it.getFecha1());
             parametros.put("noPartida", p.getNoPartida());
+            parametros.put("accion", 1);
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

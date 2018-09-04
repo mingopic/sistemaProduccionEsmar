@@ -12,10 +12,12 @@ create procedure sp_actInvSemiterminado
 (
   @idInvSemiterminado	int
   , @piezasUtilizar 	int
+  , @kg               float
 )
 as begin
 
   declare @promKg float
+  declare @kgDesc float
   
   set @promKg =
   (
@@ -26,13 +28,20 @@ as begin
     where
       idInvSemiterminado = @idInvSemiterminado
   )
+  
+  set @kgDesc = @promKg*@piezasUtilizar
+  
+  if (@kgDesc > @kg)
+  begin
+    set @kgDesc = @kg
+  end
 
   update
     tb_invSemiterminado
     
   set
     noPiezasActuales = noPiezasActuales-@piezasUtilizar
-    , kgTotalesActuales = kgTotalesActuales-(@promKg*@piezasUtilizar)
+    , kgTotalesActuales = kgTotalesActuales-(@kgDesc)
     
   where
     idInvSemiterminado = @idInvSemiterminado

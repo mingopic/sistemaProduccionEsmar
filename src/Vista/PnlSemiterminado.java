@@ -720,9 +720,10 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     ist.setNoPiezas(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
                     ist.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
                     double kgTotales = (Double.parseDouble(datosSemiterminado[fila][6]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
+                    double kg = Double.parseDouble(datosSemiterminado[fila][4]);
 
                     istc.agregarInvSemTer(ist,kgTotales);
-                    isc.actualizarNoPiezasActual(ist);
+                    isc.actualizarNoPiezasActual(ist, kg);
                     actualizarTablaSemiterminado();
                     dlgEnvTermi.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");

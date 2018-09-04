@@ -62,8 +62,8 @@ public class InventarioTerminadoCommands {
                 datos[i][1] = rs.getString("tipoRecorte");
                 datos[i][2] = rs.getString("noPiezas");
                 datos[i][3] = rs.getString("noPiezasActuales");
-                datos[i][4] = rs.getString("kgTotales");
-                datos[i][5] = rs.getString("kgTotalesActual");
+                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
+                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActual")));
                 datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
                 datos[i][7] = String.format("%.2f",Double.parseDouble(rs.getString("decimetros")));
                 datos[i][8] = String.format("%.2f",Double.parseDouble(rs.getString("decimetrosActual")));
@@ -110,7 +110,10 @@ public class InventarioTerminadoCommands {
     {
         String query = "exec sp_actInvTer "
                 + isalt.getIdInvTerminado()
-                + "," + isalt.getNoPiezas();
+                + "," + isalt.getNoPiezas()
+                + "," + isalt.getKg()
+                + "," + isalt.getDecimetros()
+                + "," + isalt.getPies();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

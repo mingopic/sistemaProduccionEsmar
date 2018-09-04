@@ -292,6 +292,11 @@ public class PnlCross extends javax.swing.JPanel {
                     
                     double promKg = Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString()) / Integer.parseInt(tblInvCross.getValueAt(fila, 2).toString());
                     double kg = promKg * Integer.parseInt(txtNoPiezasEnvSemi.getText());
+                    
+                    if (kg > Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString()))
+                    {
+                        kg = Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString());
+                    }
 
                     ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][7]));
                     ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
@@ -331,6 +336,7 @@ public class PnlCross extends javax.swing.JPanel {
             parametros.put("fecha1", ic.getFecha());
             parametros.put("fecha2", ic.getFecha1());
             parametros.put("noPartida", p.getNoPartida());
+            parametros.put("accion", 1);
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

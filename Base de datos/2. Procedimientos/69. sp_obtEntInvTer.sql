@@ -16,10 +16,11 @@ create procedure sp_obtEntInvTer
 	, @noPartida int
 	, @fecha varchar(10)
 	, @fecha1 varchar(10)
+  , @accion int = 0
 )
 as begin
 	
-  if (@noPartida = 0)
+  if (@accion = 0)
   begin
   
 		select  
@@ -91,6 +92,19 @@ as begin
         
     where
       it.fechaEntrada between @fecha and @fecha1
+      and it.noPiezasActuales > 0
+      and 
+      (
+        (
+          @noPartida = 0
+          and p.noPartida > 0
+        )
+        or
+        (
+          @noPartida > 0
+          and p.noPartida = @noPartida
+        )
+      )
       
 	end
   
@@ -145,7 +159,6 @@ as begin
         tb_partida as p
       on
         p.idPartida = pd.idPartida
-		and p.noPartida = @noPartida
       
       inner join
         tb_tipoRecorte as tr
@@ -167,6 +180,18 @@ as begin
         
     where
       it.fechaEntrada between @fecha and @fecha1
+      and 
+      (
+        (
+          @noPartida = 0
+          and p.noPartida > 0
+        )
+        or
+        (
+          @noPartida > 0
+          and p.noPartida = @noPartida
+        )
+      )
   end
 
 end

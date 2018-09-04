@@ -34,8 +34,11 @@
 	<parameter name="noPartida" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="accion" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[exec sp_obtEntInvTer $P{tipoRecorte},$P{calibre},$P{seleccion},$P{noPartida},$P{fecha},$P{fecha1}]]>
+		<![CDATA[exec sp_obtEntInvTer $P{tipoRecorte},$P{calibre},$P{seleccion},$P{noPartida},$P{fecha},$P{fecha1},$P{accion}]]>
 	</queryString>
 	<field name="noPartida" class="java.lang.Integer"/>
 	<field name="tipoRecorte" class="java.lang.String"/>

@@ -18,8 +18,11 @@
 	<parameter name="noPartida" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="accion" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[exec sp_obtEntCross $P{tipoRecorte}, $P{noPartida}, $P{fecha1}, $P{fecha2}]]>
+		<![CDATA[exec sp_obtEntCross $P{tipoRecorte}, $P{noPartida}, $P{fecha1}, $P{fecha2},$P{accion}]]>
 	</queryString>
 	<field name="noPartida" class="java.lang.Integer"/>
 	<field name="descripcion" class="java.lang.String"/>

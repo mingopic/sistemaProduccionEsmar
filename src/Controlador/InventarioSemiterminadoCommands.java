@@ -117,10 +117,10 @@ public class InventarioSemiterminadoCommands {
     }
     
     //Método para actualizar el número de piezas actuales
-    public static void actualizarNoPiezasActual(InventarioSemiterminadoTerminado ist) throws Exception
+    public static void actualizarNoPiezasActual(InventarioSemiterminadoTerminado ist, double kg) throws Exception
     {
         String query = "execute sp_actInvSemiterminado "+ist.getIdInvSemiterminado()+""
-            + ","+ist.getNoPiezas();
+            + ","+ist.getNoPiezas()+","+kg;
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

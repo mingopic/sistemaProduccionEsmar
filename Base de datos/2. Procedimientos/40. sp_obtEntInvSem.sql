@@ -78,6 +78,7 @@ as begin
         
     where
       ins.fechaEntrada between @fecha and @fecha1
+      and ins.noPiezasActuales > 0
       
 	end
   
@@ -140,6 +141,7 @@ as begin
         
     where
       ins.fechaEntrada between @fecha and @fecha1
+      and ins.noPiezasActuales > 0
   end
 
 end

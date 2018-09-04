@@ -19,6 +19,8 @@ as begin
     , tr.descripcion as 'TipoRecorte'
     , [Piezas] = pd.noPiezasAct
     , [Kg] = pd.noPiezasAct * (fpd.kgTotal/fpd.noPiezasTotal)
+    , [CostoCuero] = pd.noPiezasAct * (fpd.costoTotalCuero/fpd.noPiezasTotal)
+    , [CostoInsumos] = pd.noPiezasAct * (fpd.costoInsumos/fpd.noPiezasTotal)
     , pr.descripcion as 'Proceso'
     , pr.idProceso
 

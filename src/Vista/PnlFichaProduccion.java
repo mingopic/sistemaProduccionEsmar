@@ -217,8 +217,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             TableColumnModel columnModel = tblPartidasDisponibles.getColumnModel();
 
             columnModel.getColumn(0).setPreferredWidth(120);
-            columnModel.getColumn(1).setPreferredWidth(260);
-            columnModel.getColumn(2).setPreferredWidth(150);
+            columnModel.getColumn(1).setPreferredWidth(210);
+            columnModel.getColumn(2).setPreferredWidth(200);
             columnModel.getColumn(3).setPreferredWidth(120);
             
             tblPartidasDisponibles.getTableHeader().setReorderingAllowed(false);
@@ -330,6 +330,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             recorteSeleccionado = "Delantero Suela";
         }
+        else if (aRecortar.equals("Lados"))
+        {
+            tipoRecorte = new String[] { "Centro Castaño/Delantero Suela", "Centro Quebracho/Delantero Suela" };
+        }
         else
         {
             JOptionPane.showMessageDialog(null, "No se puede recortar este \ntipo de cuero","Advertencia",JOptionPane.ERROR_MESSAGE);
@@ -365,6 +369,32 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 
                 txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
                 lblTipoCuero2.setText("Crupon");
+            }
+            else if(recorteSeleccionado.equals("Centro Castaño/Delantero Suela"))
+            {
+                lblyRecortar.setVisible(true);
+                txtNoPiezasRecortar2.setVisible(true);
+                lblPiezasDe2.setVisible(true);
+                lblTipoCuero2.setVisible(true);
+                
+                txtNoPiezasRecortar1.setText(txtNoPiezasRecortar.getText());
+                lblTipoCuero1.setText("Centro Castaño");
+                
+                txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
+                lblTipoCuero2.setText("Delantero Suela");
+            }
+            else if(recorteSeleccionado.equals("Centro Quebracho/Delantero Suela"))
+            {
+                lblyRecortar.setVisible(true);
+                txtNoPiezasRecortar2.setVisible(true);
+                lblPiezasDe2.setVisible(true);
+                lblTipoCuero2.setVisible(true);
+                
+                txtNoPiezasRecortar1.setText(txtNoPiezasRecortar.getText());
+                lblTipoCuero1.setText("Centro Quebracho");
+                
+                txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
+                lblTipoCuero2.setText("Delantero Suela");
             }
             else
             {
@@ -1464,6 +1494,12 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     case "Delantero/Crupon":
                         pad.setIdTipoRecorte(0);
                         break;
+                    case "Centro Castaño/Delantero Suela":
+                        pad.setIdTipoRecorte(1);
+                        break;
+                    case "Centro Quebracho/Delantero Suela":
+                        pad.setIdTipoRecorte(2);
+                        break;
                     case "Lados":
                         pad.setIdTipoRecorte(4);
                         break;
@@ -1518,7 +1554,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNoPiezasRecortarKeyTyped
 
     private void txtNoPiezasRecortarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasRecortarKeyReleased
-        if (recorteSeleccionado.equals("Delantero/Crupon"))
+        if (recorteSeleccionado.equals("Delantero/Crupon") || recorteSeleccionado.equals("Centro Castaño/Delantero Suela") || recorteSeleccionado.equals("Centro Quebracho/Delantero Suela"))
         {
             if (txtNoPiezasRecortar.getText().equals(""))
             {

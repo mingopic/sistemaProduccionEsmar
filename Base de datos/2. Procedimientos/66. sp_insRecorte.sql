@@ -88,6 +88,98 @@ create procedure sp_insRecorte
         )
     end
     
+    else if @idTipoRecorte = 1
+    begin
+    
+      insert into
+        tb_partidaDet
+        (
+          noPiezas
+          , noPiezasAct
+          , idPartida
+          , idRecepcionCuero
+          , idTipoRecorte
+          , idProceso
+        )
+        
+      values
+        (
+          @noPiezas
+          , @noPiezas
+          , @idPartida
+          , @idRecepcionCuero
+          , 5
+          , @idProceso
+        )
+        
+        insert into
+        tb_partidaDet
+        (
+          noPiezas
+          , noPiezasAct
+          , idPartida
+          , idRecepcionCuero
+          , idTipoRecorte
+          , idProceso
+        )
+        
+      values
+        (
+          @noPiezas
+          , @noPiezas
+          , @idPartida
+          , @idRecepcionCuero
+          , 7
+          , @idProceso
+        )
+    end
+    
+    else if @idTipoRecorte = 2
+    begin
+    
+      insert into
+        tb_partidaDet
+        (
+          noPiezas
+          , noPiezasAct
+          , idPartida
+          , idRecepcionCuero
+          , idTipoRecorte
+          , idProceso
+        )
+        
+      values
+        (
+          @noPiezas
+          , @noPiezas
+          , @idPartida
+          , @idRecepcionCuero
+          , 6
+          , @idProceso
+        )
+        
+        insert into
+        tb_partidaDet
+        (
+          noPiezas
+          , noPiezasAct
+          , idPartida
+          , idRecepcionCuero
+          , idTipoRecorte
+          , idProceso
+        )
+        
+      values
+        (
+          @noPiezas
+          , @noPiezas
+          , @idPartida
+          , @idRecepcionCuero
+          , 7
+          , @idProceso
+        )
+    end
+    
     else
     begin
       

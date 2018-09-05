@@ -7,6 +7,7 @@ begin
 end
 go
 
+/*
 create trigger tr_insInvCross
   on tb_fichaProdDet
   after insert
@@ -65,3 +66,4 @@ as begin
   
 end
 go
+*/

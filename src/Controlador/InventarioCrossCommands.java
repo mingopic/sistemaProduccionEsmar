@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.Partida;
+import Modelo.PartidaDetalle;
 import Modelo.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,6 +81,21 @@ public class InventarioCrossCommands {
     {
         String query = "exec sp_actInvCross "+ics.getIdInvPCross()+""
             + ","+ics.getNoPiezas()+","+ics.getKgTotal();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para insertar en la tabla de tb_invCross
+    public static void insertarInvCross(PartidaDetalle pd) throws Exception
+    {
+        String query = "execute sp_insInvCross "
+                + pd.getIdPartidaDet()
+                + ", " + pd.getIdPartida()
+                + ", " + pd.getNoPiezas();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

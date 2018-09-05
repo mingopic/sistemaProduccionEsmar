@@ -10,6 +10,7 @@ import Controlador.ConexionBD;
 import Controlador.ConfiguracionMermaCommands;
 import Controlador.InventarioCrossCommands;
 import Controlador.InventarioCrossSemiterminadoCommands;
+import Controlador.PartidaDetalleCommands;
 import Controlador.ProveedorCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.TipoCueroCommands;
@@ -18,6 +19,7 @@ import Modelo.ConfiguracionMerma;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.Partida;
+import Modelo.PartidaDetalle;
 import Modelo.Proveedor;
 import Modelo.RangoPesoCuero;
 import Modelo.RecepcionCuero;
@@ -26,12 +28,14 @@ import Modelo.TipoRecorte;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -53,6 +57,8 @@ public class PnlCross extends javax.swing.JPanel {
     InventarioCrossSemiterminadoCommands icsc;
     Partida p;
     String[][] datosInvCross = null;
+    List<PartidaDetalle> lstCueroDisp;
+    int seleccionado = -1;
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -92,6 +98,7 @@ public class PnlCross extends javax.swing.JPanel {
             if (FrmPrincipal.roles[i].equals("Cross") || FrmPrincipal.roles[i].equals("Sistemas"))
             {
                 btnEnviarSemiterminado.setEnabled(true);
+                btnAgregar.setEnabled(true);
                 break;
             }
         }
@@ -273,6 +280,29 @@ public class PnlCross extends javax.swing.JPanel {
         dlgEnvSemi.setVisible(true);
     }
     
+    //Método que abre el dialogo para realizar una entrada de cuero a desvenado
+    public void abrirDialogoAgregar() throws Exception
+    {        
+        dlgAgrDesvenado.setSize(350, 300);
+        dlgAgrDesvenado.setPreferredSize(dlgAgrDesvenado.getSize());
+        dlgAgrDesvenado.setLocationRelativeTo(null);
+        dlgAgrDesvenado.setAlwaysOnTop(true);
+        dlgAgrDesvenado.setVisible(true);
+    }
+    
+    //Método que abre el dialogo de buscar partida
+    public void abrirDialogoBuscarPartida() throws Exception
+    {   
+        dlgAgrDesvenado.setVisible(false);
+        actualizarTablaCueroDisp();
+        
+        dlgBuscar.setSize(600,320);
+        dlgBuscar.setPreferredSize(dlgBuscar.getSize());
+        dlgBuscar.setLocationRelativeTo(null);
+        dlgBuscar.setAlwaysOnTop(true);
+        dlgBuscar.setVisible(true);
+    }
+    
     //Método para realizar entrada de material y actualizar inventarios
     public void realizarEntradaEnvSemi () throws Exception
     {
@@ -391,6 +421,67 @@ public class PnlCross extends javax.swing.JPanel {
         }
     }
     
+    // Método para obtener el listado de los cueros diponibles en engrase
+    private void actualizarTablaCueroDisp()
+    {
+        DefaultTableModel dtm = null;
+        
+        try 
+        {
+            PartidaDetalleCommands pdc = new PartidaDetalleCommands();
+            lstCueroDisp = pdc.obtenerCueroEngrase();
+            
+            String[] cols = new String[]
+            {
+                "No. Partida", "Recorte", "No. Piezas"
+            };
+            
+            dtm = new DefaultTableModel(){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(lstCueroDisp.size());
+            for (int i = 0; i < lstCueroDisp.size(); i++)
+            {
+                dtm.setValueAt(lstCueroDisp.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(lstCueroDisp.get(i).getRecorte(), i, 1);
+                dtm.setValueAt(lstCueroDisp.get(i).getNoPiezas(), i, 2);
+            }
+            tblBuscarPartidas.setModel(dtm);            
+            tblBuscarPartidas.getTableHeader().setReorderingAllowed(false);
+        } 
+        catch (Exception e) 
+        {   
+            e.printStackTrace();   
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD" , "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    //Método para validar que se selecciono un elemento de la lista
+    public void SeleccionarPartida() throws Exception
+     {
+        int renglonSeleccionado = tblBuscarPartidas.getSelectedRow();
+        if (renglonSeleccionado!=-1) 
+        {
+            dlgBuscar.setVisible(false);
+            
+            abrirDialogoAgregar();
+            
+            txtNoPartidaDesvenado.setText(String.valueOf(lstCueroDisp.get(renglonSeleccionado).getNoPartida()));
+            txtTipoRecorteDesvenado.setText(lstCueroDisp.get(renglonSeleccionado).getRecorte());
+            txtNoPiezasDispDesvenado.setText(String.valueOf(lstCueroDisp.get(renglonSeleccionado).getNoPiezas()));
+            seleccionado = renglonSeleccionado;
+        }
+        else 
+        {
+            dlgBuscar.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Seleccione una partida de la lista", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+            dlgBuscar.setVisible(true);
+        }
+     }
+    
     public void generarReporteInventarioCross()
     {
         try
@@ -443,11 +534,36 @@ public class PnlCross extends javax.swing.JPanel {
         btnCancelarAgregarEnvSemi = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
+        dlgAgrDesvenado = new javax.swing.JDialog();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel56 = new javax.swing.JLabel();
+        txtTipoRecorteDesvenado = new javax.swing.JTextField();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel57 = new javax.swing.JLabel();
+        txtNoPiezasDispDesvenado = new javax.swing.JTextField();
+        txtNoPartidaDesvenado = new javax.swing.JTextField();
+        jLabel58 = new javax.swing.JLabel();
+        txtNoPiezasDesvenado = new javax.swing.JTextField();
+        btnRealizarEntradaEnvSemi1 = new javax.swing.JButton();
+        btnCancelarAgregarEnvSemi1 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        btnBuscar = new javax.swing.JButton();
+        dlgBuscar = new javax.swing.JDialog();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblBuscarPartidas = new javax.swing.JTable();
+        btnSeleccionar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInvCross = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         EnviarSemiterminado = new javax.swing.JLabel();
+        btnAgregar = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
         btnEnviarSemiterminado = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -646,6 +762,290 @@ public class PnlCross extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel56.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel56.setText("Tipo Recorte:");
+
+        txtTipoRecorteDesvenado.setEditable(false);
+        txtTipoRecorteDesvenado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTipoRecorteDesvenado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTipoRecorteDesvenadoActionPerformed(evt);
+            }
+        });
+        txtTipoRecorteDesvenado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTipoRecorteDesvenadoKeyTyped(evt);
+            }
+        });
+
+        jLabel32.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel32.setText("No. Partida:");
+
+        jLabel57.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel57.setText("No. Piezas Disponibles:");
+
+        txtNoPiezasDispDesvenado.setEditable(false);
+        txtNoPiezasDispDesvenado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasDispDesvenado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNoPiezasDispDesvenadoActionPerformed(evt);
+            }
+        });
+        txtNoPiezasDispDesvenado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasDispDesvenadoKeyTyped(evt);
+            }
+        });
+
+        txtNoPartidaDesvenado.setEditable(false);
+        txtNoPartidaDesvenado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPartidaDesvenado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPartidaDesvenadoKeyTyped(evt);
+            }
+        });
+
+        jLabel58.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel58.setText("No. Piezas a egregar:");
+
+        txtNoPiezasDesvenado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasDesvenado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasDesvenadoKeyTyped(evt);
+            }
+        });
+
+        btnRealizarEntradaEnvSemi1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarEntradaEnvSemi1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnRealizarEntradaEnvSemi1.setText("Aceptar");
+        btnRealizarEntradaEnvSemi1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarEntradaEnvSemi1ActionPerformed(evt);
+            }
+        });
+
+        btnCancelarAgregarEnvSemi1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarAgregarEnvSemi1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelarAgregarEnvSemi1.setText("Cancelar");
+        btnCancelarAgregarEnvSemi1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarAgregarEnvSemi1ActionPerformed(evt);
+            }
+        });
+
+        jPanel5.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+        jLabel16.setText("Agregar Desvenado");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+        );
+
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/magnifier.png"))); // NOI18N
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel58)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtNoPiezasDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel32)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtNoPartidaDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel57)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtNoPiezasDispDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel56)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtTipoRecorteDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 29, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnRealizarEntradaEnvSemi1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarAgregarEnvSemi1)))
+                .addContainerGap())
+            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel32)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtNoPartidaDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTipoRecorteDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel56))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel57)
+                    .addComponent(txtNoPiezasDispDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasDesvenado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel58))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarEntradaEnvSemi1)
+                    .addComponent(btnCancelarAgregarEnvSemi1))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout dlgAgrDesvenadoLayout = new javax.swing.GroupLayout(dlgAgrDesvenado.getContentPane());
+        dlgAgrDesvenado.getContentPane().setLayout(dlgAgrDesvenadoLayout);
+        dlgAgrDesvenadoLayout.setHorizontalGroup(
+            dlgAgrDesvenadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgAgrDesvenadoLayout.setVerticalGroup(
+            dlgAgrDesvenadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        tblBuscarPartidas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblBuscarPartidas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblBuscarPartidas);
+
+        btnSeleccionar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSeleccionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnSeleccionar.setText("Seleccionar");
+        btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        jPanel7.setBackground(new java.awt.Color(0, 204, 204));
+
+        jLabel19.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/magnifier.png"))); // NOI18N
+        jLabel19.setText("Buscar partida");
+        jLabel19.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel19)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addContainerGap(336, Short.MAX_VALUE)
+                    .addComponent(btnSeleccionar)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btnCancelar)
+                    .addContainerGap()))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addGap(48, 48, 48))
+            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addContainerGap(390, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSeleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap()))
+        );
+
+        javax.swing.GroupLayout dlgBuscarLayout = new javax.swing.GroupLayout(dlgBuscar.getContentPane());
+        dlgBuscar.getContentPane().setLayout(dlgBuscarLayout);
+        dlgBuscarLayout.setHorizontalGroup(
+            dlgBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgBuscarLayout.setVerticalGroup(
+            dlgBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setBackground(new java.awt.Color(255, 255, 255));
 
         tblInvCross.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -669,6 +1069,23 @@ public class PnlCross extends javax.swing.JPanel {
 
         EnviarSemiterminado.setText("   ");
         jToolBar1.add(EnviarSemiterminado);
+
+        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+        btnAgregar.setText("Agregar");
+        btnAgregar.setEnabled(false);
+        btnAgregar.setFocusable(false);
+        btnAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnAgregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAgregar);
+
+        jLabel15.setText("   ");
+        jToolBar1.add(jLabel15);
 
         btnEnviarSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnEnviarSemiterminado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
@@ -1092,53 +1509,204 @@ try {
         }
     }//GEN-LAST:event_txtNoPartidaKeyPressed
 
+    private void txtTipoRecorteDesvenadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoRecorteDesvenadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoRecorteDesvenadoActionPerformed
+
+    private void txtTipoRecorteDesvenadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteDesvenadoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoRecorteDesvenadoKeyTyped
+
+    private void txtNoPiezasDispDesvenadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPiezasDispDesvenadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPiezasDispDesvenadoActionPerformed
+
+    private void txtNoPiezasDispDesvenadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasDispDesvenadoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPiezasDispDesvenadoKeyTyped
+
+    private void txtNoPartidaDesvenadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaDesvenadoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPartidaDesvenadoKeyTyped
+
+    private void txtNoPiezasDesvenadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasDesvenadoKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNoPiezasDesvenadoKeyTyped
+
+    private void btnRealizarEntradaEnvSemi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemi1ActionPerformed
+        try 
+        {
+            if (!txtNoPartidaDesvenado.getText().equals(""))
+            {
+                int noPiezas;
+                if (txtNoPiezasDesvenado.getText().equals(""))
+                {
+                    noPiezas = 0;
+                }
+                else
+                {
+                    noPiezas = Integer.parseInt(txtNoPiezasDesvenado.getText());
+                }
+                if (noPiezas <= lstCueroDisp.get(seleccionado).getNoPiezas() && noPiezas > 0)
+                {
+                    PartidaDetalle pd = new PartidaDetalle();
+                    InventarioCrossCommands icc = new InventarioCrossCommands();
+
+                    pd.setIdPartidaDet(lstCueroDisp.get(seleccionado).getIdPartidaDet());
+                    pd.setIdPartida(lstCueroDisp.get(seleccionado).getIdPartida());
+                    pd.setNoPiezas(noPiezas);
+
+                    icc.insertarInvCross(pd);
+                    dlgAgrDesvenado.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Piezas agregadas al inventario \nde desvenado correctamente");
+                    actualizarTablaCross();
+                }
+                else
+                {
+                    dlgAgrDesvenado.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Piezas a agregar no pueden ser mayores \na las disponibles o iguales a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    dlgAgrDesvenado.setVisible(true);
+                }
+            }
+            else
+            {
+                dlgAgrDesvenado.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Ingrese un número valido","Advertencia",JOptionPane.WARNING_MESSAGE);
+                dlgAgrDesvenado.setVisible(true);
+            }
+        } 
+        catch (Exception e) 
+        {
+            dlgAgrDesvenado.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Error al insertar piezas al inventario","Error",JOptionPane.ERROR_MESSAGE);
+            dlgAgrDesvenado.setVisible(true);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnRealizarEntradaEnvSemi1ActionPerformed
+
+    private void btnCancelarAgregarEnvSemi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvSemi1ActionPerformed
+        dlgAgrDesvenado.setVisible(false);
+    }//GEN-LAST:event_btnCancelarAgregarEnvSemi1ActionPerformed
+
+    private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
+        try {
+            SeleccionarPartida();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dlgBuscar.setVisible(false);
+        dlgAgrDesvenado.setVisible(true);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        try 
+        {
+            txtNoPartidaDesvenado.setText("");
+            txtNoPiezasDesvenado.setText("");
+            txtNoPiezasDispDesvenado.setText("");
+            txtTipoRecorteDesvenado.setText("");
+            seleccionado = -1;
+            abrirDialogoAgregar(); 
+        }
+        catch (Exception ex) 
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        try 
+        {
+            abrirDialogoBuscarPartida();
+        }
+        catch (Exception e) 
+        {            
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel EnviarSemiterminado;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarEntrada;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
+    private javax.swing.JButton btnCancelarAgregarEnvSemi1;
     private javax.swing.JButton btnEnviarSemiterminado;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
+    private javax.swing.JButton btnRealizarEntradaEnvSemi1;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
+    private javax.swing.JButton btnSeleccionar;
     private javax.swing.JComboBox cmbTipoRecorte;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
+    private javax.swing.JDialog dlgAgrDesvenado;
+    private javax.swing.JDialog dlgBuscar;
     private javax.swing.JDialog dlgEnvSemi;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
+    private javax.swing.JTable tblBuscarPartidas;
     private javax.swing.JTable tblInvCross;
     private javax.swing.JTextField txtNoPartida;
+    private javax.swing.JTextField txtNoPartidaDesvenado;
     private javax.swing.JTextField txtNoPartidaEnvSemi;
     private javax.swing.JTextField txtNoPiezasActualesEnvSemi;
+    private javax.swing.JTextField txtNoPiezasDesvenado;
+    private javax.swing.JTextField txtNoPiezasDispDesvenado;
     private javax.swing.JTextField txtNoPiezasEnvSemi;
+    private javax.swing.JTextField txtTipoRecorteDesvenado;
     private javax.swing.JTextField txtTipoRecorteEnvSemi;
     // End of variables declaration//GEN-END:variables
 }

@@ -11,6 +11,8 @@ import Modelo.RecepcionCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -221,5 +223,49 @@ public class PartidaDetalleCommands {
         System.out.println(query);
         pstmt.executeUpdate();
         c.desconectar();
+    }
+    
+    //Método que se llama para obtener el listado de cuero disponible para agregar a desvenado
+    public static List<PartidaDetalle> obtenerCueroEngrase() throws Exception
+    {
+        List<PartidaDetalle> lstPartidas = new ArrayList<>();
+        
+        String query = "execute sp_obtCueroEngraseDisp";
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try 
+        {
+            c.conectar();
+            stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            System.out.println(query);
+            rs = stmt.executeQuery(query);
+
+            lstPartidas = new ArrayList<>();
+            if (rs.last()) 
+            {
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    PartidaDetalle obj = new PartidaDetalle();
+                    obj.setIdPartidaDet(rs.getInt("idPartidaDet"));
+                    obj.setIdPartida(rs.getInt("idPartida"));
+                    obj.setNoPartida(rs.getInt("noPartida"));
+                    obj.setRecorte(rs.getString("recorte"));
+                    obj.setNoPiezas(rs.getInt("noPiezasAct"));
+                    lstPartidas.add(obj);
+                }
+            }
+            rs.close();
+            stmt.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return lstPartidas;
     }
 }

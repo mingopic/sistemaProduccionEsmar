@@ -88,7 +88,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         dlgLogin.setVisible(true);
         
         btnRecepcionCuero.setVisible(false);
-//        btnPartidas.setVisible(false);
+        btnPartidas.setVisible(false);
         btnFichasProduccion.setVisible(false);
         btnProdEnProc.setVisible(false);
         btnCross.setVisible(false);
@@ -160,7 +160,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     if (roles[i].equals("Produccion"))
                     {
                         btnRecepcionCuero.setVisible(true);
-//                        btnPartidas.setVisible(true);
+                        btnPartidas.setVisible(true);
                         btnFichasProduccion.setVisible(true);
                         btnProdEnProc.setVisible(true);
                         btnCross.setVisible(true);
@@ -177,7 +177,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     if (roles[i].equals("Sistemas"))
                     {
                         btnRecepcionCuero.setVisible(true);
-//                        btnPartidas.setVisible(true);
+                        btnPartidas.setVisible(true);
                         btnFichasProduccion.setVisible(true);
                         btnProdEnProc.setVisible(true);
                         btnCross.setVisible(true);
@@ -548,6 +548,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnInicio = new javax.swing.JButton();
         lblMenui = new javax.swing.JLabel();
         btnRecepcionCuero = new javax.swing.JButton();
+        btnPartidas = new javax.swing.JButton();
         btnCross = new javax.swing.JButton();
         btnSemiterminado = new javax.swing.JButton();
         btnTerminado = new javax.swing.JButton();
@@ -1188,6 +1189,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnPartidas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnPartidas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cueroProceso.png"))); // NOI18N
+        btnPartidas.setText("Partidas");
+        btnPartidas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPartidas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPartidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPartidasActionPerformed(evt);
+            }
+        });
+
         btnCross.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCross.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cuero.png"))); // NOI18N
         btnCross.setText("Desvenado");
@@ -1256,6 +1268,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addGroup(pnlMenuLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCross, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnPartidas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRecepcionCuero, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSemiterminado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1273,6 +1286,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRecepcionCuero)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPartidas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFichasProduccion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProdEnProc)
@@ -1282,7 +1297,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnSemiterminado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTerminado)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(244, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -1617,6 +1632,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCrossActionPerformed
 
+    private void btnPartidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPartidasActionPerformed
+        try {
+            pnlPartidas = new PnlPartidas();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlPartidas, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlPartidas.getGraphics());
+            
+            lblVentana.setText("Partidas");
+            ImageIcon ico=new ImageIcon("src/Imagenes/cueroProceso.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPartidasActionPerformed
+
     private void btnRecepcionCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecepcionCueroActionPerformed
         try {
             pnlRecepcionCuero = new PnlRecepcionCuero();
@@ -1930,6 +1960,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnFichasProduccion;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnPartidas;
     private javax.swing.JButton btnProdEnProc;
     private javax.swing.JButton btnRecepcionCuero;
     private javax.swing.JButton btnSalir;

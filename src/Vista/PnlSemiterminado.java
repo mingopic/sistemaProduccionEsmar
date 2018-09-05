@@ -81,13 +81,13 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso Actual","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas","Peso","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
     };
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] colsInvSemi = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Fecha Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas","Fecha Entrada"
     };
    
     /**
@@ -472,7 +472,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             ic.setIdPartida(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 0).toString()));
             tr.setDescripcion(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 1).toString());
             ics.setIdInvCrossSemi(Integer.parseInt(datos[renglonSeleccionado][5]));
-            ics.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 3).toString()));
+            ics.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 2).toString()));
             
             dlgBuscar.setVisible(false);
             
@@ -683,7 +683,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         
         txtNoPartidaEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 0)));
         txtTipoRecorteEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 1)));
-        txtNoPiezasActualesEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 3)));
+        txtNoPiezasActualesEnvTermi.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 2)));
     }
     
     //Método que abre el dialogo para enviar a terminado 
@@ -719,8 +719,8 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     ist.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
                     ist.setNoPiezas(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
                     ist.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
-                    double kgTotales = (Double.parseDouble(datosSemiterminado[fila][6]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
-                    double kg = Double.parseDouble(datosSemiterminado[fila][4]);
+                    double kgTotales = (Double.parseDouble(datosSemiterminado[fila][4]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
+                    double kg = Double.parseDouble(datosSemiterminado[fila][9]);
 
                     istc.agregarInvSemTer(ist,kgTotales);
                     isc.actualizarNoPiezasActual(ist, kg);
@@ -1767,7 +1767,7 @@ try {
         try 
         {
             int fila = tblSemiterminado.getSelectedRow();
-            String piezas = (String.valueOf(tblSemiterminado.getValueAt(fila, 3)));
+            String piezas = (String.valueOf(tblSemiterminado.getValueAt(fila, 2)));
             int numPiezasActuales = Integer.parseInt(piezas);
             
             if (numPiezasActuales != 0)

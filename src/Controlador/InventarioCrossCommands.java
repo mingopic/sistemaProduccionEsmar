@@ -56,14 +56,14 @@ public class InventarioCrossCommands {
             {
                 datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("descripcion");
-                datos[i][2] = rs.getString("noPiezas");
-                datos[i][3] = rs.getString("noPiezasActuales");
-                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotal")));
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgActual")));
-                
+                datos[i][2] = rs.getString("noPiezasActuales");
+                datos[i][3] = String.format("%.2f",Double.parseDouble(rs.getString("kgActual")));
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][6] = sdf.format(sqlDate);
+                datos[i][4] = sdf.format(sqlDate);
+                
+                datos[i][5] = rs.getString("noPiezas");
+                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotal")));
                 datos[i][7] = rs.getString("idInvPCross");
                 i++; 
             }

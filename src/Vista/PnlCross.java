@@ -60,7 +60,7 @@ public class PnlCross extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas","No. Piezas Actuales","Kg Totales","Kg Actuales","Fecha de Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas","Kg Totales","Fecha de Entrada"
     };
    
     /**
@@ -258,7 +258,7 @@ public class PnlCross extends javax.swing.JPanel {
         
         txtNoPartidaEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 0)));
         txtTipoRecorteEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 1)));
-        txtNoPiezasActualesEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 3)));
+        txtNoPiezasActualesEnvSemi.setText(String.valueOf(tblInvCross.getValueAt(fila, 2)));
     }  
     
     //Método que abre el dialogo para enviar a semiterminado 
@@ -290,12 +290,12 @@ public class PnlCross extends javax.swing.JPanel {
                     ics = new InventarioCrossSemiterminado();
                     icsc = new InventarioCrossSemiterminadoCommands();
                     
-                    double promKg = Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString()) / Integer.parseInt(tblInvCross.getValueAt(fila, 2).toString());
+                    double promKg = Double.parseDouble(datosInvCross[fila][6]) / Integer.parseInt(datosInvCross[fila][5]);
                     double kg = promKg * Integer.parseInt(txtNoPiezasEnvSemi.getText());
                     
-                    if (kg > Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString()))
+                    if (kg > Double.parseDouble(datosInvCross[fila][6]))
                     {
-                        kg = Double.parseDouble(tblInvCross.getValueAt(fila, 4).toString());
+                        kg = Double.parseDouble(datosInvCross[fila][6]);
                     }
 
                     ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][7]));
@@ -1015,7 +1015,7 @@ try {
     private void btnEnviarSemiterminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarSemiterminadoActionPerformed
         try {
             int fila = tblInvCross.getSelectedRow();
-            String piezas = (String.valueOf(tblInvCross.getValueAt(fila, 3)));
+            String piezas = (String.valueOf(tblInvCross.getValueAt(fila, 2)));
             int numPiezasActuales = Integer.parseInt(piezas);
             
             if (numPiezasActuales != 0)

@@ -86,13 +86,13 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
     {
-        "No. Partida","Tipo Recorte","No. Piezas Iniciales","No. Piezas Actuales","Peso","Peso Actual","Peso prom. X pieza","Decimetros","Decimetros Actuales","Pies","Pies Actuales","Selección","Calibre","Fecha Entrada"
+        "No. Partida","Tipo Recorte","No. Piezas","Peso","Peso prom. X pieza","Decimetros","Pies","Selección","Calibre","Fecha Entrada"
     };
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] colsInvTermi = new String[]
     {
-        "No. Partida","Tipo Recorte","Calibre","Seleccion","No. Piezas Iniciales","No. Piezas Actuales","kgTotales","Fecha Entrada"
+        "No. Partida","Tipo Recorte","Calibre","Seleccion","No. Piezas","kgTotales","Fecha Entrada"
     };
    
     /**
@@ -489,10 +489,10 @@ public class PnlTerminado extends javax.swing.JPanel {
             tr.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 1).toString());
             c.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 2).toString());
             s.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 3).toString());
-            ist.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 5).toString()));
+            ist.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
             ist.setIdInvSemTer(Integer.parseInt(datos[renglonSeleccionado][8]));
             
-            promXPieza = (Double.parseDouble(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 6).toString())) / (Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
+            promXPieza = (Double.parseDouble(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 5).toString())) / (Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
             double kgTotales = promXPieza * ist.getNoPiezasActuales();
             
             dlgBuscar.setVisible(false);

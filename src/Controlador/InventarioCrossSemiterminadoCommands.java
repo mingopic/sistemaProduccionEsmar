@@ -70,12 +70,12 @@ public class InventarioCrossSemiterminadoCommands {
             {
                 datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("descripcion");
-                datos[i][2] = rs.getString("noPiezas");
-                datos[i][3] = rs.getString("noPiezasActuales");
-                
+                datos[i][2] = rs.getString("noPiezasActuales");
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][4] = sdf.format(sqlDate);
+                datos[i][3] = sdf.format(sqlDate);
+                
+                datos[i][4] = rs.getString("noPiezas");
                 datos[i][5] = rs.getString("idInvCrossSemi");
                 i++; 
             }

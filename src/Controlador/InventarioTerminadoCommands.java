@@ -60,21 +60,21 @@ public class InventarioTerminadoCommands {
             {
                 datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("tipoRecorte");
-                datos[i][2] = rs.getString("noPiezas");
-                datos[i][3] = rs.getString("noPiezasActuales");
-                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActual")));
-                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
-                datos[i][7] = String.format("%.2f",Double.parseDouble(rs.getString("decimetros")));
-                datos[i][8] = String.format("%.2f",Double.parseDouble(rs.getString("decimetrosActual")));
-                datos[i][9] = String.format("%.2f",Double.parseDouble(rs.getString("pies")));
-                datos[i][10] = String.format("%.2f",Double.parseDouble(rs.getString("piesActual")));
-                datos[i][11] = rs.getString("seleccion");
-                datos[i][12] = rs.getString("calibre");
-                
+                datos[i][2] = rs.getString("noPiezasActuales");
+                datos[i][3] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActual")));
+                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
+                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("decimetrosActual")));
+                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("piesActual")));
+                datos[i][7] = rs.getString("seleccion");
+                datos[i][8] = rs.getString("calibre");
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][13] = sdf.format(sqlDate);
+                datos[i][9] = sdf.format(sqlDate);
+                
+                datos[i][10] = rs.getString("noPiezas");
+                datos[i][11] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
+                datos[i][12] = String.format("%.2f",Double.parseDouble(rs.getString("decimetros")));
+                datos[i][13] = String.format("%.2f",Double.parseDouble(rs.getString("pies")));
                 datos[i][14] = rs.getString("idInvTerminado");
                 i++; 
             }

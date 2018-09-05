@@ -76,13 +76,13 @@ public class InventarioSemiterminadoTerminadoCommands {
                 datos[i][1] = rs.getString("tipoRecorte");
                 datos[i][2] = rs.getString("calibre");
                 datos[i][3] = rs.getString("seleccion");
-                datos[i][4] = rs.getString("noPiezas");
-                datos[i][5] = rs.getString("noPiezasActuales");
-                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
-                
+                datos[i][4] = rs.getString("noPiezasActuales");
+                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][7] = sdf.format(sqlDate);
+                datos[i][6] = sdf.format(sqlDate);
+                
+                datos[i][7] = rs.getString("noPiezas");
                 datos[i][8] = rs.getString("idInvSemTer");
                 i++; 
             }

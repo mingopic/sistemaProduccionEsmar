@@ -513,7 +513,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
 
         chkContabilidadAgregar.setText("Contabilidad");
 
-        chkCrossAgregar.setText("Cross");
+        chkCrossAgregar.setText("Desvenado");
 
         chkProduccionAgregar.setText("Producción");
 
@@ -699,7 +699,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
 
         chkContabilidadEditar.setText("Contabilidad");
 
-        chkCrossEditar.setText("Cross");
+        chkCrossEditar.setText("Desvenado");
 
         chkProduccionEditar.setText("Producción");
 

@@ -15,6 +15,8 @@ public class PartidaDetalle {
     int idPartida;
     int idRecepcionCuero;
     int idTipoRecorte;
+    String recorte;
+    int noPartida;
 
     public int getIdPartidaDet() {
         return idPartidaDet;
@@ -55,4 +57,22 @@ public class PartidaDetalle {
     public void setIdTipoRecorte(int idTipoRecorte) {
         this.idTipoRecorte = idTipoRecorte;
     }
+
+    public String getRecorte() {
+        return recorte;
+    }
+
+    public void setRecorte(String recorte) {
+        this.recorte = recorte;
+    }    
+
+    public int getNoPartida() {
+        return noPartida;
+    }
+
+    public void setNoPartida(int noPartida) {
+        this.noPartida = noPartida;
+    }
+    
+    
 }

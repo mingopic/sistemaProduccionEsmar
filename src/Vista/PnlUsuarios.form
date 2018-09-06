@@ -300,7 +300,7 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkCrossAgregar">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Cross"/>
+                    <Property name="text" type="java.lang.String" value="Desvenado"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkProduccionAgregar">
@@ -641,7 +641,7 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkCrossEditar">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Cross"/>
+                    <Property name="text" type="java.lang.String" value="Desvenado"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkProduccionEditar">

@@ -31,8 +31,10 @@ create procedure sp_agrEntRecCuero
   ,@tipoCamion       varchar(50)
 )
 as begin
+  
   declare @fechaEntrada datetime
   declare @costoCamion float
+  declare @precioGarra float
   
   set @fechaEntrada =
     (
@@ -41,6 +43,21 @@ as begin
     )
   
   set @costoCamion = @kgTotal * @precioXKilo
+  
+  select
+    @precioGarra = costo
+  
+  from
+    tb_costoGarra
+    
+  where
+    fecha =
+      (
+        select 
+          max(fecha)
+        from
+          tb_costoGarra
+      )
   
   insert into
     tb_recepcionCuero
@@ -57,6 +74,7 @@ as begin
       , @kgTotal
       , @precioXKilo
       , @costoCamion
+      , @precioGarra
       , @mermaSal
       , @mermaHumedad
       , @mermaCachete

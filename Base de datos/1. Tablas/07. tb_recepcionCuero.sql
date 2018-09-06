@@ -21,6 +21,7 @@ create table tb_recepcionCuero
   , kgTotal          float
   , precioXKilo      float
   , costocamion      float
+  , precioGarra      float
   , mermaSal         float
   , mermaHumedad     float
   , mermaCachete     float

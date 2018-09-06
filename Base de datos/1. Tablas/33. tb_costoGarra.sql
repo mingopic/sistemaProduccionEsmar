@@ -10,8 +10,8 @@ go
 
 create table tb_costoGarra
 (
-  idCostoGarra       int 
-  , costo            int
-  , fecha            date
+  idCostoGarra int not null identity(1,1) primary key
+  , costo      float
+  , fecha      datetime
 )
 go

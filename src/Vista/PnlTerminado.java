@@ -756,9 +756,9 @@ public class PnlTerminado extends javax.swing.JPanel {
         
         txtNoPartidaEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
         txtTipoRecorteEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
-        cmbCalibreEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 9)));
-        cmbSeleccionEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 8)));
-        txtNoPiezasActualesEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 3)));
+        cmbCalibreEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 8)));
+        cmbSeleccionEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 7)));
+        txtNoPiezasActualesEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
     }
     
     //Método que abre el dialogo para enviar a terminado 
@@ -2111,7 +2111,7 @@ try {
         try 
         {
             int fila = tblTerminado.getSelectedRow();
-            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 3)));
+            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
             int numPiezasActuales = Integer.parseInt(piezas);
             
             if (numPiezasActuales != 0)

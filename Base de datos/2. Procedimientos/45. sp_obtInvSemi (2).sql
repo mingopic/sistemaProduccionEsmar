@@ -17,12 +17,14 @@ create procedure sp_obtInvSemi
 as begin
   
   select
-		tr.descripcion as tipoRecorte
+		ins.noPartida
+		, tr.descripcion as tipoRecorte
 		, c.descripcion as calibre
 		, s.descripcion as seleccion
-		, sum(ins.noPiezasActuales) as noPiezas
-		, sum(ins.kg) as peso
-	  , sum(ins.kg)/sum(ins.noPiezasActuales) as pesoProm
+		, ins.noPiezasActuales as noPiezas
+		, ins.kg as peso
+		, ins.kg/ins.noPiezasActuales as pesoProm
+		, ins.fecha
 
 	from
 		tb_InvSemiterminadoCompleto as ins
@@ -48,6 +50,4 @@ as begin
 	where
     ins.noPiezasActuales > 0
     
-	group by
-		tr.descripcion, c.descripcion, s.descripcion;
 end

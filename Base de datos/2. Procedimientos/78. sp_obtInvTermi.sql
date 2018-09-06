@@ -16,14 +16,16 @@ create procedure sp_obtInvTermi
 )
 as begin
 	select
-		tr.descripcion as tipoRecorte
+    p.noPartida
+		, tr.descripcion as tipoRecorte
 		, c.descripcion as calibre
 		, s.descripcion as seleccion
-		, sum(it.noPiezasActuales) as noPiezas
-		, sum(it.kgTotalesActual) as peso
-	  , sum(it.kgTotalesActual)/sum(it.noPiezasActuales) as pesoProm
-    , sum(it.decimetrosActual) as decimetros
-    , sum(it.piesActual) as pies
+		, it.noPiezasActuales as noPiezas
+		, it.kgTotalesActual as peso
+	  , it.kgTotalesActual/it.noPiezasActuales as pesoProm
+    , it.decimetrosActual as decimetros
+    , it.piesActual as pies
+    , it.fechaEntrada
 
 	from
 		tb_invTerminado as it
@@ -52,6 +54,11 @@ as begin
       tb_partidaDet pd
     on
       pd.idPartidaDet = ic.idPartidaDet
+      
+    inner join
+      tb_partida p
+    on
+      p.idPartida = pd.idPartida
 
     inner join
       tb_tipoRecorte tr
@@ -73,7 +80,4 @@ as begin
   
   where
     it.noPiezasActuales > 0
-	
-	group by
-		tr.descripcion, c.descripcion, s.descripcion;
 end

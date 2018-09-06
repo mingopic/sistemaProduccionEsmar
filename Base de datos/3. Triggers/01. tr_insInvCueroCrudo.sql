@@ -21,12 +21,14 @@ as begin
       noPiezasActual
       , kgTotalActual
       , idRecepcionCuero
+      , idTipoRecorte
     )
     
   select 
     noTotalPiezas
     , kgTotal
     , idRecepcionCuero
+    , 1
    
   from 
     tb_recepcionCuero

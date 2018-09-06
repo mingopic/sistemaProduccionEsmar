@@ -26,9 +26,13 @@ public class PartidaDetalleCommands {
     //Método para agregar una entrada a la tabla entradaProductoAlmacen
     public static void agregarPartidaDetalle(PartidaDetalle[] datosPD, String[][] datosPar) throws Exception {
         for (int i = 0; i < datosPD.length; i++) {
-            String query = "exec sp_agrPartidaDetalle "+datosPD[i].getNoPiezas()+""
-                + ","+datosPD[i].getIdPartida()+","+datosPD[i].getIdTipoRecorte()+""
-                    + ",'"+datosPar[i][0]+"',"+datosPar[i][1]+",'"+datosPar[i][2]+"'";
+            String query = "exec sp_agrPartidaDetalle "
+                    + datosPD[i].getNoPiezas()
+                    + ", " + datosPD[i].getIdPartida()
+                    + ", '" + datosPD[i].getRecorte() + "' "
+                    + ", '" + datosPar[i][0] + "' "
+                    + ", " + datosPar[i][1] 
+                    + ", '" + datosPar[i][2] + "'";
             PreparedStatement pstmt = null;
             c.conectar();
             pstmt = c.getConexion().prepareStatement(query);

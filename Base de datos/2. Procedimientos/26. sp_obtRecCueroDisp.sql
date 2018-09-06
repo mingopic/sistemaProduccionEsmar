@@ -15,6 +15,7 @@ as begin
     p.nombreProveedor
     , rc.noCamion
     , tp.descripcion
+    , tr.descripcion as 'recorte'
     , ic.noPiezasActual
     , ic.kgTotalActual
     , ic.kgTotalActual/ic.noPiezasActual as PromKgPieza
@@ -38,6 +39,11 @@ as begin
       tb_tipoCuero as tp
     on
       rc.idTipoCuero = tp.idTipoCuero
+    
+    inner join
+      tb_tipoRecorte tr
+    on
+      tr.idTipoRecorte = ic.idTipoRecorte
       
   where
     ic.noPiezasActual > 0

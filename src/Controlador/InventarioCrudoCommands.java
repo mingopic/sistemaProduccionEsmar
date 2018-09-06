@@ -27,7 +27,7 @@ public class InventarioCrudoCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 8;
+        int columnas = 9;
         int i = 0;
 
         c.conectar();
@@ -47,11 +47,12 @@ public class InventarioCrudoCommands {
                 datos[i][0] = rs.getString("nombreProveedor");
                 datos[i][1] = rs.getString("noCamion");
                 datos[i][2] = rs.getString("descripcion");
-                datos[i][3] = rs.getString("noPiezasActual");
-                datos[i][4] = rs.getString("kgTotalActual");
-                datos[i][5] = (String.format("%.2f",Double.parseDouble(rs.getString("PromKgPieza"))));
-                datos[i][6] = rs.getString("fechaEntrada");
-                datos[i][7] = rs.getString("idRecepcionCuero");
+                datos[i][3] = rs.getString("recorte");
+                datos[i][4] = rs.getString("noPiezasActual");
+                datos[i][5] = rs.getString("kgTotalActual");
+                datos[i][6] = (String.format("%.2f",Double.parseDouble(rs.getString("PromKgPieza"))));
+                datos[i][7] = rs.getString("fechaEntrada");
+                datos[i][8] = rs.getString("idRecepcionCuero");
                 i++; 
             }
         }

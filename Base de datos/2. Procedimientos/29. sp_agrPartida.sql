@@ -12,7 +12,7 @@ create procedure sp_agrPartida
 (
   @noPartida       int
   , @noTotalPiezas int
-  , @idProceso     int
+  , @proceso       varchar(20)
 )
 as begin
 

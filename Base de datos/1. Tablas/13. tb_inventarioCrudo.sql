@@ -14,5 +14,6 @@ create table tb_inventarioCrudo
   , noPiezasActual   int not null
   , kgTotalActual    float
   , idRecepcionCuero int not null foreign key references tb_recepcionCuero(idRecepcionCuero)
+  , idTipoRecorte    int not null foreign key references tb_tipoRecorte(idTipoRecorte)
 );
 go

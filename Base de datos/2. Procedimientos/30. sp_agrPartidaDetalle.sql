@@ -10,12 +10,12 @@ go
 
 create procedure sp_agrPartidaDetalle
 (
-  @noPiezas        int
-  , @idPartida     int
-  , @idTipoRecorte int
-  , @proveedor     varchar(20)
-  , @noCamion      int
-  , @fecha         date
+  @noPiezas     int
+  , @idPartida  int
+  , @recorte    varchar(20)
+  , @proveedor  varchar(20)
+  , @noCamion   int
+  , @fecha      date
 )
 as begin
 
@@ -45,6 +45,18 @@ as begin
           )
     )
   
+  declare
+    @idTipoRecorte int
+  
+  select
+    @idTipoRecorte = idTipoRecorte
+  
+  from
+    tb_tipoRecorte
+    
+  where
+    descripcion = @recorte
+    
   insert into
     tb_partidaDet
     (

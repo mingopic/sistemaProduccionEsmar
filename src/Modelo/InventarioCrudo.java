@@ -13,6 +13,8 @@ public class InventarioCrudo {
     int idInventarioCrudo;
     int noPiezasActual;
     int idRecepcionCuero;
+    int idTipoRecorte;
+    String recorte;
 
     public int getIdInventarioCrudo() {
         return idInventarioCrudo;
@@ -37,4 +39,22 @@ public class InventarioCrudo {
     public void setIdRecepcionCuero(int idRecepcionCuero) {
         this.idRecepcionCuero = idRecepcionCuero;
     }
+
+    public String getRecorte() {
+        return recorte;
+    }
+
+    public int getIdTipoRecorte() {
+        return idTipoRecorte;
+    }
+
+    public void setIdTipoRecorte(int idTipoRecorte) {
+        this.idTipoRecorte = idTipoRecorte;
+    }
+
+    public void setRecorte(String recorte) {
+        this.recorte = recorte;
+    }
+    
+    
 }

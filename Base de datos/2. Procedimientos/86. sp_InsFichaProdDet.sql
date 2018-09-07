@@ -29,6 +29,7 @@ as begin
     , @precioXpiezaRecCuero float
     , @porcentajePrecioXpza float
     , @costoCueroRecorte    float
+    , @costoGarra           float
   
   set
     @costoXkg = @costoInsumosFicha / @kgTotal
@@ -36,11 +37,31 @@ as begin
   set
     @costoInsumosPartida = @costoXkg * @kgPartida
   
+  set
+    @costoGarra = 
+    (
+      select
+      costo
+      
+    from
+      tb_costoGarra
+      
+    where
+      idCostoGarra =
+      (
+        select
+          max(idCostoGarra)
+          
+        from
+          tb_costoGarra
+      )
+    )
+  
   --Obtener precio de cada pieza entera
   select
     @precioXpiezaRecCuero = 
     (
-      rc.costocamion / rc.noTotalPiezas
+      (rc.costocamion / rc.noTotalPiezas) - ( @costoGarra * 2)
     )
     , @idProceso = pd.idProceso
     , @idTipoRecorte = pd.idTipoRecorte
@@ -65,22 +86,6 @@ as begin
     
   where
     idTipoRecorte = @idTipoRecorte
-    
-  /*
-  if @idProceso = 2
-  begin
-    
-    set
-      @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * @precioXpiezaRecCuero
-  end
-  
-  else 
-  begin
-  
-    set
-      @costoCueroRecorte = 0.0
-  end
-  */
   
   set
     @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * @precioXpiezaRecCuero

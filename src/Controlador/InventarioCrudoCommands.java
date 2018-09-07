@@ -27,7 +27,7 @@ public class InventarioCrudoCommands {
         
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 9;
+        int columnas = 10;
         int i = 0;
 
         c.conectar();
@@ -53,6 +53,7 @@ public class InventarioCrudoCommands {
                 datos[i][6] = (String.format("%.2f",Double.parseDouble(rs.getString("PromKgPieza"))));
                 datos[i][7] = rs.getString("fechaEntrada");
                 datos[i][8] = rs.getString("idRecepcionCuero");
+                datos[i][9] = rs.getString("idInventarioCrudo");
                 i++; 
             }
         }
@@ -66,9 +67,10 @@ public class InventarioCrudoCommands {
     //Método para actualizar el número de piezas actuales
     public static void actualizarNoPiezasActual(String[][] datosPar) throws Exception {
         for (int i = 0; i < datosPar.length; i++) {
-            String query = "exec sp_actInvCrudo '"+datosPar[i][0]+""
-                + "',"+datosPar[i][1]+",'"+datosPar[i][2]+"',"+datosPar[i][3]+""
-                    + ","+datosPar[i][4];
+            String query = "exec sp_actInvCrudo "
+                    + datosPar[i][3]
+                    + ", " + datosPar[i][4]
+                    + ", " + datosPar[i][5];
             PreparedStatement pstmt = null;
             c.conectar();
             pstmt = c.getConexion().prepareStatement(query);
@@ -81,6 +83,25 @@ public class InventarioCrudoCommands {
     //Método para eliminar una recepcion de cuero que aún no está en uso
     public static void eliminarInventarioCrudo(RecepcionCuero rc) throws Exception {
         String query = "exec sp_EliInvCrudo "+rc.getIdRecepcionCuero();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para agregar recortes de cuero en inventarioCrudo
+    public static void agregarRecorte(InventarioCrudo ic, int noPiezasOriginal, int noPiezas1, int noPiezas2, Double kg1, Double kg2 ) throws Exception {
+        String query = "exec sp_insRecorteInvCrudo "
+                + ic.getIdInventarioCrudo()
+                + ", " + noPiezasOriginal
+                + ", " + noPiezas1
+                + ", " + noPiezas2
+                + ", " + kg1
+                + ", " + kg2
+                + ", " + ic.getIdTipoRecorte()
+                + ", " + ic.getIdRecepcionCuero();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

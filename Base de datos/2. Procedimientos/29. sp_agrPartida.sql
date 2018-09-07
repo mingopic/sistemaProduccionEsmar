@@ -12,16 +12,9 @@ create procedure sp_agrPartida
 (
   @noPartida       int
   , @noTotalPiezas int
-  , @proceso       varchar(20)
+  , @idProceso     int
 )
 as begin
-
-  declare @fecha datetime
-  
-  set @fecha = 
-  (
-    select getdate()
-  )
   
   insert into
     tb_partida
@@ -30,7 +23,7 @@ as begin
     (
       @noPartida
       , @noTotalPiezas
-      , @fecha
+      , getdate()
       , @idProceso
     )
 end

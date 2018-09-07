@@ -10,7 +10,6 @@ import Controlador.FichaProdDetCommands;
 import Controlador.FichaProduccionCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
-import Modelo.FichaProdDet;
 import Modelo.FichaProduccion;
 import Modelo.Proceso;
 import java.io.InputStream;

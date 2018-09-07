@@ -517,6 +517,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 {
                     double costoGarra = Double.parseDouble(txtCostoGarra.getText());
                     
+                    if (costoGarra <= 0)
+                    {
+                        JOptionPane.showMessageDialog(dlgCostoGarra, "Costo de la garra debe ser mayor a 0", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    
                     cg.setCosto(costoGarra);
                     
                     cgc.agregarConfigGarra(cg);
@@ -524,14 +530,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(dlgCostoGarra, "Registro insertado correctamente");
                     
                     dlgCostoGarra.setVisible(false);
-                    this.setVisible(true);
-                    this.setExtendedState(MAXIMIZED_BOTH);
-                    pnlPrincipal=new PnlPrincipal();
-                    pnlPrincipalx.removeAll();        
-                    pnlPrincipalx.add(pnlPrincipal, BorderLayout.CENTER);
-                    pnlPrincipalx.paintAll(pnlPrincipal.getGraphics());
-                    ImageIcon ico=new ImageIcon(".\\src\\imagenes\\house.png");
-                    lblVentana.setIcon(ico);
                 }
                 catch (Exception e)
                 {
@@ -541,7 +539,38 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         catch (Exception e)
         {
-            
+            e.printStackTrace();
+            dlgCostoGarra.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Error al guardar costo de la garra","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void validarNumerosDecimales(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c;
+            c=evt.getKeyChar();    
+            int punto=textoCaja.indexOf(".")+1;
+
+            if (punto==0)
+            {
+                if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_PERIOD)
+                {
+                    getToolkit().beep();           
+                    evt.consume();
+                }
+            }
+
+            else
+            {
+                if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+                {
+                    getToolkit().beep();           
+                    evt.consume();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1267,6 +1296,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtCostoGarra.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtCostoGarra.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCostoGarra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoGarraKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCostoGarraKeyTyped(evt);
             }
@@ -1321,7 +1353,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
                     .addComponent(txtCostoGarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
@@ -2115,7 +2147,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void txtCostoGarraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoGarraKeyTyped
-        // TODO add your handling code here:
+        validarNumerosDecimales(evt, txtCostoGarra.getText());
     }//GEN-LAST:event_txtCostoGarraKeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -2123,9 +2155,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        abrirDialogo(dlgCostoGarra, 310, 280);
+        abrirDialogo(dlgCostoGarra, 310, 180);
         cargarConfActPrecGarra();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void txtCostoGarraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoGarraKeyReleased
+        if (txtCostoGarra.getText().equals(""))
+        {
+            txtCostoGarra.setText("0");
+        }
+    }//GEN-LAST:event_txtCostoGarraKeyReleased
 
     /**
      * @param args the command line arguments

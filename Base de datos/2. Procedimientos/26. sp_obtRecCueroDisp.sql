@@ -21,6 +21,7 @@ as begin
     , ic.kgTotalActual/ic.noPiezasActual as PromKgPieza
     , rc.fechaEntrada
     , rc.idRecepcionCuero
+    , ic.idInventarioCrudo
     
   from
     tb_proveedor as p

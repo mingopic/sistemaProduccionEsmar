@@ -1015,7 +1015,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             .addGroup(dlgRecortarLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 190, Short.MAX_VALUE))
         );
 
         setPreferredSize(new java.awt.Dimension(1000, 450));

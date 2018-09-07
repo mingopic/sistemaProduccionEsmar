@@ -10,48 +10,20 @@ go
 
 create procedure sp_actInvCrudo
 (
-  @proveedor        varchar(20)
-  , @noCamion       int
-  , @fecha          date
-  , @piezasUtilizar int
-  , @kgDescontar	float
+  @piezasUtilizar    int
+  , @kgDescontar	     float
+  , @idInventarioCrudo int
 )
 as begin
-
-  declare @idRecepcionCuero int
-  
-  set @idRecepcionCuero =
-    (
-      select
-        idRecepcionCuero
-        
-      from
-        tb_recepcionCuero
-        
-      where
-        noCamion = @noCamion
-        and fechaEntrada = @fecha
-        and idProveedor =
-          (
-            select
-              idProveedor
-              
-            from
-              tb_proveedor
-              
-            where
-              nombreProveedor = @proveedor
-          )
-    )
     
   update
     tb_inventarioCrudo
     
   set
     noPiezasActual = noPiezasActual-@piezasUtilizar
-	, kgTotalActual = kgTotalActual-@kgDescontar
+    , kgTotalActual = kgTotalActual-@kgDescontar
     
   where
-    idRecepcionCuero = @idRecepcionCuero
+    idInventarioCrudo = @idInventarioCrudo
 end
 go

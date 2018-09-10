@@ -39,6 +39,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -47,6 +48,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas1
           , @kg1
+          , @kg1 / @noPiezas1
           , @idRecepcionCuero
           , 2
         )
@@ -56,6 +58,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -64,6 +67,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas2
           , @kg2
+          , @kg2 / @noPiezas2
           , @idRecepcionCuero
           , 3
         )
@@ -77,6 +81,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -85,6 +90,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas1
           , @kg1
+          , @kg1 / @noPiezas1
           , @idRecepcionCuero
           , 5
         )
@@ -94,6 +100,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -102,6 +109,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas2
           , @kg2
+          , @kg2 / @noPiezas2
           , @idRecepcionCuero
           , 7
         )
@@ -115,6 +123,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -123,6 +132,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas1
           , @kg1
+          , @kg1 / @noPiezas1
           , @idRecepcionCuero
           , 6
         )
@@ -132,6 +142,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -140,6 +151,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas2
           , @kg2
+          , @kg2 / @noPiezas2
           , @idRecepcionCuero
           , 7
         )
@@ -153,6 +165,7 @@ create procedure sp_insRecorteInvCrudo
         (
           noPiezasActual
           , KgTotalActual
+          , pesoXPieza
           , idRecepcionCuero
           , idTipoRecorte
         )
@@ -161,6 +174,7 @@ create procedure sp_insRecorteInvCrudo
         (
           @noPiezas1
           , @kg1
+          , @kg1 / @noPiezas1
           , @idRecepcionCuero
           , @idTipoRecorte
         )

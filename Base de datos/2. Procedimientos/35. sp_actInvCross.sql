@@ -28,25 +28,5 @@ as begin
     
   where
     idInvPCross = @idInvPCross
-  
-  -- Buscar idPartidaDet para actualizar el no. de piezas en la tabla de tb_partidaDet
-  select
-    @idPartidaDet = idPartidaDet
-  
-  from
-    tb_invCross
-  
-  where
-    idInvPCross = @idInvPCross
-  
-  --
-  update
-    tb_partidaDet
-  
-  set
-    noPiezasAct = noPiezasAct - @piezasUtilizar
-  
-  where
-    idPartidaDet = @idPartidaDet
 end
 go

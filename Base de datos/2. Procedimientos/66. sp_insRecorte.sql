@@ -20,7 +20,8 @@ create procedure sp_insRecorte
   as begin
     
     declare 
-      @idRecepcionCuero int
+      @idRecepcionCuero  int
+      , @idInventarioCrudo int
       
     update
       tb_partidaDet
@@ -31,16 +32,17 @@ create procedure sp_insRecorte
     where
       idPartidaDet = @idPartidaDet
     
-    set
-      @idRecepcionCuero = 
-        (
-          select
-            idRecepcionCuero
-          from
-            tb_partidaDet
-          where
-            idPartidaDet = @idPartidaDet
-        )
+    --
+    select
+      @idRecepcionCuero = idRecepcionCuero
+      , @idInventarioCrudo = idInventarioCrudo
+      
+    from
+      tb_partidaDet
+      
+    where
+      idPartidaDet = @idPartidaDet
+        
       
     if @idTipoRecorte = 0
     begin
@@ -54,6 +56,9 @@ create procedure sp_insRecorte
           , idRecepcionCuero
           , idTipoRecorte
           , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
         )
         
       values
@@ -64,9 +69,12 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , 2
           , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
         
-        insert into
+      insert into
         tb_partidaDet
         (
           noPiezas
@@ -75,6 +83,9 @@ create procedure sp_insRecorte
           , idRecepcionCuero
           , idTipoRecorte
           , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
         )
         
       values
@@ -85,6 +96,9 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , 3
           , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
     end
     
@@ -100,6 +114,9 @@ create procedure sp_insRecorte
           , idRecepcionCuero
           , idTipoRecorte
           , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
         )
         
       values
@@ -110,18 +127,24 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , 5
           , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
         
         insert into
-        tb_partidaDet
-        (
-          noPiezas
-          , noPiezasAct
-          , idPartida
-          , idRecepcionCuero
-          , idTipoRecorte
-          , idProceso
-        )
+          tb_partidaDet
+          (
+            noPiezas
+            , noPiezasAct
+            , idPartida
+            , idRecepcionCuero
+            , idTipoRecorte
+            , idProceso
+            , idInventarioCrudo
+            , procedenciaCrudo
+            , idRecortePartidaDet
+          )
         
       values
         (
@@ -131,6 +154,9 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , 7
           , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
     end
     
@@ -146,6 +172,9 @@ create procedure sp_insRecorte
           , idRecepcionCuero
           , idTipoRecorte
           , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
         )
         
       values
@@ -156,9 +185,12 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , 6
           , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
         
-        insert into
+      insert into
         tb_partidaDet
         (
           noPiezas
@@ -167,6 +199,9 @@ create procedure sp_insRecorte
           , idRecepcionCuero
           , idTipoRecorte
           , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
         )
         
       values
@@ -177,11 +212,13 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , 7
           , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
     end
     
-    else
-    begin
+    else begin
       
       insert into
         tb_partidaDet
@@ -192,6 +229,9 @@ create procedure sp_insRecorte
           , idRecepcionCuero
           , idTipoRecorte
           , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
         )
         
       values
@@ -202,6 +242,9 @@ create procedure sp_insRecorte
           , @idRecepcionCuero
           , @idTipoRecorte
           , @idProceso 
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
         )
     end
     

@@ -10,12 +10,13 @@ go
 
 create procedure sp_agrPartidaDetalle
 (
-  @noPiezas     int
-  , @idPartida  int
-  , @recorte    varchar(20)
-  , @proveedor  varchar(20)
-  , @noCamion   int
-  , @fecha      date
+  @noPiezas            int
+  , @idPartida         int
+  , @recorte           varchar(20)
+  , @proveedor         varchar(20)
+  , @noCamion          int
+  , @fecha             date
+  , @idInventarioCrudo int
 )
 as begin
 
@@ -47,6 +48,7 @@ as begin
   
   declare
     @idTipoRecorte int
+    , @consecutivo int
   
   select
     @idTipoRecorte = idTipoRecorte
@@ -56,7 +58,7 @@ as begin
     
   where
     descripcion = @recorte
-    
+  
   insert into
     tb_partidaDet
     (
@@ -66,6 +68,9 @@ as begin
       , idRecepcionCuero
       , idTipoRecorte
       , idProceso
+      , idInventarioCrudo
+      , procedenciaCrudo
+      , idRecortePartidaDet
     )
     
   values
@@ -76,6 +81,9 @@ as begin
       , @idRecepcionCuero
       , @idTipoRecorte
       , 1
+      , @idInventarioCrudo
+      , 1
+      , 0
     )
 end
 go

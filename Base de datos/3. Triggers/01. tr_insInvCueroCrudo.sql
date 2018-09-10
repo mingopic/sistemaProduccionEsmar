@@ -20,6 +20,7 @@ as begin
     (
       noPiezasActual
       , kgTotalActual
+      , pesoXPieza
       , idRecepcionCuero
       , idTipoRecorte
     )
@@ -27,6 +28,7 @@ as begin
   select 
     noTotalPiezas
     , kgTotal
+    , kgTotal / noTotalPiezas
     , idRecepcionCuero
     , 1
    

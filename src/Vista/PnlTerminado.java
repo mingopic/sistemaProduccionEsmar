@@ -774,7 +774,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         dlgEnvSal.setVisible(true);
     }
     
-    //Método para realizar entrada de material y actualizar inventarios
+    //Método para realizar salida de material y actualizar inventarios
     public void realizarEntradaEnvSal () throws Exception
     {
         if ( !txtNoPiezasEnvSal.getText().isEmpty() && Integer.parseInt(txtNoPiezasEnvSal.getText()) != 0)
@@ -813,7 +813,7 @@ public class PnlTerminado extends javax.swing.JPanel {
                     itc.actualizarNoPiezasActual(isalt);
                     actualizarTablaTerminado();
                     dlgEnvSal.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
+                    JOptionPane.showMessageDialog(null, "Salida realizada correctamente");
                 }
             } 
             catch (Exception e) 

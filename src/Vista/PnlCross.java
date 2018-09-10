@@ -342,6 +342,7 @@ public class PnlCross extends javax.swing.JPanel {
             } 
             catch (Exception e) 
             {
+                e.printStackTrace();
                 dlgEnvSemi.setVisible(false);                
                 JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
             }   

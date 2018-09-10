@@ -18,12 +18,14 @@ create procedure sp_InsPartidaDetalleFicha
 as begin
 
   declare 
-    @idRecepcionCuero int
-    , @idProceso      int
+    @idRecepcionCuero    int
+    , @idProceso         int
+    , @idInventarioCrudo int 
   
   select
     @idRecepcionCuero = idRecepcionCuero
     , @idProceso = idProceso
+    , @idInventarioCrudo = idInventarioCrudo
     
   from
     tb_partidaDet
@@ -40,6 +42,10 @@ as begin
       , idRecepcionCuero
       , idTipoRecorte
       , idProceso
+      , idInventarioCrudo
+      , procedenciaCrudo
+      , idRecortePartidaDet
+      
     )
     
   values
@@ -50,6 +56,9 @@ as begin
       , @idRecepcionCuero
       , @idTipoRecorte
       , @idProceso + 1
+      , @idInventarioCrudo
+      , 0
+      , @idPartidaDet
     )
   
   update

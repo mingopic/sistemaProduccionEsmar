@@ -23,6 +23,8 @@ as begin
     , tr.idTipoRecorte
     , [Proveedor] = pr.nombreProveedor + ' - ' + cast(rc.noCamion as varchar)
     , rc.idRecepcionCuero
+    , pd.idRecortePartidaDet
+    , pd.idInventarioCrudo
     
 	from
 		tb_partidaDet as pd

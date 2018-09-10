@@ -10,7 +10,8 @@ go
 
 create procedure sp_eliPartidaDet
 (
-	@idPartidaDet int
+	@idPartidaDet        int
+  , @idInventarioCrudo int
 )
 as begin
   
@@ -18,7 +19,6 @@ as begin
     @noPiezas           int
     , @idPartida        int
     , @idRecepcionCuero int
-    , @kilosXpieza      float
   
   -- Obtener datos de la partidaDet 
   select
@@ -58,25 +58,15 @@ as begin
       idPartida = @idPartida
   end
   
-  -- Obtener promedio de kilos por pieza
-  select
-    @kilosXpieza = kgTotal / noTotalPiezas
-  
-  from
-    tb_recepcionCuero
-  
-  where
-    idRecepcionCuero = @idRecepcionCuero
-  
   -- Actualizar noPiezas al inventario
   update
     tb_inventarioCrudo
   
   set
     noPiezasActual = noPiezasActual + @noPiezas
-    , kgTotalActual = kgTotalActual + (@kilosXpieza * @noPiezas)
+    , kgTotalActual = kgTotalActual + (pesoXPieza * @noPiezas)
   
   where
-    idRecepcionCuero = @idRecepcionCuero
+    idInventarioCrudo = @idInventarioCrudo
 end
 go

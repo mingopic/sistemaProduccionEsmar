@@ -401,15 +401,53 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 lblTipoCuero1.setText(recorteSeleccionado);
             }
             
-            dlgRecortar.setSize(300, 280);
-            dlgRecortar.setPreferredSize(dlgRecortar.getSize());
-            dlgRecortar.setLocationRelativeTo(null);
-            dlgRecortar.setAlwaysOnTop(true);
-            dlgRecortar.setVisible(true);
+            switch (recorteSeleccionado) 
+            {
+                case "Delantero/Crupon":
+                    pad.setIdTipoRecorte(0);
+                    break;
+                case "Centro Castaño/Delantero Suela":
+                    pad.setIdTipoRecorte(1);
+                    break;
+                case "Centro Quebracho/Delantero Suela":
+                    pad.setIdTipoRecorte(2);
+                    break;
+                case "Lados":
+                    pad.setIdTipoRecorte(4);
+                    break;
+                case "Centro Castaño":
+                    pad.setIdTipoRecorte(5);
+                    break;
+                case "Centro Quebracho":
+                    pad.setIdTipoRecorte(6);
+                    break;
+                case "Delantero Suela":
+                    pad.setIdTipoRecorte(7);
+                    break;
+                default:
+                    break;
+            }
+            
+            PartidaDetalleCommands pdc = new PartidaDetalleCommands();
+            
+            int banderaRecortar = pdc.validarCrearRecorte(pad);
+            
+            if (banderaRecortar == 1)
+            {
+                dlgRecortar.setSize(300, 280);
+                dlgRecortar.setPreferredSize(dlgRecortar.getSize());
+                dlgRecortar.setLocationRelativeTo(null);
+                dlgRecortar.setAlwaysOnTop(true);
+                dlgRecortar.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No se puede recortar. \nYa se tienen recortes del mismos tipo para esta partida y camión","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
         } 
         catch (Exception e) 
         {
-            System.err.println(e);
+            e.printStackTrace();
             dlgRecortar.setVisible(false);
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
             dlgRecortar.setVisible(true);
@@ -693,15 +731,32 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
                     pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
                     pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
+                    pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
+                    pd.setIdInventarioCrudo(lstPartidas.get(fila).getIdInventarioCrudo());
                     
-                    for (int i = 0; i < lstPartidas.size(); i++)
+                    if (pd.getIdRecortePartidaDet() == 0)
                     {
-                        if(lstPartidas.get(i).getIdPartida() == pd.getIdPartida() && lstPartidas.get(i).getIdTipoRecorte() != 1)
+                        for (int i = 0; i < lstPartidas.size(); i++)
                         {
-                            JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
-                            return;
+                            if(lstPartidas.get(i).getIdRecortePartidaDet() == pd.getIdPartidaDet())
+                            {
+                                JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
                         }
                     }
+                    
+                    else
+                    {
+                        for (int i = 0; i < lstPartidas.size(); i++)
+                        {
+                            if(lstPartidas.get(i).getIdPartida() == pd.getIdPartida() && lstPartidas.get(i).getIdTipoRecorte() != 1)
+                            {
+                                JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                        }
+                    }                    
 
                     int eliminar = pdc.obtenerPartidaDetalleEliminar(pd);
 
@@ -750,6 +805,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
                     pd.setIdRecepcionCuero(lstPartidas.get(fila).getIdRecepcionCuero());
                     pd.setIdTipoRecorte(lstPartidas.get(fila).getIdTipoRecorte());
+                    pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
                     
                     if (pd.getIdTipoRecorte() == 1)
                     {
@@ -769,7 +825,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                             pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
                             pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
                         }
-                        else
+                        else if (eliminar == 1)
                         {
                             if (pd.getIdTipoRecorte() == 2 || pd.getIdTipoRecorte() == 3)
                             {
@@ -779,6 +835,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                             {
                                 JOptionPane.showMessageDialog(null, "El recorte que desea eliminar ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
                             }
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "No se puede eliminar recorte creado desde la creación de la partida","Advertencia",JOptionPane.WARNING_MESSAGE);
                         }
                     }
                 }
@@ -1462,6 +1522,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
             pad.setIdPartida(lstPartidas.get(i).getIdPartida());
             pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
+            pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
             
             abrirDialogoRecortar();
         } 
@@ -1489,32 +1550,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             try 
             {
                 noPiezas = Integer.parseInt(txtNoPiezasRecortar1.getText());
-                switch (recorteSeleccionado) 
-                {
-                    case "Delantero/Crupon":
-                        pad.setIdTipoRecorte(0);
-                        break;
-                    case "Centro Castaño/Delantero Suela":
-                        pad.setIdTipoRecorte(1);
-                        break;
-                    case "Centro Quebracho/Delantero Suela":
-                        pad.setIdTipoRecorte(2);
-                        break;
-                    case "Lados":
-                        pad.setIdTipoRecorte(4);
-                        break;
-                    case "Centro Castaño":
-                        pad.setIdTipoRecorte(5);
-                        break;
-                    case "Centro Quebracho":
-                        pad.setIdTipoRecorte(6);
-                        break;
-                    case "Delantero Suela":
-                        pad.setIdTipoRecorte(7);
-                        break;
-                    default:
-                        break;
-                }
+                
                 pdc = new PartidaDetalleCommands();
                 pdc.agregarRecorte(pad, noPiezasRecortar, noPiezas, Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0])-1);
                 dlgRecortar.setVisible(false);

@@ -11,7 +11,7 @@ go
 create table tb_invCrossSemi 
 (
   idInvCrossSemi     int not null identity(1,1) primary key
-  , idInvPCross      int not null foreign key references tb_partidaDet(idPartidaDet)
+  , idInvPCross      int not null foreign key references tb_invCross(idInvPCross)
   , noPiezas         int
   , noPiezasActuales int
   , kgTotal          float

@@ -10,11 +10,11 @@ go
 
 create procedure sp_eliRecorte
 (
-	@idPartidaDet       int
-  , @NoPiezas         int
-  , @idPartida        int
-  , @idRecepcionCuero int
-  , @idTipoRecorte    int
+	@idPartidaDet          int
+  , @NoPiezas            int
+  , @idPartida           int
+  , @idRecepcionCuero    int
+  , @idTipoRecorte       int
 )
 as begin
   

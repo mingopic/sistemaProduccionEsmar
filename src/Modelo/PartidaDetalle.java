@@ -17,6 +17,8 @@ public class PartidaDetalle {
     int idTipoRecorte;
     String recorte;
     int noPartida;
+    int idRecortePartidaDet;
+    int idInventarioCrudo;
 
     public int getIdPartidaDet() {
         return idPartidaDet;
@@ -72,6 +74,22 @@ public class PartidaDetalle {
 
     public void setNoPartida(int noPartida) {
         this.noPartida = noPartida;
+    }
+
+    public int getIdRecortePartidaDet() {
+        return idRecortePartidaDet;
+    }
+
+    public void setIdRecortePartidaDet(int idRecortePartidaDet) {
+        this.idRecortePartidaDet = idRecortePartidaDet;
+    }
+
+    public int getIdInventarioCrudo() {
+        return idInventarioCrudo;
+    }
+
+    public void setIdInventarioCrudo(int idInventarioCrudo) {
+        this.idInventarioCrudo = idInventarioCrudo;
     }
     
     

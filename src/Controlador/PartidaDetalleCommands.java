@@ -32,7 +32,8 @@ public class PartidaDetalleCommands {
                     + ", '" + datosPD[i].getRecorte() + "' "
                     + ", '" + datosPar[i][0] + "' "
                     + ", " + datosPar[i][1] 
-                    + ", '" + datosPar[i][2] + "'";
+                    + ", '" + datosPar[i][2] + "'"
+                    + ", " + datosPar[i][5];
             PreparedStatement pstmt = null;
             c.conectar();
             pstmt = c.getConexion().prepareStatement(query);
@@ -171,7 +172,8 @@ public class PartidaDetalleCommands {
     //Método que se llama eliminar una partidaDet
     public void eliminarPartidaDet(PartidaDetalle pd) throws Exception {
         String query = "exec sp_eliPartidaDet "
-                + pd.getIdPartidaDet();
+                + pd.getIdPartidaDet()
+                + ", " + pd.getIdInventarioCrudo();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -185,9 +187,8 @@ public class PartidaDetalleCommands {
         String query= "execute sp_valBorrarRecorte "
                 + pd.getIdPartidaDet()
                 +", " + pd.getNoPiezas()
-                +", " + pd.getIdPartida()
-                +", " + pd.getIdRecepcionCuero()
-                +", " + pd.getIdTipoRecorte();
+                +", " + pd.getIdTipoRecorte()
+                +", " + pd.getIdRecortePartidaDet();
         
         int datos = 0;
 
@@ -271,5 +272,37 @@ public class PartidaDetalleCommands {
             System.err.println(e);
         }
         return lstPartidas;
+    }
+    
+    //Método que se llama para validar si se puede realizar un recorte
+    public static int validarCrearRecorte(PartidaDisp pd) throws Exception {
+        String query= "execute sp_valCrearRecorte "
+                + pd.getIdPartida()
+                +", " + pd.getIdRecepcionCuero()
+                +", " + pd.getIdTipoRecorte()
+                +", " + pd.getIdProceso();
+        
+        int datos = 0;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) 
+        {
+            rs.beforeFirst();
+            
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) 
+            {
+                datos = rs.getInt("bandera");
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return datos;
     }
 }

@@ -13,6 +13,7 @@ create table tb_inventarioCrudo
   idInventarioCrudo  int not null identity(1,1) primary key
   , noPiezasActual   int not null
   , kgTotalActual    float
+  , pesoXPieza       float
   , idRecepcionCuero int not null foreign key references tb_recepcionCuero(idRecepcionCuero)
   , idTipoRecorte    int not null foreign key references tb_tipoRecorte(idTipoRecorte)
 );

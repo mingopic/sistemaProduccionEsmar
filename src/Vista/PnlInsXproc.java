@@ -16,7 +16,6 @@ import Modelo.Insumo;
 import Modelo.InsumoPorProceso;
 import Modelo.Proceso;
 import Modelo.SubProceso;
-import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;

@@ -16,13 +16,6 @@ create procedure sp_agrInvCrossSemi
   , @kg               float
 )
 as begin
-	declare @fechaEntrada datetime
-	
-	set @fechaEntrada =
-	(
-		select
-			getdate()
-	)
 	
 	insert into
 		tb_invCrossSemi
@@ -34,7 +27,7 @@ as begin
       , @noPiezasActuales
       , @kg
       , @kg
-      , @fechaEntrada
+      , getdate()
     )
 end
 go

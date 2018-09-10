@@ -462,6 +462,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 lblVentana.setIcon(ico);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al insertar la recepción", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

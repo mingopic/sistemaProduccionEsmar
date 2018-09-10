@@ -19,6 +19,9 @@ public class PartidaDisp {
     String proveedor;
     Double kgXpieza;
     int idRecepcionCuero;
+    int idProceso;
+    int idRecortePartidaDet;
+    int idInventarioCrudo;
 
     public int getNoPartida() {
         return noPartida;
@@ -91,4 +94,30 @@ public class PartidaDisp {
     public void setIdRecepcionCuero(int idRecepcionCuero) {
         this.idRecepcionCuero = idRecepcionCuero;
     }
+
+    public int getIdProceso() {
+        return idProceso;
+    }
+
+    public void setIdProceso(int idProceso) {
+        this.idProceso = idProceso;
+    }
+
+    public int getIdRecortePartidaDet() {
+        return idRecortePartidaDet;
+    }
+
+    public void setIdRecortePartidaDet(int idRecortePartidaDet) {
+        this.idRecortePartidaDet = idRecortePartidaDet;
+    }
+
+    public int getIdInventarioCrudo() {
+        return idInventarioCrudo;
+    }
+
+    public void setIdInventarioCrudo(int idInventarioCrudo) {
+        this.idInventarioCrudo = idInventarioCrudo;
+    }
+    
+    
 }

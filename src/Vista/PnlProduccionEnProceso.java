@@ -265,6 +265,52 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         }
     }
     
+    public void generarReporteCostoPartida(int idProceso, int noPartida, String anio)
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/CostoPartida.jasper");
+
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("idProceso", idProceso);
+            parametros.put("noPartida", noPartida);
+            parametros.put("anio", anio);
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void validarNumerosEnteros(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c = evt.getKeyChar();
+            
+            if (c<'0' || c>'9' )
+            {
+                evt.consume();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void generarReporteInventario()
     {
         try
@@ -321,12 +367,22 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         dcFecha2EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnBuscarEntrada = new javax.swing.JButton();
+        lbl1 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtNoPartida = new javax.swing.JTextField();
+        lbl2 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtAnio = new javax.swing.JTextField();
         jToolBar2 = new javax.swing.JToolBar();
         btnReporteFichaProd = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnReporteListaPartProdProc = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         btnReporteListaPartProdProc1 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        btnReporteCostoPartida = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProduccionProceso = new javax.swing.JTable();
 
@@ -503,6 +559,49 @@ try {
     });
     jToolBar1.add(btnBuscarEntrada);
 
+    lbl1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    lbl1.setForeground(new java.awt.Color(227, 222, 222));
+    lbl1.setText("   ");
+    jToolBar1.add(lbl1);
+
+    jLabel26.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel26.setText("No. Partida");
+    jToolBar1.add(jLabel26);
+
+    jLabel8.setText("  ");
+    jToolBar1.add(jLabel8);
+
+    txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
+    txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
+    txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtNoPartidaKeyTyped(evt);
+        }
+    });
+    jToolBar1.add(txtNoPartida);
+
+    lbl2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    lbl2.setForeground(new java.awt.Color(227, 222, 222));
+    lbl2.setText("   ");
+    jToolBar1.add(lbl2);
+
+    jLabel28.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel28.setText("Año");
+    jToolBar1.add(jLabel28);
+
+    jLabel9.setText("  ");
+    jToolBar1.add(jLabel9);
+
+    txtAnio.setToolTipText("");
+    txtAnio.setMinimumSize(new java.awt.Dimension(40, 20));
+    txtAnio.setPreferredSize(new java.awt.Dimension(50, 25));
+    txtAnio.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtAnioKeyTyped(evt);
+        }
+    });
+    jToolBar1.add(txtAnio);
+
     jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar2.setFloatable(false);
     jToolBar2.setRollover(true);
@@ -551,6 +650,22 @@ try {
         }
     });
     jToolBar2.add(btnReporteListaPartProdProc1);
+
+    jLabel10.setText("   ");
+    jToolBar2.add(jLabel10);
+
+    btnReporteCostoPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteCostoPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+    btnReporteCostoPartida.setText("Reporte Costo Partida");
+    btnReporteCostoPartida.setFocusable(false);
+    btnReporteCostoPartida.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteCostoPartida.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteCostoPartida.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteCostoPartidaActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteCostoPartida);
 
     tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {
@@ -672,9 +787,57 @@ try {
         generarReporteInventario();
     }//GEN-LAST:event_btnReporteListaPartProdProc1ActionPerformed
 
+    private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
+         validarNumerosEnteros(evt, txtNoPartida.getText());
+    }//GEN-LAST:event_txtNoPartidaKeyTyped
+
+    private void txtAnioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnioKeyTyped
+        validarNumerosEnteros(evt, txtAnio.getText());
+        if (txtAnio.getText().length() >= 4)
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtAnioKeyTyped
+
+    private void btnReporteCostoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteCostoPartidaActionPerformed
+        int idProceso;
+        int noPartida;
+        String anio;
+        
+        if (cmbProceso.getSelectedItem().toString().equals("<Todos>"))
+        {
+            idProceso = 0;
+        }
+        else
+        {
+            idProceso = Integer.parseInt(proceso[cmbProceso.getSelectedIndex() - 1][0]);
+        }
+        
+        if (txtNoPartida.getText().equals(""))
+        {
+            noPartida = 0;
+        }
+        else
+        {
+            noPartida = Integer.parseInt(txtNoPartida.getText());
+        }
+        
+        if (txtAnio.getText().equals(""))
+        {
+            anio = "1900";
+        }
+        else
+        {
+            anio = txtAnio.getText();
+        }
+        
+        generarReporteCostoPartida(idProceso, noPartida, anio);
+    }//GEN-LAST:event_btnReporteCostoPartidaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
+    private javax.swing.JButton btnReporteCostoPartida;
     private javax.swing.JButton btnReporteFichaProd;
     private javax.swing.JButton btnReporteListaPartProdProc;
     private javax.swing.JButton btnReporteListaPartProdProc1;
@@ -682,14 +845,19 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
@@ -698,6 +866,10 @@ try {
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
+    private javax.swing.JLabel lbl1;
+    private javax.swing.JLabel lbl2;
     private javax.swing.JTable tblProduccionProceso;
+    private javax.swing.JTextField txtAnio;
+    private javax.swing.JTextField txtNoPartida;
     // End of variables declaration//GEN-END:variables
 }

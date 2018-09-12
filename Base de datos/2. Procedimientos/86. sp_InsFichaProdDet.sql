@@ -37,34 +37,16 @@ as begin
   set
     @costoInsumosPartida = @costoXkg * @kgPartida
   
-  set
-    @costoGarra = 
-    (
-      select
-      costo
-      
-    from
-      tb_costoGarra
-      
-    where
-      idCostoGarra =
-      (
-        select
-          max(idCostoGarra)
-          
-        from
-          tb_costoGarra
-      )
-    )
   
   --Obtener precio de cada pieza entera
   select
     @precioXpiezaRecCuero = 
     (
-      (rc.costocamion / rc.noTotalPiezas) - ( @costoGarra * 2)
+      (rc.costocamion / rc.noTotalPiezas)
     )
     , @idProceso = pd.idProceso
     , @idTipoRecorte = pd.idTipoRecorte
+    , @costoGarra = rc.precioGarra
     
   from
     tb_partidaDet pd
@@ -87,8 +69,18 @@ as begin
   where
     idTipoRecorte = @idTipoRecorte
   
-  set
-    @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * @precioXpiezaRecCuero
+  if @idTipoRecorte in (1,4) -- Entero o Lados
+  begin
+  
+    set 
+      @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * @precioXpiezaRecCuero
+  end
+  
+  else begin
+  
+    set 
+      @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * (@precioXpiezaRecCuero - (@costoGarra * 2))
+  end
   
   insert into
     tb_fichaProdDet

@@ -7,6 +7,7 @@ package Controlador;
 
 import Modelo.FichaProduccion;
 import Modelo.Proceso;
+import Modelo.TipoRecorte;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -22,12 +23,13 @@ public class FichaProduccionCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista de las entradas de producción en proceso
-    public static String[][] obtenerListaProduccionProceso(FichaProduccion fp, Proceso pr) throws Exception
+    public static String[][] obtenerListaProduccionProceso(FichaProduccion fp, Proceso pr, TipoRecorte tr) throws Exception
     {
         String query;
         
         query= "EXEC sp_obtEntProdProc "
                 + "'" + pr.getDescripcion()+"'"
+                + ",'" + tr.getDescripcion()+"'"
                 + "," + "'"+ fp.getFecha() +"'"
                 + "," + "'"+ fp.getFecha1() +"'";
 

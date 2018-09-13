@@ -10,8 +10,10 @@ import Controlador.FichaProdDetCommands;
 import Controlador.FichaProduccionCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
+import Controlador.TipoRecorteCommands;
 import Modelo.FichaProduccion;
 import Modelo.Proceso;
+import Modelo.TipoRecorte;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,7 +42,10 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     ProcesoCommands prc;
     FichaProduccion fp;
     FichaProduccionCommands fpc;
+    TipoRecorte tr;
+    TipoRecorteCommands trc;
     String[][] proceso = null;
+    String[][] recorte = null;
     String[][] datosProduccionProceso = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
@@ -62,12 +67,14 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         conexion = new ConexionBD();
         fp = new FichaProduccion();
         pr = new Proceso();
+        tr = new TipoRecorte();
         
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaProduccionProceso.setEnabled(false);
         dcFecha2EntradaProduccionProceso.setEnabled(false);
         
         llenarComboProcesos();
+        llenarComboTipoRecorte();
         actualizarTablaProduccionProceso();
     }
     
@@ -80,6 +87,19 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         while (i<proceso.length)
         {
             cmbProceso.addItem(proceso[i][1]);
+            i++;
+        }
+    }
+    
+    public void llenarComboTipoRecorte() throws Exception
+    {
+        trc = new TipoRecorteCommands();
+        recorte = trc.llenarComboboxTipoRecorte();
+        
+        int i=0;
+        while (i<recorte.length)
+        {
+            cmbTipoRecorte.addItem(recorte[i][1]);
             i++;
         }
     }
@@ -175,11 +195,20 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             pr.setDescripcion(cmbProceso.getSelectedItem().toString());
         }
         
+        if (cmbTipoRecorte.getSelectedItem().toString().equals("<Todos>"))
+        {
+            tr.setDescripcion("%%");
+        }
+        else
+        {
+            tr.setDescripcion(cmbTipoRecorte.getSelectedItem().toString());
+        }
+        
         DefaultTableModel dtm = null;
         
         try {
             
-            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp,pr);
+            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp, pr,tr);
             
             dtm = new DefaultTableModel(datosProduccionProceso, cols){
             public boolean isCellEditable(int row, int column) {
@@ -265,7 +294,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         }
     }
     
-    public void generarReporteCostoPartida(int idProceso, int noPartida, String anio)
+    public void generarReporteCostoPartida(int idProceso, int idTipoRecorte, int noPartida, String anio)
     {
         try
         {
@@ -274,6 +303,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
             parametros.put("idProceso", idProceso);
+            parametros.put("idTipoRecorte", idTipoRecorte);
             parametros.put("noPartida", noPartida);
             parametros.put("anio", anio);
             
@@ -356,6 +386,9 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cmbProceso = new javax.swing.JComboBox<>();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        jLabel11 = new javax.swing.JLabel();
+        cmbTipoRecorte = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel27 = new javax.swing.JLabel();
@@ -408,6 +441,20 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             }
         });
         jToolBar1.add(cmbProceso);
+        jToolBar1.add(jSeparator3);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel11.setText("Tipo Recorte ");
+        jToolBar1.add(jLabel11);
+
+        cmbTipoRecorte.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbTipoRecorte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbTipoRecorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoRecorteActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cmbTipoRecorte);
 
         jLabel5.setText("   ");
         jToolBar1.add(jLabel5);
@@ -801,6 +848,7 @@ try {
 
     private void btnReporteCostoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteCostoPartidaActionPerformed
         int idProceso;
+        int idTipoRecorte;
         int noPartida;
         String anio;
         
@@ -811,6 +859,15 @@ try {
         else
         {
             idProceso = Integer.parseInt(proceso[cmbProceso.getSelectedIndex() - 1][0]);
+        }
+        
+        if (cmbTipoRecorte.getSelectedItem().toString().equals("<Todos>"))
+        {
+            idTipoRecorte = 0;
+        }
+        else
+        {
+            idTipoRecorte = Integer.parseInt(recorte[cmbTipoRecorte.getSelectedIndex() - 1][0]);
         }
         
         if (txtNoPartida.getText().equals(""))
@@ -831,8 +888,12 @@ try {
             anio = txtAnio.getText();
         }
         
-        generarReporteCostoPartida(idProceso, noPartida, anio);
+        generarReporteCostoPartida(idProceso, idTipoRecorte, noPartida, anio);
     }//GEN-LAST:event_btnReporteCostoPartidaActionPerformed
+
+    private void cmbTipoRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoRecorteActionPerformed
+        actualizarTablaProduccionProceso();
+    }//GEN-LAST:event_cmbTipoRecorteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -842,10 +903,12 @@ try {
     private javax.swing.JButton btnReporteListaPartProdProc;
     private javax.swing.JButton btnReporteListaPartProdProc1;
     private javax.swing.JComboBox<String> cmbProceso;
+    private javax.swing.JComboBox<String> cmbTipoRecorte;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -862,6 +925,7 @@ try {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;

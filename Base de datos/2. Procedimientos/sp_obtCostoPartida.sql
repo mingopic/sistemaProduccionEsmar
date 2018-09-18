@@ -10,9 +10,10 @@ go
 
 create procedure sp_obtCostoPartida
 (
-	@idProceso   int
-  , @noPartida int
-  , @anio      varchar(4)
+	@idProceso       int
+  , @idTipoRecorte int
+  , @noPartida     int
+  , @anio          varchar(4)
 )
 as begin
 
@@ -25,6 +26,7 @@ as begin
     , [CostoInsumos] = fpd.costoInsumos
     , pr.descripcion as 'Proceso'
     , pr.idProceso
+    , tr.idTipoRecorte
 
   from
     tb_partidaDet pd
@@ -62,6 +64,17 @@ as begin
       (
         @idProceso <> 0
         and pd.idProceso = @idProceso
+      )
+    )
+    and
+    (
+      (
+        @idTipoRecorte = 0
+      )
+      or
+      (
+        @idTipoRecorte <> 0
+        and tr.idTipoRecorte = @idTipoRecorte
       )
     )
 

@@ -10,9 +10,10 @@ go
 
 create procedure sp_obtEntProdProc
 (
-	@proceso varchar(20)
-	, @fecha varchar(10)
-	, @fecha1 varchar(10)
+  @proceso   varchar(20)
+  , @recorte varchar (20)
+	, @fecha   varchar(10)
+	, @fecha1  varchar(10)
 )
 as begin
 
@@ -58,6 +59,7 @@ as begin
       tb_tipoRecorte as tr
     on
       tr.idTipoRecorte = pd.idTipoRecorte
+      and tr.descripcion like @recorte
     
     inner join
       tb_proceso as pr

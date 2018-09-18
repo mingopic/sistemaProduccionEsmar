@@ -22,7 +22,10 @@ as begin
     , tr.descripcion as 'TipoRecorte'
     , [Piezas] = pd.noPiezas
     , [Kg] = fpd.kgTotal
-    , [CostoCuero] = fpd.costoTotalCuero
+    , case
+        when pr.idProceso = 2 then fpd.costoTotalCuero
+        else 0.0
+      end as CostoCuero
     , [CostoInsumos] = fpd.costoInsumos
     , pr.descripcion as 'Proceso'
     , pr.idProceso

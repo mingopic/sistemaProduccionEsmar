@@ -242,11 +242,11 @@ public class PnlPartidas extends javax.swing.JPanel {
         {
             tipoRecorte = new String[] { "Delantero/Crupon", "Lados" };
         }
-        else if (aRecortar.equals("Crupon Sillero"))
+        else if (aRecortar.equals("Crupon"))
         {
             tipoRecorte = new String[] { "Centro Castaño", "Centro Quebracho" };
         }
-        else if (aRecortar.equals("Delantero Sillero"))
+        else if (aRecortar.equals("Delantero"))
         {
             recorteSeleccionado = "Delantero Suela";
         }
@@ -288,7 +288,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 lblKgRecortar2.setVisible(true);
                 
                 txtNoPiezasRecortar1.setText(txtNoPiezasRecortar.getText());
-                lblTipoCuero1.setText("Delantero Sillero");
+                lblTipoCuero1.setText("Delantero");
                 txtKgRecortar1.setText("0");
                 
                 txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
@@ -1053,7 +1053,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         catch (Exception e) 
         {
             dlgRecortar.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un registro de la tabla de Inventario de Cuero Crudo", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRecortarActionPerformed
 

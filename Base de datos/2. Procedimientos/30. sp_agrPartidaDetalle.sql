@@ -45,6 +45,17 @@ as begin
               nombreProveedor = @proveedor
           )
     )
+    
+  if (@recorte = 'Delantero')
+  begin
+    set @recorte = 'Delantero Sillero'
+  end
+  
+  else if (@recorte = 'Crupon')
+  begin
+    set @recorte = 'Crupon Sillero'
+  end
+  
   
   declare
     @idTipoRecorte int

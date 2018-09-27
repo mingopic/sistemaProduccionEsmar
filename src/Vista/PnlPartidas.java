@@ -244,7 +244,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         }
         else if (aRecortar.equals("Crupon"))
         {
-            tipoRecorte = new String[] { "Centro Castaño", "Centro Quebracho" };
+            recorteSeleccionado = "Centro";
         }
         else if (aRecortar.equals("Delantero"))
         {
@@ -252,7 +252,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         }
         else if (aRecortar.equals("Lados"))
         {
-            tipoRecorte = new String[] { "Centro Castaño/Delantero Suela", "Centro Quebracho/Delantero Suela" };
+            recorteSeleccionado = "Centro/Delantero Suela";
         }
         else
         {
@@ -295,7 +295,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 lblTipoCuero2.setText("Crupon");
                 txtKgRecortar2.setText("0");
             }
-            else if(recorteSeleccionado.equals("Centro Castaño/Delantero Suela"))
+            else if(recorteSeleccionado.equals("Centro/Delantero Suela"))
             {
                 lblyRecortar.setVisible(true);
                 txtNoPiezasRecortar2.setVisible(true);
@@ -305,24 +305,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 lblKgRecortar2.setVisible(true);
                 
                 txtNoPiezasRecortar1.setText(txtNoPiezasRecortar.getText());
-                lblTipoCuero1.setText("Centro Castaño");
-                txtKgRecortar1.setText("0");
-                
-                txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
-                lblTipoCuero2.setText("Delantero Suela");
-                txtKgRecortar2.setText("0");
-            }
-            else if(recorteSeleccionado.equals("Centro Quebracho/Delantero Suela"))
-            {
-                lblyRecortar.setVisible(true);
-                txtNoPiezasRecortar2.setVisible(true);
-                lblPiezasDe2.setVisible(true);
-                lblTipoCuero2.setVisible(true);
-                txtKgRecortar2.setVisible(true);
-                lblKgRecortar2.setVisible(true);
-                
-                txtNoPiezasRecortar1.setText(txtNoPiezasRecortar.getText());
-                lblTipoCuero1.setText("Centro Quebracho");
+                lblTipoCuero1.setText("Centro");
                 txtKgRecortar1.setText("0");
                 
                 txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
@@ -1058,7 +1041,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRecortarActionPerformed
 
     private void txtNoPiezasRecortarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasRecortarKeyReleased
-        if (recorteSeleccionado.equals("Delantero/Crupon") || recorteSeleccionado.equals("Centro Castaño/Delantero Suela") || recorteSeleccionado.equals("Centro Quebracho/Delantero Suela"))
+        if (recorteSeleccionado.equals("Delantero/Crupon") || recorteSeleccionado.equals("Centro/Delantero Suela"))
         {
             if (txtNoPiezasRecortar.getText().equals(""))
             {
@@ -1119,14 +1102,8 @@ public class PnlPartidas extends javax.swing.JPanel {
                     kg2 = Double.parseDouble(txtKgRecortar2.getText());
                     break;
                     
-                    case "Centro Castaño/Delantero Suela":
+                    case "Centro/Delantero Suela":
                     ic.setIdTipoRecorte(1);
-                    noPiezas2 = Integer.parseInt(txtNoPiezasRecortar2.getText());
-                    kg2 = Double.parseDouble(txtKgRecortar2.getText());
-                    break;
-                    
-                    case "Centro Quebracho/Delantero Suela":
-                    ic.setIdTipoRecorte(2);
                     noPiezas2 = Integer.parseInt(txtNoPiezasRecortar2.getText());
                     kg2 = Double.parseDouble(txtKgRecortar2.getText());
                     break;
@@ -1137,14 +1114,8 @@ public class PnlPartidas extends javax.swing.JPanel {
                     kg2 = 0.0;
                     break;
                     
-                    case "Centro Castaño":
-                    ic.setIdTipoRecorte(5);
-                    noPiezas2 = 0;
-                    kg2 = 0.0;
-                    break;
-                    
-                    case "Centro Quebracho":
-                    ic.setIdTipoRecorte(6);
+                    case "Centro":
+                    ic.setIdTipoRecorte(8);
                     noPiezas2 = 0;
                     kg2 = 0.0;
                     break;

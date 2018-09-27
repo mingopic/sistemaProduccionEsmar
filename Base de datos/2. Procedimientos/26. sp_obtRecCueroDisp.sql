@@ -20,8 +20,7 @@ as begin
         when tr.descripcion = 'Delantero Sillero' then 'Delantero'
         when tr.descripcion = 'Crupon Sillero' then 'Crupon'
         when tr.descripcion = 'Lados' then 'Lados'
-        when tr.descripcion = 'Centro Castaño' then 'Centro Castaño'
-        when tr.descripcion = 'Centro Quebracho' then 'Centro Quebracho'
+        when tr.descripcion = 'Centro' then 'Centro'
         when tr.descripcion = 'Delantero Suela' then 'Delantero Suela'
       end as recorte
     , ic.noPiezasActual

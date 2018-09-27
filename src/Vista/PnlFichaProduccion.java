@@ -322,11 +322,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             tipoRecorte = new String[] { "Delantero/Crupon", "Lados" };
         }
-        else if (aRecortar.equals("Crupon Sillero"))
+        else if (aRecortar.equals("Crupon Sillero") || aRecortar.equals("Crupon"))
         {
             tipoRecorte = new String[] { "Centro Castaño", "Centro Quebracho" };
         }
-        else if (aRecortar.equals("Delantero Sillero"))
+        else if (aRecortar.equals("Delantero Sillero") || aRecortar.equals("Delantero"))
         {
             recorteSeleccionado = "Delantero Suela";
         }
@@ -365,10 +365,24 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 lblTipoCuero2.setVisible(true);
                 
                 txtNoPiezasRecortar1.setText(txtNoPiezasRecortar.getText());
-                lblTipoCuero1.setText("Delantero Sillero");
+                if (pr.getIdProceso() == 2 || pr.getIdProceso() == 3)
+                {
+                    lblTipoCuero1.setText("Delantero");
+                }
+                else
+                {
+                    lblTipoCuero1.setText("Delantero Sillero");
+                }
                 
                 txtNoPiezasRecortar2.setText(txtNoPiezasRecortar.getText());
-                lblTipoCuero2.setText("Crupon");
+                if (pr.getIdProceso() == 2 || pr.getIdProceso() == 3)
+                {
+                    lblTipoCuero2.setText("Crupon");
+                }
+                else
+                {
+                    lblTipoCuero2.setText("Crupon Sillero");
+                }
             }
             else if(recorteSeleccionado.equals("Centro Castaño/Delantero Suela"))
             {

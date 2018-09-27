@@ -81,8 +81,7 @@ as begin
       when tr.descripcion = 'Delantero Sillero' then 'Delantero' + ' ' + tc.descripcion
       when tr.descripcion = 'Crupon Sillero' then 'Crupon' + ' ' + tc.descripcion
       when tr.descripcion = 'Lados' then 'Lados' + ' ' + tc.descripcion
-      when tr.descripcion = 'Centro Castaño' then 'Centro Castaño' + ' ' + tc.descripcion
-      when tr.descripcion = 'Centro Quebracho' then 'Centro Quebracho' + ' ' + tc.descripcion
+      when tr.descripcion = 'Centro' then 'Centro' + ' ' + tc.descripcion
       when tr.descripcion = 'Delantero Suela' then 'Delantero Suela' + ' ' + tc.descripcion
     end as descripcion
     , p.nombreProveedor

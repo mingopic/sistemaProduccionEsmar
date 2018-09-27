@@ -4,7 +4,7 @@ go
 insert into
   tb_tipoRecorte
 values
-  ('Entero') ,('Delantero Sillero'), ('Crupon Sillero'), ('Lados'), ('Centro Castaño'), ('Centro Quebracho'), ('Delantero Suela');
+  ('Entero') ,('Delantero Sillero'), ('Crupon Sillero'), ('Lados'), ('Centro Castaño'), ('Centro Quebracho'), ('Delantero Suela'), ('Centro');
 
 update 
   tb_tipoRecorte 

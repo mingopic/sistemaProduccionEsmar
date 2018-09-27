@@ -92,49 +92,7 @@ create procedure sp_insRecorteInvCrudo
           , @kg1
           , @kg1 / @noPiezas1
           , @idRecepcionCuero
-          , 5
-        )
-        
-      insert into
-        tb_inventarioCrudo
-        (
-          noPiezasActual
-          , KgTotalActual
-          , pesoXPieza
-          , idRecepcionCuero
-          , idTipoRecorte
-        )
-      
-      values
-        (
-          @noPiezas2
-          , @kg2
-          , @kg2 / @noPiezas2
-          , @idRecepcionCuero
-          , 7
-        )
-    end
-    
-    else if @idTipoRecorte = 2
-    begin
-    
-      insert into
-        tb_inventarioCrudo
-        (
-          noPiezasActual
-          , KgTotalActual
-          , pesoXPieza
-          , idRecepcionCuero
-          , idTipoRecorte
-        )
-        
-      values
-        (
-          @noPiezas1
-          , @kg1
-          , @kg1 / @noPiezas1
-          , @idRecepcionCuero
-          , 6
+          , 8
         )
         
       insert into

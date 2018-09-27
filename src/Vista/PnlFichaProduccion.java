@@ -171,6 +171,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             btnEliminarPartida.setEnabled(false);
             btnEliminarRecorte.setEnabled(false);
         }
+        
+        btnSelAcabado.setEnabled(false);
 
         DefaultTableModel dtm = null;
         
@@ -465,6 +467,72 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             dlgRecortar.setVisible(false);
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
             dlgRecortar.setVisible(true);
+        }
+    }
+    
+    //Método que abre el dialogo para seleccionar el acabado del tipo recorte centro
+    public void abrirDialogoSeleccionarAcabado()
+    {   
+        dlgSelAcabado.setVisible(false);
+        
+        String[] tipoRecorte = null;
+        
+        tipoRecorte = new String[] { "Centro Castaño", "Centro Quebracho" };
+        
+        //Validar que se haya seleccionado un tipo de recorte
+        if (tipoRecorte != null)
+        {
+            recorteSeleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione acabado","Acabar",JOptionPane.INFORMATION_MESSAGE, null, tipoRecorte, tipoRecorte[0]);
+        }
+        
+        if (recorteSeleccionado == null)
+        {
+            return;
+        }
+        
+        try 
+        {
+            lblTipoCueroAcabar.setText(pad.getTipoRecorte());
+            txtNoPiezasSelAcabado.setText(String.valueOf(pad.getNoPiezasAct()));
+            txtNoPiezasSelAcabado1.setText(String.valueOf(pad.getNoPiezasAct()));
+            
+            lblTipoCueroAcabar1.setText(recorteSeleccionado);
+            
+            switch (recorteSeleccionado) 
+            {
+                case "Centro Castaño":
+                    pad.setIdTipoRecorte(5);
+                    break;
+                case "Centro Quebracho":
+                    pad.setIdTipoRecorte(6);
+                    break;
+                default:
+                    break;
+            }
+            
+            PartidaDetalleCommands pdc = new PartidaDetalleCommands();
+            
+            int banderaRecortar = pdc.validarCrearRecorte(pad);
+            
+            if (banderaRecortar == 1)
+            {
+                dlgSelAcabado.setSize(300, 280);
+                dlgSelAcabado.setPreferredSize(dlgRecortar.getSize());
+                dlgSelAcabado.setLocationRelativeTo(null);
+                dlgSelAcabado.setAlwaysOnTop(true);
+                dlgSelAcabado.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No se puede recortar. \nYa se tienen recortes del mismos tipo para esta partida y camión","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            dlgSelAcabado.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
+            dlgSelAcabado.setVisible(true);
         }
     }
     
@@ -893,6 +961,18 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         lblPiezasDe2 = new javax.swing.JLabel();
         lblyRecortar = new javax.swing.JLabel();
         lblTipoCuero2 = new javax.swing.JLabel();
+        dlgSelAcabado = new javax.swing.JDialog();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        txtNoPiezasSelAcabado = new javax.swing.JTextField();
+        btnGuardar1 = new javax.swing.JButton();
+        lblTipoCueroAcabar = new javax.swing.JLabel();
+        txtNoPiezasSelAcabado1 = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        lblTipoCueroAcabar1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -907,6 +987,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         btnAsignar = new javax.swing.JButton();
         btnEliminarPartida = new javax.swing.JButton();
         btnEliminarRecorte = new javax.swing.JButton();
+        btnSelAcabado = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -1089,7 +1170,138 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             .addGroup(dlgRecortarLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 190, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
+        );
+
+        dlgSelAcabado.setPreferredSize(new java.awt.Dimension(283, 229));
+        dlgSelAcabado.setResizable(false);
+
+        jPanel4.setBackground(new java.awt.Color(0, 204, 204));
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel15.setText("Seleccionar Acabado");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(108, 108, 108))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel17.setText("Piezas de");
+
+        txtNoPiezasSelAcabado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasSelAcabado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtNoPiezasSelAcabado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNoPiezasSelAcabadoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasSelAcabadoKeyTyped(evt);
+            }
+        });
+
+        btnGuardar1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+
+        lblTipoCueroAcabar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTipoCueroAcabar.setText("TipoCuero");
+
+        txtNoPiezasSelAcabado1.setEditable(false);
+        txtNoPiezasSelAcabado1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasSelAcabado1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("=");
+        jLabel18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel19.setText("Piezas de");
+
+        lblTipoCueroAcabar1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTipoCueroAcabar1.setText("TipoCuero");
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel14Layout.createSequentialGroup()
+                                .addComponent(txtNoPiezasSelAcabado, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblTipoCueroAcabar))
+                            .addGroup(jPanel14Layout.createSequentialGroup()
+                                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtNoPiezasSelAcabado1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel19)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblTipoCueroAcabar1)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGuardar1)))
+                .addContainerGap())
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasSelAcabado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17)
+                    .addComponent(lblTipoCueroAcabar))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasSelAcabado1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19)
+                    .addComponent(lblTipoCueroAcabar1))
+                .addGap(60, 60, 60)
+                .addComponent(btnGuardar1)
+                .addGap(26, 26, 26))
+        );
+
+        javax.swing.GroupLayout dlgSelAcabadoLayout = new javax.swing.GroupLayout(dlgSelAcabado.getContentPane());
+        dlgSelAcabado.getContentPane().setLayout(dlgSelAcabadoLayout);
+        dlgSelAcabadoLayout.setHorizontalGroup(
+            dlgSelAcabadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgSelAcabadoLayout.setVerticalGroup(
+            dlgSelAcabadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgSelAcabadoLayout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 190, Short.MAX_VALUE))
         );
 
         setPreferredSize(new java.awt.Dimension(1000, 450));
@@ -1196,6 +1408,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         ));
         tblPartidasDisponibles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblPartidasDisponibles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPartidasDisponiblesMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblPartidasDisponibles);
 
         btnAsignar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -1227,6 +1444,15 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         });
 
+        btnSelAcabado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSelAcabado.setText("Seleccionar Acabado");
+        btnSelAcabado.setEnabled(false);
+        btnSelAcabado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelAcabadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -1242,7 +1468,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                         .addComponent(btnAsignar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminarRecorte))
-                    .addComponent(btnEliminarPartida))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(btnEliminarPartida)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSelAcabado)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -1255,7 +1484,9 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     .addComponent(btnAsignar)
                     .addComponent(btnEliminarRecorte))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminarPartida)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEliminarPartida)
+                    .addComponent(btnSelAcabado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
         );
@@ -1725,9 +1956,19 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 {
                     Double noPiezas = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 2).toString());
                     Double peso = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
+                    String validaCentro = String.valueOf(tblPartidasAgregadas.getValueAt(i, 1).toString());
                     if (noPiezas <= 0 || peso <= 0)
                     {
                         JOptionPane.showMessageDialog(null, "Todos los campos No. Piezas y Peso (Kg), \nde la tabla Partidas agregadas deben ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    
+                    pad = new PartidaDisp();
+                    pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+                    
+                    if (validaCentro.equals("Centro") && pad.getIdProceso() == 4)
+                    {
+                        JOptionPane.showMessageDialog(null, "Debe darle acabado a las piezas de Centro \nde las que se creará la ficha de producción","Advertencia",JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                 }
@@ -1853,6 +2094,119 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         eliminarRecorte();
     }//GEN-LAST:event_btnEliminarRecorteActionPerformed
 
+    private void btnSelAcabadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelAcabadoActionPerformed
+        try 
+        {
+            pad = new PartidaDisp();
+            int i = tblPartidasDisponibles.getSelectedRow();
+            
+            pad.setNoPartida(lstPartidas.get(i).getNoPartida());
+            pad.setTipoRecorte(lstPartidas.get(i).getTipoRecorte());
+            pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
+            pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
+            pad.setIdPartida(lstPartidas.get(i).getIdPartida());
+            pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
+            pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+            
+            abrirDialogoSeleccionarAcabado();
+        } 
+        catch (Exception e) 
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla \nde partidas disponibles","Mensaje",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+    }//GEN-LAST:event_btnSelAcabadoActionPerformed
+
+    private void tblPartidasDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPartidasDisponiblesMouseClicked
+        if (evt.getClickCount() == 1)
+        {
+            if (p.getIdProceso() == 4)
+            {
+                int fila = tblPartidasDisponibles.getSelectedRow();
+                if (tblPartidasDisponibles.getValueAt(fila, 2).equals("Centro"))
+                {
+                    btnSelAcabado.setEnabled(true);
+                }
+                else
+                {
+                    btnSelAcabado.setEnabled(false);
+                }
+            }
+            else
+            {
+                btnSelAcabado.setEnabled(false);
+            }
+        }
+        else
+        {
+            btnSelAcabado.setEnabled(false);
+        }
+    }//GEN-LAST:event_tblPartidasDisponiblesMouseClicked
+
+    private void txtNoPiezasSelAcabadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasSelAcabadoKeyReleased
+        if (txtNoPiezasSelAcabado.getText().equals(""))
+        {
+            txtNoPiezasSelAcabado.setText("0");
+            txtNoPiezasSelAcabado1.setText("0");
+        }
+        else
+        {
+            txtNoPiezasSelAcabado1.setText(txtNoPiezasSelAcabado.getText());
+        }
+    }//GEN-LAST:event_txtNoPiezasSelAcabadoKeyReleased
+
+    private void txtNoPiezasSelAcabadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasSelAcabadoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPiezasSelAcabadoKeyTyped
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        int noPiezasAcabar = 0;
+        int noPiezas = 0;
+        try 
+        {
+            noPiezasAcabar = Integer.parseInt(txtNoPiezasSelAcabado.getText());
+        } 
+        catch (Exception e) 
+        {
+            
+        }
+        
+        if (noPiezasAcabar > 0 && noPiezasAcabar <= pad.getNoPiezasAct())
+        {
+            try 
+            {
+                noPiezas = Integer.parseInt(txtNoPiezasSelAcabado1.getText());
+                
+                pdc = new PartidaDetalleCommands();
+                pdc.agregarRecorte(pad, noPiezasAcabar, noPiezas, Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0])-1);
+                dlgSelAcabado.setVisible(false);
+                JOptionPane.showMessageDialog(null,"Acabado realizado correctamente");
+                actualizarTablaPartidasDisponibles();
+                inicializarTablaPartidasAgregadas();
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,"Error al realizar acabado","Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else
+        {
+            if (noPiezasAcabar == 0)
+            {
+                dlgSelAcabado.setVisible(false);
+                JOptionPane.showMessageDialog(null,"Piezas a acabar deben ser mayor a 0","Mensaje",JOptionPane.WARNING_MESSAGE);
+                dlgSelAcabado.setVisible(true);
+            }
+            else
+            {
+                dlgSelAcabado.setVisible(false);
+                JOptionPane.showMessageDialog(null,"Piezas a acabar insuficientes para la partida seleccionada","Mensaje",JOptionPane.WARNING_MESSAGE);
+                dlgSelAcabado.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
@@ -1861,17 +2215,24 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminarRecorte;
     private javax.swing.JButton btnGenerarFicha;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnGuardar1;
     private javax.swing.JButton btnRecortar;
+    private javax.swing.JButton btnSelAcabado;
     private javax.swing.JComboBox<String> cmbProceso;
     private javax.swing.JComboBox<String> cmbTambores;
     private javax.swing.JDialog dlgRecortar;
+    private javax.swing.JDialog dlgSelAcabado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1884,7 +2245,9 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -1899,6 +2262,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JLabel lblSubProceso;
     private javax.swing.JLabel lblTipoCuero1;
     private javax.swing.JLabel lblTipoCuero2;
+    private javax.swing.JLabel lblTipoCueroAcabar;
+    private javax.swing.JLabel lblTipoCueroAcabar1;
     private javax.swing.JLabel lblTipoCueroRecortar;
     private javax.swing.JLabel lblyRecortar;
     private javax.swing.JTable tblInsXproc;
@@ -1908,6 +2273,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JTextField txtNoPiezasRecortar;
     private javax.swing.JTextField txtNoPiezasRecortar1;
     private javax.swing.JTextField txtNoPiezasRecortar2;
+    private javax.swing.JTextField txtNoPiezasSelAcabado;
+    private javax.swing.JTextField txtNoPiezasSelAcabado1;
     private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }

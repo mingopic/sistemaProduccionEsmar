@@ -28,6 +28,7 @@ as begin
         when tr.descripcion = 'Crupon Sillero' and pr.descripcion in ('REMOJO','PELAMBRE') then 'Crupon'
         when tr.descripcion = 'Crupon Sillero' and pr.descripcion not in ('REMOJO','PELAMBRE') then 'Crupon Sillero'
         when tr.descripcion = 'Lados' then 'Lados'
+        when tr.descripcion = 'Centro' then 'Centro'
         when tr.descripcion = 'Centro Castaño' then 'Centro Castaño'
         when tr.descripcion = 'Centro Quebracho' then 'Centro Quebracho'
         when tr.descripcion = 'Delantero Suela' then 'Delantero Suela'

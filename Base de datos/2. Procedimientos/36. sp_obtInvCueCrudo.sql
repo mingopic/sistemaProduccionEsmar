@@ -15,8 +15,7 @@ as begin
   declare @porcentajeDelSillero   float
   declare @porcentajeCrupSillero  float
   declare @porcentajeLados        float
-  declare @porcentajeCenCastano   float
-  declare @porcentajeCenQuebracho float
+  declare @porcentajeCentro       float
   declare @porcentajeDelSuela     float
   
   -- Entero
@@ -51,23 +50,15 @@ as begin
   where
     idTipoRecorte = 4
     
-  -- Centro Castano
+  -- Centro
   select
-    @porcentajeCenCastano = porcentaje
+    @porcentajeCentro = porcentaje
   from
     tb_confPrecioCuero
   where
-    idTipoRecorte = 5
-    
-  -- Centro Quebracho
-  select
-    @porcentajeCenQuebracho = porcentaje
-  from
-    tb_confPrecioCuero
-  where
-    idTipoRecorte = 6
+    idTipoRecorte = 8
   
-  -- Centro Quebracho
+  -- Delantero Suela
   select
     @porcentajeDelSuela = porcentaje
   from
@@ -93,8 +84,7 @@ as begin
         when ic.idTipoRecorte = 2 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeDelSillero
         when ic.idTipoRecorte = 3 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCrupSillero
         when ic.idTipoRecorte = 4 then ((rc.costoCamion / rc.noTotalPiezas) * @porcentajeLados)
-        when ic.idTipoRecorte = 5 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCenCastano
-        when ic.idTipoRecorte = 6 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCenQuebracho
+        when ic.idTipoRecorte = 8 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCentro
         when ic.idTipoRecorte = 7 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeDelSuela
       end as precioXPza
     , (
@@ -105,8 +95,7 @@ as begin
             when ic.idTipoRecorte = 2 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeDelSillero
             when ic.idTipoRecorte = 3 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCrupSillero
             when ic.idTipoRecorte = 4 then ((rc.costoCamion / rc.noTotalPiezas) * @porcentajeLados)
-            when ic.idTipoRecorte = 5 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCenCastano
-            when ic.idTipoRecorte = 6 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCenQuebracho
+            when ic.idTipoRecorte = 8 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCentro
             when ic.idTipoRecorte = 7 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeDelSuela
           end
          )

@@ -12,7 +12,7 @@ create table tb_bajasInventarioCrudo
 (
   idBajaInventarioCrudo int not null identity(1,1) primary key
   , noPiezas            int
-  , causa               varchar (100)
+  , motivo               varchar (100)
   , fechaBaja           date
   , idInventarioCrudo   int not null foreign key references tb_inventarioCrudo(idInventarioCrudo)
 );

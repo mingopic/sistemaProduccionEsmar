@@ -12,7 +12,7 @@ create table tb_bajasRecepcionCuero
 (
   idBajaRecepcionCuero int not null identity(1,1) primary key
   , noPiezas           int
-  , causa              varchar (100)
+  , motivo              varchar (100)
   , fechaBaja          date
   , idRecepcionCuero   int not null foreign key references tb_recepcionCuero(idRecepcionCuero)
 );

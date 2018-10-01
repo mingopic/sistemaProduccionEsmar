@@ -15,11 +15,21 @@ import Modelo.InventarioCrudo;
 import Modelo.Partida;
 import Modelo.PartidaDetalle;
 import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -40,6 +50,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     String[][] asignados = null;
     String datosPartidas[] = null;
     String recorteSeleccionado = null;
+    private final String imagen="/Imagenes/logo_esmar.png";
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] columnas = new String[]
@@ -341,7 +352,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     public void inicializarCamposEliPzaInvCrudo() throws Exception
     {
         txtNoPiezasEliminar.setText("");
-        txtMotivo.setText("");
+        txtrMotivo.setText("");
         
         int fila = tblInvCueCrudo.getSelectedRow();
         
@@ -357,7 +368,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     {
         inicializarCamposEliPzaInvCrudo();
         
-        dlgEliPzaInvCrudo.setSize(400, 480);
+        dlgEliPzaInvCrudo.setSize(430, 490);
         dlgEliPzaInvCrudo.setPreferredSize(dlgEliPzaInvCrudo.getSize());
         dlgEliPzaInvCrudo.setLocationRelativeTo(null);
         dlgEliPzaInvCrudo.setAlwaysOnTop(true);
@@ -378,8 +389,8 @@ public class PnlPartidas extends javax.swing.JPanel {
                 else
                 {
                     int fila = tblInvCueCrudo.getSelectedRow();
-                    ic = new InventarioCrudo();
-                    icc = new InventarioCrudoCommands();
+                    bic = new BajasInventarioCrudo();
+                    bicc = new BajasInventarioCrudoCommands();
                     
 //                    double promKg = Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 6).toString());
 //                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
@@ -391,13 +402,14 @@ public class PnlPartidas extends javax.swing.JPanel {
 
                     bic.setIdInventarioCrudo(Integer.parseInt(datosIC[fila][9]));
                     bic.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
+                    bic.setMotivo(txtrMotivo.getText());
 //                    bic.setKgTotal(kg);
 
                     bicc.agregarBajaInvCrudo(bic);
-                    icc.actualizarNoPiezasActual(ics);
-                    actualizarTablaCross();
-                    dlgEnvSemi.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
+                    icc.actualizarNoPiezasBaja(bic);
+                    actualizarTablaInvCrudo();
+                    dlgEliPzaInvCrudo.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
                 }
             } 
             catch (Exception e) 
@@ -412,6 +424,35 @@ public class PnlPartidas extends javax.swing.JPanel {
             dlgEliPzaInvCrudo.setVisible(false);
             JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
             dlgEliPzaInvCrudo.setVisible(true);
+        }
+    }
+    
+    public void generarReporteBajasInvCrudo()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteBajasInvCrudo.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -455,7 +496,6 @@ public class PnlPartidas extends javax.swing.JPanel {
         btnCancelarAgregarEnvSemi = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
-        txtMotivo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtNoCamion = new javax.swing.JTextField();
@@ -464,6 +504,8 @@ public class PnlPartidas extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtTipoRecorte = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtrMotivo = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -473,6 +515,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         btnAsignarEntrada = new javax.swing.JButton();
         btnRecortar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -755,14 +798,6 @@ public class PnlPartidas extends javax.swing.JPanel {
             .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
         );
 
-        txtMotivo.setEditable(false);
-        txtMotivo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtMotivo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtMotivoKeyTyped(evt);
-            }
-        });
-
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("No. piezas actuales:");
 
@@ -786,6 +821,10 @@ public class PnlPartidas extends javax.swing.JPanel {
 
         txtTipoRecorte.setEditable(false);
         txtTipoRecorte.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtrMotivo.setColumns(20);
+        txtrMotivo.setRows(5);
+        jScrollPane3.setViewportView(txtrMotivo);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -811,17 +850,15 @@ public class PnlPartidas extends javax.swing.JPanel {
                                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMotivo)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                        .addComponent(txtNoCamion)
-                                        .addComponent(txtTipoCuero)
-                                        .addComponent(txtTipoRecorte))
-                                    .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 131, Short.MAX_VALUE))))
+                            .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(txtNoCamion)
+                                .addComponent(txtTipoCuero)
+                                .addComponent(txtTipoRecorte))
+                            .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 30, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRealizarEntradaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -860,8 +897,8 @@ public class PnlPartidas extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel53)
-                    .addComponent(txtMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRealizarEntradaEnvSemi)
                     .addComponent(btnCancelarAgregarEnvSemi))
@@ -948,6 +985,15 @@ public class PnlPartidas extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+        jButton2.setText("Reporte Piezas Eliminadas");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -956,22 +1002,26 @@ public class PnlPartidas extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRecortar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAsignarEntrada)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAsignarEntrada)
-                    .addComponent(btnRecortar)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAsignarEntrada)
+                        .addComponent(btnRecortar)
+                        .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
         );
@@ -1381,9 +1431,14 @@ public class PnlPartidas extends javax.swing.JPanel {
 
     private void btnGuardarRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarRecorteActionPerformed
         int noPiezasRecortar = 0;
+        double kgRecortar1 = 0;
+        double kgRecortar2 = 0;
+        
         try
         {
             noPiezasRecortar = Integer.parseInt(txtNoPiezasRecortar.getText());
+            kgRecortar1 = Double.parseDouble(txtKgRecortar1.getText());
+            kgRecortar2 = Double.parseDouble(txtKgRecortar2.getText());
         }
         catch (Exception e)
         {
@@ -1539,9 +1594,10 @@ public class PnlPartidas extends javax.swing.JPanel {
         dlgEliPzaInvCrudo.setVisible(false);
     }//GEN-LAST:event_btnCancelarAgregarEnvSemiActionPerformed
 
-    private void txtMotivoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMotivoKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMotivoKeyTyped
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        actualizarTablaInvCrudo();
+        generarReporteBajasInvCrudo();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1555,6 +1611,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     private javax.swing.JDialog dlgEliPzaInvCrudo;
     private javax.swing.JDialog dlgRecortar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1583,6 +1640,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblKgRecortar1;
     private javax.swing.JLabel lblKgRecortar2;
     private javax.swing.JLabel lblPiezasDe2;
@@ -1595,7 +1653,6 @@ public class PnlPartidas extends javax.swing.JPanel {
     private javax.swing.JTextField txtKgRecortar1;
     private javax.swing.JTextField txtKgRecortar2;
     private javax.swing.JTextField txtKgTotal;
-    private javax.swing.JTextField txtMotivo;
     private javax.swing.JTextField txtNoCamion;
     private javax.swing.JTextField txtNoPartida;
     private javax.swing.JTextField txtNoPiezasActuales;
@@ -1607,5 +1664,6 @@ public class PnlPartidas extends javax.swing.JPanel {
     private javax.swing.JTextField txtTipoCuero;
     private javax.swing.JTextField txtTipoRecorte;
     private javax.swing.JTextField txtTotalPiezas;
+    private javax.swing.JTextArea txtrMotivo;
     // End of variables declaration//GEN-END:variables
 }

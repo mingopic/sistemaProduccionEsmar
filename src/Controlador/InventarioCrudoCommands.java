@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.BajasInventarioCrudo;
 import Modelo.InventarioCrudo;
 import Modelo.RecepcionCuero;
 import java.sql.PreparedStatement;
@@ -102,6 +103,19 @@ public class InventarioCrudoCommands {
                 + ", " + kg2
                 + ", " + ic.getIdTipoRecorte()
                 + ", " + ic.getIdRecepcionCuero();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para actualizar el número de piezas actuales
+    public static void actualizarNoPiezasBaja(BajasInventarioCrudo bic) throws Exception {
+        String query = "exec sp_actBajasInvCrudo "
+                + bic.getNoPiezas()
+                + ", " + bic.getIdInventarioCrudo();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

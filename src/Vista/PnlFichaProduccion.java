@@ -1173,7 +1173,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
         );
 
-        dlgSelAcabado.setPreferredSize(new java.awt.Dimension(283, 229));
         dlgSelAcabado.setResizable(false);
 
         jPanel4.setBackground(new java.awt.Color(0, 204, 204));
@@ -1181,7 +1180,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel15.setText("Seleccionar Acabado");
+        jLabel15.setText("Seleccionar Curtido");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1445,7 +1444,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         });
 
         btnSelAcabado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnSelAcabado.setText("Seleccionar Acabado");
+        btnSelAcabado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/color_picker.png"))); // NOI18N
+        btnSelAcabado.setText("Seleccionar Curtido");
         btnSelAcabado.setEnabled(false);
         btnSelAcabado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

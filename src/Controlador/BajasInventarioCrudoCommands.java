@@ -20,11 +20,11 @@ public class BajasInventarioCrudoCommands {
     static ResultSet rs = null;
     static ConexionBD c=new ConexionBD();
     
-    //Método para agregar una entrada a la tabla tb_invCrossSemi
+    //Método para agregar una baja a la tabla tb_bajasInventarioCrudo
     public static void agregarBajaInvCrudo(BajasInventarioCrudo bic) throws Exception
     {
-        String query = "exec sp_agrInvCrossSemi "+ics.getIdInvPCross()+""
-            + ","+ics.getNoPiezas()+","+ics.getNoPiezasActuales()+","+ics.getKgTotal();
+        String query = "exec sp_agrBajaInvCrudo "+bic.getNoPiezas()+""
+            + ",'"+bic.getMotivo()+"',"+bic.getIdInventarioCrudo();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

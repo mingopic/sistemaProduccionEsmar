@@ -413,31 +413,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
-    //Metodo para inicializar los campos de dlgEliPzaRecCuero
-    public void inicializarCamposEliPzaRecCuero() throws Exception
-    {
-        txtNoPiezasEliminar.setText("");
-        txtMotivo.setText("");
-        
-        int fila = tblRecepcionCuero.getSelectedRow();
-        
-        txtProveedor.setText(String.valueOf(tblRecepcionCuero.getValueAt(fila, 0)));
-        txtNoCamion.setText(String.valueOf(tblRecepcionCuero.getValueAt(fila, 1)));
-        txtNoPiezasActuales.setText(String.valueOf(tblRecepcionCuero.getValueAt(fila, 2)));
-    }
-    
-    //Método que abre el dialogo para eliminar piezas de una recepción de cuero 
-    public void abrirDialogoEliPzaRecCuero() throws Exception
-    {
-        inicializarCamposEliPzaRecCuero();
-        
-        dlgEliPzaRecCuero.setSize(340, 300);
-        dlgEliPzaRecCuero.setPreferredSize(dlgEliPzaRecCuero.getSize());
-        dlgEliPzaRecCuero.setLocationRelativeTo(null);
-        dlgEliPzaRecCuero.setAlwaysOnTop(true);
-        dlgEliPzaRecCuero.setVisible(true);
-    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -506,7 +481,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel30 = new javax.swing.JLabel();
         btnEliminarEntrada = new javax.swing.JButton();
         jLabel31 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1034,19 +1008,6 @@ try {
     jLabel31.setText("   ");
     jToolBar3.add(jLabel31);
 
-    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-    jButton1.setText("Eliminar Piezas");
-    jButton1.setFocusable(false);
-    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
-        }
-    });
-    jToolBar3.add(jButton1);
-
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
@@ -1142,25 +1103,6 @@ try {
         eliminarRecepcionCuero();
     }//GEN-LAST:event_btnEliminarEntradaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            int fila = tblRecepcionCuero.getSelectedRow();
-            String piezas = (String.valueOf(tblRecepcionCuero.getValueAt(fila, 3)));
-            int numPiezasActuales = Integer.parseInt(piezas);
-            
-            if (numPiezasActuales != 0)
-            {
-                abrirDialogoEliPzaRecCuero();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Recepción Cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void txtNoPiezasActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNoPiezasActualesActionPerformed
@@ -1231,7 +1173,6 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgEliPzaRecCuero;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel14;

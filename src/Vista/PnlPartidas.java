@@ -1431,14 +1431,10 @@ public class PnlPartidas extends javax.swing.JPanel {
 
     private void btnGuardarRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarRecorteActionPerformed
         int noPiezasRecortar = 0;
-        double kgRecortar1 = 0;
-        double kgRecortar2 = 0;
         
         try
         {
             noPiezasRecortar = Integer.parseInt(txtNoPiezasRecortar.getText());
-            kgRecortar1 = Double.parseDouble(txtKgRecortar1.getText());
-            kgRecortar2 = Double.parseDouble(txtKgRecortar2.getText());
         }
         catch (Exception e)
         {
@@ -1492,13 +1488,45 @@ public class PnlPartidas extends javax.swing.JPanel {
                     default:
                     break;
                 }
-                InventarioCrudoCommands icc = new InventarioCrudoCommands();
-                icc.agregarRecorte(ic, noPiezasRecortar, noPiezas1, noPiezas2, kg1, kg2);
-                dlgRecortar.setVisible(false);
-                JOptionPane.showMessageDialog(null,"Recorte relizado correctamente");
-                limpiarTabla(tblPartida);
-                llenarNoPartida();
-                actualizarTablaInvCrudo();
+                
+                if (recorteSeleccionado.equals("Delantero/Crupon") || recorteSeleccionado.equals("Centro/Delantero Suela"))
+                {
+                    if (kg1 == 0 || kg2 == 0)
+                    {
+                        dlgRecortar.setVisible(false);
+                        JOptionPane.showMessageDialog(null,"los kg de las piezas deben ser mayor a 0","Mensaje",JOptionPane.WARNING_MESSAGE);
+                        dlgRecortar.setVisible(true);
+                    }
+                    else
+                    {
+                        InventarioCrudoCommands icc = new InventarioCrudoCommands();
+                        icc.agregarRecorte(ic, noPiezasRecortar, noPiezas1, noPiezas2, kg1, kg2);
+                        dlgRecortar.setVisible(false);
+                        JOptionPane.showMessageDialog(null,"Recorte relizado correctamente");
+                        limpiarTabla(tblPartida);
+                        llenarNoPartida();
+                        actualizarTablaInvCrudo();
+                    }
+                }
+                else
+                {
+                    if (kg1 == 0)
+                    {
+                        dlgRecortar.setVisible(false);
+                        JOptionPane.showMessageDialog(null,"los kg de las piezas deben ser mayor a 0","Mensaje",JOptionPane.WARNING_MESSAGE);
+                        dlgRecortar.setVisible(true);
+                    }
+                    else
+                    {
+                        InventarioCrudoCommands icc = new InventarioCrudoCommands();
+                        icc.agregarRecorte(ic, noPiezasRecortar, noPiezas1, noPiezas2, kg1, kg2);
+                        dlgRecortar.setVisible(false);
+                        JOptionPane.showMessageDialog(null,"Recorte relizado correctamente");
+                        limpiarTabla(tblPartida);
+                        llenarNoPartida();
+                        actualizarTablaInvCrudo();
+                    }
+                }
             }
             catch (Exception e)
             {

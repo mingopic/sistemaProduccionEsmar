@@ -392,18 +392,18 @@ public class PnlPartidas extends javax.swing.JPanel {
                     bic = new BajasInventarioCrudo();
                     bicc = new BajasInventarioCrudoCommands();
                     
-//                    double promKg = Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 6).toString());
-//                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
-//                    
-//                    if (kg > Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 5).toString()))
-//                    {
-//                        kg = Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 5).toString());
-//                    }
+                    double promKg = Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 6).toString());
+                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
+                    
+                    if (kg > Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 5).toString()))
+                    {
+                        kg = Double.parseDouble(tblInvCueCrudo.getValueAt(fila, 5).toString());
+                    }
 
                     bic.setIdInventarioCrudo(Integer.parseInt(datosIC[fila][9]));
                     bic.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
                     bic.setMotivo(txtrMotivo.getText());
-//                    bic.setKgTotal(kg);
+                    bic.setKgTotal(kg);
 
                     bicc.agregarBajaInvCrudo(bic);
                     icc.actualizarNoPiezasBaja(bic);

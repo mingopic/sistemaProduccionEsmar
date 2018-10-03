@@ -115,7 +115,8 @@ public class InventarioCrudoCommands {
     public static void actualizarNoPiezasBaja(BajasInventarioCrudo bic) throws Exception {
         String query = "exec sp_actBajasInvCrudo "
                 + bic.getNoPiezas()
-                + ", " + bic.getIdInventarioCrudo();
+                + ", " + bic.getIdInventarioCrudo()
+                + ", " + bic.getKgTotal();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

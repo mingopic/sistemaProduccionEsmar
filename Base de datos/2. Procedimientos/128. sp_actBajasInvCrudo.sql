@@ -12,6 +12,8 @@ create procedure sp_actBajasInvCrudo
 (
   @piezasUtilizar      int
   , @idInventarioCrudo int
+  , @kgDescontar       float
+  
 )
 as begin
     
@@ -20,6 +22,7 @@ as begin
     
   set
     noPiezasActual = noPiezasActual-@piezasUtilizar
+    , kgTotalActual = kgTotalActual-@kgDescontar
     
   where
     idInventarioCrudo = @idInventarioCrudo

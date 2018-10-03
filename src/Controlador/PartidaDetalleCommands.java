@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.BajasPartidaDet;
 import Modelo.PartidaDetalle;
 import Modelo.PartidaDisp;
 import Modelo.RecepcionCuero;
@@ -304,5 +305,18 @@ public class PartidaDetalleCommands {
         stmt.close();
         c.desconectar();
         return datos;
+    }
+    
+    //Método para actualizar el número de piezas actuales
+    public static void actualizarNoPiezasBaja(BajasPartidaDet bpd) throws Exception {
+        String query = "exec sp_actBajasPartidaDet "
+                + bpd.getNoPiezas()
+                + ", " + bpd.getIdPartidaDet();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

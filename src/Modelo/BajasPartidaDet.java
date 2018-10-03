@@ -9,28 +9,19 @@ package Modelo;
  *
  * @author Mingo
  */
-public class BajasInventarioCrudo {
-    int idBajaInventarioCrudo;
+public class BajasPartidaDet {
+    int idBajaPartidaDet;
     int noPiezas;
     String motivo;
     String fechaBaja;
-    int idInventarioCrudo;
-    double kgTotal;
+    int idPartidaDet;
 
-    public double getKgTotal() {
-        return kgTotal;
+    public int getIdBajaPartidaDet() {
+        return idBajaPartidaDet;
     }
 
-    public void setKgTotal(double kgTotal) {
-        this.kgTotal = kgTotal;
-    }
-
-    public int getIdBajaInventarioCrudo() {
-        return idBajaInventarioCrudo;
-    }
-
-    public void setIdBajaInventarioCrudo(int idBajaInventarioCrudo) {
-        this.idBajaInventarioCrudo = idBajaInventarioCrudo;
+    public void setIdBajaPartidaDet(int idBajaPartidaDet) {
+        this.idBajaPartidaDet = idBajaPartidaDet;
     }
 
     public int getNoPiezas() {
@@ -57,11 +48,11 @@ public class BajasInventarioCrudo {
         this.fechaBaja = fechaBaja;
     }
 
-    public int getIdInventarioCrudo() {
-        return idInventarioCrudo;
+    public int getIdPartidaDet() {
+        return idPartidaDet;
     }
 
-    public void setIdInventarioCrudo(int idInventarioCrudo) {
-        this.idInventarioCrudo = idInventarioCrudo;
+    public void setIdPartidaDet(int idPartidaDet) {
+        this.idPartidaDet = idPartidaDet;
     }
 }

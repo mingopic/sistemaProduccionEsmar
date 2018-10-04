@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.BajasInventarioCross;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.Partida;
@@ -96,6 +97,20 @@ public class InventarioCrossCommands {
                 + pd.getIdPartidaDet()
                 + ", " + pd.getIdPartida()
                 + ", " + pd.getNoPiezas();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para actualizar el número de piezas actuales
+    public static void actualizarNoPiezasBaja(BajasInventarioCross bic) throws Exception {
+        String query = "exec sp_actBajasInvCross "
+                + bic.getNoPiezas()
+                + ", " + bic.getIdInvPCross()
+                + ", " + bic.getKgTotal();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

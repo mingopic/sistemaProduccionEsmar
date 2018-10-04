@@ -959,8 +959,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         int fila = tblPartidasDisponibles.getSelectedRow();
         
         txtNoPartida.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 0)));
-        txtProveedor.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 1)));
-        txtNoCamion.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 1)));
+        txtProveedorNoCamion.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 1)));
         txtTipoRecorte.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 2)));
         txtNoPiezasActuales.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 3)));
     }
@@ -970,7 +969,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     {
         inicializarCamposEliPzaFichaProd();
         
-        dlgEliPzaFichaProd.setSize(430, 490);
+        dlgEliPzaFichaProd.setSize(460, 490);
         dlgEliPzaFichaProd.setPreferredSize(dlgEliPzaFichaProd.getSize());
         dlgEliPzaFichaProd.setLocationRelativeTo(null);
         dlgEliPzaFichaProd.setAlwaysOnTop(true);
@@ -1079,10 +1078,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        txtProveedor = new javax.swing.JTextField();
+        txtProveedorNoCamion = new javax.swing.JTextField();
         txtNoPartida = new javax.swing.JTextField();
-        txtNoCamion = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         txtTipoRecorte = new javax.swing.JTextField();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -1421,7 +1418,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel15.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel55.setText("Proveedor:");
+        jLabel55.setText("Proveedor y No. Camión:");
 
         txtNoPiezasActuales.setEditable(false);
         txtNoPiezasActuales.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -1490,17 +1487,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel22.setText("No. piezas a eliminar:");
 
-        txtProveedor.setEditable(false);
-        txtProveedor.setBackground(new java.awt.Color(255, 255, 255));
+        txtProveedorNoCamion.setEditable(false);
+        txtProveedorNoCamion.setBackground(new java.awt.Color(255, 255, 255));
 
         txtNoPartida.setEditable(false);
         txtNoPartida.setBackground(new java.awt.Color(255, 255, 255));
-
-        txtNoCamion.setEditable(false);
-        txtNoCamion.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel23.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel23.setText("No. Camión:");
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel24.setText("Tipo de recorte:");
@@ -1521,30 +1512,28 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel32)
-                                    .addComponent(jLabel55)
-                                    .addComponent(jLabel23)
-                                    .addComponent(jLabel24)
-                                    .addComponent(jLabel21)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel53, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel15Layout.createSequentialGroup()
+                                    .addGap(32, 32, 32)
+                                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel32)
+                                        .addComponent(jLabel55)
+                                        .addComponent(jLabel24)
+                                        .addComponent(jLabel21)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                                    .addGap(86, 86, 86)
+                                    .addComponent(jLabel53)))
+                            .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(txtNoPartida, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                .addComponent(txtProveedor)
-                                .addComponent(txtNoCamion)
+                                .addComponent(txtProveedorNoCamion)
                                 .addComponent(txtTipoRecorte))
                             .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 30, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRealizarEntradaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1563,32 +1552,31 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel55)
-                    .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNoCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTipoRecorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel24))
+                    .addComponent(txtProveedorNoCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel24))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txtTipoRecorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel53)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel53))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRealizarEntradaEnvSemi)
                     .addComponent(btnCancelarAgregarEnvSemi))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout dlgEliPzaFichaProdLayout = new javax.swing.GroupLayout(dlgEliPzaFichaProd.getContentPane());
@@ -2603,7 +2591,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel32;
@@ -2647,7 +2634,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JTable tblPartidasAgregadas;
     private javax.swing.JTable tblPartidasDisponibles;
     private javax.swing.JTable tblSubproceso;
-    private javax.swing.JTextField txtNoCamion;
     private javax.swing.JTextField txtNoPartida;
     private javax.swing.JTextField txtNoPiezasActuales;
     private javax.swing.JTextField txtNoPiezasEliminar;
@@ -2656,7 +2642,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JTextField txtNoPiezasRecortar2;
     private javax.swing.JTextField txtNoPiezasSelAcabado;
     private javax.swing.JTextField txtNoPiezasSelAcabado1;
-    private javax.swing.JTextField txtProveedor;
+    private javax.swing.JTextField txtProveedorNoCamion;
     private javax.swing.JTextField txtTipoRecorte;
     private javax.swing.JTextField txtTotal;
     private javax.swing.JTextArea txtrMotivo;

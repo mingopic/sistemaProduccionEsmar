@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.BajasInventarioCross;
+import Modelo.BajasInventarioSemiterminado;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -14,16 +14,16 @@ import java.sql.Statement;
  *
  * @author Mingo
  */
-public class BajasInventarioCrossCommands {
+public class BajasInventarioSemiterminadoCommands {
     static Statement stmt = null;
     static ResultSet rs = null;
     static ConexionBD c = new ConexionBD();
     
-    //Método para agregar una baja a la tabla tb_bajasInventarioSemiterminado
-    public static void agregarBajaInvSemiterminado(BajasInventarioCross bic) throws Exception
+    //Método para agregar una baja a la tabla tb_bajasInventarioCrudo
+    public static void agregarBajaInvSemiterminado(BajasInventarioSemiterminado bis) throws Exception
     {
-        String query = "exec sp_agrBajaInvCross "+bic.getNoPiezas()+""
-            + ",'"+bic.getMotivo()+"',"+bic.getIdInvPCross();
+        String query = "exec sp_agrBajaInvSemiterminado "+bis.getNoPiezas()+""
+            + ",'"+bis.getMotivo()+"',"+bis.getIdInvSemiterminado();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

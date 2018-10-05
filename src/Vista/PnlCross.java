@@ -571,7 +571,7 @@ public class PnlCross extends javax.swing.JPanel {
                     bic.setMotivo(txtrMotivo.getText());
                     bic.setKgTotal(kg);
 
-                    bicc.agregarBajaInvCrudo(bic);
+                    bicc.agregarBajaInvSemiterminado(bic);
                     icc.actualizarNoPiezasBaja(bic);
                     actualizarTablaCross();
                     dlgEliPzaInvCross.setVisible(false);
@@ -590,6 +590,35 @@ public class PnlCross extends javax.swing.JPanel {
             dlgEliPzaInvCross.setVisible(false);
             JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
             dlgEliPzaInvCross.setVisible(true);
+        }
+    }
+    
+    public void generarReporteBajasInvCross()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteBajasInvCross.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
         
@@ -1650,6 +1679,11 @@ try {
     jButton2.setFocusable(false);
     jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
     jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton2ActionPerformed(evt);
+        }
+    });
     jToolBar2.add(jButton2);
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -1980,6 +2014,11 @@ try {
     private void txtNoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoPartidaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNoPartidaActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        actualizarTablaCross();
+        generarReporteBajasInvCross();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

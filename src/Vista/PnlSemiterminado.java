@@ -6,6 +6,7 @@
 
 package Vista;
 
+import Controlador.BajasInventarioSemiterminadoCommands;
 import Controlador.CalibreCommands;
 import Controlador.ConexionBD;
 import Controlador.InventarioCrossCommands;
@@ -15,6 +16,7 @@ import Controlador.InventarioSemiterminadoTerminadoCommands;
 import Controlador.InventarioTerminadoCommands;
 import Controlador.SeleccionCommands;
 import Controlador.TipoRecorteCommands;
+import Modelo.BajasInventarioSemiterminado;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
@@ -70,6 +72,8 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     InventarioSemiterminadoTerminadoCommands istc;
     InventarioTerminadoCommands itc;
     Partida p;
+    BajasInventarioSemiterminado bis;
+    BajasInventarioSemiterminadoCommands bisc;
     String[][] datosSemiterminado = null;
     String[][] datos = null;
     String[][] calibres = null;
@@ -742,6 +746,114 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             dlgEnvTermi.setVisible(true);
         }
     }
+    
+    //Metodo para inicializar los campos de dlgEliPzaInvSemiterminado
+    public void inicializarCamposEliPzaInvSemiterminado() throws Exception
+    {
+        txtNoPiezasEliminar.setText("");
+        txtrMotivo.setText("");
+        
+        int fila = tblSemiterminado.getSelectedRow();
+        
+        txtNoPartida1.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 0)));
+        txtTipoRecorte.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 1)));
+        txtCalibre.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 6)));
+        txtSeleccion.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 5)));
+        txtNoPiezasActuales.setText(String.valueOf(tblSemiterminado.getValueAt(fila, 2)));
+    }
+    
+    //Método que abre el dialogo para eliminar piezas del inventario semiterminado
+    public void abrirDialogoEliPzaInvSemiterminado() throws Exception
+    {
+        inicializarCamposEliPzaInvSemiterminado();
+        
+        dlgEliPzaInvSemiterminado.setSize(430, 490);
+        dlgEliPzaInvSemiterminado.setPreferredSize(dlgEliPzaInvSemiterminado.getSize());
+        dlgEliPzaInvSemiterminado.setLocationRelativeTo(null);
+        dlgEliPzaInvSemiterminado.setAlwaysOnTop(true);
+        dlgEliPzaInvSemiterminado.setVisible(true);
+    }
+    
+    //Método para realizar entrada de material y actualizar inventarios
+    public void eliminarPiezasInvCross () throws Exception
+    {
+        if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
+        {
+            try 
+            {
+                if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
+                {
+                    JOptionPane.showMessageDialog(dlgEliPzaInvSemiterminado, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+                }
+                else
+                {
+                    int fila = tblSemiterminado.getSelectedRow();
+                    bis = new BajasInventarioSemiterminado();
+                    bisc = new BajasInventarioSemiterminadoCommands();
+                    
+                    double promKg = Double.parseDouble(tblSemiterminado.getValueAt(fila, 4).toString());
+                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
+                    
+                    if (kg > Double.parseDouble(datosSemiterminado[fila][9]))
+                    {
+                        kg = Double.parseDouble(datosSemiterminado[fila][9]);
+                    }
+
+                    bis.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
+                    bis.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
+                    bis.setMotivo(txtrMotivo.getText());
+                    bis.setKgTotal(kg);
+
+                    bisc.agregarBajaInvSemiterminado(bis);
+                    isc.actualizarNoPiezasBaja(bis);
+                    actualizarTablaSemiterminado();
+                    dlgEliPzaInvSemiterminado.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
+                }
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                dlgEliPzaInvSemiterminado.setVisible(false);                
+                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+            }   
+        }
+        else
+        {
+            dlgEliPzaInvSemiterminado.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
+            dlgEliPzaInvSemiterminado.setVisible(true);
+        }
+    }
+    
+    public void generarReporteBajasInvSemiterminado()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteBajasInvSemiterminado.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -793,6 +905,27 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         jButton5 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
+        dlgEliPzaInvSemiterminado = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        txtCalibre = new javax.swing.JTextField();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel67 = new javax.swing.JLabel();
+        txtSeleccion = new javax.swing.JTextField();
+        btnRealizarEntradaEnvSemi2 = new javax.swing.JButton();
+        btnCancelarAgregarEnvSemi2 = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        txtNoPartida1 = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        txtTipoRecorte = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtrMotivo = new javax.swing.JTextArea();
+        txtNoPiezasActuales = new javax.swing.JTextField();
+        txtNoPiezasEliminar = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSemiterminado = new javax.swing.JTable();
@@ -833,11 +966,15 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         btnReporteEntrada2 = new javax.swing.JButton();
         jLabel57 = new javax.swing.JLabel();
         btnReporteEntrada6 = new javax.swing.JButton();
+        jLabel68 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jToolBar3 = new javax.swing.JToolBar();
         lblEnviarTerminado = new javax.swing.JLabel();
         btnAgregarEntrada = new javax.swing.JButton();
         jLabel61 = new javax.swing.JLabel();
         btnEnviarTerminado = new javax.swing.JButton();
+        jLabel66 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1147,7 +1284,6 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1299,6 +1435,188 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtCalibre.setEditable(false);
+        txtCalibre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCalibre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCalibreKeyTyped(evt);
+            }
+        });
+
+        jLabel33.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel33.setText("No. Partida:");
+
+        jLabel67.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel67.setText("Motivo:");
+
+        txtSeleccion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSeleccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSeleccionKeyTyped(evt);
+            }
+        });
+
+        btnRealizarEntradaEnvSemi2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarEntradaEnvSemi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnRealizarEntradaEnvSemi2.setText("Aceptar");
+        btnRealizarEntradaEnvSemi2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarEntradaEnvSemi2ActionPerformed(evt);
+            }
+        });
+
+        btnCancelarAgregarEnvSemi2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarAgregarEnvSemi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelarAgregarEnvSemi2.setText("Cancelar");
+        btnCancelarAgregarEnvSemi2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarAgregarEnvSemi2ActionPerformed(evt);
+            }
+        });
+
+        jPanel9.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+        jLabel20.setText("Eliminar Piezas");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+        );
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setText("Calibre:");
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel21.setText("Selección:");
+
+        txtNoPartida1.setEditable(false);
+        txtNoPartida1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel22.setText("Tipo de recorte:");
+
+        txtTipoRecorte.setEditable(false);
+        txtTipoRecorte.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtrMotivo.setColumns(20);
+        txtrMotivo.setRows(5);
+        jScrollPane3.setViewportView(txtrMotivo);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("No. Piezas Actuales:");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("No. Piezas a eliminar:");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel8Layout.createSequentialGroup()
+                                    .addGap(32, 32, 32)
+                                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel33)
+                                        .addComponent(jLabel22)
+                                        .addComponent(jLabel10)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel21)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel67, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCalibre, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtNoPartida1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(txtTipoRecorte))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtSeleccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+                        .addGap(0, 57, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnRealizarEntradaEnvSemi2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarAgregarEnvSemi2)))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel33)
+                    .addComponent(txtNoPartida1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTipoRecorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCalibre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSeleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel67))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarEntradaEnvSemi2)
+                    .addComponent(btnCancelarAgregarEnvSemi2))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout dlgEliPzaInvSemiterminadoLayout = new javax.swing.GroupLayout(dlgEliPzaInvSemiterminado.getContentPane());
+        dlgEliPzaInvSemiterminado.getContentPane().setLayout(dlgEliPzaInvSemiterminadoLayout);
+        dlgEliPzaInvSemiterminadoLayout.setHorizontalGroup(
+            dlgEliPzaInvSemiterminadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgEliPzaInvSemiterminadoLayout.setVerticalGroup(
+            dlgEliPzaInvSemiterminadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setBackground(new java.awt.Color(255, 255, 255));
 
         tblSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1446,38 +1764,38 @@ public class PnlSemiterminado extends javax.swing.JPanel {
 
         dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(0, 0, 255),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(128, 128, 128),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -1486,7 +1804,6 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                 false,
                 true)));
     dcFecha1EntradaSemiterminado.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-    dcFecha1EntradaSemiterminado.setFormat(2);
     dcFecha1EntradaSemiterminado.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
     try {
         dcFecha1EntradaSemiterminado.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
@@ -1507,38 +1824,38 @@ public class PnlSemiterminado extends javax.swing.JPanel {
 
     dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                 new java.awt.Color(0, 0, 255),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                 new java.awt.Color(128, 128, 128),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -1649,6 +1966,24 @@ try {
     });
     jToolBar2.add(btnReporteEntrada6);
 
+    jLabel68.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel68.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel68.setText("     ");
+    jToolBar2.add(jLabel68);
+
+    jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+    jButton2.setText("Reporte Piezas Eliminadas");
+    jButton2.setFocusable(false);
+    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton2ActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(jButton2);
+
     jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar3.setFloatable(false);
     jToolBar3.setRollover(true);
@@ -1688,6 +2023,24 @@ try {
         }
     });
     jToolBar3.add(btnEnviarTerminado);
+
+    jLabel66.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel66.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel66.setText("   ");
+    jToolBar3.add(jLabel66);
+
+    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    jButton1.setText("Eliminar Piezas");
+    jButton1.setFocusable(false);
+    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(jButton1);
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
@@ -1931,14 +2284,70 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtKgTotalesAgregarActionPerformed
 
+    private void txtCalibreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCalibreKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCalibreKeyTyped
+
+    private void txtSeleccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSeleccionKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtSeleccionKeyTyped
+
+    private void btnRealizarEntradaEnvSemi2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemi2ActionPerformed
+        try
+        {
+            eliminarPiezasInvCross();
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnRealizarEntradaEnvSemi2ActionPerformed
+
+    private void btnCancelarAgregarEnvSemi2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvSemi2ActionPerformed
+        dlgEliPzaInvSemiterminado.setVisible(false);
+    }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            int fila = tblSemiterminado.getSelectedRow();
+            String piezas = (String.valueOf(tblSemiterminado.getValueAt(fila, 2)));
+            int numPiezasActuales = Integer.parseInt(piezas);
+
+            if (numPiezasActuales != 0)
+            {
+                abrirDialogoEliPzaInvSemiterminado();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        actualizarTablaSemiterminado();
+        generarReporteBajasInvSemiterminado();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEntrada;
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnCancelarAgregar;
+    private javax.swing.JButton btnCancelarAgregarEnvSemi2;
     private javax.swing.JButton btnCancelarAgregarEnvTermi;
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.JButton btnRealizarEntrada;
+    private javax.swing.JButton btnRealizarEntradaEnvSemi2;
     private javax.swing.JButton btnRealizarEntradaEnvTermi;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
@@ -1953,10 +2362,15 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgAgregar;
     private javax.swing.JDialog dlgBuscar;
+    private javax.swing.JDialog dlgEliPzaInvSemiterminado;
     private javax.swing.JDialog dlgEnvTermi;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1966,10 +2380,15 @@ try {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -1988,6 +2407,9 @@ try {
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1998,8 +2420,11 @@ try {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
@@ -2010,14 +2435,21 @@ try {
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JTable tblBuscarPartidaInvCrossSemi;
     private javax.swing.JTable tblSemiterminado;
+    private javax.swing.JTextField txtCalibre;
     private javax.swing.JTextField txtKgTotalesAgregar;
     private javax.swing.JTextField txtNoPartida;
+    private javax.swing.JTextField txtNoPartida1;
     private javax.swing.JTextField txtNoPartidaAgregar;
     private javax.swing.JTextField txtNoPartidaEnvTermi;
+    private javax.swing.JTextField txtNoPiezasActuales;
     private javax.swing.JTextField txtNoPiezasActualesEnvTermi;
     private javax.swing.JTextField txtNoPiezasAgregar;
+    private javax.swing.JTextField txtNoPiezasEliminar;
     private javax.swing.JTextField txtNoPiezasEnvTermi;
+    private javax.swing.JTextField txtSeleccion;
+    private javax.swing.JTextField txtTipoRecorte;
     private javax.swing.JTextField txtTipoRecorteAgregar;
     private javax.swing.JTextField txtTipoRecorteEnvTermi;
+    private javax.swing.JTextArea txtrMotivo;
     // End of variables declaration//GEN-END:variables
 }

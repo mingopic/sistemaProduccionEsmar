@@ -6,6 +6,7 @@
 package Controlador;
 
 import static Controlador.InventarioSemiterminadoTerminadoCommands.c;
+import Modelo.BajasInventarioSemiterminado;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioSemiterminado;
@@ -121,6 +122,20 @@ public class InventarioSemiterminadoCommands {
     {
         String query = "execute sp_actInvSemiterminado "+ist.getIdInvSemiterminado()+""
             + ","+ist.getNoPiezas()+","+kg;
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para actualizar el número de piezas actuales
+    public static void actualizarNoPiezasBaja(BajasInventarioSemiterminado bis) throws Exception {
+        String query = "exec sp_actBajasInvSemiterminado "
+                + bis.getNoPiezas()
+                + ", " + bis.getIdInvSemiterminado()
+                + ", " + bis.getKgTotal();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

@@ -775,7 +775,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     }
     
     //Método para realizar entrada de material y actualizar inventarios
-    public void eliminarPiezasInvCross () throws Exception
+    public void eliminarPiezasInvSemiterminado() throws Exception
     {
         if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
         {
@@ -2302,7 +2302,7 @@ try {
     private void btnRealizarEntradaEnvSemi2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemi2ActionPerformed
         try
         {
-            eliminarPiezasInvCross();
+            eliminarPiezasInvSemiterminado();
         }
         catch (Exception ex)
         {

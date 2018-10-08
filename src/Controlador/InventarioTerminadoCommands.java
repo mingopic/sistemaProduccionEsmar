@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.BajasInventarioTerminado;
 import Modelo.Calibre;
 import Modelo.InventarioSalTerminado;
 import Modelo.InventarioTerminado;
@@ -114,6 +115,22 @@ public class InventarioTerminadoCommands {
                 + "," + isalt.getKg()
                 + "," + isalt.getDecimetros()
                 + "," + isalt.getPies();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para actualizar el número de piezas actuales
+    public static void actualizarNoPiezasBaja(BajasInventarioTerminado bit) throws Exception {
+        String query = "exec sp_actBajasInvTerminado "
+                + bit.getNoPiezas()
+                + ", " + bit.getIdInvTerminado()
+                + ", " + bit.getKg()
+                + ", " + bit.getPies()
+                + ", " + bit.getDecimetros();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

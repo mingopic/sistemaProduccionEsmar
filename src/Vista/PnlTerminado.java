@@ -6,6 +6,7 @@
 
 package Vista;
 
+import Controlador.BajasInventarioTerminadoCommands;
 import Controlador.CalibreCommands;
 import Controlador.ConexionBD;
 import Controlador.InventarioCrossCommands;
@@ -16,6 +17,7 @@ import Controlador.InventarioSemiterminadoTerminadoCommands;
 import Controlador.InventarioTerminadoCommands;
 import Controlador.SeleccionCommands;
 import Controlador.TipoRecorteCommands;
+import Modelo.BajasInventarioTerminado;
 import Modelo.Calibre;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
@@ -74,6 +76,8 @@ public class PnlTerminado extends javax.swing.JPanel {
     InventarioSalTerminado isalt;
     InventarioSalTerminadoCommands isaltc;
     Partida p;
+    BajasInventarioTerminado bit;
+    BajasInventarioTerminadoCommands bitc;
     double promXPieza;
     String[][] datosTerminado = null;
     String[][] datos = null;
@@ -914,6 +918,142 @@ public class PnlTerminado extends javax.swing.JPanel {
             txtDecimetrosEnvSal.setText("");
         }
     }
+    
+    //Metodo para inicializar los campos de dlgEliPzaInvTerminado
+    public void inicializarCamposEliPzaInvTerminado() throws Exception
+    {
+        txtNoPiezasEliminar.setText("");
+        txtrMotivo.setText("");
+        
+        int fila = tblTerminado.getSelectedRow();
+        
+        txtNoPartida1.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
+        txtTipoRecorte.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
+        txtCalibre.setText(String.valueOf(tblTerminado.getValueAt(fila, 8)));
+        txtSeleccion.setText(String.valueOf(tblTerminado.getValueAt(fila, 7)));
+        txtNoPiezasActuales.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
+    }
+    
+    //Método que abre el dialogo para eliminar piezas del inventario terminado
+    public void abrirDialogoEliPzaInvTerminado() throws Exception
+    {
+        inicializarCamposEliPzaInvTerminado();
+        
+        dlgEliPzaInvTerminado.setSize(430, 490);
+        dlgEliPzaInvTerminado.setPreferredSize(dlgEliPzaInvTerminado.getSize());
+        dlgEliPzaInvTerminado.setLocationRelativeTo(null);
+        dlgEliPzaInvTerminado.setAlwaysOnTop(true);
+        dlgEliPzaInvTerminado.setVisible(true);
+    }
+    
+     //Método para realizar entrada de material y actualizar inventarios
+    public void eliminarPiezasInvTerminado() throws Exception
+    {
+        if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
+        {
+            try 
+            {
+                if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
+                {
+                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+                }
+                else
+                {
+                    int fila = tblTerminado.getSelectedRow();
+                    bit = new BajasInventarioTerminado();
+                    bitc = new BajasInventarioTerminadoCommands();
+                    
+                    if (Double.parseDouble(tblTerminado.getValueAt(fila, 3).toString()) > 0)
+                    {
+                        double promKg = Double.parseDouble(tblTerminado.getValueAt(fila, 4).toString());
+                        double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
+                        
+                        if (kg > Double.parseDouble(datosTerminado[fila][11]))
+                        {
+                            kg = Double.parseDouble(datosTerminado[fila][11]);
+                        }
+                        
+                        bit.setKg(kg);
+                        bit.setPies(0);
+                        bit.setDecimetros(0);
+                    }
+                    else
+                    {
+                        double promPies = Double.parseDouble(datosTerminado[fila][13]) / Double.parseDouble(datosTerminado[fila][10]);
+                        double pies = promPies * Integer.parseInt(txtNoPiezasEliminar.getText());
+                        
+                        double promDecimetros = Double.parseDouble(datosTerminado[fila][12]) / Double.parseDouble(datosTerminado[fila][10]);
+                        double decimetros = promDecimetros * Integer.parseInt(txtNoPiezasEliminar.getText());
+                        
+                        if (pies > Double.parseDouble(datosTerminado[fila][13]))
+                        {
+                            pies = Double.parseDouble(datosTerminado[fila][13]);
+                        }
+                        
+                        if (decimetros > Double.parseDouble(datosTerminado[fila][12]))
+                        {
+                            decimetros = Double.parseDouble(datosTerminado[fila][12]);
+                        }
+                        
+                        bit.setKg(0);
+                        bit.setPies(pies);
+                        bit.setDecimetros(decimetros);
+                    }
+
+                    bit.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][14]));
+                    bit.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
+                    bit.setMotivo(txtrMotivo.getText());
+
+                    bitc.agregarBajaInvTerminado(bit);
+                    itc.actualizarNoPiezasBaja(bit);
+                    actualizarTablaTerminado();
+                    dlgEliPzaInvTerminado.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
+                }
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                dlgEliPzaInvTerminado.setVisible(false);                
+                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+            }   
+        }
+        else
+        {
+            dlgEliPzaInvTerminado.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
+            dlgEliPzaInvTerminado.setVisible(true);
+        }
+    }
+    
+    public void generarReporteBajasInvTerminado()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReporteBajasInvTerminado.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -985,6 +1125,27 @@ public class PnlTerminado extends javax.swing.JPanel {
         jrAreaEnvSal = new javax.swing.JRadioButton();
         btnGroup = new javax.swing.ButtonGroup();
         btnGroup1 = new javax.swing.ButtonGroup();
+        dlgEliPzaInvTerminado = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        txtCalibre = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel74 = new javax.swing.JLabel();
+        txtSeleccion = new javax.swing.JTextField();
+        btnRealizarEntradaEnvSemi2 = new javax.swing.JButton();
+        btnCancelarAgregarEnvSemi2 = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        txtNoPartida1 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        txtTipoRecorte = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtrMotivo = new javax.swing.JTextArea();
+        txtNoPiezasActuales = new javax.swing.JTextField();
+        txtNoPiezasEliminar = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTerminado = new javax.swing.JTable();
@@ -1025,11 +1186,15 @@ public class PnlTerminado extends javax.swing.JPanel {
         btnReporteEntrada2 = new javax.swing.JButton();
         jLabel57 = new javax.swing.JLabel();
         btnReporteEntrada6 = new javax.swing.JButton();
+        jLabel72 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jToolBar3 = new javax.swing.JToolBar();
         lblEnviarTerminado = new javax.swing.JLabel();
         btnAgregarEntrada = new javax.swing.JButton();
         jLabel61 = new javax.swing.JLabel();
         btnEnviarTerminado = new javax.swing.JButton();
+        jLabel73 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1344,7 +1509,7 @@ public class PnlTerminado extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel19)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -1366,7 +1531,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                 .addGap(11, 11, 11)
@@ -1644,6 +1809,188 @@ public class PnlTerminado extends javax.swing.JPanel {
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtCalibre.setEditable(false);
+        txtCalibre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCalibre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCalibreKeyTyped(evt);
+            }
+        });
+
+        jLabel34.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel34.setText("No. Partida:");
+
+        jLabel74.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel74.setText("Motivo:");
+
+        txtSeleccion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSeleccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSeleccionKeyTyped(evt);
+            }
+        });
+
+        btnRealizarEntradaEnvSemi2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarEntradaEnvSemi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnRealizarEntradaEnvSemi2.setText("Aceptar");
+        btnRealizarEntradaEnvSemi2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarEntradaEnvSemi2ActionPerformed(evt);
+            }
+        });
+
+        btnCancelarAgregarEnvSemi2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarAgregarEnvSemi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelarAgregarEnvSemi2.setText("Cancelar");
+        btnCancelarAgregarEnvSemi2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarAgregarEnvSemi2ActionPerformed(evt);
+            }
+        });
+
+        jPanel9.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+        jLabel21.setText("Eliminar Piezas");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+        );
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setText("Calibre:");
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel22.setText("Selección:");
+
+        txtNoPartida1.setEditable(false);
+        txtNoPartida1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel23.setText("Tipo de recorte:");
+
+        txtTipoRecorte.setEditable(false);
+        txtTipoRecorte.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtrMotivo.setColumns(20);
+        txtrMotivo.setRows(5);
+        jScrollPane3.setViewportView(txtrMotivo);
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel14.setText("No. Piezas Actuales:");
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel24.setText("No. Piezas a eliminar:");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel8Layout.createSequentialGroup()
+                                    .addGap(32, 32, 32)
+                                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel34)
+                                        .addComponent(jLabel23)
+                                        .addComponent(jLabel10)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel22)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel74, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCalibre, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtNoPartida1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                .addComponent(txtTipoRecorte))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtSeleccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+                        .addGap(0, 57, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnRealizarEntradaEnvSemi2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarAgregarEnvSemi2)))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel34)
+                    .addComponent(txtNoPartida1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTipoRecorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCalibre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSeleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel74))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarEntradaEnvSemi2)
+                    .addComponent(btnCancelarAgregarEnvSemi2))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout dlgEliPzaInvTerminadoLayout = new javax.swing.GroupLayout(dlgEliPzaInvTerminado.getContentPane());
+        dlgEliPzaInvTerminado.getContentPane().setLayout(dlgEliPzaInvTerminadoLayout);
+        dlgEliPzaInvTerminadoLayout.setHorizontalGroup(
+            dlgEliPzaInvTerminadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgEliPzaInvTerminadoLayout.setVerticalGroup(
+            dlgEliPzaInvTerminadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setBackground(new java.awt.Color(255, 255, 255));
 
         tblTerminado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1791,38 +2138,38 @@ public class PnlTerminado extends javax.swing.JPanel {
 
         dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(0, 0, 255),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(128, 128, 128),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                    new java.awt.Color(0, 0, 0),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(187, 187, 187),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -1851,38 +2198,38 @@ public class PnlTerminado extends javax.swing.JPanel {
 
     dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                 new java.awt.Color(0, 0, 255),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                 new java.awt.Color(128, 128, 128),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
-                new java.awt.Color(0, 0, 0),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(187, 187, 187),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -1993,6 +2340,24 @@ try {
     });
     jToolBar2.add(btnReporteEntrada6);
 
+    jLabel72.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel72.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel72.setText("     ");
+    jToolBar2.add(jLabel72);
+
+    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+    jButton1.setText("Reporte Piezas Eliminadas");
+    jButton1.setFocusable(false);
+    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(jButton1);
+
     jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar3.setFloatable(false);
     jToolBar3.setRollover(true);
@@ -2032,6 +2397,24 @@ try {
         }
     });
     jToolBar3.add(btnEnviarTerminado);
+
+    jLabel73.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel73.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel73.setText("   ");
+    jToolBar3.add(jLabel73);
+
+    jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    jButton2.setText("Eliminar Piezas");
+    jButton2.setFocusable(false);
+    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton2ActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(jButton2);
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
@@ -2334,17 +2717,73 @@ try {
         calcDecimetrosTotalesEnvSal();
     }//GEN-LAST:event_txtPiesEnvSalKeyReleased
 
+    private void txtCalibreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCalibreKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCalibreKeyTyped
+
+    private void txtSeleccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSeleccionKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtSeleccionKeyTyped
+
+    private void btnRealizarEntradaEnvSemi2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaEnvSemi2ActionPerformed
+        try
+        {
+            eliminarPiezasInvTerminado();
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(PnlCross.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnRealizarEntradaEnvSemi2ActionPerformed
+
+    private void btnCancelarAgregarEnvSemi2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarEnvSemi2ActionPerformed
+        dlgEliPzaInvTerminado.setVisible(false);
+    }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            int fila = tblTerminado.getSelectedRow();
+            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
+            int numPiezasActuales = Integer.parseInt(piezas);
+
+            if (numPiezasActuales != 0)
+            {
+                abrirDialogoEliPzaInvTerminado();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        actualizarTablaTerminado();
+        generarReporteBajasInvTerminado();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEntrada;
     private javax.swing.JButton btnBuscarEntrada;
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregar1;
+    private javax.swing.JButton btnCancelarAgregarEnvSemi2;
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroup1;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntrada1;
+    private javax.swing.JButton btnRealizarEntradaEnvSemi2;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
@@ -2360,14 +2799,19 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
     private javax.swing.JDialog dlgAgregar;
     private javax.swing.JDialog dlgBuscar;
+    private javax.swing.JDialog dlgEliPzaInvTerminado;
     private javax.swing.JDialog dlgEnvSal;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -2375,11 +2819,16 @@ try {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
@@ -2403,6 +2852,9 @@ try {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -2412,8 +2864,11 @@ try {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
@@ -2428,19 +2883,26 @@ try {
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JTable tblBuscarPartidaInvSemTer;
     private javax.swing.JTable tblTerminado;
+    private javax.swing.JTextField txtCalibre;
     private javax.swing.JTextField txtDecimetrosAgregar;
     private javax.swing.JTextField txtDecimetrosEnvSal;
     private javax.swing.JTextField txtKgTotalesAgregar;
     private javax.swing.JTextField txtKgTotalesEnvSal;
     private javax.swing.JTextField txtNoPartida;
+    private javax.swing.JTextField txtNoPartida1;
     private javax.swing.JTextField txtNoPartidaAgregar;
     private javax.swing.JTextField txtNoPartidaEnvSal;
+    private javax.swing.JTextField txtNoPiezasActuales;
     private javax.swing.JTextField txtNoPiezasActualesEnvSal;
     private javax.swing.JTextField txtNoPiezasAgregar;
+    private javax.swing.JTextField txtNoPiezasEliminar;
     private javax.swing.JTextField txtNoPiezasEnvSal;
     private javax.swing.JTextField txtPiesCuadradosAgregar;
     private javax.swing.JTextField txtPiesEnvSal;
+    private javax.swing.JTextField txtSeleccion;
+    private javax.swing.JTextField txtTipoRecorte;
     private javax.swing.JTextField txtTipoRecorteAgregar;
     private javax.swing.JTextField txtTipoRecorteEnvSal;
+    private javax.swing.JTextArea txtrMotivo;
     // End of variables declaration//GEN-END:variables
 }

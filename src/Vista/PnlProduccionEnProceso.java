@@ -235,6 +235,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
             parametros.put("proceso", pr.getDescripcion());
+            parametros.put("recorte", tr.getDescripcion());
             parametros.put("fecha", fp.getFecha());
             parametros.put("fecha1", fp.getFecha1());
             

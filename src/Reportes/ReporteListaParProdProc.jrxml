@@ -25,8 +25,11 @@
 	<parameter name="imagen" class="java.lang.Object">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="recorte" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[sp_obtEntProdProc $P{proceso},$P{fecha},$P{fecha1}]]>
+		<![CDATA[sp_obtEntProdProc $P{proceso},$P{recorte},$P{fecha},$P{fecha1}]]>
 	</queryString>
 	<field name="idFichaProd" class="java.lang.Integer"/>
 	<field name="noPartida" class="java.lang.Integer"/>

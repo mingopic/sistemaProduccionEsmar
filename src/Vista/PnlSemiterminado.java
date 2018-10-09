@@ -1451,6 +1451,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         jLabel67.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel67.setText("Motivo:");
 
+        txtSeleccion.setEditable(false);
         txtSeleccion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSeleccion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -1516,6 +1517,14 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         txtrMotivo.setColumns(20);
         txtrMotivo.setRows(5);
         jScrollPane3.setViewportView(txtrMotivo);
+
+        txtNoPiezasActuales.setEditable(false);
+
+        txtNoPiezasEliminar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasEliminarKeyTyped(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("No. Piezas Actuales:");
@@ -2337,6 +2346,17 @@ try {
         actualizarTablaSemiterminado();
         generarReporteBajasInvSemiterminado();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtNoPiezasEliminarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEliminarKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNoPiezasEliminarKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -22,6 +22,8 @@ create procedure sp_insRecorte
     declare 
       @idRecepcionCuero  int
       , @idInventarioCrudo int
+      , @garra            float
+      , @garraDesc        float
       
     update
       tb_partidaDet
@@ -100,6 +102,36 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+      
+      set
+        @garra =
+        (
+          select
+            costo
+            
+          from
+            tb_costoGarra
+            
+          where
+            idCostoGarra =
+            (
+              select
+                max(idCostoGarra)
+                
+              from
+                tb_costoGarra
+            )
+        )
+      
+      set
+        @garraDesc = (@garra*2) * @noPiezasAct
+      
+      update
+        tb_fichaProdDet
+      set
+        costoTotalCuero = costoTotalCuero - @garraDesc
+      where
+        idPartidaDet = @idPartidaDet
     end
     
     else if @idTipoRecorte = 1
@@ -158,6 +190,36 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+        
+      set
+        @garra =
+        (
+          select
+            costo
+            
+          from
+            tb_costoGarra
+            
+          where
+            idCostoGarra =
+            (
+              select
+                max(idCostoGarra)
+                
+              from
+                tb_costoGarra
+            )
+        )
+      
+      set
+        @garraDesc = @garra * @noPiezasAct
+      
+      update
+        tb_fichaProdDet
+      set
+        costoTotalCuero = costoTotalCuero - @garraDesc
+      where
+        idPartidaDet = @idPartidaDet
     end
     
     else if @idTipoRecorte = 2
@@ -216,6 +278,36 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+        
+        set
+        @garra =
+        (
+          select
+            costo
+            
+          from
+            tb_costoGarra
+            
+          where
+            idCostoGarra =
+            (
+              select
+                max(idCostoGarra)
+                
+              from
+                tb_costoGarra
+            )
+        )
+      
+      set
+        @garraDesc = @garra * @noPiezasAct
+      
+      update
+        tb_fichaProdDet
+      set
+        costoTotalCuero = costoTotalCuero - @garraDesc
+      where
+        idPartidaDet = @idPartidaDet
     end
     
     else begin

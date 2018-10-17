@@ -8,10 +8,12 @@ package Vista;
 import Controlador.ConexionBD;
 import Controlador.FichaProdDetCommands;
 import Controlador.FichaProduccionCommands;
+import Controlador.PartidaCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TipoRecorteCommands;
 import Modelo.FichaProduccion;
+import Modelo.Partida;
 import Modelo.Proceso;
 import Modelo.TipoRecorte;
 import java.io.InputStream;
@@ -44,8 +46,11 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     FichaProduccionCommands fpc;
     TipoRecorte tr;
     TipoRecorteCommands trc;
+    Partida p;
+    PartidaCommands pc;
     String[][] proceso = null;
     String[][] recorte = null;
+    List<Partida> lstPartida;
     String[][] datosProduccionProceso = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
@@ -75,6 +80,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         
         llenarComboProcesos();
         llenarComboTipoRecorte();
+        llenarComboAnio();
         actualizarTablaProduccionProceso();
     }
     
@@ -100,6 +106,21 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         while (i<recorte.length)
         {
             cmbTipoRecorte.addItem(recorte[i][1]);
+            i++;
+        }
+    }
+    
+    public void llenarComboAnio() throws Exception
+    {
+        pc = new PartidaCommands();
+        lstPartida = new ArrayList<>();
+        
+        lstPartida = pc.llenarComboboxAnio();
+        
+        int i=0;
+        while (i < lstPartida.size())
+        {
+            cmbAnioPartida.addItem(lstPartida.get(i).getAnio());
             i++;
         }
     }
@@ -437,7 +458,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         lbl2 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtAnio = new javax.swing.JTextField();
+        cmbAnioPartida = new javax.swing.JComboBox<>();
         jToolBar2 = new javax.swing.JToolBar();
         btnReporteFichaProd = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -671,15 +692,13 @@ try {
     jLabel9.setText("  ");
     jToolBar1.add(jLabel9);
 
-    txtAnio.setToolTipText("");
-    txtAnio.setMinimumSize(new java.awt.Dimension(40, 20));
-    txtAnio.setPreferredSize(new java.awt.Dimension(50, 25));
-    txtAnio.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyTyped(java.awt.event.KeyEvent evt) {
-            txtAnioKeyTyped(evt);
+    cmbAnioPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    cmbAnioPartida.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cmbAnioPartidaActionPerformed(evt);
         }
     });
-    jToolBar1.add(txtAnio);
+    jToolBar1.add(cmbAnioPartida);
 
     jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar2.setFloatable(false);
@@ -779,7 +798,7 @@ try {
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jScrollPane1)
-        .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1048, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -886,57 +905,50 @@ try {
          validarNumerosEnteros(evt, txtNoPartida.getText());
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
-    private void txtAnioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnioKeyTyped
-        validarNumerosEnteros(evt, txtAnio.getText());
-        if (txtAnio.getText().length() >= 4)
-        {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtAnioKeyTyped
-
     private void btnReporteCostoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteCostoPartidaActionPerformed
-        int idProceso;
-        int idTipoRecorte;
-        int noPartida;
-        String anio;
-        
-        if (cmbProceso.getSelectedItem().toString().equals("<Todos>"))
-        {
-            idProceso = 0;
-        }
-        else
-        {
-            idProceso = Integer.parseInt(proceso[cmbProceso.getSelectedIndex() - 1][0]);
-        }
-        
-        if (cmbTipoRecorte.getSelectedItem().toString().equals("<Todos>"))
-        {
-            idTipoRecorte = 0;
-        }
-        else
-        {
-            idTipoRecorte = Integer.parseInt(recorte[cmbTipoRecorte.getSelectedIndex() - 1][0]);
-        }
-        
         if (txtNoPartida.getText().equals(""))
         {
-            noPartida = 0;
+            JOptionPane.showMessageDialog(null, "Ingrese un numero de partida","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
         else
         {
-            noPartida = Integer.parseInt(txtNoPartida.getText());
+            int idProceso;
+            int idTipoRecorte;
+            int noPartida;
+            String anio;
+
+            if (cmbProceso.getSelectedItem().toString().equals("<Todos>"))
+            {
+                idProceso = 0;
+            }
+            else
+            {
+                idProceso = Integer.parseInt(proceso[cmbProceso.getSelectedIndex() - 1][0]);
+            }
+
+            if (cmbTipoRecorte.getSelectedItem().toString().equals("<Todos>"))
+            {
+                idTipoRecorte = 0;
+            }
+            else
+            {
+                idTipoRecorte = Integer.parseInt(recorte[cmbTipoRecorte.getSelectedIndex() - 1][0]);
+            }
+
+            if (txtNoPartida.getText().equals(""))
+            {
+                noPartida = 0;
+            }
+            else
+            {
+                noPartida = Integer.parseInt(txtNoPartida.getText());
+            }
+
+
+            anio = cmbAnioPartida.getSelectedItem().toString();
+
+            generarReporteCostoPartida(idProceso, idTipoRecorte, noPartida, anio);
         }
-        
-        if (txtAnio.getText().equals(""))
-        {
-            anio = "1900";
-        }
-        else
-        {
-            anio = txtAnio.getText();
-        }
-        
-        generarReporteCostoPartida(idProceso, idTipoRecorte, noPartida, anio);
     }//GEN-LAST:event_btnReporteCostoPartidaActionPerformed
 
     private void cmbTipoRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoRecorteActionPerformed
@@ -947,6 +959,10 @@ try {
         generarReporteBajasPartidaDet();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void cmbAnioPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAnioPartidaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbAnioPartidaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
@@ -954,6 +970,7 @@ try {
     private javax.swing.JButton btnReporteFichaProd;
     private javax.swing.JButton btnReporteListaPartProdProc;
     private javax.swing.JButton btnReporteListaPartProdProc1;
+    private javax.swing.JComboBox<String> cmbAnioPartida;
     private javax.swing.JComboBox<String> cmbProceso;
     private javax.swing.JComboBox<String> cmbTipoRecorte;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
@@ -987,7 +1004,6 @@ try {
     private javax.swing.JLabel lbl1;
     private javax.swing.JLabel lbl2;
     private javax.swing.JTable tblProduccionProceso;
-    private javax.swing.JTextField txtAnio;
     private javax.swing.JTextField txtNoPartida;
     // End of variables declaration//GEN-END:variables
 }

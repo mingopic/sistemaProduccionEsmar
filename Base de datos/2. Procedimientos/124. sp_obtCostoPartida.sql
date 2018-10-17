@@ -17,6 +17,28 @@ create procedure sp_obtCostoPartida
 )
 as begin
 
+  declare @costoTotalGarras float
+  
+  set
+    @costoTotalGarras =
+      (
+        select
+          sum(gp.costoTotalGarras)
+        from
+          tb_garrasPartida as gp
+        inner join
+          tb_partida as p
+        on
+          p.idPartida = gp.idPartida
+        where
+          p.noPartida = @noPartida
+      )
+      
+  if (@costoTotalGarras is null)
+  begin
+    set @costoTotalGarras = 0
+  end
+
   select
     pa.noPartida
     , tr.descripcion as 'TipoRecorte'
@@ -30,6 +52,7 @@ as begin
     , pr.descripcion as 'Proceso'
     , pr.idProceso
     , tr.idTipoRecorte
+    , @costoTotalGarras as costoGarras
 
   from
     tb_partidaDet pd

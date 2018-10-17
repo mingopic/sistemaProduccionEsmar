@@ -24,6 +24,7 @@ create procedure sp_insRecorte
       , @idInventarioCrudo int
       , @garra            float
       , @garraDesc        float
+      , @noGarras         int
       
     update
       tb_partidaDet
@@ -122,16 +123,27 @@ create procedure sp_insRecorte
                 tb_costoGarra
             )
         )
-      
+        
       set
-        @garraDesc = (@garra*2) * @noPiezasAct
-      
-      update
-        tb_fichaProdDet
+        @noGarras = @noPiezasAct*2
+        
       set
-        costoTotalCuero = costoTotalCuero - @garraDesc
-      where
-        idPartidaDet = @idPartidaDet
+        @garraDesc = @garra * @noGarras
+      
+      insert into
+        tb_garrasPartida
+        (
+          idPartida
+          , noGarras
+          , costoTotalGarras
+        )
+        
+      values
+        (
+          @idPartida
+          , @noGarras
+          , @garraDesc
+        )
     end
     
     else if @idTipoRecorte = 1
@@ -212,14 +224,25 @@ create procedure sp_insRecorte
         )
       
       set
-        @garraDesc = @garra * @noPiezasAct
-      
-      update
-        tb_fichaProdDet
+        @noGarras = @noPiezasAct
+        
       set
-        costoTotalCuero = costoTotalCuero - @garraDesc
-      where
-        idPartidaDet = @idPartidaDet
+        @garraDesc = @garra * @noGarras
+      
+      insert into
+        tb_garrasPartida
+        (
+          idPartida
+          , noGarras
+          , costoTotalGarras
+        )
+        
+      values
+        (
+          @idPartida
+          , @noGarras
+          , @garraDesc
+        )
     end
     
     else if @idTipoRecorte = 2
@@ -300,14 +323,124 @@ create procedure sp_insRecorte
         )
       
       set
-        @garraDesc = @garra * @noPiezasAct
-      
-      update
-        tb_fichaProdDet
+        @noGarras = @noPiezasAct
+        
       set
-        costoTotalCuero = costoTotalCuero - @garraDesc
-      where
-        idPartidaDet = @idPartidaDet
+        @garraDesc = @garra * @noGarras
+      
+      insert into
+        tb_garrasPartida
+        (
+          idPartida
+          , noGarras
+          , costoTotalGarras
+        )
+        
+      values
+        (
+          @idPartida
+          , @noGarras
+          , @garraDesc
+        )
+    end
+    
+    else if @idTipoRecorte = 3
+    begin
+    
+      insert into
+        tb_partidaDet
+        (
+          noPiezas
+          , noPiezasAct
+          , idPartida
+          , idRecepcionCuero
+          , idTipoRecorte
+          , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
+        )
+        
+      values
+        (
+          @noPiezas
+          , @noPiezas
+          , @idPartida
+          , @idRecepcionCuero
+          , 8
+          , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
+        )
+        
+      insert into
+        tb_partidaDet
+        (
+          noPiezas
+          , noPiezasAct
+          , idPartida
+          , idRecepcionCuero
+          , idTipoRecorte
+          , idProceso
+          , idInventarioCrudo
+          , procedenciaCrudo
+          , idRecortePartidaDet
+        )
+        
+      values
+        (
+          @noPiezas
+          , @noPiezas
+          , @idPartida
+          , @idRecepcionCuero
+          , 7
+          , @idProceso
+          , @idInventarioCrudo
+          , 0
+          , @idPartidaDet
+        )
+        
+        set
+        @garra =
+        (
+          select
+            costo
+            
+          from
+            tb_costoGarra
+            
+          where
+            idCostoGarra =
+            (
+              select
+                max(idCostoGarra)
+                
+              from
+                tb_costoGarra
+            )
+        )
+      
+      set
+        @noGarras = @noPiezasAct
+        
+      set
+        @garraDesc = @garra * @noGarras
+      
+      insert into
+        tb_garrasPartida
+        (
+          idPartida
+          , noGarras
+          , costoTotalGarras
+        )
+        
+      values
+        (
+          @idPartida
+          , @noGarras
+          , @garraDesc
+        )
     end
     
     else begin

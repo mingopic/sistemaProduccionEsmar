@@ -142,4 +142,36 @@ public class PartidaCommands {
         c.desconectar();
         return idPartida;
     }
+    
+    //Método para traer los años activos
+    public List llenarComboboxAnio() throws Exception
+    {
+        List<Partida> lstPartida = new ArrayList<>();
+        Partida obj;
+        
+        String query="execute sp_obtAnioAct";
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) {
+            rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                obj = new Partida();
+                obj.setAnio(rs.getString("anio"));
+                lstPartida.add(obj);
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return lstPartida;
+    }
 }

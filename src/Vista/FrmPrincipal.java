@@ -462,6 +462,50 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }
     
+    private void cargarConfPrecioManoDeObra()
+    {
+        try
+        {
+            ConfiPrecioCueroCommands cpcc = new ConfiPrecioCueroCommands();
+            lstConfPrecioCuero = cpcc.obtenerConfPrecioCuero();
+            
+            String[] cols = new String[]
+            {
+                "Tipo Recorte", "Porcentaje del Costo"
+            };
+            
+            DefaultTableModel dtm = new DefaultTableModel()
+            {
+                public boolean isCellEditable (int row, int column)
+                {
+                    // Aquí devolvemos true o false según queramos que una celda
+                    // identificada por fila,columna (row,column), sea o no editable
+                    if (column == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            };
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(lstConfPrecioCuero.size());
+            for (int i = 0; i < lstConfPrecioCuero.size(); i++)
+            {
+                dtm.setValueAt(lstConfPrecioCuero.get(i).getDescTipoRecorte(), i, 0);
+                dtm.setValueAt(lstConfPrecioCuero.get(i).getPorcentaje(), i, 1);
+            }
+            tblConfCostoCuero.setModel(dtm);
+            tblConfCostoCuero.getTableHeader().setReorderingAllowed(false);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Error al recuperar datos de la BD", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     private void validarPorcentaje()
     {
         for (int fila = 0; fila < tblConfCostoCuero.getRowCount(); fila++)
@@ -650,6 +694,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jPanel19 = new javax.swing.JPanel();
         jToolBar4 = new javax.swing.JToolBar();
         jButton3 = new javax.swing.JButton();
+        dlgPrecioManoDeObra = new javax.swing.JDialog();
+        jPanel20 = new javax.swing.JPanel();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jPanel22 = new javax.swing.JPanel();
+        jPanel23 = new javax.swing.JPanel();
+        jToolBar5 = new javax.swing.JToolBar();
+        btnGuardar1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblConfCostoManoDeObra = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         pnlMenu = new javax.swing.JPanel();
         btnInicio = new javax.swing.JButton();
@@ -682,6 +736,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmInsumosXproceso = new javax.swing.JMenuItem();
         jmCostoCuero = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jmCostoManoDeObra = new javax.swing.JMenuItem();
         jmpBaseDeDatos = new javax.swing.JMenu();
         jmiExportar = new javax.swing.JMenuItem();
         jmiImportar = new javax.swing.JMenuItem();
@@ -1382,6 +1437,122 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel21.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
+        jLabel21.setText("Configuración Costo Mano De Obra");
+
+        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
+        jPanel21.setLayout(jPanel21Layout);
+        jPanel21Layout.setHorizontalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel21Layout.setVerticalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel22.setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar5.setFloatable(false);
+        jToolBar5.setRollover(true);
+
+        btnGuardar1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.setFocusable(false);
+        btnGuardar1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGuardar1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+        jToolBar5.add(btnGuardar1);
+
+        javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
+        jPanel23.setLayout(jPanel23Layout);
+        jPanel23Layout.setHorizontalGroup(
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel23Layout.setVerticalGroup(
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel23Layout.createSequentialGroup()
+                .addComponent(jToolBar5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        tblConfCostoManoDeObra.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null}
+            },
+            new String [] {
+                "Tipo Recorte", " Costo"
+            }
+        ));
+        tblConfCostoManoDeObra.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblConfCostoManoDeObra.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblConfCostoManoDeObraMouseClicked(evt);
+            }
+        });
+        tblConfCostoManoDeObra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblConfCostoManoDeObraKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblConfCostoManoDeObra);
+
+        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
+        jPanel22.setLayout(jPanel22Layout);
+        jPanel22Layout.setHorizontalGroup(
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+        jPanel22Layout.setVerticalGroup(
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel22Layout.createSequentialGroup()
+                .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel20Layout.setVerticalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout dlgPrecioManoDeObraLayout = new javax.swing.GroupLayout(dlgPrecioManoDeObra.getContentPane());
+        dlgPrecioManoDeObra.getContentPane().setLayout(dlgPrecioManoDeObraLayout);
+        dlgPrecioManoDeObraLayout.setHorizontalGroup(
+            dlgPrecioManoDeObraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgPrecioManoDeObraLayout.setVerticalGroup(
+            dlgPrecioManoDeObraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -1558,7 +1729,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(425, Short.MAX_VALUE))
+                .addContainerGap(449, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1573,7 +1744,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 867, Short.MAX_VALUE)
                         .addComponent(lblLogoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1720,6 +1891,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jmpConfiguraciones.add(jMenuItem2);
+
+        jmCostoManoDeObra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
+        jmCostoManoDeObra.setText("Costo Mano De Obra");
+        jmCostoManoDeObra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmCostoManoDeObraActionPerformed(evt);
+            }
+        });
+        jmpConfiguraciones.add(jmCostoManoDeObra);
 
         jMenuBar1.add(jmpConfiguraciones);
 
@@ -2119,14 +2299,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
        cargarConfPrecioCuero();
     }//GEN-LAST:event_jmCostoCueroActionPerformed
 
-    private void tblConfCostoCueroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblConfCostoCueroKeyReleased
-        validarPorcentaje();
-    }//GEN-LAST:event_tblConfCostoCueroKeyReleased
-
-    private void tblConfCostoCueroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConfCostoCueroMouseClicked
-        validarPorcentaje();
-    }//GEN-LAST:event_tblConfCostoCueroMouseClicked
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try 
         {
@@ -2165,6 +2337,31 @@ public class FrmPrincipal extends javax.swing.JFrame {
             txtCostoGarra.setText("0");
         }
     }//GEN-LAST:event_txtCostoGarraKeyReleased
+
+    private void jmCostoManoDeObraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCostoManoDeObraActionPerformed
+        abrirDialogo(dlgPrecioManoDeObra, 450, 300);
+       cargarConfPrecioCuero();
+    }//GEN-LAST:event_jmCostoManoDeObraActionPerformed
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+
+    private void tblConfCostoManoDeObraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConfCostoManoDeObraMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblConfCostoManoDeObraMouseClicked
+
+    private void tblConfCostoManoDeObraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblConfCostoManoDeObraKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblConfCostoManoDeObraKeyReleased
+
+    private void tblConfCostoCueroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblConfCostoCueroKeyReleased
+        validarPorcentaje();
+    }//GEN-LAST:event_tblConfCostoCueroKeyReleased
+
+    private void tblConfCostoCueroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConfCostoCueroMouseClicked
+        validarPorcentaje();
+    }//GEN-LAST:event_tblConfCostoCueroMouseClicked
 
     /**
      * @param args the command line arguments
@@ -2212,6 +2409,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnFichasProduccion;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnGuardar1;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnPartidas;
     private javax.swing.JButton btnProdEnProc;
@@ -2223,6 +2421,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JDialog dlgLogin;
     private javax.swing.JDialog dlgMermas;
     private javax.swing.JDialog dlgPrecioCuero;
+    private javax.swing.JDialog dlgPrecioManoDeObra;
     private javax.swing.JDialog dlgRangos;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -2240,6 +2439,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2263,6 +2463,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -2271,11 +2475,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JToolBar jToolBar4;
+    private javax.swing.JToolBar jToolBar5;
     private javax.swing.JMenuItem jmCostoCuero;
+    private javax.swing.JMenuItem jmCostoManoDeObra;
     private javax.swing.JMenuItem jmInsumosXproceso;
     private javax.swing.JMenuItem jmMermas;
     private javax.swing.JMenuItem jmProveedores;
@@ -2302,6 +2509,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static javax.swing.JPanel pnlPrincipalx;
     private javax.swing.JPasswordField ptxtContrasenia;
     private javax.swing.JTable tblConfCostoCuero;
+    private javax.swing.JTable tblConfCostoManoDeObra;
     private javax.swing.JTextField txtCachAcep;
     private javax.swing.JTextField txtCostoGarra;
     private javax.swing.JTextField txtHumAcep;

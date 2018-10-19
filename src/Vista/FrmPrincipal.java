@@ -6,6 +6,7 @@
 package Vista;
 
 import Controlador.ConexionBD;
+import Controlador.ConfPrecioManoDeObraCommands;
 import Controlador.ConfiPrecioCueroCommands;
 import Controlador.ConfiguracionMermaCommands;
 import Controlador.ControladorUsuario;
@@ -13,6 +14,7 @@ import Controlador.CostoGarraCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.RolesXUsuarioCommands;
 import Modelo.ConfPrecioCuero;
+import Modelo.ConfPrecioManoDeObra;
 import Modelo.ConfiguracionMerma;
 import Modelo.CostoGarra;
 import Modelo.RangoPesoCuero;
@@ -62,6 +64,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     CostoGarraCommands cgc;
     public static String[] roles;
     List<ConfPrecioCuero> lstConfPrecioCuero;
+    List<ConfPrecioManoDeObra> lstConfPrecioManoDeObra;
     /**
      * Creates new form FrmPrincipal
      */
@@ -466,12 +469,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     {
         try
         {
-            ConfiPrecioCueroCommands cpcc = new ConfiPrecioCueroCommands();
-            lstConfPrecioCuero = cpcc.obtenerConfPrecioCuero();
+            ConfPrecioManoDeObraCommands cpmc = new ConfPrecioManoDeObraCommands();
+            lstConfPrecioManoDeObra = cpmc.obtenerConfPrecioManoDeObra();
             
             String[] cols = new String[]
             {
-                "Tipo Recorte", "Porcentaje del Costo"
+                "Tipo Recorte", "Costo"
             };
             
             DefaultTableModel dtm = new DefaultTableModel()
@@ -491,14 +494,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 }
             };
             dtm.setColumnIdentifiers(cols);
-            dtm.setRowCount(lstConfPrecioCuero.size());
-            for (int i = 0; i < lstConfPrecioCuero.size(); i++)
+            dtm.setRowCount(lstConfPrecioManoDeObra.size());
+            for (int i = 0; i < lstConfPrecioManoDeObra.size(); i++)
             {
-                dtm.setValueAt(lstConfPrecioCuero.get(i).getDescTipoRecorte(), i, 0);
-                dtm.setValueAt(lstConfPrecioCuero.get(i).getPorcentaje(), i, 1);
+                dtm.setValueAt(lstConfPrecioManoDeObra.get(i).getDescTipoRecorte(), i, 0);
+                dtm.setValueAt(lstConfPrecioManoDeObra.get(i).getCosto(), i, 1);
             }
-            tblConfCostoCuero.setModel(dtm);
-            tblConfCostoCuero.getTableHeader().setReorderingAllowed(false);
+            tblConfCostoManoDeObra.setModel(dtm);
+            tblConfCostoManoDeObra.getTableHeader().setReorderingAllowed(false);
         }
         catch (Exception e)
         {
@@ -2340,7 +2343,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jmCostoManoDeObraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCostoManoDeObraActionPerformed
         abrirDialogo(dlgPrecioManoDeObra, 450, 300);
-       cargarConfPrecioCuero();
+        cargarConfPrecioManoDeObra();
     }//GEN-LAST:event_jmCostoManoDeObraActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed

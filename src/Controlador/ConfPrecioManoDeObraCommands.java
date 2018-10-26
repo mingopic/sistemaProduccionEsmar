@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.ConfPrecioManoDeObra;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -60,5 +61,19 @@ public class ConfPrecioManoDeObraCommands {
             System.err.println(e);
         }
         return configuraciones;
+    }
+    
+    //Método para actualizar el porcentaje del precio de un tipo de recorte
+    public static void actualizarCosto(ConfPrecioManoDeObra cpm) throws Exception {
+        String query = "exec sp_actConfPrecioManoDeObra "
+                + cpm.getIdConfPrecioManoDeObra()
+                + ", " + cpm.getCosto();
+        
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

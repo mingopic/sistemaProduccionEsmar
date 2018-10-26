@@ -9,6 +9,15 @@ go
 
 create procedure sp_obtConfPrecioManoDeObra
 as begin
+  declare @fecha date
+  
+  set @fecha =
+  (
+    select max
+      (fecha) as fecha
+    from
+      tb_confPrecioManoDeObra
+  )
   
   select
     cp.idConfPrecioManoDeObra
@@ -19,8 +28,10 @@ as begin
   from 
     tb_confPrecioManoDeObra cp
     
-    inner join 
-      tb_tipoRecorte tr
-    on
-      tr.idTipoRecorte = cp.idTipoRecorte
+  inner join 
+    tb_tipoRecorte tr
+  on
+    tr.idTipoRecorte = cp.idTipoRecorte
+  where
+    cp.fecha = @fecha
 end

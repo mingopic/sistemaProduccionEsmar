@@ -49,6 +49,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlImportar pnlImportar;
     PnlTambores pnlTambores;
     PnlCalibres pnlCalibres;
+    PnlPrecioVenta pnlPrecioVenta;
     PnlCross pnlCross;
     PnlSemiterminado pnlSemiterminado;
     PnlFichaProduccion pnlFichaProduccion;
@@ -793,6 +794,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmSubProcesos = new javax.swing.JMenuItem();
         jmProveedores = new javax.swing.JMenuItem();
         Usuarios = new javax.swing.JMenuItem();
+        jmPrecioVenta = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
         jmRangosPeso = new javax.swing.JMenuItem();
@@ -2180,6 +2182,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(Usuarios);
 
+        jmPrecioVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page.png"))); // NOI18N
+        jmPrecioVenta.setText("Precios de venta");
+        jmPrecioVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmPrecioVentaActionPerformed(evt);
+            }
+        });
+        jmpCatalogos.add(jmPrecioVenta);
+
         jMenuBar1.add(jmpCatalogos);
 
         jmpConfiguraciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cog.png"))); // NOI18N
@@ -2815,6 +2826,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostoCentroKeyTyped
 
+    private void jmPrecioVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmPrecioVentaActionPerformed
+        try 
+        {
+            pnlPrecioVenta = new PnlPrecioVenta();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlPrecioVenta, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlPrecioVenta.getGraphics());
+            
+            lblVentana.setText("Catálogo de Precios de venta");
+            ImageIcon ico=new ImageIcon("src/Imagenes/ruler.png");
+            lblVentana.setIcon(ico);
+        } 
+        catch (Exception ex) 
+        {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jmPrecioVentaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2953,6 +2983,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmCostoManoDeObra;
     private javax.swing.JMenuItem jmInsumosXproceso;
     private javax.swing.JMenuItem jmMermas;
+    private javax.swing.JMenuItem jmPrecioVenta;
     private javax.swing.JMenuItem jmProveedores;
     private javax.swing.JMenuItem jmRangosPeso;
     private javax.swing.JMenuItem jmSalir;

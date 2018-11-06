@@ -13,6 +13,6 @@ create table tb_confPrecioManoDeObra
   idConfPrecioManoDeObra  int not null identity(1,1) primary key
   , idTipoRecorte         int not null foreign key references tb_tipoRecorte(idTipoRecorte)
   , costo                 float
-  , fecha                 date
+  , fecha                 datetime
 )
 go

@@ -9,7 +9,7 @@ go
 
 create procedure sp_obtConfPrecioManoDeObra
 as begin
-  declare @fecha date
+  declare @fecha datetime
   
   set @fecha =
   (

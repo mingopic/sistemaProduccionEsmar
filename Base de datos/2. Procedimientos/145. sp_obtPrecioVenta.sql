@@ -18,7 +18,7 @@ as begin
   
   select
     tr.descripcion as tipoRecorte
-    , c.descripcion as calibbre
+    , c.descripcion as calibre
     , s.descripcion as seleccion
     , pv.precio
     , pv.fecha
@@ -30,19 +30,16 @@ as begin
     tb_tipoRecorte as tr
   on
     pv.idTipoRecorte = tr.idTipoRecorte
-    and pv.idTipoRecorte = @idTipoRecorte
   
   inner join
     tb_calibre as c
   on
     pv.idCalibre = c.idCalibre
-    and pv.idCalibre = @idCalibre
     
   inner join
     tb_seleccion as s
   on
     pv.idSeleccion = s.idSeleccion
-    and pv.idSeleccion = @idSeleccion
     
   where
   (

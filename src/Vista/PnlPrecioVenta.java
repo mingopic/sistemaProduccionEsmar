@@ -233,30 +233,29 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             pv.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
             pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteAgregar.getSelectedIndex()][0]));
             
-            //Valida que no haya un tambor registrado con los mismos datos en BD
-//            if (c.getIdCalibre()== 0) 
-//            {
-//                c.setDescripcion(nombre);
-//                if (cmbEstatusAgregar.getSelectedItem().toString().equals("Activo"))
-//                {
-//                    c.setEstatus(1);
-//                }
-//                else
-//                {
-//                    c.setEstatus(0);
-//                }
-//                cc.insertarCalibre(c);
-//                dlgAgregarCalibre.setVisible(false);
-//                JOptionPane.showMessageDialog(null, "Calibre registrado correctamente");
-//                actualizarTablaPrecioVenta();
-//            }
+            //Valida que no haya un precio de venta registrado con los mismos datos en BD
+            int valida = pvc.obtenerPrecioVentaDisp(pv);
+            
+            if (valida == 0) 
+            {
+                 pvc.insertarPrecioVenta(pv);
+                dlgAgregarPrecioVenta.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Precio de Venta registrado correctamente");
+                actualizarTablaPrecioVenta();
+            }
+            else
+            {
+                dlgAgregarPrecioVenta.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Registro existente");
+                dlgAgregarPrecioVenta.setVisible(true);
+            }
         } 
         catch (Exception e) 
         {   
-//            System.err.println(e);
-//            dlgAgregarCalibre.setVisible(false);
-//            JOptionPane.showMessageDialog(null, "Error al insertar Calibre", "Error", JOptionPane.ERROR_MESSAGE);
-//            dlgAgregarCalibre.setVisible(true);
+            System.err.println(e);
+            dlgAgregarPrecioVenta.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Error al insertar Precio de Venta", "Error", JOptionPane.ERROR_MESSAGE);
+            dlgAgregarPrecioVenta.setVisible(true);
         }
     }
     

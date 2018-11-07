@@ -6,10 +6,14 @@
 package Controlador;
 
 import Modelo.Calibre;
+import Modelo.PrecioVenta;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -38,6 +42,7 @@ public class PrecioVentaCommands {
         
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
         rs = stmt.executeQuery(query);
         
         if (rs.last()) {
@@ -48,10 +53,13 @@ public class PrecioVentaCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) {
                 precioVenta[i][0]= rs.getString("tipoRecorte");
-                precioVenta[i][1]= rs.getString("calibbre");
+                precioVenta[i][1]= rs.getString("calibre");
                 precioVenta[i][2]= rs.getString("seleccion");
                 precioVenta[i][3]= rs.getString("precio");
-                precioVenta[i][4]= rs.getString("fecha");
+                
+                Date sqlDate = rs.getDate("fecha");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                precioVenta[i][4] = sdf.format(sqlDate);
                 precioVenta[i][5]= rs.getString("idPrecioVenta");
                 i++;
             }
@@ -61,5 +69,52 @@ public class PrecioVentaCommands {
         stmt.close();
         c.desconectar();
         return precioVenta;
+    }
+    
+    //Método que se llama para insertar un calibre
+    public static void insertarPrecioVenta(PrecioVenta pv) throws Exception {
+        String query= "execute sp_insPrecioVenta "
+                + "" + pv.getIdSeleccion() +","
+                + pv.getIdCalibre()+","
+                + pv.getIdTipoRecorte()+","
+                + pv.getPrecio();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para obtener todos los calibres activos en BD
+    public static int obtenerPrecioVentaDisp(PrecioVenta pv) throws Exception
+    {
+        int idPrecioVenta = 0;
+        
+        String query="execute sp_obtPrecioVentaDisp "
+                + pv.getIdSeleccion()
+                + "," + pv.getIdCalibre()
+                + "," + pv.getIdTipoRecorte();
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) {
+            rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                idPrecioVenta = rs.getInt("idPrecioVenta");
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return idPrecioVenta;
     }
 }

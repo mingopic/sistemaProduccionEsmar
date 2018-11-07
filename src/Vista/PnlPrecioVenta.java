@@ -91,6 +91,19 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
     }
     
+    public void llenarComboCalibreEditar() throws Exception
+    {
+        cc = new CalibreCommands();
+        calibres = cc.llenarComboboxCalibre();
+        
+        int i=0;
+        while (i<calibres.length)
+        {
+            cmbCalibreEditar.addItem(calibres[i][1]);
+            i++;
+        }
+    }
+    
     //método que llena los combobox del tipo de recorte en la base de datos
     public void llenarComboTipoRecorte() throws Exception
     {
@@ -118,6 +131,19 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
     }
     
+    public void llenarComboTipoRecorteEditar() throws Exception
+    {
+        trc = new TipoRecorteCommands();
+        tipoRecorte = trc.llenarComboboxTipoRecorte();
+        
+        int i=0;
+        while (i<tipoRecorte.length)
+        {
+            cmbTipoRecorteEditar.addItem(tipoRecorte[i][1]);
+            i++;
+        }
+    }
+    
     //método que llena los combobox de la selección en la base de datos
     public void llenarComboSeleccion() throws Exception
     {
@@ -141,6 +167,19 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         while (i<seleccion.length)
         {
             cmbSeleccionAgregar.addItem(seleccion[i][1]);
+            i++;
+        }
+    }
+    
+    public void llenarComboSeleccionEditar() throws Exception
+    {
+        sc = new SeleccionCommands();
+        seleccion = sc.llenarComboboxSeleccion();
+        
+        int i=0;
+        while (i<seleccion.length)
+        {
+            cmbSeleccionEditar.addItem(seleccion[i][1]);
             i++;
         }
     }
@@ -192,8 +231,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             return false;
             }
             };
-            tblCalibres.setModel(dtm);
-            tblCalibres.getTableHeader().setReorderingAllowed(false);
+            tblPrecioVenta.setModel(dtm);
+            tblPrecioVenta.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -359,21 +398,32 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     //Método que abre el dialogo para editar un tambor
     public void abrirDialogoEditar()
     {   
-//        try 
-//        {
-//            dlgEditarCalibre.setSize(410, 210);
-//            dlgEditarCalibre.setPreferredSize(dlgEditarCalibre.getSize());
-//            dlgEditarCalibre.setLocationRelativeTo(null);
-//            dlgEditarCalibre.setAlwaysOnTop(true);
-//            dlgEditarCalibre.setVisible(true);
-//        } 
-//        catch (Exception e) 
-//        {
-//            System.err.println(e);
-//            dlgEditarCalibre.setVisible(false);
-//            JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
-//            dlgEditarCalibre.setVisible(true);
-//        }
+        try 
+        {
+            int fila = tblPrecioVenta.getSelectedRow();
+            
+            llenarComboTipoRecorteEditar();
+            llenarComboSeleccionEditar();
+            llenarComboCalibreEditar();
+            
+            cmbTipoRecorteEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
+            cmbCalibreEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
+            cmbSeleccionEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
+            txtPrecioEditar.setText(String.valueOf(tblPrecioVenta.getValueAt(fila, 3)));
+            
+            dlgEditarPrecioVenta.setSize(385, 285);
+            dlgEditarPrecioVenta.setPreferredSize(dlgEditarPrecioVenta.getSize());
+            dlgEditarPrecioVenta.setLocationRelativeTo(null);
+            dlgEditarPrecioVenta.setAlwaysOnTop(true);
+            dlgEditarPrecioVenta.setVisible(true);
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+            dlgEditarPrecioVenta.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
+            dlgEditarPrecioVenta.setVisible(true);
+        }
     }
     
     private void validarNumeros(java.awt.event.KeyEvent evt, String textoCaja)
@@ -428,19 +478,22 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         cmbCalibreAgregar = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         cmbSeleccionAgregar = new javax.swing.JComboBox<>();
-        dlgEditarCalibre = new javax.swing.JDialog();
+        dlgEditarPrecioVenta = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        txtNombreCalEditar = new javax.swing.JTextField();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        txtPrecioEditar = new javax.swing.JTextField();
         btnGuardarEditar = new javax.swing.JButton();
-        lblIdCalibre = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        cmbEstatusEditar = new javax.swing.JComboBox<>();
+        jLabel19 = new javax.swing.JLabel();
+        cmbTipoRecorteEditar = new javax.swing.JComboBox<>();
+        jLabel20 = new javax.swing.JLabel();
+        cmbCalibreEditar = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
+        cmbSeleccionEditar = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCalibres = new javax.swing.JTable();
+        tblPrecioVenta = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
@@ -585,8 +638,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        dlgEditarCalibre.setBackground(new java.awt.Color(255, 255, 255));
-        dlgEditarCalibre.setResizable(false);
+        dlgEditarPrecioVenta.setBackground(new java.awt.Color(255, 255, 255));
+        dlgEditarPrecioVenta.setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(0, 204, 204));
 
@@ -610,92 +663,110 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("Nombre Calibre:");
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setText("Precio:");
 
-        txtNombreCalEditar.setEditable(false);
-        txtNombreCalEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioEditarKeyTyped(evt);
+            }
+        });
 
         btnGuardarEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnGuardarEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
-        btnGuardarEditar.setText("Guardar cambios");
+        btnGuardarEditar.setText("Guardar");
         btnGuardarEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarEditarActionPerformed(evt);
             }
         });
 
-        lblIdCalibre.setText("idCalibre");
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel19.setText("Tipo Recorte:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel8.setText("Estatus:");
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel20.setText("Calibre:");
 
-        cmbEstatusEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbEstatusEditar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
+        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel21.setText("Selección:");
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombreCalEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(lblIdCalibre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGuardarEditar)))
-                .addContainerGap())
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jLabel8)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbCalibreEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbTipoRecorteEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbSeleccionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPrecioEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGuardarEditar)
+                .addGap(66, 66, 66))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(cmbTipoRecorteEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cmbEstatusEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(cmbCalibreEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(cmbSeleccionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtPrecioEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnGuardarEditar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtNombreCalEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbEstatusEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardarEditar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblIdCalibre, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-        );
 
-        javax.swing.GroupLayout dlgEditarCalibreLayout = new javax.swing.GroupLayout(dlgEditarCalibre.getContentPane());
-        dlgEditarCalibre.getContentPane().setLayout(dlgEditarCalibreLayout);
-        dlgEditarCalibreLayout.setHorizontalGroup(
-            dlgEditarCalibreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout dlgEditarPrecioVentaLayout = new javax.swing.GroupLayout(dlgEditarPrecioVenta.getContentPane());
+        dlgEditarPrecioVenta.getContentPane().setLayout(dlgEditarPrecioVentaLayout);
+        dlgEditarPrecioVentaLayout.setHorizontalGroup(
+            dlgEditarPrecioVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        dlgEditarCalibreLayout.setVerticalGroup(
-            dlgEditarCalibreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dlgEditarCalibreLayout.createSequentialGroup()
+        dlgEditarPrecioVentaLayout.setVerticalGroup(
+            dlgEditarPrecioVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlgEditarPrecioVentaLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        tblCalibres.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tblCalibres.setModel(new javax.swing.table.DefaultTableModel(
+        tblPrecioVenta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblPrecioVenta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -706,8 +777,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblCalibres.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tblCalibres);
+        tblPrecioVenta.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tblPrecioVenta);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
@@ -833,52 +904,35 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAgregarProveedorActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-//        try
-//        {
-//            c = new Calibre();
-//            c.setDescripcion(tblCalibres.getValueAt(tblCalibres.getSelectedRow(), 0).toString());
-//            if (tblCalibres.getValueAt(tblCalibres.getSelectedRow(), 1).toString().equals("Activo"))
-//            {
-//                c.setEstatus(1);
-//            }
-//            else
-//            {
-//                c.setEstatus(0);
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de calibres","Advertencia",JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
-//        
-//        try 
-//        {
-//            c = cc.obtenerCalibreXNombre(c);
-//            
-//            txtNombreCalEditar.setText(c.getDescripcion());
-//            lblIdCalibre.setText(String.valueOf(c.getIdCalibre()));
-//            lblIdCalibre.setVisible(false);
-//            abrirDialogoEditar();
-//        }  
-//        catch (Exception e) 
-//        {
-//            System.err.println(e);
-//            JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        int fila;
+        
+        try
+        {
+            fila = tblPrecioVenta.getSelectedRow();
+            abrirDialogoEditar();
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de precios de venta","Advertencia",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAgregarActionPerformed
         agregarPrecioVenta();
     }//GEN-LAST:event_btnGuardarAgregarActionPerformed
 
-    private void btnGuardarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEditarActionPerformed
-//        editarCalibre();
-    }//GEN-LAST:event_btnGuardarEditarActionPerformed
-
     private void txtPrecioAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioAgregarKeyTyped
         validarNumeros(evt, txtPrecioAgregar.getText());
     }//GEN-LAST:event_txtPrecioAgregarKeyTyped
+
+    private void txtPrecioEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEditarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioEditarKeyTyped
+
+    private void btnGuardarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEditarActionPerformed
+        
+    }//GEN-LAST:event_btnGuardarEditarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -889,13 +943,15 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JButton btnGuardarEditar;
     private javax.swing.JComboBox<String> cmbCalibre;
     private javax.swing.JComboBox<String> cmbCalibreAgregar;
-    private javax.swing.JComboBox<String> cmbEstatusEditar;
+    private javax.swing.JComboBox<String> cmbCalibreEditar;
     private javax.swing.JComboBox<String> cmbSeleccion;
     private javax.swing.JComboBox<String> cmbSeleccionAgregar;
+    private javax.swing.JComboBox<String> cmbSeleccionEditar;
     private javax.swing.JComboBox<String> cmbTipoRecorte;
     private javax.swing.JComboBox<String> cmbTipoRecorteAgregar;
+    private javax.swing.JComboBox<String> cmbTipoRecorteEditar;
     private javax.swing.JDialog dlgAgregarPrecioVenta;
-    private javax.swing.JDialog dlgEditarCalibre;
+    private javax.swing.JDialog dlgEditarPrecioVenta;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -907,25 +963,26 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
-    private javax.swing.JLabel lblIdCalibre;
-    private javax.swing.JTable tblCalibres;
-    private javax.swing.JTextField txtNombreCalEditar;
+    private javax.swing.JTable tblPrecioVenta;
     private javax.swing.JTextField txtPrecioAgregar;
+    private javax.swing.JTextField txtPrecioEditar;
     // End of variables declaration//GEN-END:variables
 }

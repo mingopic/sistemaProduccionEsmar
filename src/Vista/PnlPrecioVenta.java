@@ -454,6 +454,55 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    //Método para editar un precio de venta en BD
+    private void editarPrecioVenta()
+    {
+        dlgEditarPrecioVenta.setVisible(false);
+        if (JOptionPane.showConfirmDialog(null, "¿Realmente desea guardar las modificaciones?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+        {
+            int fila = tblPrecioVenta.getSelectedRow();
+            
+            try
+            {
+                pv = new PrecioVenta();
+                pvc = new PrecioVentaCommands();
+                
+                pv.setIdTipoRecorte(Integer.parseInt(datos[fila][5]));
+                
+                //Elimina espacios, tabuladores y retornos delante.
+                String precio = txtPrecioEditar.getText().replaceAll("^\\s*","");
+                
+                //Validar que el precio de venta no este vacío
+                if (precio.equals(""))
+                {   
+                    dlgEditarPrecioVenta.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Ingrese un precio de venta","Mensaje",JOptionPane.WARNING_MESSAGE);
+                    dlgEditarPrecioVenta.setVisible(true);
+                    return;
+                }
+
+                pv.setIdPrecioVenta(Integer.parseInt(datos[fila][5]));
+                pv.setIdSeleccion(Integer.parseInt(seleccion[cmbSeleccionEditar.getSelectedIndex()][0]));
+                pv.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEditar.getSelectedIndex()][0]));
+                pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteEditar.getSelectedIndex()][0]));
+                pv.setPrecio(Float.parseFloat(txtPrecioEditar.getText()));
+                pvc.actualizarPrecioVenta(pv);
+                dlgEditarPrecioVenta.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Precio de venta actualizado correctamente");
+                actualizarTablaPrecioVenta();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+                dlgEditarPrecioVenta.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Error al actualizar precio de venta", "Error", JOptionPane.ERROR_MESSAGE);
+                dlgEditarPrecioVenta.setVisible(true);
+            }
+        }
+        else
+            dlgEditarPrecioVenta.setVisible(true);
+    }
             
     /**
      * This method is called from within the constructor to initialize the form.
@@ -687,11 +736,17 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel19.setText("Tipo Recorte:");
 
+        cmbTipoRecorteEditar.setEnabled(false);
+
         jLabel20.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel20.setText("Calibre:");
 
+        cmbCalibreEditar.setEnabled(false);
+
         jLabel21.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel21.setText("Selección:");
+
+        cmbSeleccionEditar.setEnabled(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -904,11 +959,9 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAgregarProveedorActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int fila;
-        
         try
         {
-            fila = tblPrecioVenta.getSelectedRow();
+            int fila = tblPrecioVenta.getSelectedRow();
             abrirDialogoEditar();
         }
         catch (Exception e)
@@ -931,7 +984,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_txtPrecioEditarKeyTyped
 
     private void btnGuardarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEditarActionPerformed
-        
+        editarPrecioVenta();
     }//GEN-LAST:event_btnGuardarEditarActionPerformed
 
 

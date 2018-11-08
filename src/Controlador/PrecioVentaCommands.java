@@ -117,4 +117,20 @@ public class PrecioVentaCommands {
         c.desconectar();
         return idPrecioVenta;
     }
+    
+    //Método que se llama para actualizar detos de un precio de venta
+    public static void actualizarPrecioVenta(PrecioVenta pv) throws Exception {
+        String query= "execute sp_actPrecioVenta "
+                + "" + pv.getIdPrecioVenta()+ ""
+                + ", " + pv.getIdSeleccion()
+                + ", " + pv.getIdCalibre()
+                + ", " + pv.getIdTipoRecorte()
+                + ", " + pv.getPrecio();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
 }

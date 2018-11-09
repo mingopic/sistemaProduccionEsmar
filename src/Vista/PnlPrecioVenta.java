@@ -16,10 +16,20 @@ import Modelo.PrecioVenta;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
 import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -41,6 +51,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     String[][] seleccion = null;
     String[][] datos;
     DefaultTableModel dtm;
+    private final String imagen="/Imagenes/logo_esmar.png";
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols_tblPrecioVenta = new String[]
@@ -198,7 +209,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
         else
         {
-            tr.setIdTipoRecorte(Integer.parseInt(cmbTipoRecorte.getSelectedItem().toString()));
+            tr.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorte.getSelectedIndex()-1][0]));
         }
         
         //validamos si esta seleccionado algún calibre para hacer filtro
@@ -208,7 +219,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
         else
         {
-            c.setIdCalibre(Integer.parseInt(cmbCalibre.getSelectedItem().toString()));
+            c.setIdCalibre(Integer.parseInt(calibres[cmbCalibre.getSelectedIndex()-1][0]));
         }
         
         //validamos si esta seleccionada alguna selección para hacer filtro
@@ -218,7 +229,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
         else
         {
-            s.setIdSeleccion(Integer.parseInt(cmbSeleccion.getSelectedItem().toString()));
+            s.setIdSeleccion(Integer.parseInt(seleccion[cmbSeleccion.getSelectedIndex()-1][0]));
         }
         
         try 
@@ -407,8 +418,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             llenarComboCalibreEditar();
             
             cmbTipoRecorteEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
-            cmbCalibreEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
-            cmbSeleccionEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
+            cmbCalibreEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 1)));
+            cmbSeleccionEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 2)));
             txtPrecioEditar.setText(String.valueOf(tblPrecioVenta.getValueAt(fila, 3)));
             
             dlgEditarPrecioVenta.setSize(385, 285);
@@ -502,6 +513,38 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
         else
             dlgEditarPrecioVenta.setVisible(true);
+    }
+    
+    public void generarReportePrecioVenta()
+    {
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/ReportePrecioVenta.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("idTipoRecorte", tr.getIdTipoRecorte());
+            parametros.put("idCalibre", c.getIdCalibre());
+            parametros.put("idSeleccion", s.getIdSeleccion());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
             
     /**
@@ -845,6 +888,11 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -859,6 +907,11 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jToolBar2.add(jLabel11);
 
         cmbTipoRecorte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbTipoRecorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoRecorteActionPerformed(evt);
+            }
+        });
         jToolBar2.add(cmbTipoRecorte);
 
         jLabel13.setText("   ");
@@ -872,6 +925,11 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jToolBar2.add(jLabel12);
 
         cmbCalibre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbCalibre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCalibreActionPerformed(evt);
+            }
+        });
         jToolBar2.add(cmbCalibre);
 
         jLabel14.setText("   ");
@@ -884,6 +942,11 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jToolBar2.add(jLabel16);
 
         cmbSeleccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbSeleccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSeleccionActionPerformed(evt);
+            }
+        });
         jToolBar2.add(cmbSeleccion);
 
         jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -986,6 +1049,22 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private void btnGuardarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEditarActionPerformed
         editarPrecioVenta();
     }//GEN-LAST:event_btnGuardarEditarActionPerformed
+
+    private void cmbTipoRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoRecorteActionPerformed
+        actualizarTablaPrecioVenta();
+    }//GEN-LAST:event_cmbTipoRecorteActionPerformed
+
+    private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed
+        actualizarTablaPrecioVenta();
+    }//GEN-LAST:event_cmbCalibreActionPerformed
+
+    private void cmbSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSeleccionActionPerformed
+        actualizarTablaPrecioVenta();
+    }//GEN-LAST:event_cmbSeleccionActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        generarReportePrecioVenta();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -2835,7 +2835,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlPrecioVenta.getGraphics());
             
             lblVentana.setText("Catálogo de Precios de venta");
-            ImageIcon ico=new ImageIcon("src/Imagenes/ruler.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/page.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 

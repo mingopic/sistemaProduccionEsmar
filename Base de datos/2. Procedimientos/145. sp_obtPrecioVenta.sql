@@ -10,9 +10,9 @@ go
 
 create procedure sp_obtPrecioVenta
 (
-  @idSeleccion     int
+  @idTipoRecorte    int
   , @idCalibre     int
-  , @idTipoRecorte int
+  , @idSeleccion int
 )
 as begin
   

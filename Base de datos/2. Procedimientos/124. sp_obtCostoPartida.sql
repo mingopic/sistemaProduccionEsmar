@@ -38,6 +38,8 @@ as begin
   begin
     set @costoTotalGarras = 0
   end
+  
+  
 
   select
     pa.noPartida
@@ -53,6 +55,7 @@ as begin
     , pr.idProceso
     , tr.idTipoRecorte
     , @costoTotalGarras as costoGarras
+    , fpd.costoManoObra
 
   from
     tb_partidaDet pd

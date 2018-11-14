@@ -30,6 +30,10 @@ as begin
     , @porcentajePrecioXpza float
     , @costoCueroRecorte    float
     , @costoGarra           float
+    , @ManoObra             float
+    , @costoManoObra        float
+  
+  
   
   set
     @costoXkg = @costoInsumosFicha / @kgTotal
@@ -82,6 +86,30 @@ as begin
       @costoCueroRecorte = (@noPiezasPartida * @porcentajePrecioXpza) * (@precioXpiezaRecCuero - (@costoGarra * 2))
   end
   
+  set
+    @ManoObra = 
+    (
+      select
+        costo
+      from
+        tb_confPrecioManoDeObra
+      where
+        idTipoRecorte = @idTipoRecorte
+      and
+        fecha =
+        (
+          select max
+          (
+            fecha
+          )
+          from
+            tb_confPrecioManoDeObra
+        )
+    )
+  
+  set
+    @costoManoObra = @ManoObra * @noPiezasPartida
+  
   insert into
     tb_fichaProdDet
     (
@@ -91,6 +119,7 @@ as begin
       , kgTotal
       , costoTotalCuero
       , costoInsumos
+      , costoManoObra
     )
     
   values
@@ -101,6 +130,7 @@ as begin
     , @kgPartida
     , @costoCueroRecorte
     , @costoInsumosPartida
+    , @costoManoObra
   )
 end
 go

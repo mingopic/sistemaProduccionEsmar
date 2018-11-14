@@ -16,5 +16,6 @@ create table tb_fichaProd
   , kgTotal        float
   , costoInsumos   float
   , fechaCreacion  date
+  , costoManoObra  float
 )
 go

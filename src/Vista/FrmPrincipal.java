@@ -805,6 +805,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpBaseDeDatos = new javax.swing.JMenu();
         jmiExportar = new javax.swing.JMenuItem();
         jmiImportar = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
 
         dlgLogin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -2280,6 +2282,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jmpBaseDeDatos);
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report_key.png"))); // NOI18N
+        jMenu1.setText("Almacen");
+
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+        jMenuItem3.setText("Reporte de Inventario de Almacen");
+        jMenu1.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu1);
+
         jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
         jmpAcercaDe.setText("Acerca de");
         jmpAcercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2633,8 +2644,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 cpc.setIdConfPrecioCuero(lstConfPrecioCuero.get(i).getIdConfPrecioCuero());
                 cpc.setPorcentaje(Double.parseDouble(tblConfCostoCuero.getValueAt(i, 1).toString()) / 100);
                 cpcc.actualizarPorcentajePrecio(cpc);
-                cargarConfPrecioCuero();
+                
             }
+            cargarConfPrecioCuero();
             dlgPrecioCuero.setVisible(false);
             JOptionPane.showMessageDialog(null, "Configuraciones guardadas correctamente","Mensaje",JOptionPane.INFORMATION_MESSAGE);
             dlgPrecioCuero.setVisible(true);
@@ -2941,9 +2953,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

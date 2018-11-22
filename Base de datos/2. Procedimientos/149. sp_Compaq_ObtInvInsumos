@@ -16,6 +16,7 @@ as begin
     , pr.CNOMBREPRODUCTO
     , ump.CNOMBREUNIDAD
     , (CENTRADASPERIODO12 - CSALIDASPERIODO12) as existencia
+    , (CCOSTOENTRADASPERIODO12 - CCOSTOSALIDASPERIODO12) as costo
   
   from
     admProductos pr

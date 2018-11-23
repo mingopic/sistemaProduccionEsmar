@@ -1968,6 +1968,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Reporte de Inventario de Almacen"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -6,6 +6,7 @@
 package Vista;
 
 import Controlador.ConexionBD;
+import Controlador.ConfGastosFabricacionCommands;
 import Controlador.ConfPrecioManoDeObraCommands;
 import Controlador.ConfiPrecioCueroCommands;
 import Controlador.ConfiguracionMermaCommands;
@@ -13,6 +14,7 @@ import Controlador.ControladorUsuario;
 import Controlador.CostoGarraCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.RolesXUsuarioCommands;
+import Modelo.ConfGastosFabricacion;
 import Modelo.ConfPrecioCuero;
 import Modelo.ConfPrecioManoDeObra;
 import Modelo.ConfiguracionMerma;
@@ -75,6 +77,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static String[] roles;
     List<ConfPrecioCuero> lstConfPrecioCuero;
     List<ConfPrecioManoDeObra> lstConfPrecioManoDeObra;
+    List<ConfGastosFabricacion> lstConfGastosFabricacion;
     private final String imagen="/Imagenes/logo_esmar.png";
     /**
      * Creates new form FrmPrincipal
@@ -520,21 +523,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }
     
-    private void cargarConfPrecioManoDeObra1()
+    private void cargarConfGastosFabricacion()
     {
         try
         {
-            ConfPrecioManoDeObraCommands cpmc = new ConfPrecioManoDeObraCommands();
-            lstConfPrecioManoDeObra = cpmc.obtenerConfPrecioManoDeObra();
+            ConfGastosFabricacionCommands cgfc = new ConfGastosFabricacionCommands();
+            lstConfGastosFabricacion = cgfc.obtenerConfGastosFabricacion();
             
-            txtCostoEntero.setText(String.valueOf(lstConfPrecioManoDeObra.get(0).getCosto()));
-            txtCostoDelSillero.setText(String.valueOf(lstConfPrecioManoDeObra.get(1).getCosto()));
-            txtCostoCrupSillero.setText(String.valueOf(lstConfPrecioManoDeObra.get(2).getCosto()));
-            txtCostoLados.setText(String.valueOf(lstConfPrecioManoDeObra.get(3).getCosto()));
-            txtCostoCentroCas.setText(String.valueOf(lstConfPrecioManoDeObra.get(4).getCosto()));
-            txtCostoCentroQue.setText(String.valueOf(lstConfPrecioManoDeObra.get(5).getCosto()));
-            txtCostoDelSuela.setText(String.valueOf(lstConfPrecioManoDeObra.get(6).getCosto()));
-            txtCostoCentro.setText(String.valueOf(lstConfPrecioManoDeObra.get(7).getCosto()));
+            txtCostoEntero1.setText(String.valueOf(lstConfGastosFabricacion.get(0).getCosto()));
+            txtCostoDelSillero1.setText(String.valueOf(lstConfGastosFabricacion.get(1).getCosto()));
+            txtCostoCrupSillero1.setText(String.valueOf(lstConfGastosFabricacion.get(2).getCosto()));
+            txtCostoLados1.setText(String.valueOf(lstConfGastosFabricacion.get(3).getCosto()));
+            txtCostoCentroCas1.setText(String.valueOf(lstConfGastosFabricacion.get(4).getCosto()));
+            txtCostoCentroQue1.setText(String.valueOf(lstConfGastosFabricacion.get(5).getCosto()));
+            txtCostoDelSuela1.setText(String.valueOf(lstConfGastosFabricacion.get(6).getCosto()));
+            txtCostoCentro1.setText(String.valueOf(lstConfGastosFabricacion.get(7).getCosto()));
         }
         catch (Exception e)
         {
@@ -694,6 +697,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void cargarConfPrecioManoDeObra1()
+    {
+        try
+        {
+            ConfPrecioManoDeObraCommands cpmc = new ConfPrecioManoDeObraCommands();
+            lstConfPrecioManoDeObra = cpmc.obtenerConfPrecioManoDeObra();
+            
+            txtCostoEntero.setText(String.valueOf(lstConfPrecioManoDeObra.get(0).getCosto()));
+            txtCostoDelSillero.setText(String.valueOf(lstConfPrecioManoDeObra.get(1).getCosto()));
+            txtCostoCrupSillero.setText(String.valueOf(lstConfPrecioManoDeObra.get(2).getCosto()));
+            txtCostoLados.setText(String.valueOf(lstConfPrecioManoDeObra.get(3).getCosto()));
+            txtCostoCentroCas.setText(String.valueOf(lstConfPrecioManoDeObra.get(4).getCosto()));
+            txtCostoCentroQue.setText(String.valueOf(lstConfPrecioManoDeObra.get(5).getCosto()));
+            txtCostoDelSuela.setText(String.valueOf(lstConfPrecioManoDeObra.get(6).getCosto()));
+            txtCostoCentro.setText(String.valueOf(lstConfPrecioManoDeObra.get(7).getCosto()));
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Error al recuperar datos de la BD", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -3129,7 +3154,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             dlgPrecioManoDeObra1.setVisible(false);
             JOptionPane.showMessageDialog(null, "Cambio realizado correctamente","Mensaje",JOptionPane.WARNING_MESSAGE);
             dlgPrecioManoDeObra1.setVisible(true);
-            cargarConfPrecioManoDeObra1();
+            cargarConfPrecioManoDeObra();
         } 
         catch (Exception e) 
         {
@@ -3228,7 +3253,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCostoEntero1KeyTyped
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        try 
+        {
+            ConfGastosFabricacion cgf = new ConfGastosFabricacion();
+            ConfGastosFabricacionCommands cgfc = new ConfGastosFabricacionCommands();
+
+            cgf.setIdConfGastosFabricacion(lstConfGastosFabricacion.get(0).getIdConfGastosFabricacion());
+            cgf.setCosto(Double.parseDouble(txtCostoEntero1.getText()));
+            cgfc.actualizarCosto(cgf);
+            dlgGastosDeFabricacion.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Cambio realizado correctamente","Mensaje",JOptionPane.WARNING_MESSAGE);
+            dlgGastosDeFabricacion.setVisible(true);
+            cargarConfGastosFabricacion();
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+            dlgGastosDeFabricacion.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Error al guardar las configuraciones de gastos de fabricación","Error",JOptionPane.WARNING_MESSAGE);
+            dlgGastosDeFabricacion.setVisible(true);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void txtCostoDelSillero1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoDelSillero1KeyReleased
@@ -3289,7 +3333,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         abrirDialogo(dlgGastosDeFabricacion, 450, 450);
-//        cargarConfPrecioManoDeObra1();
+        cargarConfGastosFabricacion();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**

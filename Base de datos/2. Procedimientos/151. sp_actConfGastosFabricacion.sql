@@ -1,16 +1,16 @@
 use esmarProd
 go
 
-if exists (select name from sys.sysobjects WHERE name = 'sp_actConfPrecioManoDeObra')
+if exists (select name from sys.sysobjects WHERE name = 'sp_actConfGastosFabricacion')
 begin 
   drop
-    procedure sp_actConfPrecioManoDeObra
+    procedure sp_actConfGastosFabricacion
 end
 go
 
-create procedure sp_actConfPrecioManoDeObra
+create procedure sp_actConfGastosFabricacion
 (
-	@idConfPrecioManoDeObra int
+	@idConfGastosFabricacion int
 	, @costo                float
 )
 as begin
@@ -121,7 +121,7 @@ as begin
   set @costoCentro = @costo * @porcCentro
     
   insert into
-    tb_confPrecioManoDeObra
+    tb_confGastosFabricacion
     (
       idTipoRecorte
       , costo

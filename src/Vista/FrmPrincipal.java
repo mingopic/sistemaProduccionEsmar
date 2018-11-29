@@ -807,6 +807,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtCostoDelSuela = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
         txtCostoCentro = new javax.swing.JTextField();
+        dlgGastosDeFabricacion = new javax.swing.JDialog();
+        jPanel26 = new javax.swing.JPanel();
+        jPanel27 = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        jPanel30 = new javax.swing.JPanel();
+        jLabel33 = new javax.swing.JLabel();
+        txtCostoEntero1 = new javax.swing.JTextField();
+        jPanel31 = new javax.swing.JPanel();
+        jToolBar8 = new javax.swing.JToolBar();
+        jButton5 = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
+        txtCostoDelSillero1 = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        txtCostoCrupSillero1 = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        txtCostoLados1 = new javax.swing.JTextField();
+        jLabel37 = new javax.swing.JLabel();
+        txtCostoCentroCas1 = new javax.swing.JTextField();
+        jLabel38 = new javax.swing.JLabel();
+        txtCostoCentroQue1 = new javax.swing.JTextField();
+        jLabel39 = new javax.swing.JLabel();
+        txtCostoDelSuela1 = new javax.swing.JTextField();
+        jLabel40 = new javax.swing.JLabel();
+        txtCostoCentro1 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         pnlMenu = new javax.swing.JPanel();
         btnInicio = new javax.swing.JButton();
@@ -841,6 +865,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmCostoCuero = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jmCostoManoDeObra = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jmpBaseDeDatos = new javax.swing.JMenu();
         jmiExportar = new javax.swing.JMenuItem();
         jmiImportar = new javax.swing.JMenuItem();
@@ -1939,6 +1964,286 @@ public class FrmPrincipal extends javax.swing.JFrame {
             .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel27.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel32.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
+        jLabel32.setText("Configuración Gastos De Fabricación");
+
+        javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
+        jPanel27.setLayout(jPanel27Layout);
+        jPanel27Layout.setHorizontalGroup(
+            jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel27Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel27Layout.setVerticalGroup(
+            jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel30.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel33.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel33.setText("Entero $");
+
+        txtCostoEntero1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoEntero1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoEntero1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoEntero1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoEntero1KeyTyped(evt);
+            }
+        });
+
+        jToolBar8.setFloatable(false);
+        jToolBar8.setRollover(true);
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+        jButton5.setText("Guardar");
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jToolBar8.add(jButton5);
+
+        javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
+        jPanel31.setLayout(jPanel31Layout);
+        jPanel31Layout.setHorizontalGroup(
+            jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel31Layout.setVerticalGroup(
+            jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel31Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jToolBar8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jLabel34.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel34.setText("Delantero Sillero $");
+
+        txtCostoDelSillero1.setEditable(false);
+        txtCostoDelSillero1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoDelSillero1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoDelSillero1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoDelSillero1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoDelSillero1KeyTyped(evt);
+            }
+        });
+
+        jLabel35.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel35.setText("Crupon Sillero $");
+
+        txtCostoCrupSillero1.setEditable(false);
+        txtCostoCrupSillero1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoCrupSillero1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoCrupSillero1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoCrupSillero1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoCrupSillero1KeyTyped(evt);
+            }
+        });
+
+        jLabel36.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel36.setText("Lados $");
+
+        txtCostoLados1.setEditable(false);
+        txtCostoLados1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoLados1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoLados1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoLados1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoLados1KeyTyped(evt);
+            }
+        });
+
+        jLabel37.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel37.setText("Centro Castaño $");
+
+        txtCostoCentroCas1.setEditable(false);
+        txtCostoCentroCas1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoCentroCas1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoCentroCas1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoCentroCas1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoCentroCas1KeyTyped(evt);
+            }
+        });
+
+        jLabel38.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel38.setText("Centro Quebracho $");
+
+        txtCostoCentroQue1.setEditable(false);
+        txtCostoCentroQue1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoCentroQue1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoCentroQue1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoCentroQue1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoCentroQue1KeyTyped(evt);
+            }
+        });
+
+        jLabel39.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel39.setText("Delantero Suela $");
+
+        txtCostoDelSuela1.setEditable(false);
+        txtCostoDelSuela1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoDelSuela1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoDelSuela1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoDelSuela1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoDelSuela1KeyTyped(evt);
+            }
+        });
+
+        jLabel40.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel40.setText("Centro $");
+
+        txtCostoCentro1.setEditable(false);
+        txtCostoCentro1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCostoCentro1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCostoCentro1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCostoCentro1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoCentro1KeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
+        jPanel30.setLayout(jPanel30Layout);
+        jPanel30Layout.setHorizontalGroup(
+            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel30Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel30Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel30Layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(jLabel40)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtCostoCentro1))
+                            .addGroup(jPanel30Layout.createSequentialGroup()
+                                .addComponent(jLabel39)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtCostoDelSuela1))))
+                    .addGroup(jPanel30Layout.createSequentialGroup()
+                        .addComponent(jLabel38)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtCostoCentroQue1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel30Layout.createSequentialGroup()
+                        .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel30Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel34)
+                                    .addComponent(jLabel33)))
+                            .addComponent(jLabel35, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel36, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel37, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCostoEntero1)
+                            .addComponent(txtCostoDelSillero1)
+                            .addComponent(txtCostoCrupSillero1)
+                            .addComponent(txtCostoLados1)
+                            .addComponent(txtCostoCentroCas1))))
+                .addGap(68, 68, 68))
+        );
+        jPanel30Layout.setVerticalGroup(
+            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel30Layout.createSequentialGroup()
+                .addComponent(jPanel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel33)
+                    .addComponent(txtCostoEntero1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel34)
+                    .addComponent(txtCostoDelSillero1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel35)
+                    .addComponent(txtCostoCrupSillero1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel36)
+                    .addComponent(txtCostoLados1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel37)
+                    .addComponent(txtCostoCentroCas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel38)
+                    .addComponent(txtCostoCentroQue1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel39)
+                    .addComponent(txtCostoDelSuela1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel40)
+                    .addComponent(txtCostoCentro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
+        jPanel26.setLayout(jPanel26Layout);
+        jPanel26Layout.setHorizontalGroup(
+            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel26Layout.setVerticalGroup(
+            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel26Layout.createSequentialGroup()
+                .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout dlgGastosDeFabricacionLayout = new javax.swing.GroupLayout(dlgGastosDeFabricacion.getContentPane());
+        dlgGastosDeFabricacion.getContentPane().setLayout(dlgGastosDeFabricacionLayout);
+        dlgGastosDeFabricacionLayout.setHorizontalGroup(
+            dlgGastosDeFabricacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgGastosDeFabricacionLayout.setVerticalGroup(
+            dlgGastosDeFabricacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -2295,6 +2600,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jmpConfiguraciones.add(jmCostoManoDeObra);
+
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/coins.png"))); // NOI18N
+        jMenuItem4.setText("Gastos De Fabricación");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jmpConfiguraciones.add(jMenuItem4);
 
         jMenuBar1.add(jmpConfiguraciones);
 
@@ -2905,6 +3219,79 @@ public class FrmPrincipal extends javax.swing.JFrame {
         generarReporteInventarioInsumos();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void txtCostoEntero1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoEntero1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoEntero1KeyReleased
+
+    private void txtCostoEntero1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoEntero1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoEntero1KeyTyped
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void txtCostoDelSillero1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoDelSillero1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoDelSillero1KeyReleased
+
+    private void txtCostoDelSillero1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoDelSillero1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoDelSillero1KeyTyped
+
+    private void txtCostoCrupSillero1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCrupSillero1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCrupSillero1KeyReleased
+
+    private void txtCostoCrupSillero1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCrupSillero1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCrupSillero1KeyTyped
+
+    private void txtCostoLados1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoLados1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoLados1KeyReleased
+
+    private void txtCostoLados1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoLados1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoLados1KeyTyped
+
+    private void txtCostoCentroCas1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCentroCas1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCentroCas1KeyReleased
+
+    private void txtCostoCentroCas1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCentroCas1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCentroCas1KeyTyped
+
+    private void txtCostoCentroQue1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCentroQue1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCentroQue1KeyReleased
+
+    private void txtCostoCentroQue1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCentroQue1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCentroQue1KeyTyped
+
+    private void txtCostoDelSuela1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoDelSuela1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoDelSuela1KeyReleased
+
+    private void txtCostoDelSuela1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoDelSuela1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoDelSuela1KeyTyped
+
+    private void txtCostoCentro1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCentro1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCentro1KeyReleased
+
+    private void txtCostoCentro1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoCentro1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCostoCentro1KeyTyped
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        abrirDialogo(dlgGastosDeFabricacion, 450, 450);
+//        cargarConfPrecioManoDeObra1();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2960,6 +3347,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnSemiterminado;
     private javax.swing.JButton btnTerminado;
     private javax.swing.JDialog dlgCostoGarra;
+    private javax.swing.JDialog dlgGastosDeFabricacion;
     private javax.swing.JDialog dlgLogin;
     private javax.swing.JDialog dlgMermas;
     private javax.swing.JDialog dlgPrecioCuero;
@@ -2970,6 +3358,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2995,7 +3384,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3006,6 +3404,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -3024,9 +3423,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel30;
+    private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -3041,6 +3444,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar4;
     private javax.swing.JToolBar jToolBar5;
     private javax.swing.JToolBar jToolBar7;
+    private javax.swing.JToolBar jToolBar8;
     private javax.swing.JMenuItem jmCostoCuero;
     private javax.swing.JMenuItem jmCostoManoDeObra;
     private javax.swing.JMenuItem jmInsumosXproceso;
@@ -3073,14 +3477,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable tblConfCostoManoDeObra;
     private javax.swing.JTextField txtCachAcep;
     private javax.swing.JTextField txtCostoCentro;
+    private javax.swing.JTextField txtCostoCentro1;
     private javax.swing.JTextField txtCostoCentroCas;
+    private javax.swing.JTextField txtCostoCentroCas1;
     private javax.swing.JTextField txtCostoCentroQue;
+    private javax.swing.JTextField txtCostoCentroQue1;
     private javax.swing.JTextField txtCostoCrupSillero;
+    private javax.swing.JTextField txtCostoCrupSillero1;
     private javax.swing.JTextField txtCostoDelSillero;
+    private javax.swing.JTextField txtCostoDelSillero1;
     private javax.swing.JTextField txtCostoDelSuela;
+    private javax.swing.JTextField txtCostoDelSuela1;
     private javax.swing.JTextField txtCostoEntero;
+    private javax.swing.JTextField txtCostoEntero1;
     private javax.swing.JTextField txtCostoGarra;
     private javax.swing.JTextField txtCostoLados;
+    private javax.swing.JTextField txtCostoLados1;
     private javax.swing.JTextField txtHumAcep;
     private javax.swing.JTextField txtRangoMax;
     private javax.swing.JTextField txtRangoMin;

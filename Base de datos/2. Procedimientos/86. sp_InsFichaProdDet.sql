@@ -32,6 +32,8 @@ as begin
     , @costoGarra           float
     , @ManoObra             float
     , @costoManoObra        float
+    , @gastosFabricacion     float
+    , @costoGastosFabricacion float
   
   
   
@@ -110,6 +112,30 @@ as begin
   set
     @costoManoObra = @ManoObra * @noPiezasPartida
   
+  set
+    @gastosFabricacion = 
+    (
+      select
+        costo
+      from
+        tb_confGastosFabricacion
+      where
+        idTipoRecorte = @idTipoRecorte
+      and
+        fecha =
+        (
+          select max
+          (
+            fecha
+          )
+          from
+            tb_confGastosFabricacion
+        )
+    )
+    
+    set
+      @costoGastosFabricacion = @gastosFabricacion * @noPiezasPartida
+  
   insert into
     tb_fichaProdDet
     (
@@ -120,6 +146,7 @@ as begin
       , costoTotalCuero
       , costoInsumos
       , costoManoObra
+      , costoFabricacion
     )
     
   values
@@ -131,6 +158,7 @@ as begin
     , @costoCueroRecorte
     , @costoInsumosPartida
     , @costoManoObra
+    , @costoGastosFabricacion
   )
 end
 go

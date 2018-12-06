@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d5e7ac3b-6cbc-43fe-8376-c197e191df0d">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="225"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -181,7 +181,7 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="2" y="0" width="65" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="6f070afa-d2e5-48a9-ba9e-c88345fbadd5"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{idFichaProd}]]></textFieldExpression>
@@ -189,7 +189,7 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="67" y="0" width="69" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d523b42b-29e8-4dd3-9932-9c4f6b28ecfd"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{noPartida}]]></textFieldExpression>
@@ -197,7 +197,7 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="213" y="0" width="63" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="919df4ea-0301-4a19-a598-0149788d9a1a"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{noPiezasTotal}]]></textFieldExpression>
@@ -205,7 +205,7 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="276" y="0" width="61" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="1c85aa83-63a4-4822-9ccc-7f718bd84f4d"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{kgTotal}]]></textFieldExpression>
@@ -213,7 +213,7 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="337" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="fe80dcf0-fbe3-4ca9-b2b0-18c4a8fa036f"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{costoTotalCuero}]]></textFieldExpression>
@@ -221,7 +221,7 @@
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="487" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8e6d1ed9-1354-4620-8fa6-d40a8cbd2f1c"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{costoInsumos}]]></textFieldExpression>
@@ -229,7 +229,7 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="637" y="0" width="72" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="6b6b7fec-733f-4922-8f06-f04d2e96b069"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{tambor}]]></textFieldExpression>
@@ -237,7 +237,7 @@
 				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="715" y="0" width="82" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="78e69c0b-95e1-4200-9da9-18675eac135e"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fechaCreacion}]]></textFieldExpression>
@@ -245,7 +245,7 @@
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 					<reportElement style="Detail" positionType="Float" mode="Transparent" x="136" y="0" width="77" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="db2ca6ea-fa12-49e0-9d1e-29b14be8978f"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{tipoRecorte}]]></textFieldExpression>
@@ -253,7 +253,7 @@
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="416" y="0" width="71" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="635546bd-5c89-403b-be2f-f80cfa29319a"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{costoCueroXpza}]]></textFieldExpression>
@@ -261,7 +261,7 @@
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="566" y="0" width="71" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="b38e6d10-8a64-44f3-9c8d-a09689ff30ad"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="Times New Roman" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{costoInsumoxKg}]]></textFieldExpression>

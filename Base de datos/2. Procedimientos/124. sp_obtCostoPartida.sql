@@ -55,7 +55,14 @@ as begin
     , pr.idProceso
     , tr.idTipoRecorte
     , @costoTotalGarras as costoGarras
-    , fpd.costoManoObra
+    , case
+        when pr.idProceso = 6 then fpd.costoManoObra
+        else 0.0
+      end as costoManoObra
+    , case
+        when pr.idProceso = 6 then fpd.costoFabricacion
+        else 0.0
+      end as costoFabricacion
 
   from
     tb_partidaDet pd

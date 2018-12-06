@@ -689,7 +689,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     {
         try
         {
-            URL path = this.getClass().getResource("/Reportes/ReporteInvTermi.jasper");
+            URL path = this.getClass().getResource("/Reportes/InvTerminado.jasper");
             
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));

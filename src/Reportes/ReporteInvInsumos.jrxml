@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae23e6fe-bd42-4111-bf99-7b8fce8756ef">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.4641000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
@@ -65,7 +65,7 @@
 				<reportElement mode="Opaque" x="0" y="7" width="555" height="28" forecolor="#000000" backcolor="#CCCCFF" uuid="ec97f442-914e-4469-b5b5-bf250d0da7fb"/>
 			</frame>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="0" y="7" width="180" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f758de0a-f9c9-42be-85fc-26c1a425307c"/>
+				<reportElement style="Column header" mode="Transparent" x="0" y="7" width="217" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f758de0a-f9c9-42be-85fc-26c1a425307c"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -73,7 +73,7 @@
 				<text><![CDATA[Insumo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="180" y="7" width="125" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8289a5e3-5eb3-403e-8dc2-7502e64ee767"/>
+				<reportElement style="Column header" mode="Transparent" x="217" y="7" width="106" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8289a5e3-5eb3-403e-8dc2-7502e64ee767"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -81,7 +81,7 @@
 				<text><![CDATA[Unidad de medida]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="305" y="7" width="125" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a53fbe62-a5af-45de-bbbd-946e69c34ace"/>
+				<reportElement style="Column header" mode="Transparent" x="323" y="7" width="107" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a53fbe62-a5af-45de-bbbd-946e69c34ace"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -103,30 +103,30 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="b4ead135-a5cf-4fc0-ac67-316746166e52"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="180" height="18" uuid="127f2860-eaee-4efa-b66d-fa229efa7cd6"/>
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="217" height="18" uuid="127f2860-eaee-4efa-b66d-fa229efa7cd6"/>
 					<textElement>
-						<font size="14"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CNOMBREPRODUCTO}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="180" y="0" width="125" height="18" uuid="fd18fadf-46f4-47d3-9864-1b4575f222a0"/>
+					<reportElement style="Detail" positionType="Float" x="217" y="0" width="107" height="18" uuid="fd18fadf-46f4-47d3-9864-1b4575f222a0"/>
 					<textElement>
-						<font size="14"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CNOMBREUNIDAD}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0">
-					<reportElement style="Detail" positionType="Float" x="305" y="0" width="125" height="18" uuid="bbf1721b-b20a-461d-bde0-d946fd055bf5"/>
+					<reportElement style="Detail" positionType="Float" x="323" y="0" width="107" height="18" uuid="bbf1721b-b20a-461d-bde0-d946fd055bf5"/>
 					<textElement>
-						<font size="14"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{existencia}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00">
 					<reportElement style="Detail" positionType="Float" x="430" y="0" width="125" height="18" uuid="b1c8b58b-9c65-4158-8ce8-186a8bd47aec"/>
 					<textElement>
-						<font size="14"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
 				</textField>

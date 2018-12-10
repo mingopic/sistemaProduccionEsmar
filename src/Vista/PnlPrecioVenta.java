@@ -11,13 +11,17 @@ import Controlador.ConexionBD;
 import Controlador.PrecioVentaCommands;
 import Controlador.SeleccionCommands;
 import Controlador.TipoRecorteCommands;
+import Controlador.UnidadMedidaCommands;
 import Modelo.Calibre;
 import Modelo.PrecioVenta;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
+import Modelo.UnidadMedida;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +49,9 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     CalibreCommands cc;
     Seleccion s;
     SeleccionCommands sc;
+    UnidadMedida um;
+    UnidadMedidaCommands umc;
+    List<UnidadMedida> lstUnidadMedida;
     
     String[][] tipoRecorte = null;
     String[][] calibres = null;
@@ -56,7 +63,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols_tblPrecioVenta = new String[]
     {
-        "Tipo de Recorte" , "Calibre", "Selección", "Precio", "Unidad de medida", "Fecha" 
+        "Tipo de Recorte" , "Calibre", "Selección", "Precio", "Unidad de medida", "Fecha Actualización" 
     };
    
     public PnlPrecioVenta() throws Exception {
@@ -195,6 +202,24 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         }
     }
     
+    public void llenarComboUnidadMedida() throws Exception
+    {
+        umc = new UnidadMedidaCommands();
+        lstUnidadMedida = new ArrayList<>();
+        cmbUnidadMedidaAgregar.removeAllItems();
+        cmbUnidadMedidaEditar.removeAllItems();
+        
+        lstUnidadMedida = umc.obtenerUnidadMedida();
+        
+        int i=0;
+        while (i < lstUnidadMedida.size())
+        {
+            cmbUnidadMedidaAgregar.addItem(lstUnidadMedida.get(i).getDescripcion());
+            cmbUnidadMedidaEditar.addItem(lstUnidadMedida.get(i).getDescripcion());
+            i++;
+        }
+    }
+    
     //Método para actualizar la tabla de Precio de venta
     private void actualizarTablaPrecioVenta() 
     {
@@ -279,29 +304,17 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 return;
             }
             
-            //Elimina espacios, tabuladores y retornos delante.
-            String unidadMedida = txtUnidadMedida.getText().replaceAll("^\\s*","");
-            
-            //Validar que la unidad de medida no este vacía
-            if (unidadMedida.equals(""))
-            {   
-                dlgAgregarPrecioVenta.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Ingrese una unidad de medida","Mensaje",JOptionPane.WARNING_MESSAGE);
-                dlgAgregarPrecioVenta.setVisible(true);
-                return;
-            }
-            
             pv.setIdSeleccion(Integer.parseInt(seleccion[cmbSeleccionAgregar.getSelectedIndex()][0]));
             pv.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
             pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteAgregar.getSelectedIndex()][0]));
-            pv.setUnidadMedida(unidadMedida);
+            pv.setUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaAgregar.getSelectedIndex()).getIdUnidadMedida());
             
             //Valida que no haya un precio de venta registrado con los mismos datos en BD
             int valida = pvc.obtenerPrecioVentaDisp(pv);
             
             if (valida == 0) 
             {
-                 pvc.insertarPrecioVenta(pv);
+                pvc.insertarPrecioVenta(pv);
                 dlgAgregarPrecioVenta.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Precio de Venta registrado correctamente");
                 actualizarTablaPrecioVenta();
@@ -321,78 +334,6 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             dlgAgregarPrecioVenta.setVisible(true);
         }
     }
-    
-    //Método para editar un calibre en BD
-    private void editarCalibre()
-    {
-//        dlgEditarCalibre.setVisible(false);
-//        if (JOptionPane.showConfirmDialog(null, "¿Realmente desea guardar las modificaciones?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
-//        {
-//            try
-//            {
-//                c = new Calibre();
-//                cc = new CalibreCommands();
-//
-//                //Elimina espacios, tabuladores y retornos delante.
-//                String nombre = txtNombreCalEditar.getText().replaceAll("^\\s*","");
-//                c.setDescripcion(nombre);
-//
-//                //Validar que el nombre del calibre no este vacío
-//                if (c.getDescripcion().equals(""))
-//                {   
-//                    dlgEditarCalibre.setVisible(false);
-//                    JOptionPane.showMessageDialog(null, "Ingrese un nombre de calibre","Mensaje",JOptionPane.WARNING_MESSAGE);
-//                    dlgEditarCalibre.setVisible(true);
-//                    return;
-//                }
-//
-//                //Validar que el nombre del calibre no sea mayor a 15 caracteres
-//                if (c.getDescripcion().length() > 15)
-//                {   
-//                    dlgEditarCalibre.setVisible(false);
-//                    JOptionPane.showMessageDialog(null, "Solo se admiten 15 caracteres \npara el nombre del calibre","Mensaje",JOptionPane.WARNING_MESSAGE);
-//                    dlgEditarCalibre.setVisible(true);
-//                    return;
-//                }
-//
-//                c = cc.obtenerCalibreXNombre(c);
-//
-//                //Valida que no haya un tambor resgistrado con los mismos datos en BD
-//                if (c.getIdCalibre()== 0 || c.getIdCalibre()== Integer.parseInt(lblIdCalibre.getText()))
-//                {
-//                    c.setIdCalibre(Integer.parseInt(lblIdCalibre.getText()));
-//                    c.setDescripcion(nombre);
-//                    if (cmbEstatusEditar.getSelectedItem().toString().equals("Activo"))
-//                    {
-//                        c.setEstatus(1);
-//                    }
-//                    else
-//                    {
-//                        c.setEstatus(0);
-//                    }
-//                    cc.actualizarCalibre(c);
-//                    dlgEditarCalibre.setVisible(false);
-//                    JOptionPane.showMessageDialog(null, "Calibre actualizado correctamente");
-//                    actualizarTablaPrecioVenta();
-//                }
-//                else
-//                {
-//                    dlgEditarCalibre.setVisible(false);
-//                    JOptionPane.showMessageDialog(null, "Ya existe un calibre con el nombre capturado", "Mensaje", JOptionPane.WARNING_MESSAGE);
-//                    dlgEditarCalibre.setVisible(true);
-//                }
-//            }
-//            catch (Exception e)
-//            {
-//                System.err.println(e);
-//                dlgEditarCalibre.setVisible(false);
-//                JOptionPane.showMessageDialog(null, "Error al actualizar calibre", "Error", JOptionPane.ERROR_MESSAGE);
-//                dlgEditarCalibre.setVisible(true);
-//            }
-//        }
-//        else
-//            dlgEditarCalibre.setVisible(true);
-    }
    
     //Método que abre el dialogo para agregar un tambor
     public void abrirDialogoAgregar()
@@ -408,6 +349,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             llenarComboTipoRecorteAgregar();
             llenarComboCalibreAgregar();
             llenarComboSeleccionAgregar();
+            llenarComboUnidadMedida();
             txtPrecioAgregar.setText("");
         } 
         catch (Exception e) 
@@ -429,13 +371,15 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             llenarComboTipoRecorteEditar();
             llenarComboSeleccionEditar();
             llenarComboCalibreEditar();
+            llenarComboUnidadMedida();
             
             cmbTipoRecorteEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
             cmbCalibreEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 1)));
             cmbSeleccionEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 2)));
             txtPrecioEditar.setText(String.valueOf(tblPrecioVenta.getValueAt(fila, 3)));
+            cmbUnidadMedidaEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 4)));
             
-            dlgEditarPrecioVenta.setSize(385, 285);
+            dlgEditarPrecioVenta.setSize(385, 320);
             dlgEditarPrecioVenta.setPreferredSize(dlgEditarPrecioVenta.getSize());
             dlgEditarPrecioVenta.setLocationRelativeTo(null);
             dlgEditarPrecioVenta.setAlwaysOnTop(true);
@@ -492,8 +436,6 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 pv = new PrecioVenta();
                 pvc = new PrecioVentaCommands();
                 
-                pv.setIdTipoRecorte(Integer.parseInt(datos[fila][5]));
-                
                 //Elimina espacios, tabuladores y retornos delante.
                 String precio = txtPrecioEditar.getText().replaceAll("^\\s*","");
                 
@@ -506,10 +448,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                     return;
                 }
 
-                pv.setIdPrecioVenta(Integer.parseInt(datos[fila][5]));
-                pv.setIdSeleccion(Integer.parseInt(seleccion[cmbSeleccionEditar.getSelectedIndex()][0]));
-                pv.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEditar.getSelectedIndex()][0]));
-                pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteEditar.getSelectedIndex()][0]));
+                pv.setIdPrecioVenta(Integer.parseInt(datos[fila][6]));
                 pv.setPrecio(Float.parseFloat(txtPrecioEditar.getText()));
                 pvc.actualizarPrecioVenta(pv);
                 dlgEditarPrecioVenta.setVisible(false);
@@ -583,14 +522,13 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         cmbCalibreAgregar = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         cmbSeleccionAgregar = new javax.swing.JComboBox<>();
-        txtUnidadMedida = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        cmbUnidadMedidaAgregar = new javax.swing.JComboBox<>();
         dlgEditarPrecioVenta = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        txtPrecioEditar = new javax.swing.JTextField();
         btnGuardarEditar = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         cmbTipoRecorteEditar = new javax.swing.JComboBox<>();
@@ -598,6 +536,9 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         cmbCalibreEditar = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
         cmbSeleccionEditar = new javax.swing.JComboBox<>();
+        txtPrecioEditar = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        cmbUnidadMedidaEditar = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrecioVenta = new javax.swing.JTable();
@@ -628,7 +569,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/money_dollar.png"))); // NOI18N
         jLabel2.setText("Agregar Precio de Venta");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -684,11 +625,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtUnidadMedida, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -698,10 +635,14 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(cmbTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrecioAgregar)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -728,10 +669,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                     .addComponent(jLabel3)
                     .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUnidadMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(btnGuardarAgregar)
                 .addContainerGap())
         );
@@ -752,6 +693,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         );
 
         dlgEditarPrecioVenta.setBackground(new java.awt.Color(255, 255, 255));
+        dlgEditarPrecioVenta.setPreferredSize(new java.awt.Dimension(385, 281));
         dlgEditarPrecioVenta.setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(0, 204, 204));
@@ -759,8 +701,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ruler.png"))); // NOI18N
-        jLabel5.setText("Editar Calibre");
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/money_dollar.png"))); // NOI18N
+        jLabel5.setText("Editar Precio de Venta");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -768,8 +710,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(208, 208, 208))
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addGap(120, 120, 120))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -780,13 +722,6 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Precio:");
-
-        txtPrecioEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPrecioEditar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPrecioEditarKeyTyped(evt);
-            }
-        });
 
         btnGuardarEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnGuardarEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
@@ -812,36 +747,42 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
 
         cmbSeleccionEditar.setEnabled(false);
 
+        txtPrecioEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioEditarKeyTyped(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setText("Unidad de medida:");
+
+        cmbUnidadMedidaEditar.setEnabled(false);
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel21)
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cmbCalibreEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbTipoRecorteEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbSeleccionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPrecioEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtPrecioEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbSeleccionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbCalibreEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbTipoRecorteEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnGuardarEditar)
-                .addGap(66, 66, 66))
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -862,7 +803,11 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtPrecioEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnGuardarEditar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -871,8 +816,11 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         dlgEditarPrecioVenta.getContentPane().setLayout(dlgEditarPrecioVentaLayout);
         dlgEditarPrecioVentaLayout.setHorizontalGroup(
             dlgEditarPrecioVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(dlgEditarPrecioVentaLayout.createSequentialGroup()
+                .addGroup(dlgEditarPrecioVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         dlgEditarPrecioVentaLayout.setVerticalGroup(
             dlgEditarPrecioVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1046,7 +994,15 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         try
         {
             int fila = tblPrecioVenta.getSelectedRow();
-            abrirDialogoEditar();
+            if (fila >= 0)
+            {
+                abrirDialogoEditar();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de precios de venta","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+            
         }
         catch (Exception e)
         {
@@ -1062,10 +1018,6 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private void txtPrecioAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioAgregarKeyTyped
         validarNumeros(evt, txtPrecioAgregar.getText());
     }//GEN-LAST:event_txtPrecioAgregarKeyTyped
-
-    private void txtPrecioEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEditarKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPrecioEditarKeyTyped
 
     private void btnGuardarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEditarActionPerformed
         editarPrecioVenta();
@@ -1087,6 +1039,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         generarReportePrecioVenta();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtPrecioEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEditarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioEditarKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAgregarProveedor;
@@ -1103,6 +1059,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbTipoRecorte;
     private javax.swing.JComboBox<String> cmbTipoRecorteAgregar;
     private javax.swing.JComboBox<String> cmbTipoRecorteEditar;
+    private javax.swing.JComboBox<String> cmbUnidadMedidaAgregar;
+    private javax.swing.JComboBox<String> cmbUnidadMedidaEditar;
     private javax.swing.JDialog dlgAgregarPrecioVenta;
     private javax.swing.JDialog dlgEditarPrecioVenta;
     private javax.swing.JButton jButton1;
@@ -1125,6 +1083,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1138,6 +1097,5 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JTable tblPrecioVenta;
     private javax.swing.JTextField txtPrecioAgregar;
     private javax.swing.JTextField txtPrecioEditar;
-    private javax.swing.JTextField txtUnidadMedida;
     // End of variables declaration//GEN-END:variables
 }

@@ -56,7 +56,7 @@ public class PrecioVentaCommands {
                 precioVenta[i][1]= rs.getString("calibre");
                 precioVenta[i][2]= rs.getString("seleccion");
                 precioVenta[i][3]= rs.getString("precio");
-                precioVenta[i][4]= rs.getString("unidadMedida");
+                precioVenta[i][4]= rs.getString("descripcion");
                 
                 Date sqlDate = rs.getDate("fecha");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -124,9 +124,6 @@ public class PrecioVentaCommands {
     public static void actualizarPrecioVenta(PrecioVenta pv) throws Exception {
         String query= "execute sp_actPrecioVenta "
                 + "" + pv.getIdPrecioVenta()+ ""
-                + ", " + pv.getIdSeleccion()
-                + ", " + pv.getIdCalibre()
-                + ", " + pv.getIdTipoRecorte()
                 + ", " + pv.getPrecio();
         PreparedStatement pstmt = null;
         c.conectar();

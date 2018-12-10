@@ -1960,7 +1960,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
                     .addComponent(txtCostoCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
@@ -2240,7 +2240,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel40)
                     .addComponent(txtCostoCentro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
@@ -2553,7 +2553,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(Usuarios);
 
-        jmPrecioVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/page.png"))); // NOI18N
+        jmPrecioVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/money_dollar.png"))); // NOI18N
         jmPrecioVenta.setText("Precios de venta");
         jmPrecioVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3230,13 +3230,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
             pnlPrincipalx.paintAll(pnlPrecioVenta.getGraphics());
             
             lblVentana.setText("Catálogo de Precios de venta");
-            ImageIcon ico=new ImageIcon("src/Imagenes/page.png");
+            ImageIcon ico=new ImageIcon("src/Imagenes/money_dollar.png");
             lblVentana.setIcon(ico);
         } 
         catch (Exception ex) 
         {
             System.out.println(ex);
-            JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al abrir el Panel","Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jmPrecioVentaActionPerformed
 

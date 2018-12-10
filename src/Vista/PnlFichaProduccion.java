@@ -116,6 +116,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     {
         tc = new TamborCommands();
         lstTambor = new ArrayList<>();
+        cmbTambores.removeAllItems();
         
         lstTambor = tc.llenarComboboxTambores();
         
@@ -2477,7 +2478,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNoPiezasSelAcabadoKeyReleased
 
     private void txtNoPiezasSelAcabadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasSelAcabadoKeyTyped
-        // TODO add your handling code here:
+        validarNumerosEnteros(evt);
     }//GEN-LAST:event_txtNoPiezasSelAcabadoKeyTyped
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed

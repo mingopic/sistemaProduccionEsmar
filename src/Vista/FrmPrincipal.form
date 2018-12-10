@@ -2240,7 +2240,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jmPrecioVenta">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/page.png"/>
+                  <Image iconType="3" name="/Imagenes/money_dollar.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Precios de venta"/>
               </Properties>

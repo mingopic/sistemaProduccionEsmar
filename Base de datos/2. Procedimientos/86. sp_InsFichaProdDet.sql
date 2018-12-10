@@ -34,6 +34,8 @@ as begin
     , @costoManoObra        float
     , @gastosFabricacion     float
     , @costoGastosFabricacion float
+    , @costoManoObraFicha     float
+    , @costoGastosFabricacionFicha float
   
   
   
@@ -160,5 +162,67 @@ as begin
     , @costoManoObra
     , @costoGastosFabricacion
   )
+  
+  set
+    @costoManoObraFicha =
+    (
+      select
+        costoManoObra
+      from
+        tb_fichaProd
+      where
+        idFichaProd = @idFichaProd
+    )
+    
+  set
+    @costoGastosFabricacionFicha =
+    (
+      select
+        costoFabricacion
+      from
+        tb_fichaProd
+      where
+        idFichaProd = @idFichaProd
+    )
+    
+  if (@costoManoObraFicha is null)
+  begin
+    update
+      tb_fichaProd
+    set
+      costoManoObra = @costoManoObra
+    where
+      idFichaProd = @idFichaProd
+  end
+  
+  else
+  begin
+    update
+      tb_fichaProd
+    set
+      costoManoObra = costoManoObra + @costoManoObra
+    where
+      idFichaProd = @idFichaProd
+  end
+    
+  if (@costoGastosFabricacionFicha is null)
+  begin
+    update
+      tb_fichaProd
+    set
+      costoFabricacion = @costoGastosFabricacion
+    where
+      idFichaProd = @idFichaProd
+  end
+  
+  else
+  begin
+    update
+      tb_fichaProd
+    set
+      costoFabricacion = costoFabricacion + @costoGastosFabricacion
+    where
+      idFichaProd = @idFichaProd
+  end
 end
 go

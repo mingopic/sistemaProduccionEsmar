@@ -15,6 +15,7 @@ create table tb_PrecioVenta
   , idCalibre     int not null foreign key references tb_calibre(idCalibre)
   , idTipoRecorte int not null foreign key references tb_tipoRecorte(idTipoRecorte)
   , precio        float
+  , unidadMedida  varchar(30)
   , fecha         datetime
 )
 go

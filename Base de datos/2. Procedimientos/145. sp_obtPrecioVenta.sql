@@ -21,6 +21,7 @@ as begin
     , c.descripcion as calibre
     , s.descripcion as seleccion
     , pv.precio
+    , pv.unidadMedida
     , pv.fecha
     , pv.idPrecioVenta
     

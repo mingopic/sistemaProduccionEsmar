@@ -37,7 +37,7 @@ public class PrecioVentaCommands {
         Statement stmt = null;
         ResultSet rs = null;
         int renglones = 0;
-        int columnas = 6;
+        int columnas = 7;
         int i = 0;
         
         c.conectar();
@@ -56,11 +56,12 @@ public class PrecioVentaCommands {
                 precioVenta[i][1]= rs.getString("calibre");
                 precioVenta[i][2]= rs.getString("seleccion");
                 precioVenta[i][3]= rs.getString("precio");
+                precioVenta[i][4]= rs.getString("unidadMedida");
                 
                 Date sqlDate = rs.getDate("fecha");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                precioVenta[i][4] = sdf.format(sqlDate);
-                precioVenta[i][5]= rs.getString("idPrecioVenta");
+                precioVenta[i][5] = sdf.format(sqlDate);
+                precioVenta[i][6]= rs.getString("idPrecioVenta");
                 i++;
             }
         }
@@ -77,7 +78,8 @@ public class PrecioVentaCommands {
                 + "" + pv.getIdSeleccion() +","
                 + pv.getIdCalibre()+","
                 + pv.getIdTipoRecorte()+","
-                + pv.getPrecio();
+                + pv.getPrecio()+","
+                + pv.getUnidadMedida();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

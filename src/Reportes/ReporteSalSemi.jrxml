@@ -59,7 +59,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="2" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="784b807e-da20-4154-b366-83ee01afe89c"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[No. Partida]]></text>
@@ -67,7 +67,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="115" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="57c3ea33-2e93-4150-bb2f-92a6ca2da832"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[No. Piezas]]></text>
@@ -75,7 +75,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="228" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e633caa1-b0b4-4597-bdf3-09267d4cbeae"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[Peso]]></text>
@@ -83,7 +83,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="341" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a9c563bc-cc37-4653-9c8c-3a513f30378f"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[Peso Prom]]></text>
@@ -91,7 +91,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="454" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="96b19ae2-54bf-4e75-91ab-1c3f5b2b871d"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[Selección]]></text>
@@ -99,7 +99,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="567" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="eaaa7712-ed91-4f0b-a0a5-01989fb1a844"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[Calibre]]></text>
@@ -107,7 +107,7 @@
 					<staticText>
 						<reportElement style="Column header" mode="Transparent" x="680" y="24" width="113" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="c3ff6190-a754-4086-bd0a-bf837b6c8eb2"/>
 						<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-							<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+							<font fontName="Times New Roman" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 							<paragraph lineSpacing="Single"/>
 						</textElement>
 						<text><![CDATA[Fecha Salida]]></text>

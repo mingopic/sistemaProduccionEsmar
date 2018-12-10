@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f9a51cad-af44-4a73-b9dd-56a3868b4f8f">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
@@ -70,7 +70,7 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="0" y="7" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8b487957-2d1f-4452-a33c-53cdba1c3507"/>
+				<reportElement style="Column header" mode="Transparent" x="0" y="7" width="63" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8b487957-2d1f-4452-a33c-53cdba1c3507"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -78,7 +78,7 @@
 				<text><![CDATA[Proveedor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="79" y="7" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="85bcbbb5-b1cc-4420-948f-cd80c42eb749"/>
+				<reportElement style="Column header" mode="Transparent" x="63" y="7" width="55" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="85bcbbb5-b1cc-4420-948f-cd80c42eb749"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -86,7 +86,7 @@
 				<text><![CDATA[No. Camión]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="158" y="7" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="864276ee-7ed1-4c4c-9919-998bc94afe98"/>
+				<reportElement style="Column header" mode="Transparent" x="118" y="7" width="68" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="864276ee-7ed1-4c4c-9919-998bc94afe98"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -94,7 +94,7 @@
 				<text><![CDATA[Tipo Cuero]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="237" y="7" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="c5162e90-20e4-4948-b29c-0e40e28246af"/>
+				<reportElement style="Column header" mode="Transparent" x="186" y="7" width="82" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="c5162e90-20e4-4948-b29c-0e40e28246af"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -102,7 +102,7 @@
 				<text><![CDATA[Tipo Recorte]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="316" y="7" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a636c638-e1fd-4372-ae4d-c8d18b8d3ded"/>
+				<reportElement style="Column header" mode="Transparent" x="268" y="7" width="48" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a636c638-e1fd-4372-ae4d-c8d18b8d3ded"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -110,7 +110,7 @@
 				<text><![CDATA[No. Piezas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="395" y="7" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f8941504-cd5b-4556-9a92-24bc88be003e"/>
+				<reportElement style="Column header" mode="Transparent" x="316" y="7" width="158" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f8941504-cd5b-4556-9a92-24bc88be003e"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -132,7 +132,7 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="e63287ed-e8db-4c66-af67-c9a8778f3c35"/>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-					<reportElement style="Detail" positionType="Float" mode="Transparent" x="0" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="3cbe8817-3572-4038-8ae8-9cc2d2afbcab"/>
+					<reportElement style="Detail" positionType="Float" mode="Transparent" x="0" y="0" width="63" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="3cbe8817-3572-4038-8ae8-9cc2d2afbcab"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -140,7 +140,7 @@
 					<textFieldExpression><![CDATA[$F{nombreProveedor}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="false">
-					<reportElement style="Detail" positionType="Float" mode="Transparent" x="79" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="9558a9cf-6ab0-4d04-b873-4906b17896a7"/>
+					<reportElement style="Detail" positionType="Float" mode="Transparent" x="63" y="0" width="55" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="9558a9cf-6ab0-4d04-b873-4906b17896a7"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -148,7 +148,7 @@
 					<textFieldExpression><![CDATA[$F{noCamion}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-					<reportElement style="Detail" positionType="Float" mode="Transparent" x="158" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d51732b5-7d8d-4a6a-827f-f6d47fedda6a"/>
+					<reportElement style="Detail" positionType="Float" mode="Transparent" x="118" y="0" width="68" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d51732b5-7d8d-4a6a-827f-f6d47fedda6a"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -156,7 +156,7 @@
 					<textFieldExpression><![CDATA[$F{tipoCuero}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-					<reportElement style="Detail" positionType="Float" mode="Transparent" x="237" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="016beee3-2aff-4992-8158-14484df5163f"/>
+					<reportElement style="Detail" positionType="Float" mode="Transparent" x="186" y="0" width="82" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="016beee3-2aff-4992-8158-14484df5163f"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -164,7 +164,7 @@
 					<textFieldExpression><![CDATA[$F{tipoRecorte}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="false">
-					<reportElement style="Detail" positionType="Float" mode="Transparent" x="316" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d76eaa26-0d9d-4eea-ae4c-8f4dbb605ff7"/>
+					<reportElement style="Detail" positionType="Float" mode="Transparent" x="268" y="0" width="48" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d76eaa26-0d9d-4eea-ae4c-8f4dbb605ff7"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -172,7 +172,7 @@
 					<textFieldExpression><![CDATA[$F{noPiezas}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
-					<reportElement style="Detail" positionType="Float" mode="Transparent" x="395" y="0" width="79" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d2c44943-4dff-4575-bb31-dae76ac69347"/>
+					<reportElement style="Detail" positionType="Float" mode="Transparent" x="316" y="0" width="158" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d2c44943-4dff-4575-bb31-dae76ac69347"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>

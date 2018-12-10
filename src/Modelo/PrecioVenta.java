@@ -16,6 +16,15 @@ public class PrecioVenta {
     int idTipoRecorte;
     float precio;
     String fecha;
+    String unidadMedida;
+
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
 
     public int getIdPrecioVenta() {
         return idPrecioVenta;

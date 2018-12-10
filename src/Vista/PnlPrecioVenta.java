@@ -56,7 +56,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols_tblPrecioVenta = new String[]
     {
-        "Tipo de Recorte" , "Calibre", "Selección", "Precio", "Fecha" 
+        "Tipo de Recorte" , "Calibre", "Selección", "Precio", "Unidad de medida", "Fecha" 
     };
    
     public PnlPrecioVenta() throws Exception {
@@ -279,9 +279,22 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 return;
             }
             
+            //Elimina espacios, tabuladores y retornos delante.
+            String unidadMedida = txtUnidadMedida.getText().replaceAll("^\\s*","");
+            
+            //Validar que la unidad de medida no este vacía
+            if (unidadMedida.equals(""))
+            {   
+                dlgAgregarPrecioVenta.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Ingrese una unidad de medida","Mensaje",JOptionPane.WARNING_MESSAGE);
+                dlgAgregarPrecioVenta.setVisible(true);
+                return;
+            }
+            
             pv.setIdSeleccion(Integer.parseInt(seleccion[cmbSeleccionAgregar.getSelectedIndex()][0]));
             pv.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
             pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteAgregar.getSelectedIndex()][0]));
+            pv.setUnidadMedida(unidadMedida);
             
             //Valida que no haya un precio de venta registrado con los mismos datos en BD
             int valida = pvc.obtenerPrecioVentaDisp(pv);
@@ -386,7 +399,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {   
         try 
         {
-            dlgAgregarPrecioVenta.setSize(385, 285);
+            dlgAgregarPrecioVenta.setSize(435, 335);
             dlgAgregarPrecioVenta.setPreferredSize(dlgAgregarPrecioVenta.getSize());
             dlgAgregarPrecioVenta.setLocationRelativeTo(null);
             dlgAgregarPrecioVenta.setAlwaysOnTop(true);
@@ -570,6 +583,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         cmbCalibreAgregar = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         cmbSeleccionAgregar = new javax.swing.JComboBox<>();
+        txtUnidadMedida = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         dlgEditarPrecioVenta = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -660,36 +675,38 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jLabel18.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel18.setText("Selección:");
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setText("Unidad de medida:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtUnidadMedida, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbTipoRecorteAgregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel18)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnGuardarAgregar)
-                .addGap(66, 66, 66))
+                .addGap(30, 30, 30))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -710,9 +727,13 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUnidadMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(btnGuardarAgregar)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout dlgAgregarPrecioVentaLayout = new javax.swing.GroupLayout(dlgAgregarPrecioVenta.getContentPane());
@@ -1002,7 +1023,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1102,6 +1123,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -1116,5 +1138,6 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JTable tblPrecioVenta;
     private javax.swing.JTextField txtPrecioAgregar;
     private javax.swing.JTextField txtPrecioEditar;
+    private javax.swing.JTextField txtUnidadMedida;
     // End of variables declaration//GEN-END:variables
 }

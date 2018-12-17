@@ -14,7 +14,7 @@ create procedure sp_insPrecioVenta
     , @idCalibre     int
     , @idTipoRecorte int
     , @precio        float
-    , @idUnidadMedida  int
+    , @unidadMedida  varchar(30)
   )
   as begin
   
@@ -25,7 +25,7 @@ create procedure sp_insPrecioVenta
         , idCalibre
         , idTipoRecorte
         , precio
-        , idUnidadMedida
+        , unidadMedida
         , fecha
       )
       
@@ -35,7 +35,7 @@ create procedure sp_insPrecioVenta
         , @idCalibre
         , @idTipoRecorte
         , @precio
-        , @idUnidadMedida
+        , @unidadMedida
         , getdate()
       )
   end

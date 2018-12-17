@@ -10,7 +10,7 @@ go
 
 create table tb_CueroPesado
 (
-  idInventario       int 
+  idInventario       int
   , noPartida        int
   , idTipoRecorte    int
   , idCalibre        int

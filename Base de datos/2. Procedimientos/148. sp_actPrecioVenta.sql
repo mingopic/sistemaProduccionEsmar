@@ -11,6 +11,9 @@ go
 create procedure sp_actPrecioVenta
   (
     @idPrecioVenta    int
+    , @idSeleccion    int
+    , @idCalibre      int
+    , @idTipoRecorte  int
     , @precio         float
   )
   as begin
@@ -19,7 +22,10 @@ create procedure sp_actPrecioVenta
       tb_PrecioVenta 
       
     set
-      precio = @precio
+      idSeleccion = @idSeleccion
+      , idCalibre = @idCalibre
+      , idTipoRecorte = idTipoRecorte
+      , precio = @precio
       , fecha = getdate()
       
     where

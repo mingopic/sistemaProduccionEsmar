@@ -10,7 +10,8 @@ go
 
 create procedure sp_agrInvTer
 (
-	@idInvSemTer int
+	@idInvSemTer    int
+  , @bandera      int
 	, @idCalibre    int
 	, @idSeleccion  int
 	, @noPiezas     int
@@ -20,23 +21,81 @@ create procedure sp_agrInvTer
 )
 as begin
 
-	insert into
-		tb_invTerminado
+  if @bandera = 1
+  begin
+  
+    insert into
+      tb_invTerminadoPesado
+      (
+        idInvSemTerPesado
+        , idCalibre
+        , idSeleccion
+        , noPiezas
+        , noPiezasActuales
+        , kgTotales
+        , kgTotalesActual
+        , decimetros
+        , decimetrosActual
+        , pies
+        , piesActual
+        , fechaEntrada
+      )
+      
+    values
+      (
+        @idInvSemTer
+        , @idCalibre
+        , @idSeleccion
+        , @noPiezas
+        , @noPiezas
+        , @kgTotales
+        , @kgTotales
+        , @decimetros
+        , @decimetros
+        , @pies
+        , @pies
+        , getdate()
+      )
     
-	values
-		(
-      @idInvSemTer
-      , @idCalibre
-      , @idSeleccion
-      , @noPiezas
-      , @noPiezas
-      , @kgTotales
-      , @kgTotales
-      , @decimetros
-      , @decimetros
-      , @pies
-      , @pies
-      , getdate()
-    )
+  end
+  
+  else
+  begin
+  
+    insert into
+      tb_invTerminado
+      (
+        idInvSemTer
+        , idCalibre
+        , idSeleccion
+        , noPiezas
+        , noPiezasActuales
+        , kgTotales
+        , kgTotalesActual
+        , decimetros
+        , decimetrosActual
+        , pies
+        , piesActual
+        , fechaEntrada
+      )
+      
+    values
+      (
+        @idInvSemTer
+        , @idCalibre
+        , @idSeleccion
+        , @noPiezas
+        , @noPiezas
+        , @kgTotales
+        , @kgTotales
+        , @decimetros
+        , @decimetros
+        , @pies
+        , @pies
+        , getdate()
+      )
+    
+  end
+	
 end
 go

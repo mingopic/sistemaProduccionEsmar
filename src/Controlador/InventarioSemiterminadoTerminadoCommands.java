@@ -40,18 +40,13 @@ public class InventarioSemiterminadoTerminadoCommands {
         c.desconectar();
     }
     
-    //Método que se llama para obtener la lista del Inventario Semiterminado Terminado
-    public static String[][] obtenerListaInvSemTer(InventarioSemiterminadoTerminado ist, Partida p, TipoRecorte tr, Calibre ca, Seleccion s) throws Exception
+    //Método que se llama para obtener la lista del Inventario Semiterminado Terminado Completo
+    public static String[][] obtenerListaInvSemTer() throws Exception
     {
         String query;
         
-        query= "EXEC sp_obtInvSemTer "
-                + "'" + tr.getDescripcion() +"'"
-                + ",'" + ca.getDescripcion() +"'"
-                + ",'" + s.getDescripcion() +"'"
-                + "," + p.getNoPartida()
-                + ",'" + ist.getFecha() +"'"
-                + ",'" + ist.getFecha1() +"'";
+        // Este SP es el que modificas
+        query= "execute sp_obtInvSemTer ";
 
         String[][] datos = null;
         int renglones = 0;
@@ -76,13 +71,13 @@ public class InventarioSemiterminadoTerminadoCommands {
                 datos[i][1] = rs.getString("tipoRecorte");
                 datos[i][2] = rs.getString("calibre");
                 datos[i][3] = rs.getString("seleccion");
-                datos[i][4] = rs.getString("noPiezasActuales");
+                datos[i][4] = rs.getString("noPiezas");
                 datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
                 Date sqlDate = rs.getDate("fechaEntrada");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 datos[i][6] = sdf.format(sqlDate);
                 
-                datos[i][7] = rs.getString("noPiezas");
+                datos[i][7] = rs.getString("bandera");
                 datos[i][8] = rs.getString("idInvSemTer");
                 i++; 
             }
@@ -102,6 +97,18 @@ public class InventarioSemiterminadoTerminadoCommands {
                 + "," + it.getNoPiezas();
         PreparedStatement pstmt = null;
         c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para insertar el inventario completo de semiterminado terminado
+    public static void insInvSemTerCompleto() throws Exception
+    {
+        String query = "execute sp_insInvSemTerCompleto ";
+        PreparedStatement pstmt = null;
+         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
         System.out.println(query);
         pstmt.executeUpdate();

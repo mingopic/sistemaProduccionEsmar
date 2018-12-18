@@ -25,4 +25,24 @@ as begin
   
   where
     idInventario = @idInventario
+  
+  
+  insert into
+    tb_invSemTerPesado
+    (
+      idInventario
+      , noPiezas
+      , noPiezasActuales
+      , kgTotales
+      , fechaEntrada
+    )
+    
+    values
+    (
+      @idInventario
+      , @noPiezasActuales
+      , @noPiezasActuales
+      , @peso
+      , getdate()
+    )
 end

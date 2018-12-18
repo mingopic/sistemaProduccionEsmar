@@ -9,140 +9,37 @@ end
 go
 	
 create procedure sp_obtInvSemTer
-(
-	@tipoRecorte varchar(20)
-	, @calibre	 varchar(20)
-	, @seleccion varchar(20)
-	, @noPartida int
-	, @fecha     varchar(10)
-	, @fecha1    varchar(10)
-)
 as begin
-
-	if (@noPartida = 0)
-	begin
 		
     select
-			p.noPartida
+			istc.noPartida
       , tr.descripcion as tipoRecorte
-	  , c.descripcion as calibre
-	  , s.descripcion as seleccion
-      , ist.noPiezas
-      , ist.noPiezasActuales
-	  , ist.kgTotales
-      , ist.fechaEntrada
-      , ist.idInvSemTer
+      , c.descripcion as calibre
+      , s.descripcion as seleccion
+      , istc.noPiezas
+      , istc.kgTotales
+      , istc.fechaEntrada
+      , istc.bandera
+      , istc.idInvSemTer
 		
     from
-		tb_invSemTer as ist
+      tb_invSemTerCompleto as istc  
+    inner join
+      tb_tipoRecorte as tr
+    on
+      tr.idTipoRecorte = istc.idTipoRecorte
+		
 	  inner join
-		tb_invSemiterminado as ins
+      tb_calibre as c
 	  on
-		ins.idInvSemiterminado = ist.idInvSemiterminado
-		
-	  inner join
-		tb_invCrossSemi as ics
-	  on ics.idInvCrossSemi = ins.idInvCrossSemi
-		
-      inner join
-        tb_invCross as ic
-      on
-        ic.idInvPCross = ics.idInvPCross
-      
-      inner join
-        tb_partidaDet as pd
-      on
-        pd.idPartidaDet = ic.idPartidaDet
-      
-      inner join
-        tb_partida as p
-      on
-        p.idPartida = pd.idPartida
-        
-      inner join
-        tb_tipoRecorte as tr
-      on
-        tr.idTipoRecorte = pd.idTipoRecorte
-        and tr.descripcion like @tipoRecorte
-		
-	  inner join
-		tb_calibre c
-	  on
-		c.idCalibre = ins.idCalibre
-		and c.descripcion like @calibre
+      c.idCalibre = istc.idCalibre
 
 	  inner join
-		tb_seleccion s
+      tb_seleccion s
 	  on
-		s.idSeleccion = ins.idSeleccion
-		and s.descripcion like @seleccion
+      s.idSeleccion = istc.idSeleccion
 		
     where
-      ist.fechaEntrada between @fecha and @fecha1
-      and ist.noPiezasActuales > 0
-	end
-	
-	else
-	begin
-		select
-			p.noPartida
-      , tr.descripcion as tipoRecorte
-	  , c.descripcion as calibre
-	  , s.descripcion as seleccion
-      , ist.noPiezas
-      , ist.noPiezasActuales
-      , ist.fechaEntrada
-      , ist.idInvSemTer
-		
-    from
-		tb_invSemTer as ist
-	  inner join
-		tb_invSemiterminado as ins
-	  on
-		ins.idInvSemiterminado = ist.idInvSemiterminado
-		
-	  inner join
-		tb_invCrossSemi as ics
-	  on ics.idInvCrossSemi = ins.idInvCrossSemi
-		
-      inner join
-        tb_invCross as ic
-      on
-        ic.idInvPCross = ics.idInvPCross
-      
-      inner join
-        tb_partidaDet as pd
-      on
-        pd.idPartidaDet = ic.idPartidaDet
-      
-      inner join
-        tb_partida as p
-      on
-        p.idPartida = pd.idPartida
-		and p.noPartida = @noPartida
-        
-      inner join
-        tb_tipoRecorte as tr
-      on
-        tr.idTipoRecorte = pd.idTipoRecorte
-        and tr.descripcion like @tipoRecorte
-		
-	  inner join
-		tb_calibre c
-	  on
-		c.idCalibre = ins.idCalibre
-		and c.descripcion like @calibre
-
-	  inner join
-		tb_seleccion s
-	  on
-		s.idSeleccion = ins.idSeleccion
-		and s.descripcion like @seleccion
-		
-    where
-      ist.fechaEntrada between @fecha and @fecha1
-      and ist.noPiezasActuales > 0
-	end
-  
+      istc.noPiezas > 0
 end
 go

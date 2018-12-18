@@ -398,25 +398,12 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Método para actualizar la tabla de inventario cross semiterminado
     public void actualizarTablaInvSemTer() 
     {  
-        ist = new InventarioSemiterminadoTerminado();
-        istc =new InventarioSemiterminadoTerminadoCommands();
-        tr = new TipoRecorte();
-        c = new Calibre();
-        s = new Seleccion();
-        p = new Partida();
-        
-        ist.setFecha("1900-01-01");
-        ist.setFecha1("2040-01-01");     
-        tr.setDescripcion("%%");
-        c.setDescripcion("%%");
-        s.setDescripcion("%%");
-        p.setNoPartida(0);
-       
         DefaultTableModel dtm = null;
         
         try {
             
-            datos = istc.obtenerListaInvSemTer(ist,p,tr,c,s);
+            // Este es el mètodo que debes de modificar
+            datos = istc.obtenerListaInvSemTer();
             
             dtm = new DefaultTableModel(datos, colsInvTermi)
             {
@@ -439,6 +426,10 @@ public class PnlTerminado extends javax.swing.JPanel {
     public void abrirDialogoBuscarPartida() throws Exception
     {   
         dlgAgregar.setVisible(false);
+        //AQUI VAS A TENER QUE LLAMAR EL SP QUE INSERTA EN LA TABLA tb_InSemTerCompleto
+        istc.insInvSemTerCompleto();
+        
+        //Modificar mètodo actualizarTablaInvSemTer() para llenar la tabla de busqueda
         actualizarTablaInvSemTer();
         
         dlgBuscar.setSize(600,320);

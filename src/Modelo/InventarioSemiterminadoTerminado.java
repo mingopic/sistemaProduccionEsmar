@@ -18,6 +18,15 @@ public class InventarioSemiterminadoTerminado {
     String fechaEntrada;
     String fecha;
     String fecha1;
+    int bandera;
+
+    public int getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(int bandera) {
+        this.bandera = bandera;
+    }
 
     public String getFecha() {
         return fecha;

@@ -138,6 +138,8 @@ public class PnlTerminado extends javax.swing.JPanel {
                 break;
             }
         }
+        
+        btnInvXtrabajar.setVisible(false);
     }
 //    
 //    
@@ -485,6 +487,7 @@ public class PnlTerminado extends javax.swing.JPanel {
             c.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 2).toString());
             s.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 3).toString());
             ist.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
+            ist.setBandera(Integer.parseInt(datos[renglonSeleccionado][7]));
             ist.setIdInvSemTer(Integer.parseInt(datos[renglonSeleccionado][8]));
             
             promXPieza = (Double.parseDouble(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 5).toString())) / (Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
@@ -520,6 +523,7 @@ public class PnlTerminado extends javax.swing.JPanel {
                     try 
                     {
                         it.setIdInvSemTer(ist.getIdInvSemTer());
+                        it.setBandera(ist.getBandera());
                         it.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         it.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
                         it.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
@@ -1174,7 +1178,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         jLabel50 = new javax.swing.JLabel();
         btnReporteEntrada3 = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
-        btnReporteEntrada2 = new javax.swing.JButton();
+        btnInvXtrabajar = new javax.swing.JButton();
         jLabel57 = new javax.swing.JLabel();
         btnReporteEntrada6 = new javax.swing.JButton();
         jLabel72 = new javax.swing.JLabel();
@@ -1294,7 +1298,7 @@ public class PnlTerminado extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel13)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jrKg.setText("Kilogramos");
@@ -2139,13 +2143,13 @@ public class PnlTerminado extends javax.swing.JPanel {
         dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
@@ -2163,13 +2167,13 @@ public class PnlTerminado extends javax.swing.JPanel {
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -2199,13 +2203,13 @@ public class PnlTerminado extends javax.swing.JPanel {
     dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -2223,13 +2227,13 @@ public class PnlTerminado extends javax.swing.JPanel {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -2308,18 +2312,18 @@ try {
     jLabel51.setText("     ");
     jToolBar2.add(jLabel51);
 
-    btnReporteEntrada2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteEntrada2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntrada2.setText("Reporte Inventario x Trabajar");
-    btnReporteEntrada2.setFocusable(false);
-    btnReporteEntrada2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    btnReporteEntrada2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteEntrada2.addActionListener(new java.awt.event.ActionListener() {
+    btnInvXtrabajar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnInvXtrabajar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
+    btnInvXtrabajar.setText("Reporte Inventario x Trabajar");
+    btnInvXtrabajar.setFocusable(false);
+    btnInvXtrabajar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnInvXtrabajar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnInvXtrabajar.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteEntrada2ActionPerformed(evt);
+            btnInvXtrabajarActionPerformed(evt);
         }
     });
-    jToolBar2.add(btnReporteEntrada2);
+    jToolBar2.add(btnInvXtrabajar);
 
     jLabel57.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel57.setForeground(new java.awt.Color(227, 222, 222));
@@ -2477,9 +2481,9 @@ try {
         generarReporteEntradaTerminado();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
-    private void btnReporteEntrada2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada2ActionPerformed
+    private void btnInvXtrabajarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvXtrabajarActionPerformed
         generarReporteInventarioXTrabajar();
-    }//GEN-LAST:event_btnReporteEntrada2ActionPerformed
+    }//GEN-LAST:event_btnInvXtrabajarActionPerformed
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
         actualizarTablaTerminado();
@@ -2792,11 +2796,11 @@ try {
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroup1;
+    private javax.swing.JButton btnInvXtrabajar;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntrada1;
     private javax.swing.JButton btnRealizarEntradaEnvSemi2;
     private javax.swing.JButton btnReporteEntrada;
-    private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
     private javax.swing.JButton btnReporteEntrada6;
     private javax.swing.JComboBox cmbCalibre;

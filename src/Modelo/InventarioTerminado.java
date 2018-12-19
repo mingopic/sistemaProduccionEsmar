@@ -22,6 +22,15 @@ public class InventarioTerminado {
     String fecha1;
     double decimetros;
     double pies;
+    int bandera;
+
+    public int getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(int bandera) {
+        this.bandera = bandera;
+    }
 
     public double getDecimetros() {
         return decimetros;

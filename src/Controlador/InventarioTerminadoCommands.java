@@ -92,6 +92,7 @@ public class InventarioTerminadoCommands {
     {
         String query = "execute sp_agrInvTer "
                 + it.getIdInvSemTer()
+                + "," + it.getBandera()
                 + "," + it.getIdCalibre()
                 + ","+ it.getIdSeleccion()
                 + ","+ it.getNoPiezas()

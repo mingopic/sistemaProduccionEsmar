@@ -94,7 +94,8 @@ public class InventarioSemiterminadoTerminadoCommands {
     {
         String query = "exec sp_actInvSemTer "
                 + it.getIdInvSemTer()
-                + "," + it.getNoPiezas();
+                + "," + it.getNoPiezas()
+                + "," + it.getBandera();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

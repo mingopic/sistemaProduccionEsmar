@@ -1753,7 +1753,7 @@
                 <Property name="text" type="java.lang.String" value="     "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnReporteEntrada2">
+            <Component class="javax.swing.JButton" name="btnInvXtrabajar">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="12" style="0"/>
@@ -1767,7 +1767,7 @@
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteEntrada2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInvXtrabajarActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel57">

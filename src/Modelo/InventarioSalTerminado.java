@@ -18,6 +18,24 @@ public class InventarioSalTerminado {
     double decimetros;
     double pies;
     int bandera;
+    int idCalibre;
+    int idSeleccion;
+
+    public int getIdCalibre() {
+        return idCalibre;
+    }
+
+    public void setIdCalibre(int idCalibre) {
+        this.idCalibre = idCalibre;
+    }
+
+    public int getIdSeleccion() {
+        return idSeleccion;
+    }
+
+    public void setIdSeleccion(int idSeleccion) {
+        this.idSeleccion = idSeleccion;
+    }
 
     public int getBandera() {
         return bandera;

@@ -90,7 +90,60 @@ as begin
 		
 		where
 			isalt.fechaEntrada between @fecha and @fecha1
+      and isalt.bandera = 0
       
+    union all
+    
+    select
+			cp.noPartida
+			, tr.descripcion as tipoRecorte
+			, isalt.noPiezas
+      , isalt.kg
+      , isalt.decimetros
+      , isalt.pies
+			, s.descripcion as seleccion
+			, c.descripcion as calibre
+			, isalt.fechaEntrada
+      
+		from
+			tb_invSalTerminado as isalt
+      
+      inner join
+        tb_invTerminadoPesado as itp
+      on
+        itp.idInvTerminadoPesado = isalt.idInvTerminado
+      
+      inner join
+        tb_invSemTerPesado as istp
+      on
+        istp.idInvSemTerPesado = itp.idInvSemTerPesado
+        
+      inner join
+        tb_CueroPesado as cp
+      on
+        cp.idInventario = istp.idInventario
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = cp.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = isalt.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = isalt.idSeleccion
+        and s.descripcion like @seleccion
+		
+		where
+			isalt.fechaEntrada between @fecha and @fecha1
+      and isalt.bandera = 1
 	end
 	
 	else
@@ -163,6 +216,61 @@ as begin
 		
 		where
 			isalt.fechaEntrada between @fecha and @fecha1
+      and isalt.bandera = 0
+      
+    union all
+    
+    select
+			cp.noPartida
+			, tr.descripcion as tipoRecorte
+			, isalt.noPiezas
+      , isalt.kg
+      , isalt.decimetros
+      , isalt.pies
+			, s.descripcion as seleccion
+			, c.descripcion as calibre
+			, isalt.fechaEntrada
+      
+		from
+			tb_invSalTerminado as isalt
+      
+      inner join
+        tb_invTerminadoPesado as itp
+      on
+        itp.idInvTerminadoPesado = isalt.idInvTerminado
+      
+      inner join
+        tb_invSemTerPesado as istp
+      on
+        istp.idInvSemTerPesado = itp.idInvSemTerPesado
+        
+      inner join
+        tb_CueroPesado as cp
+      on
+        cp.idInventario = istp.idInventario
+        and cp.noPartida = @noPartida
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = cp.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = isalt.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = isalt.idSeleccion
+        and s.descripcion like @seleccion
+		
+		where
+			isalt.fechaEntrada between @fecha and @fecha1
+      and isalt.bandera = 1
 	end
 end
 go

@@ -22,8 +22,15 @@ public class InventarioSalTerminadoCommands {
     //Método para agregar una entrada a la tabla tb_invsalTerminado
     public static void agregarInvSalTer(InventarioSalTerminado isalt) throws Exception
     {
-        String query = "execute sp_agrInvSalTer "+isalt.getIdInvTerminado()+""
-            + ","+isalt.getNoPiezas()+","+isalt.getKg()+","+isalt.getDecimetros()+","+isalt.getPies();
+        String query = "execute sp_agrInvSalTer "
+                + isalt.getIdInvTerminado()
+                + ", " + isalt.getNoPiezas() 
+                + ", " + isalt.getKg()
+                + ", " + isalt.getDecimetros()
+                + ", " + isalt.getPies()
+                + ", " + isalt.getIdCalibre()
+                + ", " + isalt.getIdSeleccion()
+                + ", " + isalt.getBandera();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

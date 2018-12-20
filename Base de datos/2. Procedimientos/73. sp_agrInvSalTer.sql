@@ -15,6 +15,9 @@ create procedure sp_agrInvSalTer
   , @kg             float
   , @decimetros     float
   , @pies           float
+  , @idCalibre      int
+  , @idSeleccion    int
+  , @bandera        int
 )
 as begin
 	declare @fechaEntrada datetime
@@ -29,6 +32,9 @@ as begin
 		tb_invSalTerminado
     (
       idInvTerminado
+      , bandera
+      , idCalibre
+      , idSeleccion
       , noPiezas
       , kg
       , decimetros
@@ -39,6 +45,9 @@ as begin
 	values
 	(
     @idInvTerminado
+    , @bandera
+    , @idCalibre
+    , @idSeleccion
     , @noPiezas
     , @kg
     , @decimetros

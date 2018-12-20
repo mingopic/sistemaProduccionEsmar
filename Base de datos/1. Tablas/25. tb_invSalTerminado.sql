@@ -11,7 +11,10 @@ go
 create table tb_invSalTerminado
 (
   idInvSalTerminado int not null identity(1,1) primary key
-  , idInvTerminado  int not null foreign key references tb_invTerminado(idInvTerminado)
+  , bandera         int
+  , idInvTerminado  int
+  , idCalibre       int
+  , idSeleccion     int
   , noPiezas				int
   , kg              float
   , decimetros      float

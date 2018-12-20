@@ -83,6 +83,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     String[][] datos = null;
     String[][] calibres = null;
     String[][] selecciones = null;
+    String[][] tipoRecorte = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -147,7 +148,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     public void llenarComboCalibre() throws Exception
     {
         cc = new CalibreCommands();
-        String[][] calibres = cc.llenarComboboxCalibre();
+        calibres = cc.llenarComboboxCalibre();
         
         int i=0;
         while (i<calibres.length)
@@ -161,7 +162,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     public void llenarComboTipoRecorte() throws Exception
     {
         trc = new TipoRecorteCommands();
-        String[][] tipoRecorte = trc.llenarComboboxTipoRecorte();
+        tipoRecorte = trc.llenarComboboxTipoRecorte();
         
         int i=0;
         while (i<tipoRecorte.length)
@@ -175,12 +176,12 @@ public class PnlTerminado extends javax.swing.JPanel {
     public void llenarComboSeleccion() throws Exception
     {
         sc = new SeleccionCommands();
-        String[][] seleccion = sc.llenarComboboxSeleccion();
+        selecciones = sc.llenarComboboxSeleccion();
         
         int i=0;
-        while (i<seleccion.length)
+        while (i<selecciones.length)
         {
-            cmbSeleccion.addItem(seleccion[i][1]);
+            cmbSeleccion.addItem(selecciones[i][1]);
             i++;
         }
     }
@@ -727,6 +728,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         jrkgEnvSal.setSelected(true);
         txtDecimetrosEnvSal.setEnabled(false);
         txtPiesEnvSal.setEnabled(false);
+        txtKgTotalesEnvSal.setEnabled(true);
         
         int fila = tblTerminado.getSelectedRow();
         
@@ -810,6 +812,8 @@ public class PnlTerminado extends javax.swing.JPanel {
                         isalt.setKg(0);
                     }
                     
+                    isalt.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEnvSal.getSelectedIndex()][0]));
+                    isalt.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionEnvSal.getSelectedIndex()][0]));
 
                     isalt.setBandera(Integer.parseInt(datosTerminado[fila][11]));
 

@@ -27,15 +27,23 @@ as begin
 	
 	insert into
 		tb_invSalTerminado
+    (
+      idInvTerminado
+      , noPiezas
+      , kg
+      , decimetros
+      , pies
+      , fechaEntrada
+    )
     
 	values
 	(
-      @idInvTerminado
-      , @noPiezas
-      , @kg
-      , @decimetros
-      , @pies
-      , @fechaEntrada
-    )
+    @idInvTerminado
+    , @noPiezas
+    , @kg
+    , @decimetros
+    , @pies
+    , @fechaEntrada
+  )
 end
 go

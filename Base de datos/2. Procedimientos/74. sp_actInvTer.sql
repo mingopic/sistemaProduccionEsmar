@@ -15,6 +15,7 @@ create procedure sp_actInvTer
   , @kg             float
   , @decimetros     float
   , @pies           float
+  , @bandera        int
 )
 as begin
 
@@ -76,16 +77,34 @@ as begin
     set @piesDesc = @pies
   end
 
-  update
-    tb_invTerminado
-    
-  set
-    noPiezasActuales = noPiezasActuales-@piezasUtilizar
-    , kgTotalesActual = kgTotalesActual-(@kgDesc)
-    , decimetrosActual = decimetrosActual-(@decimetrosDesc)
-    , piesActual = piesActual-(@piesDesc)
-    
-  where
-    idInvTerminado = @idInvTerminado
+  if @bandera = 1
+  begin
+    update
+      tb_invTerminadoPesado
+      
+    set
+      noPiezasActuales = noPiezasActuales-@piezasUtilizar
+      , kgTotalesActual = kgTotalesActual-(@kgDesc)
+      , decimetrosActual = decimetrosActual-(@decimetrosDesc)
+      , piesActual = piesActual-(@piesDesc)
+      
+    where
+      idInvTerminadoPesado = @idInvTerminado
+  end
+  
+  else
+  begin
+    update
+      tb_invTerminado
+      
+    set
+      noPiezasActuales = noPiezasActuales-@piezasUtilizar
+      , kgTotalesActual = kgTotalesActual-(@kgDesc)
+      , decimetrosActual = decimetrosActual-(@decimetrosDesc)
+      , piesActual = piesActual-(@piesDesc)
+      
+    where
+      idInvTerminado = @idInvTerminado
+  end
 end
 go

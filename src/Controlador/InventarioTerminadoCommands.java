@@ -72,11 +72,12 @@ public class InventarioTerminadoCommands {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 datos[i][9] = sdf.format(sqlDate);
                 
-                datos[i][10] = rs.getString("noPiezas");
-                datos[i][11] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
-                datos[i][12] = String.format("%.2f",Double.parseDouble(rs.getString("decimetros")));
-                datos[i][13] = String.format("%.2f",Double.parseDouble(rs.getString("pies")));
-                datos[i][14] = rs.getString("idInvTerminado");
+//                datos[i][10] = rs.getString("noPiezas");
+//                datos[i][11] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
+//                datos[i][12] = String.format("%.2f",Double.parseDouble(rs.getString("decimetros")));
+//                datos[i][13] = String.format("%.2f",Double.parseDouble(rs.getString("pies")));
+                datos[i][10] = rs.getString("idInvTerminado");
+                datos[i][11] = rs.getString("bandera");
                 i++; 
             }
         }
@@ -115,7 +116,8 @@ public class InventarioTerminadoCommands {
                 + "," + isalt.getNoPiezas()
                 + "," + isalt.getKg()
                 + "," + isalt.getDecimetros()
-                + "," + isalt.getPies();
+                + "," + isalt.getPies()
+                + "," + isalt.getBandera();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -134,6 +136,18 @@ public class InventarioTerminadoCommands {
                 + ", " + bit.getDecimetros();
         PreparedStatement pstmt = null;
         c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método para insertar el inventario completo de terminado
+    public static void insInvTerminadoCompleto() throws Exception
+    {
+        String query = "execute sp_insInvTerminadoCompleto ";
+        PreparedStatement pstmt = null;
+         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
         System.out.println(query);
         pstmt.executeUpdate();

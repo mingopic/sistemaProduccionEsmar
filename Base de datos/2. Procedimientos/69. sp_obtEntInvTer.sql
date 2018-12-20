@@ -24,174 +24,109 @@ as begin
   begin
   
 		select  
-			p.noPartida
+			itc.noPartida
       , tr.descripcion as tipoRecorte
-      , it.noPiezas
-      , it.noPiezasActuales
-      , it.kgTotales
-      , it.kgTotalesActual
-      , (it.kgTotales/it.noPiezas) as PesoPromXPza
-      , it.decimetros
-      , it.decimetrosActual
-      , it.pies
-      , it.piesActual
+      , itc.noPiezasActuales
+      , itc.kgTotalesActual
+      , (itc.kgTotalesActual/itc.noPiezasActuales) as PesoPromXPza
+      , itc.decimetrosActual
+      , itc.piesActual
       , s.descripcion as seleccion
       , c.descripcion as calibre
-      , it.fechaEntrada
-      , it.idInvTerminado
+      , itc.fechaEntrada
+      , itc.idInvTerminado
+      , itc.bandera
       
     from
-	  tb_invTerminado as it
-	inner join
-	  tb_invSemTer as ist
-	on
-	  ist.idInvSemTer = it.idInvSemTer
-	  
-	inner join
-      tb_invSemiterminado as ins
-	on
-	  ins.idInvSemiterminado = ist.idInvSemiterminado
+	  tb_invTerminadoCompleto as itc
       
-      inner join
-        tb_invCrossSemi as ics
-      on
-        ics.idInvCrossSemi = ins.idInvCrossSemi
+    inner join
+      tb_tipoRecorte as tr
+    on
+      tr.idTipoRecorte = itc.idTipoRecorte
+      and tr.descripcion like @tipoRecorte
+    
+    inner join
+      tb_calibre as c
+    on
+      c.idCalibre = itc.idCalibre
+      and c.descripcion like @calibre
+    
+    inner join
+      tb_seleccion as s
+    on
+      s.idSeleccion = itc.idSeleccion
+      and s.descripcion like @seleccion
       
-      inner join
-        tb_invCross as ic
-      on
-        ic.idInvPCross = ics.idInvPCross
-        
-      inner join
-        tb_partidaDet as pd
-      on
-        pd.idPartidaDet = ic.idPartidaDet
-        
-      inner join
-        tb_partida as p
-      on
-        p.idPartida = pd.idPartida
-      
-      inner join
-        tb_tipoRecorte as tr
-      on
-        tr.idTipoRecorte = pd.idTipoRecorte
-        and tr.descripcion like @tipoRecorte
-      
-      inner join
-        tb_calibre as c
-      on
-        c.idCalibre = it.idCalibre
-        and c.descripcion like @calibre
-      
-      inner join
-        tb_seleccion as s
-      on
-        s.idSeleccion = it.idSeleccion
-        and s.descripcion like @seleccion
-        
-    where
-      it.fechaEntrada between @fecha and @fecha1
-      and it.noPiezasActuales > 0
-      and 
+  where
+    itc.fechaEntrada between @fecha and @fecha1
+    and itc.noPiezasActuales > 0
+    and 
+    (
       (
-        (
-          @noPartida = 0
-          and p.noPartida > 0
-        )
-        or
-        (
-          @noPartida > 0
-          and p.noPartida = @noPartida
-        )
+        @noPartida = 0
+        and itc.noPartida > 0
       )
-      
+      or
+      (
+        @noPartida > 0
+        and itc.noPartida = @noPartida
+      )
+    )
 	end
   
   else
 	begin
   
 		select  
-			p.noPartida
+			itc.noPartida
       , tr.descripcion as tipoRecorte
-      , it.noPiezas
-      , it.noPiezasActuales
-      , it.kgTotales
-      , it.kgTotalesActual
-      , (it.kgTotales/it.noPiezas) as PesoPromXPza
-      , it.decimetros
-      , it.decimetrosActual
-      , it.pies
-      , it.piesActual
+      , itc.noPiezasActuales
+      , itc.kgTotalesActual
+      , (itc.kgTotalesActual/itc.noPiezasActuales) as PesoPromXPza
+      , itc.decimetrosActual
+      , itc.piesActual
       , s.descripcion as seleccion
       , c.descripcion as calibre
-      , it.fechaEntrada
-      , it.idInvTerminado
+      , itc.fechaEntrada
+      , itc.idInvTerminado
+      , itc.bandera
       
     from
-	  tb_invTerminado as it
-	inner join
-	  tb_invSemTer as ist
-	on
-	  ist.idInvSemTer = it.idInvSemTer
-	  
-	inner join
-      tb_invSemiterminado as ins
-	on
-	  ins.idInvSemiterminado = ist.idInvSemiterminado
+	  tb_invTerminadoCompleto as itc
       
-      inner join
-        tb_invCrossSemi as ics
-      on
-        ics.idInvCrossSemi = ins.idInvCrossSemi
+    inner join
+      tb_tipoRecorte as tr
+    on
+      tr.idTipoRecorte = itc.idTipoRecorte
+      and tr.descripcion like @tipoRecorte
+    
+    inner join
+      tb_calibre as c
+    on
+      c.idCalibre = itc.idCalibre
+      and c.descripcion like @calibre
+    
+    inner join
+      tb_seleccion as s
+    on
+      s.idSeleccion = itc.idSeleccion
+      and s.descripcion like @seleccion
       
-      inner join
-        tb_invCross as ic
-      on
-        ic.idInvPCross = ics.idInvPCross
-        
-      inner join
-        tb_partidaDet as pd
-      on
-        pd.idPartidaDet = ic.idPartidaDet
-        
-      inner join
-        tb_partida as p
-      on
-        p.idPartida = pd.idPartida
-      
-      inner join
-        tb_tipoRecorte as tr
-      on
-        tr.idTipoRecorte = pd.idTipoRecorte
-        and tr.descripcion like @tipoRecorte
-      
-      inner join
-        tb_calibre as c
-      on
-        c.idCalibre = it.idCalibre
-        and c.descripcion like @calibre
-      
-      inner join
-        tb_seleccion as s
-      on
-        s.idSeleccion = it.idSeleccion
-        and s.descripcion like @seleccion
-        
-    where
-      it.fechaEntrada between @fecha and @fecha1
-      and 
+  where
+    itc.fechaEntrada between @fecha and @fecha1
+    and 
+    (
       (
-        (
-          @noPartida = 0
-          and p.noPartida > 0
-        )
-        or
-        (
-          @noPartida > 0
-          and p.noPartida = @noPartida
-        )
+        @noPartida = 0
+        and itc.noPartida > 0
       )
+      or
+      (
+        @noPartida > 0
+        and itc.noPartida = @noPartida
+      )
+    )
   end
 
 end

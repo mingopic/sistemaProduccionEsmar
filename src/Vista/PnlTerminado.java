@@ -323,6 +323,8 @@ public class PnlTerminado extends javax.swing.JPanel {
         
         try {
             
+            itc.insInvTerminadoCompleto();
+            
             datosTerminado = itc.obtenerListaInvTerminado(p,tr,c,s,it);
             
             dtm = new DefaultTableModel(datosTerminado, cols){
@@ -790,23 +792,26 @@ public class PnlTerminado extends javax.swing.JPanel {
                     isalt = new InventarioSalTerminado();
                     isaltc = new InventarioSalTerminadoCommands();
 
-                    isalt.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][14]));
+                    isalt.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][10]));
                     isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
                     
-                    if (jrKg.isSelected())
+                    if (jrkgEnvSal.isSelected())
                     {
                         isalt.setKg(Double.parseDouble(txtKgTotalesEnvSal.getText()));
 
                         isalt.setDecimetros(0);
                         isalt.setPies(0);
                     }
-                    else if (jrArea.isSelected())
+                    else if (jrAreaEnvSal.isSelected())
                     {
                         isalt.setDecimetros(Double.parseDouble(txtDecimetrosEnvSal.getText()));
                         isalt.setPies(Double.parseDouble(txtPiesEnvSal.getText()));
 
                         isalt.setKg(0);
                     }
+                    
+
+                    isalt.setBandera(Integer.parseInt(datosTerminado[fila][11]));
 
                     isaltc.agregarInvSalTer(isalt);
                     itc.actualizarNoPiezasActual(isalt);
@@ -995,7 +1000,7 @@ public class PnlTerminado extends javax.swing.JPanel {
                         bit.setDecimetros(decimetros);
                     }
 
-                    bit.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][14]));
+                    bit.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][10]));
                     bit.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
                     bit.setMotivo(txtrMotivo.getText());
 

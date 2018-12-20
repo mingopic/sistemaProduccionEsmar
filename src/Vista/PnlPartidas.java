@@ -76,6 +76,19 @@ public class PnlPartidas extends javax.swing.JPanel {
         actualizarTablaInvCrudo();
         inicializarTablaPartida();
         llenarNoPartida();
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Produccion") || FrmPrincipal.roles[i].equals("Sistemas"))
+            {
+                btnEliminarPiezas.setEnabled(true);
+                btnRecortar.setEnabled(true);
+                btnAsignarEntrada.setEnabled(true);
+                btnGuardar.setEnabled(true);
+                btnEliminar.setEnabled(true);
+                break;
+            }
+        }
     }
     
     public void inicializarTablaPartida()
@@ -514,7 +527,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         tblInvCueCrudo = new javax.swing.JTable();
         btnAsignarEntrada = new javax.swing.JButton();
         btnRecortar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnEliminarPiezas = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -958,6 +971,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         btnAsignarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnAsignarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_turn_right.png"))); // NOI18N
         btnAsignarEntrada.setText("Asignar Entrada");
+        btnAsignarEntrada.setEnabled(false);
         btnAsignarEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAsignarEntradaActionPerformed(evt);
@@ -967,21 +981,23 @@ public class PnlPartidas extends javax.swing.JPanel {
         btnRecortar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnRecortar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cut_red.png"))); // NOI18N
         btnRecortar.setText("Recortar");
+        btnRecortar.setEnabled(false);
         btnRecortar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRecortarActionPerformed(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-        jButton1.setText("Eliminar Piezas");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btnEliminarPiezas.setText("Eliminar Piezas");
+        btnEliminarPiezas.setEnabled(false);
+        btnEliminarPiezas.setFocusable(false);
+        btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEliminarPiezasActionPerformed(evt);
             }
         });
 
@@ -1001,10 +1017,10 @@ public class PnlPartidas extends javax.swing.JPanel {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnEliminarPiezas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(btnRecortar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAsignarEntrada)
@@ -1017,7 +1033,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminarPiezas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnAsignarEntrada)
                         .addComponent(btnRecortar)
@@ -1059,6 +1075,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
         btnEliminar.setToolTipText("");
+        btnEliminar.setEnabled(false);
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
@@ -1068,6 +1085,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
         btnGuardar.setText("Guardar");
+        btnGuardar.setEnabled(false);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -1573,7 +1591,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtKgRecortar2KeyReleased
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
         try {
             int fila = tblInvCueCrudo.getSelectedRow();
             String piezas = (String.valueOf(tblInvCueCrudo.getValueAt(fila, 4)));
@@ -1590,7 +1608,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario crudo","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
     private void txtNoPiezasActualesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesKeyTyped
         // TODO add your handling code here:
@@ -1632,13 +1650,13 @@ public class PnlPartidas extends javax.swing.JPanel {
     private javax.swing.JButton btnAsignarEntrada;
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarPiezas;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnGuardarRecorte;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnRecortar;
     private javax.swing.JDialog dlgEliPzaInvCrudo;
     private javax.swing.JDialog dlgRecortar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;

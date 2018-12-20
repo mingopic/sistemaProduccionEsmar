@@ -99,10 +99,11 @@ public class PnlCross extends javax.swing.JPanel {
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
-            if (FrmPrincipal.roles[i].equals("Cross") || FrmPrincipal.roles[i].equals("Sistemas"))
+            if (FrmPrincipal.roles[i].equals("Cross") || FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Produccion"))
             {
                 btnEnviarSemiterminado.setEnabled(true);
                 btnAgregar.setEnabled(true);
+                btnEliminarPiezas.setEnabled(true);
                 break;
             }
         }
@@ -694,7 +695,7 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         btnEnviarSemiterminado = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnEliminarPiezas = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -1395,18 +1396,19 @@ public class PnlCross extends javax.swing.JPanel {
         jLabel12.setText("   ");
         jToolBar1.add(jLabel12);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-        jButton1.setText("Eliminar Piezas");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btnEliminarPiezas.setText("Eliminar Piezas");
+        btnEliminarPiezas.setEnabled(false);
+        btnEliminarPiezas.setFocusable(false);
+        btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEliminarPiezasActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(btnEliminarPiezas);
 
         jLabel17.setText("   ");
         jToolBar1.add(jLabel17);
@@ -1490,13 +1492,13 @@ public class PnlCross extends javax.swing.JPanel {
         dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
@@ -1514,13 +1516,13 @@ public class PnlCross extends javax.swing.JPanel {
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -1551,13 +1553,13 @@ public class PnlCross extends javax.swing.JPanel {
     dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -1575,13 +1577,13 @@ public class PnlCross extends javax.swing.JPanel {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -1962,7 +1964,7 @@ try {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
         try {
             int fila = tblInvCross.getSelectedRow();
             String piezas = (String.valueOf(tblInvCross.getValueAt(fila, 2)));
@@ -1979,7 +1981,7 @@ try {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario desvenado","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
     private void txtNoPiezasActualesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesKeyTyped
         // TODO add your handling code here:
@@ -2030,6 +2032,7 @@ try {
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
     private javax.swing.JButton btnCancelarAgregarEnvSemi1;
     private javax.swing.JButton btnCancelarAgregarEnvSemi2;
+    private javax.swing.JButton btnEliminarPiezas;
     private javax.swing.JButton btnEnviarSemiterminado;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnRealizarEntradaEnvSemi1;
@@ -2045,7 +2048,6 @@ try {
     private javax.swing.JDialog dlgBuscar;
     private javax.swing.JDialog dlgEliPzaInvCross;
     private javax.swing.JDialog dlgEnvSemi;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

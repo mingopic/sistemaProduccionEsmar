@@ -60,6 +60,7 @@ public class UsuarioCommands
         
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
         rs = stmt.executeQuery(query);
         
         if (rs.last()) {

@@ -101,6 +101,16 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         llenarComboProveedores();
         llenarComboTipoCuero();
         actualizarTablaRecepcionCuero();
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Produccion") || FrmPrincipal.roles[i].equals("Sistemas"))
+            {
+                btnAgregarEntrada.setEnabled(true);
+                btnEliminarEntrada.setEnabled(true);
+                break;
+            }
+        }
     }
     
     
@@ -573,21 +583,18 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("No. piezas a eliminar:");
 
-        txtNoCamion.setBackground(new java.awt.Color(255, 255, 255));
         txtNoCamion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNoCamionActionPerformed(evt);
             }
         });
 
-        txtProveedor.setBackground(new java.awt.Color(255, 255, 255));
         txtProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtProveedorActionPerformed(evt);
             }
         });
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -599,8 +606,6 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Tipo de recorte:");
-
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -785,13 +790,13 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
         dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
@@ -809,13 +814,13 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -845,13 +850,13 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
     dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -869,13 +874,13 @@ public class PnlRecepcionCuero extends javax.swing.JPanel {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -977,6 +982,7 @@ try {
     btnAgregarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnAgregarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
     btnAgregarEntrada.setText("Agregar Recepción");
+    btnAgregarEntrada.setEnabled(false);
     btnAgregarEntrada.setFocusable(false);
     btnAgregarEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     btnAgregarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -994,6 +1000,7 @@ try {
     btnEliminarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnEliminarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
     btnEliminarEntrada.setText("Eliminar Recepción");
+    btnEliminarEntrada.setEnabled(false);
     btnEliminarEntrada.setFocusable(false);
     btnEliminarEntrada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     btnEliminarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);

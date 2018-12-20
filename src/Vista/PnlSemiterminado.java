@@ -127,10 +127,11 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
-            if (FrmPrincipal.roles[i].equals("Semiterminado") || FrmPrincipal.roles[i].equals("Sistemas"))
+            if (FrmPrincipal.roles[i].equals("Semiterminado") || FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Produccion"))
             {
                 btnAgregarEntrada.setEnabled(true);
                 btnEnviarTerminado.setEnabled(true);
+                btnEliminarPiezas.setEnabled(true);
                 break;
             }
         }
@@ -974,7 +975,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         jLabel61 = new javax.swing.JLabel();
         btnEnviarTerminado = new javax.swing.JButton();
         jLabel66 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnEliminarPiezas = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1774,13 +1775,13 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         dcFecha1EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
@@ -1798,13 +1799,13 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -1834,13 +1835,13 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     dcFecha2EntradaSemiterminado.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -1858,13 +1859,13 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -2038,18 +2039,19 @@ try {
     jLabel66.setText("   ");
     jToolBar3.add(jLabel66);
 
-    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-    jButton1.setText("Eliminar Piezas");
-    jButton1.setFocusable(false);
-    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
+    btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    btnEliminarPiezas.setText("Eliminar Piezas");
+    btnEliminarPiezas.setEnabled(false);
+    btnEliminarPiezas.setFocusable(false);
+    btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
+            btnEliminarPiezasActionPerformed(evt);
         }
     });
-    jToolBar3.add(jButton1);
+    jToolBar3.add(btnEliminarPiezas);
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
@@ -2323,7 +2325,7 @@ try {
         dlgEliPzaInvSemiterminado.setVisible(false);
     }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
         try {
             int fila = tblSemiterminado.getSelectedRow();
             String piezas = (String.valueOf(tblSemiterminado.getValueAt(fila, 2)));
@@ -2340,7 +2342,7 @@ try {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         actualizarTablaSemiterminado();
@@ -2365,6 +2367,7 @@ try {
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregarEnvSemi2;
     private javax.swing.JButton btnCancelarAgregarEnvTermi;
+    private javax.swing.JButton btnEliminarPiezas;
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntradaEnvSemi2;
@@ -2384,7 +2387,6 @@ try {
     private javax.swing.JDialog dlgBuscar;
     private javax.swing.JDialog dlgEliPzaInvSemiterminado;
     private javax.swing.JDialog dlgEnvTermi;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

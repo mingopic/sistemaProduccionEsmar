@@ -132,10 +132,11 @@ public class PnlTerminado extends javax.swing.JPanel {
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
-            if (FrmPrincipal.roles[i].equals("Terminado") || FrmPrincipal.roles[i].equals("Sistemas"))
+            if (FrmPrincipal.roles[i].equals("Terminado") || FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Produccion"))
             {
                 btnAgregarEntrada.setEnabled(true);
                 btnEnviarTerminado.setEnabled(true);
+                btnEliminarPiezas.setEnabled(true);
                 break;
             }
         }
@@ -1198,7 +1199,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         jLabel61 = new javax.swing.JLabel();
         btnEnviarTerminado = new javax.swing.JButton();
         jLabel73 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnEliminarPiezas = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -2416,18 +2417,19 @@ try {
     jLabel73.setText("   ");
     jToolBar3.add(jLabel73);
 
-    jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-    jButton2.setText("Eliminar Piezas");
-    jButton2.setFocusable(false);
-    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton2.addActionListener(new java.awt.event.ActionListener() {
+    btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    btnEliminarPiezas.setText("Eliminar Piezas");
+    btnEliminarPiezas.setEnabled(false);
+    btnEliminarPiezas.setFocusable(false);
+    btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton2ActionPerformed(evt);
+            btnEliminarPiezasActionPerformed(evt);
         }
     });
-    jToolBar3.add(jButton2);
+    jToolBar3.add(btnEliminarPiezas);
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
@@ -2760,7 +2762,7 @@ try {
         dlgEliPzaInvTerminado.setVisible(false);
     }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
         try {
             int fila = tblTerminado.getSelectedRow();
             String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
@@ -2777,7 +2779,7 @@ try {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         actualizarTablaTerminado();
@@ -2802,6 +2804,7 @@ try {
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregar1;
     private javax.swing.JButton btnCancelarAgregarEnvSemi2;
+    private javax.swing.JButton btnEliminarPiezas;
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroup1;
@@ -2826,7 +2829,6 @@ try {
     private javax.swing.JDialog dlgEliPzaInvTerminado;
     private javax.swing.JDialog dlgEnvSal;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

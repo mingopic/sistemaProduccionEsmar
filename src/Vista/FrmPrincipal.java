@@ -118,6 +118,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpCatalogos.setVisible(false);
         jmpConfiguraciones.setVisible(false);
         jmpBaseDeDatos.setVisible(false);
+        
+        jmCalibres.setVisible(false);
+        jmTambores.setVisible(false);
+        jmSubProcesos.setVisible(false);
+        jmProveedores.setVisible(false);
+        jmUsuarios.setVisible(false);
+        jmPrecioVenta.setVisible(false);
     }
     
     
@@ -143,26 +150,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 pnlPrincipalx.paintAll(pnlPrincipal.getGraphics());
                 ImageIcon ico=new ImageIcon(".\\src\\Imagenes\\house.png");
                 lblVentana.setIcon(ico);
-//                DateLabel();
                 lblNombreUsuario.setText(u.getNombre());
-//                lblIdUsuario.setText(u.getIdUsuario());
-//                lblTipoUsuario.setText(u.getTipo());
-//                lblTipoUsuario.setVisible(false);
                 
                 for (int i = 0; i < roles.length; i++)
                 {
-                    if (roles[i].equals("Semiterminado"))
+                    if (roles[i].equals("Contabilidad"))
                     {
+                        btnRecepcionCuero.setVisible(true);
+                        btnPartidas.setVisible(true);
+                        btnProdEnProc.setVisible(true);
+                        btnCross.setVisible(true);
                         btnSemiterminado.setVisible(true);
-                        break;
-                    }
-                }
-                
-                for (int i = 0; i < roles.length; i++)
-                {
-                    if (roles[i].equals("Terminado"))
-                    {
                         btnTerminado.setVisible(true);
+                        
+                        jmpCatalogos.setVisible(true);
+                        jmPrecioVenta.setVisible(true);
                         break;
                     }
                 }
@@ -188,7 +190,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         btnSemiterminado.setVisible(true);
                         btnTerminado.setVisible(true);
                         jmpCatalogos.setVisible(true);
+                        jmCalibres.setVisible(true);
+                        jmTambores.setVisible(true);
+                        jmSubProcesos.setVisible(true);
+                        jmProveedores.setVisible(true);
                         jmpConfiguraciones.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Semiterminado"))
+                    {
+                        btnSemiterminado.setVisible(true);
+                        jmpCatalogos.setVisible(true);
+                        jmCalibres.setVisible(true);
                         break;
                     }
                 }
@@ -204,9 +221,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         btnCross.setVisible(true);
                         btnSemiterminado.setVisible(true);
                         btnTerminado.setVisible(true);
+                        
                         jmpCatalogos.setVisible(true);
+                        jmCalibres.setVisible(true);
+                        jmTambores.setVisible(true);
+                        jmSubProcesos.setVisible(true);
+                        jmProveedores.setVisible(true);
+                        jmUsuarios.setVisible(true);
+                        jmPrecioVenta.setVisible(true);
+                        
                         jmpConfiguraciones.setVisible(true);
-                        jmpBaseDeDatos.setVisible(true);
+//                        jmpBaseDeDatos.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Terminado"))
+                    {
+                        btnTerminado.setVisible(true);
+                        jmpCatalogos.setVisible(true);
+                        jmCalibres.setVisible(true);
                         break;
                     }
                 }
@@ -877,11 +913,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpArchivo = new javax.swing.JMenu();
         jmSalir = new javax.swing.JMenuItem();
         jmpCatalogos = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jmCalibres = new javax.swing.JMenuItem();
         jmTambores = new javax.swing.JMenuItem();
         jmSubProcesos = new javax.swing.JMenuItem();
         jmProveedores = new javax.swing.JMenuItem();
-        Usuarios = new javax.swing.JMenuItem();
+        jmUsuarios = new javax.swing.JMenuItem();
         jmPrecioVenta = new javax.swing.JMenuItem();
         jmpConfiguraciones = new javax.swing.JMenu();
         jmMermas = new javax.swing.JMenuItem();
@@ -894,7 +930,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmpBaseDeDatos = new javax.swing.JMenu();
         jmiExportar = new javax.swing.JMenuItem();
         jmiImportar = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        jmAlmacen = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jmpAcercaDe = new javax.swing.JMenu();
 
@@ -2508,14 +2544,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ruler.png"))); // NOI18N
-        jMenuItem1.setText("Calibres");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jmCalibres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ruler.png"))); // NOI18N
+        jmCalibres.setText("Calibres");
+        jmCalibres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jmCalibresActionPerformed(evt);
             }
         });
-        jmpCatalogos.add(jMenuItem1);
+        jmpCatalogos.add(jmCalibres);
 
         jmTambores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/barril.png"))); // NOI18N
         jmTambores.setText("Tambores");
@@ -2544,14 +2580,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jmpCatalogos.add(jmProveedores);
 
-        Usuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/users_4.png"))); // NOI18N
-        Usuarios.setText("Usuarios");
-        Usuarios.addActionListener(new java.awt.event.ActionListener() {
+        jmUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/users_4.png"))); // NOI18N
+        jmUsuarios.setText("Usuarios");
+        jmUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UsuariosActionPerformed(evt);
+                jmUsuariosActionPerformed(evt);
             }
         });
-        jmpCatalogos.add(Usuarios);
+        jmpCatalogos.add(jmUsuarios);
 
         jmPrecioVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/money_dollar.png"))); // NOI18N
         jmPrecioVenta.setText("Precios de venta");
@@ -2660,8 +2696,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jmpBaseDeDatos);
 
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report_key.png"))); // NOI18N
-        jMenu1.setText("Almacen");
+        jmAlmacen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report_key.png"))); // NOI18N
+        jmAlmacen.setText("Almacen");
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
         jMenuItem3.setText("Reporte de Inventario de Almacen");
@@ -2670,9 +2706,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jmAlmacen.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jmAlmacen);
 
         jmpAcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/information.png"))); // NOI18N
         jmpAcercaDe.setText("Acerca de");
@@ -2709,8 +2745,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmpCatalogosMouseClicked
 
     private void jmpAcercaDeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpAcercaDeMouseClicked
-        JOptionPane.showMessageDialog(null, "'Sistema de Producción ESMAR V.1.0' \n"
-            + "Agosto 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
+        JOptionPane.showMessageDialog(null, "'Sistema de Producción V.1.0' \n"
+            + "Diciembre 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
             + "\nIng. Mario Daniel Luna Gutiérrez \n\n"
             + "Dudas o comentarios: \n"
             + "mingo.utl@gmail.com", "Acerca de...",
@@ -2997,7 +3033,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmTamboresActionPerformed
 
-    private void UsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsuariosActionPerformed
+    private void jmUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmUsuariosActionPerformed
         try 
         {
             pnlUsuarios = new PnlUsuarios();
@@ -3014,7 +3050,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             System.out.println(ex);
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_UsuariosActionPerformed
+    }//GEN-LAST:event_jmUsuariosActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try 
@@ -3048,7 +3084,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
        cargarConfPrecioCuero();
     }//GEN-LAST:event_jmCostoCueroActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jmCalibresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCalibresActionPerformed
         try 
         {
             pnlCalibres = new PnlCalibres();
@@ -3065,7 +3101,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             System.out.println(ex);
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog","Error",JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jmCalibresActionPerformed
 
     private void txtCostoGarraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoGarraKeyTyped
         validarNumerosDecimales(evt, txtCostoGarra.getText());
@@ -3377,7 +3413,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem Usuarios;
     private javax.swing.JButton btnCross;
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnFichasProduccion;
@@ -3443,9 +3478,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -3489,6 +3522,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar5;
     private javax.swing.JToolBar jToolBar7;
     private javax.swing.JToolBar jToolBar8;
+    private javax.swing.JMenu jmAlmacen;
+    private javax.swing.JMenuItem jmCalibres;
     private javax.swing.JMenuItem jmCostoCuero;
     private javax.swing.JMenuItem jmCostoManoDeObra;
     private javax.swing.JMenuItem jmInsumosXproceso;
@@ -3499,6 +3534,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmSalir;
     private javax.swing.JMenuItem jmSubProcesos;
     private javax.swing.JMenuItem jmTambores;
+    private javax.swing.JMenuItem jmUsuarios;
     private javax.swing.JMenuItem jmiExportar;
     private javax.swing.JMenuItem jmiImportar;
     private javax.swing.JMenu jmpAcercaDe;

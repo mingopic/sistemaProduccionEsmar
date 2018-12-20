@@ -363,8 +363,19 @@ public class PnlUsuarios extends javax.swing.JPanel {
             dlgAgregarUsuario.setLocationRelativeTo(null);
             dlgAgregarUsuario.setAlwaysOnTop(true);
             dlgAgregarUsuario.setVisible(true);
-
+            
             txtNombreUsuAgregar.setText("");
+            txtPasswordUsuAgregar.setText("");
+            txtNombreEmpAgregar.setText("");
+            cmbEstatusAgregar.setSelectedIndex(0);
+
+            chkContabilidadAgregar.setSelected(false);
+            chkCrossAgregar.setSelected(false);
+            chkProduccionAgregar.setSelected(false);
+            chkSemiterminadoAgregar.setSelected(false);
+            chkSistemasAgregar.setSelected(false);
+            chkTerminadoAgregar.setSelected(false);
+            
         } 
         catch (Exception e) 
         {

@@ -130,4 +130,59 @@ as begin
   
   where
     it.noPiezasActuales > 0
+  
+  union all
+  
+  select
+    cp.noPartida
+    , tr.descripcion as tipoRecorte
+    , c.descripcion as calibre
+    , s.descripcion as seleccion
+    , itp.noPiezasActuales as noPiezas
+    , itp.kgTotalesActual as peso
+    , itp.kgTotalesActual/itp.noPiezasActuales as pesoProm
+    , itp.decimetrosActual as decimetros
+    , itp.piesActual as pies
+    , itp.fechaEntrada
+    , 0 as 'costoMateriaPrima'
+    , 0 as 'costoManoObra'
+    , 0 as 'costoFabricacion'
+    , 0 as 'costoTotal'
+    , 
+      0 as 'precioVenta'
+
+	from
+		tb_invTerminadoPesado as itp
+	
+    inner join
+      tb_invSemTerPesado as istp
+    on
+      istp.idInvSemTerPesado = itp.idInvSemTerPesado
+      
+    inner join
+      tb_CueroPesado as cp
+    on
+      cp.idInventario = istp.idInventario
+
+    inner join
+      tb_tipoRecorte tr
+    on
+      tr.idTipoRecorte = cp.idTipoRecorte
+      and tr.descripcion like @tipoRecorte
+
+    inner join
+      tb_calibre c
+    on
+      c.idCalibre = itp.idCalibre
+      and c.descripcion like @calibre
+
+    inner join
+      tb_seleccion s
+    on
+      s.idSeleccion = itp.idSeleccion
+      and s.descripcion like @seleccion
+  
+  where
+    itp.noPiezasActuales > 0
+    
 end

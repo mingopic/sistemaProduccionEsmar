@@ -80,15 +80,15 @@ as begin
     , ic.kgTotalActual
     , (ic.kgTotalActual/ic.noPiezasActual) as pesoProm
     , case
-        when ic.idTipoRecorte = 1 then ((rc.costoCamion / ic.noPiezasActual) * @porcentajeEntero)
-        when ic.idTipoRecorte = 2 then ((rc.costoCamion / ic.noPiezasActual) - (rc.precioGarra * 2)) * @porcentajeDelSillero
-        when ic.idTipoRecorte = 3 then ((rc.costoCamion / ic.noPiezasActual) - (rc.precioGarra * 2)) * @porcentajeCrupSillero
-        when ic.idTipoRecorte = 4 then ((rc.costoCamion / ic.noPiezasActual) * @porcentajeLados)
-        when ic.idTipoRecorte = 8 then ((rc.costoCamion / ic.noPiezasActual) - (rc.precioGarra * 2)) * @porcentajeCentro
-        when ic.idTipoRecorte = 7 then ((rc.costoCamion / ic.noPiezasActual) - (rc.precioGarra * 2)) * @porcentajeDelSuela
+        when ic.idTipoRecorte = 1 then ((rc.costoCamion / rc.noTotalPiezas) * @porcentajeEntero)
+        when ic.idTipoRecorte = 2 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeDelSillero
+        when ic.idTipoRecorte = 3 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCrupSillero
+        when ic.idTipoRecorte = 4 then ((rc.costoCamion / rc.noTotalPiezas) * @porcentajeLados)
+        when ic.idTipoRecorte = 8 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeCentro
+        when ic.idTipoRecorte = 7 then ((rc.costoCamion / rc.noTotalPiezas) - (rc.precioGarra * 2)) * @porcentajeDelSuela
       end as precioXPza
     , (
-        rc.noTotalPiezas * 
+        ic.noPiezasActual * 
          (
           case
             when ic.idTipoRecorte = 1 then ((rc.costoCamion / rc.noTotalPiezas) * @porcentajeEntero)

@@ -22,8 +22,11 @@ public class BajasInventarioTerminadoCommands {
     //Método para agregar una baja a la tabla tb_bajasInvTerminado
     public static void agregarBajaInvTerminado(BajasInventarioTerminado bit) throws Exception
     {
-        String query = "exec sp_agrBajaInvTerminado "+bit.getNoPiezas()+""
-            + ",'"+bit.getMotivo()+"',"+bit.getIdInvTerminado();
+        String query = "exec sp_agrBajaInvTerminado "
+                + bit.getNoPiezas()
+                + ", '" + bit.getMotivo() + "'"
+                + ", " + bit.getIdInvTerminado()
+                + ", " + bit.getBandera();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

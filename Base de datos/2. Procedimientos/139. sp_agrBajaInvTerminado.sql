@@ -13,6 +13,7 @@ create procedure sp_agrBajaInvTerminado
 	@noPiezas         int
 	, @motivo         varchar (100)
 	, @idInvTerminado int
+  , @bandera        int
 )
 as begin
 	
@@ -25,6 +26,7 @@ as begin
       , @motivo
       , getdate()
       , @idInvTerminado
+      , @bandera
     )
 end
 go

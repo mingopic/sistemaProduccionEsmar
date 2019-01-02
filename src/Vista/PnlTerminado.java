@@ -84,6 +84,8 @@ public class PnlTerminado extends javax.swing.JPanel {
     String[][] calibres = null;
     String[][] selecciones = null;
     String[][] tipoRecorte = null;
+    String[] datosBaja = null;
+    String[] datosSalida = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -141,7 +143,7 @@ public class PnlTerminado extends javax.swing.JPanel {
             }
         }
         
-        btnInvXtrabajar.setVisible(false);
+        //btnInvXtrabajar.setVisible(false);
     }
 //    
 //    
@@ -325,6 +327,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         
         try {
             
+            // llenar la tabla de tb_invTerminadoCompleto
             itc.insInvTerminadoCompleto();
             
             datosTerminado = itc.obtenerListaInvTerminado(p,tr,c,s,it);
@@ -534,6 +537,16 @@ public class PnlTerminado extends javax.swing.JPanel {
                         
                         if (jrKg.isSelected())
                         {
+                            if (txtKgTotalesAgregar.getText().length() <=0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            if (Double.parseDouble(txtKgTotalesAgregar.getText()) <= 0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
                             it.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
                             
                             it.setDecimetros(0);
@@ -541,7 +554,28 @@ public class PnlTerminado extends javax.swing.JPanel {
                         }
                         else if (jrArea.isSelected())
                         {
+                            if (txtDecimetrosAgregar.getText().length() <=0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            if (Double.parseDouble(txtDecimetrosAgregar.getText()) <= 0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
                             it.setDecimetros(Double.parseDouble(txtDecimetrosAgregar.getText()));
+                            
+                             if (txtPiesCuadradosAgregar.getText().length() <=0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            if (Double.parseDouble(txtPiesCuadradosAgregar.getText()) <= 0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
                             it.setPies(Double.parseDouble(txtPiesCuadradosAgregar.getText()));
                             
                             it.setKgTotales(0);
@@ -768,7 +802,6 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Método que abre el dialogo para enviar a terminado 
     public void abrirDialogoEnvSal() throws Exception
     {
-        
         inicializarCamposEnvSal();
         
         dlgEnvSal.setSize(360, 540);
@@ -787,46 +820,62 @@ public class PnlTerminado extends javax.swing.JPanel {
             {
                 if (Integer.parseInt(txtNoPiezasEnvSal.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSal.getText()))
                 {
-                    JOptionPane.showMessageDialog(dlgEnvSal, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+                    JOptionPane.showMessageDialog(dlgEnvSal, "El numero de piezas debe ser menor o igual al número de piezas actuales","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                if (jrkgEnvSal.isSelected())
+                {
+                    if (txtKgTotalesEnvSal.getText().length() <= 0)
+                    {
+                        JOptionPane.showMessageDialog(dlgEnvSal, "Ingrese un número válido de Kg","Advertencia",JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                 }
                 else
                 {
-                    int fila = tblTerminado.getSelectedRow();
-                    isalt = new InventarioSalTerminado();
-                    isaltc = new InventarioSalTerminadoCommands();
-
-                    isalt.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][10]));
-                    isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
-                    
-                    if (jrkgEnvSal.isSelected())
+                    if (txtDecimetrosEnvSal.getText().length() <= 0 || txtPiesEnvSal.getText().length() <= 0)
                     {
-                        isalt.setKg(Double.parseDouble(txtKgTotalesEnvSal.getText()));
-
-                        isalt.setDecimetros(0);
-                        isalt.setPies(0);
+                        JOptionPane.showMessageDialog(dlgEnvSal, "Ingrese un número válido de Decimetros/Pies","Advertencia",JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
-                    else if (jrAreaEnvSal.isSelected())
-                    {
-                        isalt.setDecimetros(Double.parseDouble(txtDecimetrosEnvSal.getText()));
-                        isalt.setPies(Double.parseDouble(txtPiesEnvSal.getText()));
-
-                        isalt.setKg(0);
-                    }
-                    
-                    isalt.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEnvSal.getSelectedIndex()][0]));
-                    isalt.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionEnvSal.getSelectedIndex()][0]));
-
-                    isalt.setBandera(Integer.parseInt(datosTerminado[fila][11]));
-
-                    isaltc.agregarInvSalTer(isalt);
-                    itc.actualizarNoPiezasActual(isalt);
-                    actualizarTablaTerminado();
-                    dlgEnvSal.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Salida realizada correctamente");
                 }
+
+                isalt = new InventarioSalTerminado();
+                isaltc = new InventarioSalTerminadoCommands();
+
+                isalt.setIdInvTerminado(Integer.parseInt(datosSalida[10]));
+                isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
+
+                if (jrkgEnvSal.isSelected())
+                {
+                    isalt.setKg(Double.parseDouble(txtKgTotalesEnvSal.getText()));
+
+                    isalt.setDecimetros(0);
+                    isalt.setPies(0);
+                }
+                else if (jrAreaEnvSal.isSelected())
+                {
+                    isalt.setDecimetros(Double.parseDouble(txtDecimetrosEnvSal.getText()));
+                    isalt.setPies(Double.parseDouble(txtPiesEnvSal.getText()));
+
+                    isalt.setKg(0);
+                }
+
+                isalt.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEnvSal.getSelectedIndex()][0]));
+                isalt.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionEnvSal.getSelectedIndex()][0]));
+
+                isalt.setBandera(Integer.parseInt(datosSalida[11]));
+
+                isaltc.agregarInvSalTer(isalt);
+                itc.actualizarNoPiezasActual(isalt);
+                actualizarTablaTerminado();
+                dlgEnvSal.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Salida realizada correctamente");
             } 
             catch (Exception e) 
             {
+                e.printStackTrace();
                 dlgEnvSal.setVisible(false);                
                 JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
             }   
@@ -924,26 +973,9 @@ public class PnlTerminado extends javax.swing.JPanel {
         }
     }
     
-    //Metodo para inicializar los campos de dlgEliPzaInvTerminado
-    public void inicializarCamposEliPzaInvTerminado() throws Exception
-    {
-        txtNoPiezasEliminar.setText("");
-        txtrMotivo.setText("");
-        
-        int fila = tblTerminado.getSelectedRow();
-        
-        txtNoPartida1.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
-        txtTipoRecorte.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
-        txtCalibre.setText(String.valueOf(tblTerminado.getValueAt(fila, 8)));
-        txtSeleccion.setText(String.valueOf(tblTerminado.getValueAt(fila, 7)));
-        txtNoPiezasActuales.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
-    }
-    
     //Método que abre el dialogo para eliminar piezas del inventario terminado
     public void abrirDialogoEliPzaInvTerminado() throws Exception
     {
-        inicializarCamposEliPzaInvTerminado();
-        
         dlgEliPzaInvTerminado.setSize(430, 490);
         dlgEliPzaInvTerminado.setPreferredSize(dlgEliPzaInvTerminado.getSize());
         dlgEliPzaInvTerminado.setLocationRelativeTo(null);
@@ -951,7 +983,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         dlgEliPzaInvTerminado.setVisible(true);
     }
     
-     //Método para realizar entrada de material y actualizar inventarios
+    //Método para realizar entrada de material y actualizar inventarios
     public void eliminarPiezasInvTerminado() throws Exception
     {
         if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
@@ -960,22 +992,25 @@ public class PnlTerminado extends javax.swing.JPanel {
             {
                 if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
                 {
-                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El numero de piezas debe ser menor o igual al número de piezas actuales", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+                else if (txtrMotivo.getText().length() > 200)
+                {
+                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El motivo no debe sobrepasar los 200 catacteres","Advertencia",JOptionPane.WARNING_MESSAGE);
                 }
                 else
                 {
-                    int fila = tblTerminado.getSelectedRow();
                     bit = new BajasInventarioTerminado();
                     bitc = new BajasInventarioTerminadoCommands();
                     
-                    if (Double.parseDouble(tblTerminado.getValueAt(fila, 3).toString()) > 0)
+                    if (Double.parseDouble(datosBaja[3]) > 0)
                     {
-                        double promKg = Double.parseDouble(tblTerminado.getValueAt(fila, 4).toString());
+                        double promKg = Double.parseDouble(datosBaja[4]);
                         double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
                         
-                        if (kg > Double.parseDouble(datosTerminado[fila][11]))
+                        if (kg > Double.parseDouble(datosBaja[3]))
                         {
-                            kg = Double.parseDouble(datosTerminado[fila][11]);
+                            kg = Double.parseDouble(datosBaja[3]);
                         }
                         
                         bit.setKg(kg);
@@ -984,20 +1019,20 @@ public class PnlTerminado extends javax.swing.JPanel {
                     }
                     else
                     {
-                        double promPies = Double.parseDouble(datosTerminado[fila][13]) / Double.parseDouble(datosTerminado[fila][10]);
+                        double promPies = Double.parseDouble(datosBaja[6]) / Double.parseDouble(datosBaja[2]);
                         double pies = promPies * Integer.parseInt(txtNoPiezasEliminar.getText());
                         
-                        double promDecimetros = Double.parseDouble(datosTerminado[fila][12]) / Double.parseDouble(datosTerminado[fila][10]);
+                        double promDecimetros = Double.parseDouble(datosBaja[5]) / Double.parseDouble(datosBaja[2]);
                         double decimetros = promDecimetros * Integer.parseInt(txtNoPiezasEliminar.getText());
                         
-                        if (pies > Double.parseDouble(datosTerminado[fila][13]))
+                        if (pies > Double.parseDouble(datosBaja[6]))
                         {
-                            pies = Double.parseDouble(datosTerminado[fila][13]);
+                            pies = Double.parseDouble(datosBaja[6]);
                         }
                         
-                        if (decimetros > Double.parseDouble(datosTerminado[fila][12]))
+                        if (decimetros > Double.parseDouble(datosBaja[5]))
                         {
-                            decimetros = Double.parseDouble(datosTerminado[fila][12]);
+                            decimetros = Double.parseDouble(datosBaja[5]);
                         }
                         
                         bit.setKg(0);
@@ -1005,11 +1040,14 @@ public class PnlTerminado extends javax.swing.JPanel {
                         bit.setDecimetros(decimetros);
                     }
 
-                    bit.setIdInvTerminado(Integer.parseInt(datosTerminado[fila][10]));
+                    bit.setIdInvTerminado(Integer.parseInt(datosBaja[10]));
                     bit.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
                     bit.setMotivo(txtrMotivo.getText());
+                    bit.setBandera(Integer.parseInt(datosBaja[11]));
 
+                    //insertar baja en la tabla tb_bajasInvTerminado
                     bitc.agregarBajaInvTerminado(bit);
+                    
                     itc.actualizarNoPiezasBaja(bit);
                     actualizarTablaTerminado();
                     dlgEliPzaInvTerminado.setVisible(false);
@@ -2514,6 +2552,9 @@ try {
             
             if (numPiezasActuales != 0)
             {
+                datosSalida = new String[datosTerminado[fila].length];
+                datosSalida = datosTerminado[fila];
+                
                 abrirDialogoEnvSal();
             }
             else
@@ -2763,13 +2804,26 @@ try {
     }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
 
     private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
-        try {
+        try 
+        {
             int fila = tblTerminado.getSelectedRow();
             String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
+            
             int numPiezasActuales = Integer.parseInt(piezas);
 
             if (numPiezasActuales != 0)
             {
+                txtNoPiezasEliminar.setText("");
+                txtrMotivo.setText("");
+
+                txtNoPartida1.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
+                txtTipoRecorte.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
+                txtCalibre.setText(String.valueOf(tblTerminado.getValueAt(fila, 8)));
+                txtSeleccion.setText(String.valueOf(tblTerminado.getValueAt(fila, 7)));
+                txtNoPiezasActuales.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
+                
+                datosBaja = new String[datosTerminado[fila].length];
+                datosBaja = datosTerminado[fila];
                 abrirDialogoEliPzaInvTerminado();
             }
             else

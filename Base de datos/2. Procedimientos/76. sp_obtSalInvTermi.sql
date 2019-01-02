@@ -92,7 +92,9 @@ as begin
 			isalt.fechaEntrada between @fecha and @fecha1
       and isalt.bandera = 0
       
+    --------------------------------------------------------------------------------------
     union all
+    --------------------------------------------------------------------------------------
     
     select
 			cp.noPartida
@@ -144,9 +146,59 @@ as begin
 		where
 			isalt.fechaEntrada between @fecha and @fecha1
       and isalt.bandera = 1
+      
+    --------------------------------------------------------------------------------------
+    union all
+    --------------------------------------------------------------------------------------
+    
+    select
+			0
+			, tr.descripcion as tipoRecorte
+			, isalt.noPiezas
+      , isalt.kg
+      , isalt.decimetros
+      , isalt.pies
+			, s.descripcion as seleccion
+			, c.descripcion as calibre
+			, isalt.fechaEntrada
+      
+		from
+			tb_invSalTerminado as isalt
+      
+      inner join
+        tb_invTerminadoManual as itm
+      on
+        itm.idInvTerminadoManual = isalt.idInvTerminado
+      
+      inner join
+        tb_invSemTerManual as istm
+      on
+        istm.idInvSemTerManual = itm.idInvSemTerManual
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = istm.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = isalt.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = isalt.idSeleccion
+        and s.descripcion like @seleccion
+		
+		where
+			isalt.fechaEntrada between @fecha and @fecha1
+      and isalt.bandera = 2
 	end
 	
-	else
+	else ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	begin
 		select
 			p.noPartida
@@ -217,8 +269,10 @@ as begin
 		where
 			isalt.fechaEntrada between @fecha and @fecha1
       and isalt.bandera = 0
-      
+    
+    --------------------------------------------------------------------------------------
     union all
+    --------------------------------------------------------------------------------------
     
     select
 			cp.noPartida
@@ -271,6 +325,56 @@ as begin
 		where
 			isalt.fechaEntrada between @fecha and @fecha1
       and isalt.bandera = 1
+    
+    --------------------------------------------------------------------------------------
+    union all
+    --------------------------------------------------------------------------------------
+    
+    select
+		  0
+			, tr.descripcion as tipoRecorte
+			, isalt.noPiezas
+      , isalt.kg
+      , isalt.decimetros
+      , isalt.pies
+			, s.descripcion as seleccion
+			, c.descripcion as calibre
+			, isalt.fechaEntrada
+      
+		from
+			tb_invSalTerminado as isalt
+      
+      inner join
+        tb_invTerminadoManual as itm
+      on
+        itm.idInvTerminadoManual = isalt.idInvTerminado
+      
+      inner join
+        tb_invSemTerManual as istm
+      on
+        istm.idInvSemTerManual = itm.idInvSemTerManual
+      
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = istm.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+      
+      inner join
+        tb_calibre as c
+      on
+        c.idCalibre = isalt.idCalibre
+        and c.descripcion like @calibre
+      
+      inner join
+        tb_seleccion as s
+      on
+        s.idSeleccion = isalt.idSeleccion
+        and s.descripcion like @seleccion
+		
+		where
+			isalt.fechaEntrada between @fecha and @fecha1
+      and isalt.bandera = 2
 	end
 end
 go

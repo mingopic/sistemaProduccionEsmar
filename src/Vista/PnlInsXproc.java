@@ -164,10 +164,10 @@ public class PnlInsXproc extends javax.swing.JPanel {
                                 JOptionPane.showMessageDialog(null, "La clave no puede superar los 50 caracteres","Error",JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
-                            if (tblInsXSubProc.getValueAt(i, 3).toString().equals("0"))
-                            {
-                                datosIXP[i].setClave("");
-                            }
+//                            if (tblInsXSubProc.getValueAt(i, 3).toString().equals("0"))
+//                            {
+//                                datosIXP[i].setClave("");
+//                            }
                             else
                             {
                                 datosIXP[i].setClave(tblInsXSubProc.getValueAt(i, 0).toString());
@@ -282,7 +282,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnGuardarInsumo)
                 .addComponent(btnCopiarFormula))
             .addComponent(lblSubProceso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -298,7 +298,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         });
 
         btnAgregarInsumo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
-        btnAgregarInsumo.setText("Agregar");
+        btnAgregarInsumo.setText("Agregar Insumo");
         btnAgregarInsumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarInsumoActionPerformed(evt);
@@ -351,9 +351,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAgregarInsumo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgregarInsumo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAgregarEspacio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnQuitarInsumo)))
@@ -371,7 +371,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     .addComponent(btnQuitarInsumo)
                     .addComponent(btnAgregarEspacio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -433,7 +433,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,8 +508,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 idSubproceso = Integer.parseInt(idAux);
                 subP.setIdSubProceso(idSubproceso);
             }
-            
-            DefaultTableModel dtm = null;
         
             try {
 
@@ -563,7 +561,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         datos[1]= "";
         datos[2]= cmbInsumo.getSelectedItem().toString();
         datos[3]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getCIDPRODUCTO());
-        dtmInsumos.addRow(datos);
+        dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarInsumoActionPerformed
 
     private void cmbInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbInsumoActionPerformed
@@ -580,7 +578,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         datos[1]= "";
         datos[2]= "";
         datos[3]= "0";
-        dtmInsumos.addRow(datos);
+        dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarEspacioActionPerformed
 
     private void btnCopiarFormulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopiarFormulaActionPerformed

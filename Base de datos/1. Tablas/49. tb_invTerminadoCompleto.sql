@@ -11,7 +11,7 @@ go
 create table tb_invTerminadoCompleto
 (
   idInvTerminado        int
-  , bandera             int -- 0 tb_invTerminado y 1 tb_invTerminadoPesado
+  , bandera             int -- 0 foreign key de tb_invTerminado, 1 tb_invTerminadoPesado, 2 de tb_invTerminadoManual
   , noPartida           int
   , idTipoRecorte       int
   , idCalibre           int

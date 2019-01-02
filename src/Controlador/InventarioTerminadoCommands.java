@@ -62,10 +62,42 @@ public class InventarioTerminadoCommands {
                 datos[i][0] = rs.getString("noPartida");
                 datos[i][1] = rs.getString("tipoRecorte");
                 datos[i][2] = rs.getString("noPiezasActuales");
-                datos[i][3] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActual")));
-                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
+                
+                try 
+                {
+                    datos[i][3] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActual")));
+                } 
+                catch (Exception e) 
+                {
+                    datos[i][3] = String.valueOf(0.0);
+                }
+                
+                try 
+                {
+                    datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
+                } 
+                catch (Exception e) 
+                {
+                    
+                }
+                
+                if (datos[i][4] == null)
+                {
+                    datos[i][4] = String.valueOf(0.0);
+                }
+                
                 datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("decimetrosActual")));
+                if (datos[i][5] == null)
+                {
+                    datos[i][5] = String.valueOf(0.0);
+                }
+                
                 datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("piesActual")));
+                if (datos[i][6] == null)
+                {
+                    datos[i][6] = String.valueOf(0.0);
+                }
+                
                 datos[i][7] = rs.getString("seleccion");
                 datos[i][8] = rs.getString("calibre");
                 Date sqlDate = rs.getDate("fechaEntrada");
@@ -133,7 +165,8 @@ public class InventarioTerminadoCommands {
                 + ", " + bit.getIdInvTerminado()
                 + ", " + bit.getKg()
                 + ", " + bit.getPies()
-                + ", " + bit.getDecimetros();
+                + ", " + bit.getDecimetros()
+                + ", " + bit.getBandera();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

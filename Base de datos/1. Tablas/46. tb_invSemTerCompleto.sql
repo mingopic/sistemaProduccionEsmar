@@ -11,7 +11,7 @@ go
 create table tb_invSemTerCompleto 
 (
   idInvSemTer      int
-  , bandera        int -- 1 foreign key de tb_invSemTerPesado y 0 de tb_invSemTer
+  , bandera        int -- 0 foreign key de tb_invSemTer, 1 tb_invSemTerPesado, 2 de tb_invSemTerManual
   , noPartida      int
   , idTipoRecorte  int
   , idCalibre      int

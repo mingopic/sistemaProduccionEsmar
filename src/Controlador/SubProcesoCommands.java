@@ -81,17 +81,13 @@ public class SubProcesoCommands {
             //Recorremos el ResultSet registro a registro
             while (rs.next()) 
             {
+                datos[i][0] = rs.getString("clave");
                 
                 if (rs.getString("idInsumo").equals("0"))
-                {
-                    datos[i][0] = "";
                     datos[i][1] = "";
-                }
                 else
-                {
-                    datos[i][0] = rs.getString("clave");
                     datos[i][1] = rs.getString("porcentaje");
-                }
+                
                 datos[i][2] = rs.getString("nombreProducto");
                 datos[i][3] = rs.getString("idInsumo");
                 datos[i][4] = rs.getString("idFormXSubProc");

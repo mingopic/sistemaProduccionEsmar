@@ -19,64 +19,6 @@ create procedure sp_actInvTer
 )
 as begin
 
-  declare @promKg         float
-  declare @promDecimetros float
-  declare @promPies       float
-  declare @kgDesc         float
-  declare @decimetrosDesc float
-  declare @piesDesc       float
-  
-  set @promKg =
-  (
-    select
-      (kgTotales/noPiezas)
-    from
-      tb_invTerminado
-    where
-      idInvTerminado = @idInvTerminado
-  )
-  
-  set @promDecimetros =
-  (
-    select
-      (decimetros/noPiezas)
-    from
-      tb_invTerminado
-    where
-      idInvTerminado = @idInvTerminado
-  )
-  
-  set @promPies =
-  (
-    select
-      (pies/noPiezas)
-    from
-      tb_invTerminado
-    where
-      idInvTerminado = @idInvTerminado
-  )
-  
-  set @kgDesc = @promKg*@piezasUtilizar
-  
-  if (@kgDesc > @kg)
-  begin
-    set @kgDesc = @kg
-  end
-  
-  set @decimetrosDesc = @promDecimetros*@piezasUtilizar
-  
-  if (@decimetrosDesc > @decimetros)
-  begin
-    set @decimetrosDesc = @decimetros
-  end
-  
-  set @piesDesc = @promPies*@piezasUtilizar
-  
-  if (@piesDesc > @pies)
-  begin
-    set @piesDesc = @pies
-  end
-
   if @bandera = 1
   begin
     update
@@ -84,27 +26,43 @@ as begin
       
     set
       noPiezasActuales = noPiezasActuales-@piezasUtilizar
-      , kgTotalesActual = kgTotalesActual-(@kgDesc)
-      , decimetrosActual = decimetrosActual-(@decimetrosDesc)
-      , piesActual = piesActual-(@piesDesc)
+      , kgTotalesActual = kgTotalesActual-@kg
+      , decimetrosActual = decimetrosActual-@decimetros
+      , piesActual = piesActual-@pies
       
     where
       idInvTerminadoPesado = @idInvTerminado
   end
   
-  else
-  begin
+  else if @bandera = 0
+  begin 
     update
       tb_invTerminado
       
     set
       noPiezasActuales = noPiezasActuales-@piezasUtilizar
-      , kgTotalesActual = kgTotalesActual-(@kgDesc)
-      , decimetrosActual = decimetrosActual-(@decimetrosDesc)
-      , piesActual = piesActual-(@piesDesc)
+      , kgTotalesActual = kgTotalesActual-@kg
+      , decimetrosActual = decimetrosActual-@decimetros
+      , piesActual = piesActual-@pies
       
     where
       idInvTerminado = @idInvTerminado
   end
+  
+  if @bandera = 2
+  begin
+    update
+      tb_invTerminadoManual
+      
+    set
+      noPiezasActuales = noPiezasActuales-@piezasUtilizar
+      , kgTotalesActual = kgTotalesActual-@kg
+      , decimetrosActual = decimetrosActual-@decimetros
+      , piesActual = piesActual-@pies
+      
+    where
+      idInvTerminadoManual = @idInvTerminado
+  end
+  
 end
 go

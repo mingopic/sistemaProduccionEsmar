@@ -18,6 +18,7 @@ public class BajasInventarioTerminado {
     double kg;
     double pies;
     double decimetros;
+    int bandera;
 
     public double getKg() {
         return kg;
@@ -81,5 +82,13 @@ public class BajasInventarioTerminado {
 
     public void setIdInvTerminado(int idInvTerminado) {
         this.idInvTerminado = idInvTerminado;
+    }
+
+    public int getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(int bandera) {
+        this.bandera = bandera;
     }
 }

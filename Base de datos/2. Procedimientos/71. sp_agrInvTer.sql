@@ -59,7 +59,7 @@ as begin
     
   end
   
-  else
+  else if @bandera = 0
   begin
   
     insert into
@@ -97,5 +97,43 @@ as begin
     
   end
 	
+  else if @bandera = 2
+  begin
+  
+    insert into
+      tb_invTerminadoManual
+      (
+        idInvSemTerManual
+        , idCalibre
+        , idSeleccion
+        , noPiezas
+        , noPiezasActuales
+        , kgTotales
+        , kgTotalesActual
+        , decimetros
+        , decimetrosActual
+        , pies
+        , piesActual
+        , fechaEntrada
+      )
+      
+    values
+      (
+        @idInvSemTer
+        , @idCalibre
+        , @idSeleccion
+        , @noPiezas
+        , @noPiezas
+        , @kgTotales
+        , @kgTotales
+        , @decimetros
+        , @decimetros
+        , @pies
+        , @pies
+        , getdate()
+      )
+    
+  end
+  
 end
 go

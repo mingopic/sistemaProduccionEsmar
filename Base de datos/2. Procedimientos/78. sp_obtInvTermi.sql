@@ -131,7 +131,9 @@ as begin
   where
     it.noPiezasActuales > 0
   
+  -------------------------------------------------------------------------------------
   union all
+  -------------------------------------------------------------------------------------
   
   select
     cp.noPartida
@@ -184,5 +186,56 @@ as begin
   
   where
     itp.noPiezasActuales > 0
+  
+  -------------------------------------------------------------------------------------
+  union all
+  -------------------------------------------------------------------------------------
+  
+  select
+    0
+    , tr.descripcion as tipoRecorte
+    , c.descripcion as calibre
+    , s.descripcion as seleccion
+    , itm.noPiezasActuales as noPiezas
+    , itm.kgTotalesActual as peso
+    , itm.kgTotalesActual/itm.noPiezasActuales as pesoProm
+    , itm.decimetrosActual as decimetros
+    , itm.piesActual as pies
+    , itm.fechaEntrada
+    , 0 as 'costoMateriaPrima'
+    , 0 as 'costoManoObra'
+    , 0 as 'costoFabricacion'
+    , 0 as 'costoTotal'
+    , 
+      0 as 'precioVenta'
+
+	from
+		tb_invTerminadoManual as itm
+	
+    inner join
+      tb_invSemTerManual as istm
+    on
+      istm.idInvSemTerManual = itm.idInvSemTerManual
+
+    inner join
+      tb_tipoRecorte tr
+    on
+      tr.idTipoRecorte = istm.idTipoRecorte
+      and tr.descripcion like @tipoRecorte
+
+    inner join
+      tb_calibre c
+    on
+      c.idCalibre = itm.idCalibre
+      and c.descripcion like @calibre
+
+    inner join
+      tb_seleccion s
+    on
+      s.idSeleccion = itm.idSeleccion
+      and s.descripcion like @seleccion
+  
+  where
+    itm.noPiezasActuales > 0
     
 end

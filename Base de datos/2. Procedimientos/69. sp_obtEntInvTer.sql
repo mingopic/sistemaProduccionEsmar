@@ -65,11 +65,11 @@ as begin
     (
       (
         @noPartida = 0
-        and itc.noPartida > 0
+        and itc.noPartida > -1
       )
       or
       (
-        @noPartida > 0
+        @noPartida > -1
         and itc.noPartida = @noPartida
       )
     )

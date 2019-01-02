@@ -18,7 +18,7 @@ as begin
     tb_invTerminadoCompleto
     (
       idInvTerminado
-      , bandera -- 1 foreign key de tb_invTerminadoPesado y 0 de tb_invTerminado
+      , bandera -- 0 foreign key de tb_invTerminado, 1  tb_invTerminadoPesado y 2 tb_invTerminadoManual
       , noPartida
       , idTipoRecorte
       , idCalibre
@@ -41,7 +41,7 @@ as begin
     , itp.kgTotalesActual
     , itp.decimetrosActual
     , itp.piesActual
-    , getdate()
+    , itp.fechaEntrada
        
   from 
     tb_invTerminadoPesado itp
@@ -58,12 +58,12 @@ as begin
   where
     itp.noPiezasActuales > 0
   
-  -- Segundo insert en la tabla
+  -- Segundo insert en la tabla -------------------------------------------------------------------------------------------------
   insert into 
     tb_invTerminadoCompleto
     (
       idInvTerminado
-      , bandera -- 1 foreign key de tb_invTerminadoPesado y 0 de tb_invTerminado
+      , bandera -- 0 foreign key de tb_invTerminado, 1  tb_invTerminadoPesado y 2 tb_invTerminadoManual
       , noPartida
       , idTipoRecorte
       , idCalibre
@@ -86,7 +86,7 @@ as begin
     , it.kgTotalesActual
     , it.decimetrosActual
     , it.piesActual
-    , getdate()
+    , it.fechaEntrada
        
   from
     tb_invTerminado it
@@ -122,5 +122,46 @@ as begin
     
   where
     it.noPiezasActuales > 0
+    
+  -- Tercer insert en la tabla -------------------------------------------------------------------------------------------------
+  insert into 
+    tb_invTerminadoCompleto
+    (
+      idInvTerminado
+      , bandera -- 0 foreign key de tb_invTerminado, 1  tb_invTerminadoPesado y 2 tb_invTerminadoManual
+      , noPartida
+      , idTipoRecorte
+      , idCalibre
+      , idSeleccion
+      , noPiezasActuales
+      , kgTotalesActual
+      , decimetrosActual
+      , piesActual
+      , fechaEntrada
+    )
+  
+  select 
+    itm.idInvTerminadoManual
+    , 2
+    , 0
+    , istm.idTipoRecorte
+    , itm.idCalibre
+    , itm.idSeleccion
+    , itm.noPiezasActuales
+    , itm.kgTotalesActual
+    , itm.decimetrosActual
+    , itm.piesActual
+    , itm.fechaEntrada
+       
+  from
+    tb_invTerminadoManual itm
+    
+  inner join
+    tb_invSemTerManual istm
+  on
+    istm.idInvSemTerManual = itm.idInvSemTerManual
+
+  where
+    itm.noPiezasActuales > 0
 end
 go

@@ -27,10 +27,9 @@ as begin
       
     where
       idInvSemTer = @idInvSemTer
-  
   end
   
-  else
+  else if @bandera = 1
   begin
   
     update
@@ -41,7 +40,19 @@ as begin
       
     where
       idInvSemTerPesado = @idInvSemTer
+  end
   
+  else if @bandera = 2
+  begin
+  
+    update
+      tb_invSemTerManual
+      
+    set
+      noPiezasActuales = noPiezasActuales-@piezasUtilizar
+      
+    where
+      idInvSemTerManual = @idInvSemTer
   end
   
 end

@@ -361,7 +361,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
             dlgAgregarUsuario.setSize(580, 290);
             dlgAgregarUsuario.setPreferredSize(dlgAgregarUsuario.getSize());
             dlgAgregarUsuario.setLocationRelativeTo(null);
-            dlgAgregarUsuario.setAlwaysOnTop(true);
+            dlgAgregarUsuario.setModal(true);
             dlgAgregarUsuario.setVisible(true);
             
             txtNombreUsuAgregar.setText("");
@@ -393,7 +393,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
             dlgEditarUsuario.setSize(580, 290);
             dlgEditarUsuario.setPreferredSize(dlgEditarUsuario.getSize());
             dlgEditarUsuario.setLocationRelativeTo(null);
-            dlgEditarUsuario.setAlwaysOnTop(true);
+            dlgEditarUsuario.setModal(true);
             dlgEditarUsuario.setVisible(true);
         } 
         catch (Exception e) 

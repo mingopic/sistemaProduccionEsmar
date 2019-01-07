@@ -214,7 +214,7 @@ public class PnlProveedores extends javax.swing.JPanel {
             dlgAgregarProveedor.setSize(410, 210);
             dlgAgregarProveedor.setPreferredSize(dlgAgregarProveedor.getSize());
             dlgAgregarProveedor.setLocationRelativeTo(null);
-            dlgAgregarProveedor.setAlwaysOnTop(true);
+            dlgAgregarProveedor.setModal(true);
             dlgAgregarProveedor.setVisible(true);
 
             txtNombreProvAgregar.setText("");
@@ -235,7 +235,7 @@ public class PnlProveedores extends javax.swing.JPanel {
             dlgEditarProveedor.setSize(410, 210);
             dlgEditarProveedor.setPreferredSize(dlgEditarProveedor.getSize());
             dlgEditarProveedor.setLocationRelativeTo(null);
-            dlgEditarProveedor.setAlwaysOnTop(true);
+            dlgEditarProveedor.setModal(true);
             dlgEditarProveedor.setVisible(true);
         } 
         catch (Exception e) 

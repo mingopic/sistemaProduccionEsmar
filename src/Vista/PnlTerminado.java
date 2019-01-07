@@ -400,7 +400,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         dlgAgregar.setSize(370, 490);
         dlgAgregar.setPreferredSize(dlgAgregar.getSize());
         dlgAgregar.setLocationRelativeTo(null);
-        dlgAgregar.setAlwaysOnTop(true);
+        dlgAgregar.setModal(true);
         dlgAgregar.setVisible(true);
     }
     
@@ -444,7 +444,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         dlgBuscar.setSize(600,320);
         dlgBuscar.setPreferredSize(dlgBuscar.getSize());
         dlgBuscar.setLocationRelativeTo(null);
-        dlgBuscar.setAlwaysOnTop(true);
+        dlgBuscar.setModal(true);
         dlgBuscar.setVisible(true);
     }
     
@@ -807,7 +807,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         dlgEnvSal.setSize(360, 540);
         dlgEnvSal.setPreferredSize(dlgEnvSal.getSize());
         dlgEnvSal.setLocationRelativeTo(null);
-        dlgEnvSal.setAlwaysOnTop(true);
+        dlgEnvSal.setModal(true);
         dlgEnvSal.setVisible(true);
     }
     
@@ -979,7 +979,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         dlgEliPzaInvTerminado.setSize(430, 490);
         dlgEliPzaInvTerminado.setPreferredSize(dlgEliPzaInvTerminado.getSize());
         dlgEliPzaInvTerminado.setLocationRelativeTo(null);
-        dlgEliPzaInvTerminado.setAlwaysOnTop(true);
+        dlgEliPzaInvTerminado.setModal(true);
         dlgEliPzaInvTerminado.setVisible(true);
     }
     

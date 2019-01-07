@@ -491,7 +491,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 dlgRecortar.setSize(300, 280);
                 dlgRecortar.setPreferredSize(dlgRecortar.getSize());
                 dlgRecortar.setLocationRelativeTo(null);
-                dlgRecortar.setAlwaysOnTop(true);
+                dlgRecortar.setModal(true);
                 dlgRecortar.setVisible(true);
             }
             else
@@ -557,7 +557,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 dlgSelAcabado.setSize(300, 280);
                 dlgSelAcabado.setPreferredSize(dlgRecortar.getSize());
                 dlgSelAcabado.setLocationRelativeTo(null);
-                dlgSelAcabado.setAlwaysOnTop(true);
+                dlgSelAcabado.setModal(true);
                 dlgSelAcabado.setVisible(true);
             }
             else
@@ -996,7 +996,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         dlgEliPzaFichaProd.setSize(460, 490);
         dlgEliPzaFichaProd.setPreferredSize(dlgEliPzaFichaProd.getSize());
         dlgEliPzaFichaProd.setLocationRelativeTo(null);
-        dlgEliPzaFichaProd.setAlwaysOnTop(true);
+        dlgEliPzaFichaProd.setModal(true);
         dlgEliPzaFichaProd.setVisible(true);
     }
     

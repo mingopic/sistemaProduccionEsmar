@@ -214,7 +214,7 @@ public class PnlTambores extends javax.swing.JPanel {
             dlgAgregarTambor.setSize(410, 210);
             dlgAgregarTambor.setPreferredSize(dlgAgregarTambor.getSize());
             dlgAgregarTambor.setLocationRelativeTo(null);
-            dlgAgregarTambor.setAlwaysOnTop(true);
+            dlgAgregarTambor.setModal(true);
             dlgAgregarTambor.setVisible(true);
 
             txtNombreTambAgregar.setText("");
@@ -235,7 +235,7 @@ public class PnlTambores extends javax.swing.JPanel {
             dlgEditarTambor.setSize(410, 210);
             dlgEditarTambor.setPreferredSize(dlgEditarTambor.getSize());
             dlgEditarTambor.setLocationRelativeTo(null);
-            dlgEditarTambor.setAlwaysOnTop(true);
+            dlgEditarTambor.setModal(true);
             dlgEditarTambor.setVisible(true);
         } 
         catch (Exception e) 

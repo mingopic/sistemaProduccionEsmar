@@ -255,6 +255,7 @@ public class PnlPartidas extends javax.swing.JPanel {
     //Método que abre el dialogo para recortar un tipo de cuero
     public void abrirDialogoRecortar()
     {   
+        dlgRecortar.setModal(true);
         dlgRecortar.setVisible(false);
         lblyRecortar.setVisible(false);
         txtNoPiezasRecortar2.setVisible(false);
@@ -349,7 +350,6 @@ public class PnlPartidas extends javax.swing.JPanel {
             dlgRecortar.setSize(430, 330);
             dlgRecortar.setPreferredSize(dlgRecortar.getSize());
             dlgRecortar.setLocationRelativeTo(null);
-            dlgRecortar.setAlwaysOnTop(true);
             dlgRecortar.setVisible(true);
         } 
         catch (Exception e) 
@@ -381,10 +381,10 @@ public class PnlPartidas extends javax.swing.JPanel {
     {
         inicializarCamposEliPzaInvCrudo();
         
+        dlgEliPzaInvCrudo.setModal(true);
         dlgEliPzaInvCrudo.setSize(430, 490);
         dlgEliPzaInvCrudo.setPreferredSize(dlgEliPzaInvCrudo.getSize());
         dlgEliPzaInvCrudo.setLocationRelativeTo(null);
-        dlgEliPzaInvCrudo.setAlwaysOnTop(true);
         dlgEliPzaInvCrudo.setVisible(true);
     }
     
@@ -1020,7 +1020,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 .addComponent(btnEliminarPiezas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(btnRecortar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAsignarEntrada)

@@ -214,7 +214,7 @@ public class PnlCalibres extends javax.swing.JPanel {
             dlgAgregarCalibre.setSize(410, 210);
             dlgAgregarCalibre.setPreferredSize(dlgAgregarCalibre.getSize());
             dlgAgregarCalibre.setLocationRelativeTo(null);
-            dlgAgregarCalibre.setAlwaysOnTop(true);
+            dlgAgregarCalibre.setModal(true);
             dlgAgregarCalibre.setVisible(true);
 
             txtNombreCalAgregar.setText("");
@@ -236,7 +236,7 @@ public class PnlCalibres extends javax.swing.JPanel {
             dlgEditarCalibre.setSize(410, 210);
             dlgEditarCalibre.setPreferredSize(dlgEditarCalibre.getSize());
             dlgEditarCalibre.setLocationRelativeTo(null);
-            dlgEditarCalibre.setAlwaysOnTop(true);
+            dlgEditarCalibre.setModal(true);
             dlgEditarCalibre.setVisible(true);
         } 
         catch (Exception e) 

@@ -281,7 +281,7 @@ public class PnlCross extends javax.swing.JPanel {
         dlgEnvSemi.setSize(340, 300);
         dlgEnvSemi.setPreferredSize(dlgEnvSemi.getSize());
         dlgEnvSemi.setLocationRelativeTo(null);
-        dlgEnvSemi.setAlwaysOnTop(true);
+        dlgEnvSemi.setModal(true);
         dlgEnvSemi.setVisible(true);
     }
     
@@ -291,7 +291,7 @@ public class PnlCross extends javax.swing.JPanel {
         dlgAgrDesvenado.setSize(350, 300);
         dlgAgrDesvenado.setPreferredSize(dlgAgrDesvenado.getSize());
         dlgAgrDesvenado.setLocationRelativeTo(null);
-        dlgAgrDesvenado.setAlwaysOnTop(true);
+        dlgAgrDesvenado.setModal(true);
         dlgAgrDesvenado.setVisible(true);
     }
     
@@ -304,7 +304,7 @@ public class PnlCross extends javax.swing.JPanel {
         dlgBuscar.setSize(600,320);
         dlgBuscar.setPreferredSize(dlgBuscar.getSize());
         dlgBuscar.setLocationRelativeTo(null);
-        dlgBuscar.setAlwaysOnTop(true);
+        dlgBuscar.setModal(true);
         dlgBuscar.setVisible(true);
     }
     
@@ -538,7 +538,7 @@ public class PnlCross extends javax.swing.JPanel {
         dlgEliPzaInvCross.setSize(430, 490);
         dlgEliPzaInvCross.setPreferredSize(dlgEliPzaInvCross.getSize());
         dlgEliPzaInvCross.setLocationRelativeTo(null);
-        dlgEliPzaInvCross.setAlwaysOnTop(true);
+        dlgEliPzaInvCross.setModal(true);
         dlgEliPzaInvCross.setVisible(true);
     }
     

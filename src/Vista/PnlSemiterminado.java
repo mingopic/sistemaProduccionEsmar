@@ -382,7 +382,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         dlgAgregar.setSize(380, 370);
         dlgAgregar.setPreferredSize(dlgAgregar.getSize());
         dlgAgregar.setLocationRelativeTo(null);
-        dlgAgregar.setAlwaysOnTop(true);
+        dlgAgregar.setModal(true);
         dlgAgregar.setVisible(true);
     }
     
@@ -431,7 +431,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         dlgBuscar.setSize(600,320);
         dlgBuscar.setPreferredSize(dlgBuscar.getSize());
         dlgBuscar.setLocationRelativeTo(null);
-        dlgBuscar.setAlwaysOnTop(true);
+        dlgBuscar.setModal(true);
         dlgBuscar.setVisible(true);
     }
     
@@ -700,7 +700,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         dlgEnvTermi.setSize(330, 310);
         dlgEnvTermi.setPreferredSize(dlgEnvTermi.getSize());
         dlgEnvTermi.setLocationRelativeTo(null);
-        dlgEnvTermi.setAlwaysOnTop(true);
+        dlgEnvTermi.setModal(true);
         dlgEnvTermi.setVisible(true);
     }
     
@@ -771,7 +771,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         dlgEliPzaInvSemiterminado.setSize(430, 490);
         dlgEliPzaInvSemiterminado.setPreferredSize(dlgEliPzaInvSemiterminado.getSize());
         dlgEliPzaInvSemiterminado.setLocationRelativeTo(null);
-        dlgEliPzaInvSemiterminado.setAlwaysOnTop(true);
+        dlgEliPzaInvSemiterminado.setModal(true);
         dlgEliPzaInvSemiterminado.setVisible(true);
     }
     

@@ -343,7 +343,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             dlgAgregarPrecioVenta.setSize(435, 335);
             dlgAgregarPrecioVenta.setPreferredSize(dlgAgregarPrecioVenta.getSize());
             dlgAgregarPrecioVenta.setLocationRelativeTo(null);
-            dlgAgregarPrecioVenta.setAlwaysOnTop(true);
+            dlgAgregarPrecioVenta.setModal(true);
             dlgAgregarPrecioVenta.setVisible(true);
 
             llenarComboTipoRecorteAgregar();
@@ -382,7 +382,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             dlgEditarPrecioVenta.setSize(385, 320);
             dlgEditarPrecioVenta.setPreferredSize(dlgEditarPrecioVenta.getSize());
             dlgEditarPrecioVenta.setLocationRelativeTo(null);
-            dlgEditarPrecioVenta.setAlwaysOnTop(true);
+            dlgEditarPrecioVenta.setModal(true);
             dlgEditarPrecioVenta.setVisible(true);
         } 
         catch (Exception e) 

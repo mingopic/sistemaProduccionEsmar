@@ -265,7 +265,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             dialogo.setSize(ancho, alto);
             dialogo.setPreferredSize(dialogo.getSize());
             dialogo.setLocationRelativeTo(null);
-            dialogo.setAlwaysOnTop(true);
+            dialogo.setModal(true);
             dialogo.setVisible(true);
         } 
         catch (Exception e) 

@@ -247,7 +247,7 @@ public class PnlSubProcesos extends javax.swing.JPanel {
             dlgAgregarSubProceso.setSize(410, 210);
             dlgAgregarSubProceso.setPreferredSize(dlgAgregarSubProceso.getSize());
             dlgAgregarSubProceso.setLocationRelativeTo(null);
-            dlgAgregarSubProceso.setAlwaysOnTop(true);
+            dlgAgregarSubProceso.setModal(true);
             dlgAgregarSubProceso.setVisible(true);
 
             txtSubProcesoAgregar.setText("");
@@ -269,7 +269,7 @@ public class PnlSubProcesos extends javax.swing.JPanel {
             dlgEditarProveedor.setSize(410, 210);
             dlgEditarProveedor.setPreferredSize(dlgEditarProveedor.getSize());
             dlgEditarProveedor.setLocationRelativeTo(null);
-            dlgEditarProveedor.setAlwaysOnTop(true);
+            dlgEditarProveedor.setModal(true);
             dlgEditarProveedor.setVisible(true);
         } 
         catch (Exception e) 

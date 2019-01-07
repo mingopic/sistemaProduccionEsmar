@@ -21,15 +21,45 @@ create procedure sp_insRecorteInvCrudo
   )
   as begin
     
-    update
-      tb_inventarioCrudo
+    declare
+      @promkgXPiezaEntera float
     
     set
-      noPiezasActual = noPiezasActual - @noPiezasOriginal
-      , KgTotalActual = KgTotalActual - @kg1 - @kg2
+      @promkgXPiezaEntera =
+      (
+        select
+          pesoXPieza
+        from
+          tb_inventarioCrudo
+        where
+          idInventarioCrudo = @idInventarioCrudo
+      )
+      
+    if (@idTipoRecorte = 0 or @idTipoRecorte = 4)
+    begin
+      update
+        tb_inventarioCrudo
+      
+      set
+        noPiezasActual = noPiezasActual - @noPiezasOriginal
+        , KgTotalActual = (noPiezasActual - @noPiezasOriginal) * @promkgXPiezaEntera
+      
+      where
+        idInventarioCrudo = @idInventarioCrudo
+    end
     
-    where
-      idInventarioCrudo = @idInventarioCrudo
+    else
+    begin
+      update
+        tb_inventarioCrudo
+      
+      set
+        noPiezasActual = noPiezasActual - @noPiezasOriginal
+        , KgTotalActual = KgTotalActual - @kg1 - @kg2
+      
+      where
+        idInventarioCrudo = @idInventarioCrudo
+    end
       
     if @idTipoRecorte = 0
     begin

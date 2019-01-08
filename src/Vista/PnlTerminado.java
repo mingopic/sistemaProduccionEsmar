@@ -394,9 +394,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     
     //Método que abre el dialogo de agregar entrada de Semiterminad
     public void abrirDialogoAgregar() throws Exception
-    {
-        inicializarCamposAgregar();
-        
+    {   
         dlgAgregar.setSize(370, 490);
         dlgAgregar.setPreferredSize(dlgAgregar.getSize());
         dlgAgregar.setLocationRelativeTo(null);
@@ -502,7 +500,7 @@ public class PnlTerminado extends javax.swing.JPanel {
             
             dlgBuscar.setVisible(false);
             
-            abrirDialogoAgregar();
+            inicializarCamposAgregar();
             
             txtNoPartidaAgregar.setText(String.valueOf(is.getNoPartida()));
             txtTipoRecorteAgregar.setText(tr.getDescripcion());
@@ -510,6 +508,8 @@ public class PnlTerminado extends javax.swing.JPanel {
             cmbSeleccionAgregar.setSelectedItem(s.getDescripcion());
             txtNoPiezasAgregar.setText(String.valueOf(ist.getNoPiezasActuales()));      
             txtKgTotalesAgregar.setText(String.valueOf(kgTotales));
+            
+            abrirDialogoAgregar();
         }
         else 
         {
@@ -2588,6 +2588,7 @@ try {
 
     private void btnAgregarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEntradaActionPerformed
         try {
+            inicializarCamposAgregar();
             abrirDialogoAgregar();
         } catch (Exception ex) {
             System.out.println(ex);

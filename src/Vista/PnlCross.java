@@ -473,12 +473,12 @@ public class PnlCross extends javax.swing.JPanel {
         {
             dlgBuscar.setVisible(false);
             
-            abrirDialogoAgregar();
-            
             txtNoPartidaDesvenado.setText(String.valueOf(lstCueroDisp.get(renglonSeleccionado).getNoPartida()));
             txtTipoRecorteDesvenado.setText(lstCueroDisp.get(renglonSeleccionado).getRecorte());
             txtNoPiezasDispDesvenado.setText(String.valueOf(lstCueroDisp.get(renglonSeleccionado).getNoPiezas()));
             seleccionado = renglonSeleccionado;
+            
+            abrirDialogoAgregar();
         }
         else 
         {
@@ -940,7 +940,7 @@ public class PnlCross extends javax.swing.JPanel {
         });
 
         jLabel58.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel58.setText("No. Piezas a egregar:");
+        jLabel58.setText("No. Piezas a agregar:");
 
         txtNoPiezasDesvenado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtNoPiezasDesvenado.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1131,7 +1131,7 @@ public class PnlCross extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel19)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);

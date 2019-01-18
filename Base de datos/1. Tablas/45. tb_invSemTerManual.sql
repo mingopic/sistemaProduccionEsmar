@@ -16,6 +16,12 @@ create table tb_invSemTerManual
   , idSeleccion 	    int
   , noPiezas          int
   , noPiezasActuales  int
+  , kgTotales         float
+  , kgTotalesActual   float
+  , decimetros        float
+  , decimetrosActual  float
+  , pies              float
+  , piesActual        float
   , fechaEntrada	    date
 )
 go

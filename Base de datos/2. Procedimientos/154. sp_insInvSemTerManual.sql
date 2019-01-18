@@ -22,22 +22,34 @@ as begin
       , idSeleccion
       , noPiezas
       , noPiezasActuales
+      , kgTotales
+      , kgTotalesActual
+      , decimetros
+      , decimetrosActual
+      , pies
+      , piesActual
       , fechaEntrada
     )
   
   select 
-    RECORTE
+    TIPODEPRODUCTO
     , CALIBRE
     , SELECCION
-    , TOTAL119
-    , TOTAL211
+    , TOTAL131
+    , TOTALACTUAL
+    , KGTOTAL
+    , KGTOTAL
+    , DMTOTAL
+    , DMTOTAL
+    , PIESTOTAL
+    , PIESTOTAL
     , getdate()
        
   from 
     INVENTARIOPRODUCTOTERMINADO$
   
   where
-    TOTAL211 > 0
+    TOTALACTUAL > 0
   
 end
 go

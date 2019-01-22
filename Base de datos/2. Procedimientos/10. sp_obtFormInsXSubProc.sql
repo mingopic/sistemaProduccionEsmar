@@ -49,6 +49,7 @@ create procedure sp_obtFormInsXSubProc
       , porcentaje
       , idInsumo
       , nombreProducto
+      , comentario
       
     from 
       tb_insumXproc

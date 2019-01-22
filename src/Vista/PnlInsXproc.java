@@ -48,12 +48,12 @@ public class PnlInsXproc extends javax.swing.JPanel {
     
     String[] cols2 = new String[]
     {
-        "Clave","Porcentaje","Insumo","idInsumo"
+        "Clave","Porcentaje","Insumo","Rodar","idInsumo"
     };
     
     boolean[] editables = new boolean[]
     {
-        true,true,false
+        true,true,false,true
     };
    
     /**
@@ -177,17 +177,19 @@ public class PnlInsXproc extends javax.swing.JPanel {
                             datosIXP[i].setClave("");
                         }
                         //validar si el renglon se agrego por presionar btnAgregarEspacio
-                        if (tblInsXSubProc.getValueAt(i, 3).toString().equals("0"))
+                        if (tblInsXSubProc.getValueAt(i, 4).toString().equals("0"))
                         {
                             datosIXP[i].setPorcentaje((float) 0.0);
                             datosIXP[i].setNombreProducto("");
-                            datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 3).toString()));
+                            datosIXP[i].setComentario(tblInsXSubProc.getValueAt(i, 3).toString());
+                            datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 4).toString()));
                         }
                         else
                         {
                             datosIXP[i].setPorcentaje(Float.parseFloat(tblInsXSubProc.getValueAt(i, 1).toString()));
                             datosIXP[i].setNombreProducto(tblInsXSubProc.getValueAt(i, 2).toString());
-                            datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 3).toString()));
+                            datosIXP[i].setComentario(tblInsXSubProc.getValueAt(i, 3).toString());
+                            datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 4).toString()));
                         } 
                     }
                     fxs.setIdSubproceso(idSubProceso);
@@ -318,7 +320,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Clave", "Porcentaje", "Insumo"
+                "Clave", "Porcentaje", "Insumo", "Rodar"
             }
         ));
         tblInsXSubProc.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -520,9 +522,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 };
                 tblInsXSubProc.setModel(dtmInsumos);
                 tblInsXSubProc.getTableHeader().setReorderingAllowed(false);
-                tblInsXSubProc.getColumnModel().getColumn(3).setMaxWidth(0);
-                tblInsXSubProc.getColumnModel().getColumn(3).setMinWidth(0);
-                tblInsXSubProc.getColumnModel().getColumn(3).setPreferredWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(4).setMaxWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(4).setMinWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(4).setPreferredWidth(0);
 
             } catch (Exception e) {
 
@@ -573,11 +575,12 @@ public class PnlInsXproc extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGuardarInsumoActionPerformed
 
     private void btnAgregarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEspacioActionPerformed
-        String datos[]=new String[4];
+        String datos[]=new String[5];
         datos[0]= "";
         datos[1]= "";
         datos[2]= "";
-        datos[3]= "0";
+        datos[3]= "";
+        datos[4]= "0";
         dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarEspacioActionPerformed
 

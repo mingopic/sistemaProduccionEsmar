@@ -64,7 +64,7 @@ public class SubProcesoCommands {
         String query = "execute sp_obtFormInsXSubProc "+subP.getIdSubProceso()+";";
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 6;
+        int columnas = 7;
         int i = 0;
 
         c.conectar();
@@ -89,9 +89,10 @@ public class SubProcesoCommands {
                     datos[i][1] = rs.getString("porcentaje");
                 
                 datos[i][2] = rs.getString("nombreProducto");
-                datos[i][3] = rs.getString("idInsumo");
-                datos[i][4] = rs.getString("idFormXSubProc");
-                datos[i][5] = rs.getString("idInsumXProc");
+                datos[i][3] = rs.getString("comentario");
+                datos[i][4] = rs.getString("idInsumo");
+                datos[i][5] = rs.getString("idFormXSubProc");
+                datos[i][6] = rs.getString("idInsumXProc");
                 i++; 
             }
         }

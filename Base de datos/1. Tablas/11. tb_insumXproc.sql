@@ -16,5 +16,6 @@ create table tb_insumXproc
   , porcentaje     float
   , idInsumo       int
   , nombreProducto varchar(60) default ''
+  , comentario     varchar(60)
 );
 go

@@ -33,6 +33,7 @@ public class InsumoPorProcesoCommands {
                     + ", '" + datosIXP[i].getClave() + "'"
                     + "," + datosIXP[i].getPorcentaje()
                     + ", '" + datosIXP[i].getNombreProducto() + "'"
+                    + ", '" + datosIXP[i].getComentario() + "'"
                     + "," + datosIXP[i].getIdInsumo();
             PreparedStatement pstmt = null;
             c.conectar();

@@ -16,6 +16,15 @@ public class InsumoPorProceso {
     float porcentaje;
     int idInsumo;
     String nombreProducto;
+    String comentario;
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 
     public int getIdInsumXProc() {
         return idInsumXProc;

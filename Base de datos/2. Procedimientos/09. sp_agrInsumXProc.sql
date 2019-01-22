@@ -14,6 +14,7 @@ create procedure sp_agrInsumXProc
     , @clave          varchar(10)
     , @porcentaje     float
     , @nombreProducto varchar(60)
+    , @comentario     varchar(100)
     , @idInsumo       int
   )
   as begin
@@ -43,7 +44,15 @@ create procedure sp_agrInsumXProc
     )
       
     insert into 
-      tb_insumXproc 
+      tb_insumXproc
+      (
+        idFormXSubProc
+        , clave
+        , porcentaje
+        , idInsumo
+        , nombreProducto
+        , comentario
+      )
       
     values 
       (
@@ -52,6 +61,7 @@ create procedure sp_agrInsumXProc
         , @porcentaje
         , @idInsumo
         , @nombreProducto
+        , @comentario
       )
   end
 go

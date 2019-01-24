@@ -139,8 +139,10 @@ public class SubProcesoCommands {
                         obj.setClave(rs.getString("clave"));
                     }
                     obj.setMaterial(rs.getString("nombreProducto"));
+                    obj.setRodar(rs.getString("comentario"));
                     obj.setIdProducto(rs.getInt("idInsumo"));
                     obj.setIdFormXSubProc(rs.getInt("IdFormXSubProc"));
+                    obj.setTemperatura("");
                     lstInsumos.add(obj);
                 }
             }

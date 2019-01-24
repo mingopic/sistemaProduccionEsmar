@@ -66,6 +66,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     DefaultTableModel dtmInsumos;
     int idSubproceso = 0;
     List<InsumosXFichaProd> lstInsumos;
+    int filasAgregadas = 0;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -88,7 +89,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             llenarComboTambores();
             actualizarTablaSubProc();
             inicializarTablaPartidasAgregadas();
-            actualizarTablaInsumos();
+            actualizarTablaInsumos(0);
         } 
         catch (Exception e)
         {
@@ -589,7 +590,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
     }
     
-    private void actualizarTablaInsumos()
+    private void actualizarTablaInsumos(int bandera)
     {
         subP = new SubProceso();
         String idAux = "";
@@ -600,12 +601,17 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             idSubproceso = Integer.parseInt(idAux);
         }
 
-        try {
-            lstInsumos = new ArrayList<>();
-            lstInsumos = subPc.obtInsXSubProcList(idSubproceso);
-            for (int i = 0; i < lstInsumos.size(); i++)
+        try 
+        {
+            if (bandera == 0)
             {
-                lstInsumos.get(i).setPrecioUnitario(subPc.obtPrecioProducto(lstInsumos.get(i).getIdProducto()));
+                lstInsumos = new ArrayList<>();
+                lstInsumos = subPc.obtInsXSubProcList(idSubproceso);
+            
+                for (int i = 0; i < lstInsumos.size(); i++)
+                {
+                    lstInsumos.get(i).setPrecioUnitario(subPc.obtPrecioProducto(lstInsumos.get(i).getIdProducto()));
+                }
             }
             
             String[] cols = new String[]
@@ -646,8 +652,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     dtmInsumos.setValueAt(lstInsumos.get(i).getPrecioUnitario(), i, 7);
                 }
                 dtmInsumos.setValueAt(lstInsumos.get(i).getMaterial(), i, 2);
-                dtmInsumos.setValueAt("", i, 3);
-                dtmInsumos.setValueAt("", i, 4);
+                dtmInsumos.setValueAt(lstInsumos.get(i).getTemperatura(), i, 3);
+                dtmInsumos.setValueAt(lstInsumos.get(i).getRodar(), i, 4);
                 dtmInsumos.setValueAt("", i, 6);
                 
             }
@@ -792,14 +798,17 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             try
             {
                 idProducto = lstInsumos.get(tblInsXproc.getSelectedRow()).getIdProducto();
-                precio = Double.parseDouble(tblInsXproc.getValueAt(tblInsXproc.getSelectedRow(), 7).toString());
                 
-                for (int fila = 0; fila < tblInsXproc.getRowCount(); fila++)
+                if (idProducto > 0)
                 {
-                    if (lstInsumos.get(fila).getIdProducto() == idProducto)
+                    precio = Double.parseDouble(tblInsXproc.getValueAt(tblInsXproc.getSelectedRow(), 7).toString());
+                    for (int fila = 0; fila < tblInsXproc.getRowCount(); fila++)
                     {
-                        tblInsXproc.setValueAt(precio, fila, 7);
-                    }
+                        if (lstInsumos.get(fila).getIdProducto() == idProducto)
+                        {
+                            tblInsXproc.setValueAt(precio, fila, 7);
+                        }
+                    }    
                 }
             }
             catch (Exception e)
@@ -815,7 +824,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             try 
             {
-                if (lstInsumos.get(fila).getIdProducto() != 0)
+                if (lstInsumos.get(fila).getIdProducto() > 0)
                 {
                     Double pu = Double.parseDouble(tblInsXproc.getValueAt(fila, 7).toString());
                     lstInsumos.get(fila).setPrecioUnitario(pu);
@@ -1134,6 +1143,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel13 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         lblSubProceso = new javax.swing.JLabel();
+        btnAgregarEspacio = new javax.swing.JButton();
+        btnQuitarInsumo = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblInsXproc = new javax.swing.JTable();
         txtTotal = new javax.swing.JTextField();
@@ -1664,7 +1675,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1776,7 +1787,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
@@ -1810,7 +1821,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     .addComponent(btnSelAcabado)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
         );
 
         jPanel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1872,8 +1883,8 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEliminar)
@@ -1903,6 +1914,22 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         lblSubProceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblSubProceso.setText("Insumo");
 
+        btnAgregarEspacio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/note_add.png"))); // NOI18N
+        btnAgregarEspacio.setText("Agregar Espacio");
+        btnAgregarEspacio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarEspacioActionPerformed(evt);
+            }
+        });
+
+        btnQuitarInsumo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnQuitarInsumo.setText("Quitar");
+        btnQuitarInsumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarInsumoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
@@ -1911,14 +1938,20 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblSubProceso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(lblSubProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAgregarEspacio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnQuitarInsumo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-                .addComponent(lblSubProceso))
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblSubProceso)
+                .addComponent(btnAgregarEspacio)
+                .addComponent(btnQuitarInsumo))
         );
 
         tblInsXproc.setModel(new javax.swing.table.DefaultTableModel(
@@ -1960,7 +1993,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2070,11 +2103,11 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         actualizarTablaSubProc();
         actualizarTablaPartidasDisponibles();
         inicializarTablaPartidasAgregadas();
-        actualizarTablaInsumos();
+        actualizarTablaInsumos(0);
     }//GEN-LAST:event_cmbProcesoActionPerformed
 
     private void tblSubprocesoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSubprocesoMouseClicked
-        actualizarTablaInsumos();
+        actualizarTablaInsumos(0);
     }//GEN-LAST:event_tblSubprocesoMouseClicked
 
     private void btnRecortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecortarActionPerformed
@@ -2578,8 +2611,93 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         dlgEliPzaFichaProd.setVisible(false);
     }//GEN-LAST:event_btnCancelarAgregarEnvSemiActionPerformed
 
+    private void btnAgregarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEspacioActionPerformed
+        try
+        {
+            int filaAgregada = tblInsXproc.getSelectedRow() + 1;
+            int bandera = 0;
+            List<InsumosXFichaProd> lstInsumosAux = new ArrayList<>();
+            
+            for (int i = 0; i < lstInsumos.size() + 1; i++)
+            {
+                InsumosXFichaProd obj = new InsumosXFichaProd();
+                if (i == filaAgregada)
+                {
+                    obj.setClave("");
+                    obj.setPorcentaje(0.0);
+                    obj.setMaterial("");
+                    obj.setTemperatura("");
+                    obj.setRodar("");
+                    obj.setCantidad(0.0);
+                    obj.setObservaciones("");
+                    obj.setPrecioUnitario(0.0);
+                    obj.setTotal(0.0);
+                    obj.setIdProducto(0);
+                    obj.setIdFormXSubProc(lstInsumos.get(0).getIdFormXSubProc());
+                    lstInsumosAux.add(obj);
+                    bandera = 1;
+                }
+                else
+                {
+                    obj.setClave(tblInsXproc.getValueAt(i - bandera, 0).toString());
+                    obj.setPorcentaje(lstInsumos.get(i - bandera).getPorcentaje());
+                    obj.setMaterial(tblInsXproc.getValueAt(i - bandera, 2).toString());
+                    obj.setTemperatura(tblInsXproc.getValueAt(i - bandera, 3).toString());
+                    obj.setRodar(tblInsXproc.getValueAt(i - bandera, 4).toString());
+                    obj.setCantidad(lstInsumos.get(i - bandera).getCantidad());
+                    obj.setObservaciones(tblInsXproc.getValueAt(i - bandera, 6).toString());
+                    
+                    if (lstInsumos.get(i-bandera).getIdProducto() == 0)
+                    {
+                        obj.setPrecioUnitario(0.0);
+                        obj.setTotal(0.0);
+                    }
+                    else
+                    {
+                        obj.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i - bandera, 7).toString()));
+                        obj.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i - bandera, 8).toString()));
+                    }
+                    obj.setIdProducto(lstInsumos.get(i - bandera).getIdProducto());
+                    obj.setIdFormXSubProc(lstInsumos.get(i - bandera).getIdFormXSubProc());
+                    lstInsumosAux.add(obj);
+                }
+            }
+            lstInsumos = lstInsumosAux;
+            actualizarTablaInsumos(1);   
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de insumos","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAgregarEspacioActionPerformed
+
+    private void btnQuitarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarInsumoActionPerformed
+        try
+        {
+            int filaEliminada = tblInsXproc.getSelectedRow();
+            List<InsumosXFichaProd> lstInsumosAux = new ArrayList<>();
+            
+            for (int i = 0; i < lstInsumos.size(); i++)
+            {
+                if (i != filaEliminada)
+                {
+                    lstInsumosAux.add(lstInsumos.get(i));
+                }
+            }
+            lstInsumos = lstInsumosAux;
+            actualizarTablaInsumos(1);   
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de insumos","Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnQuitarInsumoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarEspacio;
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
     private javax.swing.JButton btnEliminar;
@@ -2588,6 +2706,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JButton btnGenerarFicha;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnGuardar1;
+    private javax.swing.JButton btnQuitarInsumo;
     private javax.swing.JButton btnRealizarEntradaEnvSemi;
     private javax.swing.JButton btnRecortar;
     private javax.swing.JButton btnSelAcabado;

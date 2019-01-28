@@ -198,7 +198,8 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Fórmula guardada correctamente");
                 } catch (Exception e)
                 {
-                    System.err.println(e);
+//                    System.err.println(e);
+                    e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Ingrese datos validos","Error",JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -558,11 +559,12 @@ public class PnlInsXproc extends javax.swing.JPanel {
 
     private void btnAgregarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInsumoActionPerformed
         int n;
-        String datos[]=new String[4];
+        String datos[]=new String[5];
         datos[0]= "";
         datos[1]= "";
         datos[2]= cmbInsumo.getSelectedItem().toString();
-        datos[3]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getCIDPRODUCTO());
+        datos[3]= "";
+        datos[4]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getCIDPRODUCTO());
         dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarInsumoActionPerformed
 

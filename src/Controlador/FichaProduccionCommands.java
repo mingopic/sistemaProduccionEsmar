@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.FichaProduccion;
+import Modelo.Partida;
 import Modelo.Proceso;
 import Modelo.TipoRecorte;
 import java.sql.ResultSet;
@@ -23,7 +24,7 @@ public class FichaProduccionCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista de las entradas de producción en proceso
-    public static String[][] obtenerListaProduccionProceso(FichaProduccion fp, Proceso pr, TipoRecorte tr) throws Exception
+    public static String[][] obtenerListaProduccionProceso(FichaProduccion fp, Proceso pr, TipoRecorte tr, Partida p) throws Exception
     {
         String query;
         
@@ -31,7 +32,8 @@ public class FichaProduccionCommands {
                 + "'" + pr.getDescripcion()+"'"
                 + ",'" + tr.getDescripcion()+"'"
                 + "," + "'"+ fp.getFecha() +"'"
-                + "," + "'"+ fp.getFecha1() +"'";
+                + "," + "'"+ fp.getFecha1() +"'"
+                + "," + p.getNoPartida();
 
         String[][] datos = null;
         int renglones = 0;

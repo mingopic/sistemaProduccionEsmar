@@ -16,6 +16,7 @@ import Modelo.FichaProduccion;
 import Modelo.Partida;
 import Modelo.Proceso;
 import Modelo.TipoRecorte;
+import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         fp = new FichaProduccion();
         pr = new Proceso();
         tr = new TipoRecorte();
+        p = new Partida();
         
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaProduccionProceso.setEnabled(false);
@@ -225,11 +227,20 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             tr.setDescripcion(cmbTipoRecorte.getSelectedItem().toString());
         }
         
+        if (txtNoPartida.getText().isEmpty())
+        {
+            p.setNoPartida(0);
+        }
+        else
+        {
+            p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));
+        }
+        
         DefaultTableModel dtm = null;
         
         try {
             
-            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp, pr,tr);
+            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp, pr,tr,p);
             
             dtm = new DefaultTableModel(datosProduccionProceso, cols){
             public boolean isCellEditable(int row, int column) {
@@ -537,13 +548,13 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         dcFecha1EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
@@ -561,13 +572,13 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
                 new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                    new java.awt.Color(187, 187, 187),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -576,6 +587,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                 false,
                 true)));
     dcFecha1EntradaProduccionProceso.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
+    dcFecha1EntradaProduccionProceso.setFormat(2);
     dcFecha1EntradaProduccionProceso.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
     try {
         dcFecha1EntradaProduccionProceso.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
@@ -597,13 +609,13 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     dcFecha2EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -621,13 +633,13 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -674,6 +686,9 @@ try {
     txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
     txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
     txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            txtNoPartidaKeyPressed(evt);
+        }
         public void keyTyped(java.awt.event.KeyEvent evt) {
             txtNoPartidaKeyTyped(evt);
         }
@@ -962,6 +977,13 @@ try {
     private void cmbAnioPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAnioPartidaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbAnioPartidaActionPerformed
+
+    private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            actualizarTablaProduccionProceso();
+        }
+    }//GEN-LAST:event_txtNoPartidaKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

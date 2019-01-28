@@ -244,14 +244,14 @@ public class PnlSubProcesos extends javax.swing.JPanel {
     public void abrirDialogoAgregar()
     {   try 
         {
+             txtSubProcesoAgregar.setText("");
+            llenarComboProcesos(1);
+            
             dlgAgregarSubProceso.setSize(410, 210);
             dlgAgregarSubProceso.setPreferredSize(dlgAgregarSubProceso.getSize());
             dlgAgregarSubProceso.setLocationRelativeTo(null);
             dlgAgregarSubProceso.setModal(true);
             dlgAgregarSubProceso.setVisible(true);
-
-            txtSubProcesoAgregar.setText("");
-            llenarComboProcesos(1);
         } 
         catch (Exception e) 
         {

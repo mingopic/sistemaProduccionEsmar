@@ -14,6 +14,7 @@ create procedure sp_obtEntProdProc
   , @recorte varchar (20)
 	, @fecha   varchar(10)
 	, @fecha1  varchar(10)
+  , @noPartida int
 )
 as begin
 
@@ -80,5 +81,17 @@ as begin
     
   where
     fp.fechaCreacion between @fecha and @fecha1
+    and 
+    (
+      (
+        @noPartida = 0
+        and p.noPartida > 0
+      )
+      or
+      (
+        @noPartida > 0
+        and p.noPartida = @noPartida
+      )
+    )
 end
 go

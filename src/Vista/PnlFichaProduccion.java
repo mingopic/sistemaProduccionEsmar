@@ -66,7 +66,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     DefaultTableModel dtmInsumos;
     int idSubproceso = 0;
     List<InsumosXFichaProd> lstInsumos;
-    int filasAgregadas = 0;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -2340,6 +2339,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     fp.setKgTotal(fp.getKgTotal() + Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString()));
                 }
                 fp.setCostoInsumos(Double.parseDouble(txtTotal.getText()));
+                fp.setIdSubproceso(idSubproceso);
 
                 fpc.agregarFichaProd(fp);
 

@@ -28,7 +28,8 @@ public class FichaProdCommands {
                 + fp.getIdTambor()
                 + ", " + fp.getNoPiezasTotal()
                 + ", " + fp.getKgTotal()
-                + ", " + fp.getCostoInsumos();
+                + ", " + fp.getCostoInsumos()
+                + ", " + fp.getIdSubproceso();
         
         PreparedStatement pstmt = null;
         c.conectar();

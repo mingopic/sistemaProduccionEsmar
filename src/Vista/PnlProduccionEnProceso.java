@@ -15,6 +15,7 @@ import Controlador.TipoRecorteCommands;
 import Modelo.FichaProduccion;
 import Modelo.Partida;
 import Modelo.Proceso;
+import Modelo.SubProceso;
 import Modelo.TipoRecorte;
 import java.awt.event.KeyEvent;
 import java.io.InputStream;
@@ -49,9 +50,12 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     TipoRecorteCommands trc;
     Partida p;
     PartidaCommands pc;
+    SubProcesoCommands spc;
+    SubProceso sp;
     String[][] proceso = null;
     String[][] recorte = null;
     List<Partida> lstPartida;
+    List<SubProceso> lstSubProceso;
     String[][] datosProduccionProceso = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
@@ -75,6 +79,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         pr = new Proceso();
         tr = new TipoRecorte();
         p = new Partida();
+        sp = new SubProceso();
         
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaProduccionProceso.setEnabled(false);
@@ -83,6 +88,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         llenarComboProcesos();
         llenarComboTipoRecorte();
         llenarComboAnio();
+        llenarComboSubProcesos();
         actualizarTablaProduccionProceso();
     }
     
@@ -123,6 +129,21 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         while (i < lstPartida.size())
         {
             cmbAnioPartida.addItem(lstPartida.get(i).getAnio());
+            i++;
+        }
+    }
+    
+    public void llenarComboSubProcesos() throws Exception
+    {
+        spc = new SubProcesoCommands();
+        lstSubProceso = new ArrayList<>();
+        
+        lstSubProceso = spc.llenarComboboxSubProcesos();
+        
+        int i=0;
+        while (i < lstSubProceso.size())
+        {
+            cmbSubproceso.addItem(lstSubProceso.get(i).getDescripcion());
             i++;
         }
     }
@@ -236,11 +257,20 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             p.setNoPartida(Integer.parseInt(txtNoPartida.getText()));
         }
         
+        if (cmbSubproceso.getSelectedItem().toString().equals("<Todos>"))
+        {
+            sp.setDescripcion("%%");
+        }
+        else
+        {
+            sp.setDescripcion(cmbSubproceso.getSelectedItem().toString());
+        }
+        
         DefaultTableModel dtm = null;
         
         try {
             
-            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp, pr,tr,p);
+            datosProduccionProceso = fpc.obtenerListaProduccionProceso(fp, pr,tr,p,sp);
             
             dtm = new DefaultTableModel(datosProduccionProceso, cols){
             public boolean isCellEditable(int row, int column) {
@@ -448,11 +478,16 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cmbProceso = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jLabel11 = new javax.swing.JLabel();
         cmbTipoRecorte = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
+        jLabel15 = new javax.swing.JLabel();
+        cmbSubproceso = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
         jLabel27 = new javax.swing.JLabel();
         jrFiltroFechasEntrada = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
@@ -505,6 +540,9 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             }
         });
         jToolBar1.add(cmbProceso);
+
+        jLabel14.setText("   ");
+        jToolBar1.add(jLabel14);
         jToolBar1.add(jSeparator3);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -523,6 +561,22 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel5.setText("   ");
         jToolBar1.add(jLabel5);
         jToolBar1.add(jSeparator2);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel15.setText("Subproceso ");
+        jToolBar1.add(jLabel15);
+
+        cmbSubproceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbSubproceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSubprocesoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cmbSubproceso);
+
+        jLabel13.setText("   ");
+        jToolBar1.add(jLabel13);
+        jToolBar1.add(jSeparator4);
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar.png"))); // NOI18N
@@ -985,6 +1039,10 @@ try {
         }
     }//GEN-LAST:event_txtNoPartidaKeyPressed
 
+    private void cmbSubprocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSubprocesoActionPerformed
+        actualizarTablaProduccionProceso();
+    }//GEN-LAST:event_cmbSubprocesoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
@@ -994,6 +1052,7 @@ try {
     private javax.swing.JButton btnReporteListaPartProdProc1;
     private javax.swing.JComboBox<String> cmbAnioPartida;
     private javax.swing.JComboBox<String> cmbProceso;
+    private javax.swing.JComboBox<String> cmbSubproceso;
     private javax.swing.JComboBox<String> cmbTipoRecorte;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
@@ -1002,6 +1061,9 @@ try {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -1019,6 +1081,7 @@ try {
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;

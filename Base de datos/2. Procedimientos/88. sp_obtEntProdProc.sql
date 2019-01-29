@@ -15,6 +15,7 @@ create procedure sp_obtEntProdProc
 	, @fecha   varchar(10)
 	, @fecha1  varchar(10)
   , @noPartida int
+  , @subproceso varchar(30)
 )
 as begin
 
@@ -43,6 +44,7 @@ as begin
     , t.nombreTambor as tambor
     , fp.fechaCreacion
     , fpd.idFichaProdDet
+    , spr.descripcion as subproceso
     
   from
     tb_fichaProdDet as fpd
@@ -78,6 +80,12 @@ as begin
      on
       pr.idProceso = pd.idProceso
       and pr.descripcion like @proceso
+    
+    inner join
+      tb_subProceso as spr
+    on
+      spr.idSubproceso = fp.idSubproceso
+      and spr.descripcion like @subproceso
     
   where
     fp.fechaCreacion between @fecha and @fecha1

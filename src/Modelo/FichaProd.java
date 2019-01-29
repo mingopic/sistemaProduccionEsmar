@@ -16,6 +16,15 @@ public class FichaProd {
     Double kgTotal;
     Double costoInsumos;
     String fechaCreacion;
+    int idSubproceso;
+
+    public int getIdSubproceso() {
+        return idSubproceso;
+    }
+
+    public void setIdSubproceso(int idSubproceso) {
+        this.idSubproceso = idSubproceso;
+    }
 
     public int getIdFichaProd() {
         return idFichaProd;

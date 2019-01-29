@@ -18,5 +18,6 @@ create table tb_fichaProd
   , fechaCreacion  date
   , costoManoObra  float
   , costoFabricacion float
+  , idSubproceso     int not null foreign key references tb_subProceso(idSubproceso)
 )
 go

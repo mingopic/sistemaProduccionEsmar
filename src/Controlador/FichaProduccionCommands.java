@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.FichaProduccion;
 import Modelo.Partida;
 import Modelo.Proceso;
+import Modelo.SubProceso;
 import Modelo.TipoRecorte;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -24,7 +25,7 @@ public class FichaProduccionCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista de las entradas de producción en proceso
-    public static String[][] obtenerListaProduccionProceso(FichaProduccion fp, Proceso pr, TipoRecorte tr, Partida p) throws Exception
+    public static String[][] obtenerListaProduccionProceso(FichaProduccion fp, Proceso pr, TipoRecorte tr, Partida p, SubProceso sp) throws Exception
     {
         String query;
         
@@ -33,11 +34,12 @@ public class FichaProduccionCommands {
                 + ",'" + tr.getDescripcion()+"'"
                 + "," + "'"+ fp.getFecha() +"'"
                 + "," + "'"+ fp.getFecha1() +"'"
-                + "," + p.getNoPartida();
+                + "," + p.getNoPartida()
+                + ",'" + sp.getDescripcion()+"'";
 
         String[][] datos = null;
         int renglones = 0;
-        int columnas = 13;
+        int columnas = 14;
         int i = 0;
 
         c.conectar();
@@ -70,6 +72,7 @@ public class FichaProduccionCommands {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 datos[i][11] = sdf.format(sqlDate);
                 datos[i][12] = rs.getString("idFichaProdDet");
+                datos[i][13] = rs.getString("subproceso");
                 i++; 
             }
         }

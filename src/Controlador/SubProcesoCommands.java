@@ -293,4 +293,38 @@ public class SubProcesoCommands {
         c.desconectar();
         return subproceso;
     }
+    
+    //Método para traer los subprocesos activos
+    public List llenarComboboxSubProcesos() throws Exception
+    {
+        List<SubProceso> lstSubProceso = new ArrayList<>();
+        SubProceso obj;
+        
+        String query="execute sp_obtSubProcesos";
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(query);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) {
+            rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                obj = new SubProceso();
+                obj.setIdSubProceso(Integer.parseInt(rs.getString("idSubproceso")));
+                obj.setDescripcion(rs.getString("descripcion"));
+                lstSubProceso.add(obj);
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return lstSubProceso;
+    }
 }

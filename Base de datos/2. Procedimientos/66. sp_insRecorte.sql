@@ -472,7 +472,6 @@ create procedure sp_insRecorte
           , @idPartidaDet
         )
     end
-    
   end
 go
 

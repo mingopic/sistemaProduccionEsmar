@@ -9,11 +9,14 @@ import Controlador.ConexionBD;
 import Controlador.FichaProdDetCommands;
 import Controlador.FichaProduccionCommands;
 import Controlador.PartidaCommands;
+import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TipoRecorteCommands;
+import Modelo.FichaProdDet;
 import Modelo.FichaProduccion;
 import Modelo.Partida;
+import Modelo.PartidaDetalle;
 import Modelo.Proceso;
 import Modelo.SubProceso;
 import Modelo.TipoRecorte;
@@ -58,6 +61,9 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     List<SubProceso> lstSubProceso;
     String[][] datosProduccionProceso = null;
     private final String imagen="/Imagenes/logo_esmar.png";
+    PartidaDetalle pd;
+    PartidaDetalleCommands pdc;
+    FichaProdDet fpd;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -462,6 +468,46 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void eliminarFichaProduccion()
+    {
+        try
+        {
+            int fila = tblProduccionProceso.getSelectedRow();
+            
+            if (fila != -1)
+            {
+                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la ficha de producción seleccionada?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                {
+                    fpd = new FichaProdDet();
+
+                    fpd.setIdPartidaDet(Integer.parseInt(datosProduccionProceso[fila][12]));
+
+                    int validaElimina = pdc.obtenerFichaProdEliminar(fpd);
+
+                    if (validaElimina == 0)
+                    {
+//                        icc.eliminarInventarioCrudo(rc);
+//                        rcc.eliminarRecepcionCuero(rc);
+//                        actualizarTablaRecepcionCuero();
+                        JOptionPane.showMessageDialog(null, "Recepción de cuero eliminada");
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "La ficha de producción que desea eliminar ya sido utilizada en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Recepción Cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -517,6 +563,11 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProduccionProceso = new javax.swing.JTable();
+        jToolBar3 = new javax.swing.JToolBar();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
@@ -861,6 +912,29 @@ try {
     tblProduccionProceso.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane1.setViewportView(tblProduccionProceso);
 
+    jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jToolBar3.setFloatable(false);
+    jToolBar3.setRollover(true);
+
+    jLabel18.setText("  ");
+    jToolBar3.add(jLabel18);
+    jToolBar3.add(jLabel19);
+
+    jLabel31.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jToolBar3.add(jLabel31);
+
+    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    jButton2.setText("Eliminar Ficha de Producción");
+    jButton2.setFocusable(false);
+    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton2ActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(jButton2);
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -868,6 +942,7 @@ try {
         .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jScrollPane1)
         .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1048, Short.MAX_VALUE)
+        .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1048, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -875,8 +950,10 @@ try {
             .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(4, 4, 4)
             .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(1, 1, 1)
+            .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1043,6 +1120,10 @@ try {
         actualizarTablaProduccionProceso();
     }//GEN-LAST:event_cmbSubprocesoActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
@@ -1057,6 +1138,7 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1064,12 +1146,15 @@ try {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1084,6 +1169,7 @@ try {
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lbl1;

@@ -64,6 +64,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
     PartidaDetalle pd;
     PartidaDetalleCommands pdc;
     FichaProdDet fpd;
+    FichaProdDetCommands fpdc;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -481,16 +482,14 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                 {
                     fpd = new FichaProdDet();
 
-                    fpd.setIdPartidaDet(Integer.parseInt(datosProduccionProceso[fila][12]));
+                    fpd.setIdFichaProdDet(Integer.parseInt(datosProduccionProceso[fila][12]));
 
                     int validaElimina = pdc.obtenerFichaProdEliminar(fpd);
 
                     if (validaElimina == 0)
                     {
-//                        icc.eliminarInventarioCrudo(rc);
-//                        rcc.eliminarRecepcionCuero(rc);
-//                        actualizarTablaRecepcionCuero();
-                        JOptionPane.showMessageDialog(null, "Recepción de cuero eliminada");
+                        fpdc.eliminarFichaProd(fpd);
+                        JOptionPane.showMessageDialog(null, "Ficha de producción eliminada");
                     }
                     else
                     {
@@ -505,7 +504,8 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         }
         catch (Exception e)
         {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
+//            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -1121,7 +1121,7 @@ try {
     }//GEN-LAST:event_cmbSubprocesoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        eliminarFichaProduccion();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

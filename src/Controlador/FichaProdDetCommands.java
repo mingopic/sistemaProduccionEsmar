@@ -39,4 +39,16 @@ public class FichaProdDetCommands {
         pstmt.executeUpdate();
         c.desconectar();
     }
+    
+    //Método para eliminar una ficha de producción
+    public static void eliminarFichaProd(FichaProdDet fpd) throws Exception {
+        String query = "exec sp_eliFichaProd "
+                + fpd.getIdFichaProdDet();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
 }

@@ -10,14 +10,17 @@ go
 
 create procedure sp_obtFichaProdEli
 (
-	@idPartidaDet int
+	@idFichaProdDet int
 )
 as begin
 
-  declare 
-    @idFichaProd int
-    , @piezas int
-    , @piezasAct int
+  declare
+    @idFichaProd  int
+    , @piezas       int
+    , @piezasAct    int
+    , @noRegistros  int
+    , @contador     int
+    , @validaElimina int
     
     declare
       @tb_partidaDet_temp table 
@@ -42,7 +45,7 @@ as begin
     tb_fichaProdDet
     
   where
-    idPartidaDet = @idPartidaDet
+    idFichaProdDet = @idFichaProdDet
   
   -- insertar en la tabla temporal todas las partidasDet pertenecientes a la ficha de producción que se quiere eliminar   
   insert into
@@ -60,46 +63,50 @@ as begin
       fpd.idPartidaDet = pd.idPartidaDet
       and fpd.idFichaProd = @idFichaProd
   
-  select * from @tb_partidaDet_temp
+  --Se inicia ciclo
+  set @contador = 0;
   
-/*  
-  set
-    @piezasAct =
-    (
-      select
-        noPiezasAct
-          
-      from
-        tb_partidaDet
-             
-      where
-        idPartidaDet = @idPartidaDet
-    )
+  select
+    @noRegistros = count(1)
+  from
+    @tb_partidaDet_temp
     
-  set
-    @piezas =
-    (
-      select
-        noPiezas
-          
-      from
-        tb_partidaDet
-             
-      where
-        idPartidaDet = @idPartidaDet
-    )
+  
+  while (@contador < @noRegistros)
+  begin
+    declare @idPartidaDetAux int
     
-    if (@piezasAct = @piezas)
+    select top(1)
+      @idPartidaDetAux = idPartidaDet
+      , @piezasAct = noPiezasAct
+      , @piezas = noPiezas
+    from
+      @tb_partidaDet_temp
+      
+    if (@piezasAct <> @piezas)
     begin
-      select
-        0 as validaElimina
+      set
+        @validaElimina = 1
+        break   
     end
     
     else
     begin
-      select
-        1 as validaElimina
+      delete from
+        @tb_partidaDet_temp
+      where
+        idPartidaDet = @idPartidaDetAux
     end
-  */
-end
+    
+    set @contador = @contador + 1
+    
+    if (@contador = @noRegistros)
+    begin
+      set
+        @validaElimina = 0
+    end
+  end
+  
+  select @validaElimina as validaElimina
+ end
 go

@@ -322,17 +322,17 @@ public class PartidaDetalleCommands {
         c.desconectar();
     }
     
-    //Método que se llama para obtener la idRecepcionCuero a eliminar
+    //Método que se llama para validar la fichaProd a eliminar
     public static int obtenerFichaProdEliminar(FichaProdDet fpd) throws Exception
     {
-        String query= "execute sp_obtFichaProdEli "+fpd.getIdPartidaDet();
+        String query= "execute sp_obtFichaProdEli "+fpd.getIdFichaProdDet();
         
         int datos = 0;
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = stmt.executeQuery(query);
         System.out.println(query);
+        rs = stmt.executeQuery(query);
         
         if (rs.last()) 
         {

@@ -13,6 +13,7 @@ import Modelo.PartidaDisp;
 import Modelo.RecepcionCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 public class PartidaDetalleCommands {
     static Statement stmt = null;
+    static PreparedStatement pstmt = null;
     static ResultSet rs = null;
     static ConexionBD c = new ConexionBD();
     
@@ -330,19 +332,25 @@ public class PartidaDetalleCommands {
         int datos = 0;
 
         c.conectar();
-        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        stmt = c.getConexion().createStatement();
         System.out.println(query);
-        rs = stmt.executeQuery(query);
         
-        if (rs.last()) 
+        int count = stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+        rs = stmt.getGeneratedKeys();
+        
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int contadorColumnas = rsmd.getColumnCount();
+        
+        if (rs.next()) 
         {
-            rs.beforeFirst();
-            
-            //Recorremos el ResultSet registro a registro
-            while (rs.next()) 
-            {
-                datos = rs.getInt("validaElimina");
-            }
+           do 
+           {
+              for (int i = 1; i <= contadorColumnas; i++) 
+              {
+                 datos = rs.getInt("validaElimina");
+              }
+           } 
+           while(rs.next());
         }
         
         rs.close();

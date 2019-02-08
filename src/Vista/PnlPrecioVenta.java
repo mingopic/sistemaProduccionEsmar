@@ -345,7 +345,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             dlgAgregarPrecioVenta.setLocationRelativeTo(null);
             dlgAgregarPrecioVenta.setModal(true);
             dlgAgregarPrecioVenta.setVisible(true);
-
+            
             llenarComboTipoRecorteAgregar();
             llenarComboCalibreAgregar();
             llenarComboSeleccionAgregar();

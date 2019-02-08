@@ -233,7 +233,14 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 }
             }
             
-            costoCamion = kgTotales*precio;
+            if (cmbTipoCamion.getSelectedItem().equals("Nacional"))
+            {
+                costoCamion = kgTotales*precio;
+            }
+            else
+            {
+                costoCamion = noTotalPiezas*precio;
+            }
 
             txtCostoCamion.setText(String.valueOf(costoCamion));
 

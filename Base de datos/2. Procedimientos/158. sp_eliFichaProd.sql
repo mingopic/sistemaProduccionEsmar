@@ -90,6 +90,26 @@ as begin
       noPiezasAct = noPiezasAct + @piezasAct
     where
       idPartidaDet = @idRecortePartidaDet
+      
+    -- Se elimina insumosFichaProdDet
+    delete from
+      tb_InsumosFichaProdDet
+    where
+      idInsumoFichaProd = 
+      (
+        select
+          idInsumoFichaProd
+        from
+          tb_InsumosFichaProd
+        where
+          idFichaProd = @idFichaProd
+      )
+    
+    -- Se elimina insumosFichaProd
+    delete from
+      tb_InsumosFichaProd
+    where
+      idFichaProd = @idFichaProd
     
     -- Se elimina fichaProdDet
     delete from

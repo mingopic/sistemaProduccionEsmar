@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d5e7ac3b-6cbc-43fe-8376-c197e191df0d">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="225"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -28,8 +28,14 @@
 	<parameter name="recorte" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="noPartida" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subProceso" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[sp_obtEntProdProc $P{proceso},$P{recorte},$P{fecha},$P{fecha1}]]>
+		<![CDATA[sp_obtEntProdProc $P{proceso},$P{recorte},$P{fecha},$P{fecha1},$P{noPartida},$P{subProceso}]]>
 	</queryString>
 	<field name="idFichaProd" class="java.lang.Integer"/>
 	<field name="noPartida" class="java.lang.Integer"/>
@@ -44,6 +50,7 @@
 	<field name="tambor" class="java.lang.String"/>
 	<field name="fechaCreacion" class="java.sql.Date"/>
 	<field name="idFichaProdDet" class="java.lang.Integer"/>
+	<field name="subproceso" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

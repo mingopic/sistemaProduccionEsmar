@@ -415,6 +415,7 @@ public class PnlTambores extends javax.swing.JPanel {
         jLabel7.setText("Estatus:");
 
         txtNombreTambEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNombreTambEditar.setEnabled(false);
 
         cmbEstatusEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbEstatusEditar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));

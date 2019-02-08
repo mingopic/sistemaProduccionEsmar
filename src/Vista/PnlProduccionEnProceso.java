@@ -307,6 +307,8 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
             parametros.put("recorte", tr.getDescripcion());
             parametros.put("fecha", fp.getFecha());
             parametros.put("fecha1", fp.getFecha1());
+            parametros.put("noPartida", p.getNoPartida());
+            parametros.put("subProceso", sp.getDescripcion());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

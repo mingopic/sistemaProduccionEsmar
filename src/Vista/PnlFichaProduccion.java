@@ -83,7 +83,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private void inicializar()
     {
         try 
-        {
+        {   
             llenarComboProcesos();
             llenarComboTambores();
             actualizarTablaSubProc();
@@ -103,12 +103,28 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         prc = new ProcesoCommands();
         cmbProceso.removeAllItems();
         proceso = prc.llenarComboboxProcesos();
+        int j = 0;
+        int subprocesos = 0;
         
-        int i=0;
-        while (i<proceso.length)
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
-            cmbProceso.addItem(proceso[i][1]);
-            i++;
+            if (FrmPrincipal.roles[i].equals("Rivera"))
+            {
+                j = 0;
+                subprocesos = 1;
+                break;
+            }
+            else if (FrmPrincipal.roles[i].equals("Engrase"))
+            {
+                j = 4;
+                subprocesos = 0;
+                break;
+            }
+        }
+        while (j<proceso.length-subprocesos)
+        {
+            cmbProceso.addItem(proceso[j][1]);
+            j++;
         }
     }
     
@@ -132,7 +148,19 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     public void actualizarTablaSubProc() 
     {
         pr = new Proceso();
-        pr.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Engrase"))
+            {
+                pr.setIdProceso(6);
+                break;
+            }
+            else
+            {
+                pr.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+            }
+        }
 
         DefaultTableModel dtm = null;
         
@@ -164,7 +192,19 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     public void actualizarTablaPartidasDisponibles() 
     {
         p = new Partida();
-        p.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Engrase"))
+            {
+                pr.setIdProceso(6);
+                break;
+            }
+            else
+            {
+                pr.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+            }
+        }
         
         if (p.getIdProceso() == 2)
         {

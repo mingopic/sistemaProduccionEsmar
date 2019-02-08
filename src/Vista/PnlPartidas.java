@@ -79,7 +79,7 @@ public class PnlPartidas extends javax.swing.JPanel {
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
-            if (FrmPrincipal.roles[i].equals("Produccion") || FrmPrincipal.roles[i].equals("Sistemas"))
+            if (FrmPrincipal.roles[i].equals("Produccion") || FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Rivera"))
             {
                 btnEliminarPiezas.setEnabled(true);
                 btnRecortar.setEnabled(true);

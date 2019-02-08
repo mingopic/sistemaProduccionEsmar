@@ -246,6 +246,35 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         break;
                     }
                 }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Rivera"))
+                    {
+                        btnRecepcionCuero.setVisible(true);
+                        btnPartidas.setVisible(true);
+                        btnFichasProduccion.setVisible(true);
+                        jmpCatalogos.setVisible(true);
+                        jmTambores.setVisible(true);
+                        jmSubProcesos.setVisible(true);
+                        jmProveedores.setVisible(true);
+                        jmpConfiguraciones.setVisible(true);
+                        break;
+                    }
+                }
+                
+                for (int i = 0; i < roles.length; i++)
+                {
+                    if (roles[i].equals("Engrase"))
+                    {
+                        btnFichasProduccion.setVisible(true);
+                        jmpCatalogos.setVisible(true);
+                        jmTambores.setVisible(true);
+                        jmSubProcesos.setVisible(true);
+                        jmpConfiguraciones.setVisible(true);
+                        break;
+                    }
+                }
             }
             else
                 JOptionPane.showMessageDialog(dlgLogin, "Datos incorrectos o usuario inactivo", "Error de Login", JOptionPane.ERROR_MESSAGE);

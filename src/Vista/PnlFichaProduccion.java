@@ -197,12 +197,12 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             if (FrmPrincipal.roles[i].equals("Engrase"))
             {
-                pr.setIdProceso(6);
+                p.setIdProceso(6);
                 break;
             }
             else
             {
-                pr.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+                p.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
             }
         }
         

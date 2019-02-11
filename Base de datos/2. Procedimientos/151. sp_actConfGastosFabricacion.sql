@@ -30,6 +30,26 @@ as begin
   , @costoCentroQue   float
   , @costoDelSuela    float
   , @costoCentro      float
+  , @costogarra       float
+  
+  set @costogarra =
+  (
+    select
+      costo
+      
+    from
+      tb_costoGarra
+      
+    where
+      idCostoGarra =
+      (
+        select
+          max(idCostoGarra)
+          
+        from
+          tb_costoGarra
+      )
+  )
   
   set @porcEntero =
   (
@@ -112,13 +132,13 @@ as begin
   )
   
   set @costoEntero = @costo * @porcEntero
-  set @costoDelSillero = @costo * @porcDelSillero
-  set @costoCrupSillero = @costo * @porcCrupSillero
+  set @costoDelSillero = @costo * @porcDelSillero - ((@costogarra*2)*@porcDelSillero)
+  set @costoCrupSillero = @costo * @porcCrupSillero - ((@costogarra*2)*@porcCrupSillero)
   set @costoLados = @costo * @porcLados
-  set @costoCentroCas = @costo * @porcCentroCas
-  set @costoCentroQue = @costo * @porcCentroQue
-  set @costoDelSuela = @costo * @porcDelSuela
-  set @costoCentro = @costo * @porcCentro
+  set @costoCentroCas = @costo * @porcCentroCas - ((@costogarra*2)*@porcCentroCas)
+  set @costoCentroQue = @costo * @porcCentroQue - ((@costogarra*2)*@porcCentroQue)
+  set @costoDelSuela = @costo * @porcDelSuela - ((@costogarra*2)*@porcDelSuela)
+  set @costoCentro = @costo * @porcCentro - ((@costogarra*2)*@porcCentro)
     
   insert into
     tb_confGastosFabricacion

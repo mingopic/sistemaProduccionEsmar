@@ -48,7 +48,7 @@ public class ConfPrecioManoDeObraCommands {
                     cp.setIdConfPrecioManoDeObra(rs.getInt("idConfPrecioManoDeObra"));
                     cp.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
                     cp.setDescTipoRecorte(rs.getString("descTipoRecorte"));
-                    cp.setCosto(rs.getDouble("costo"));
+                    cp.setCosto(Double.parseDouble(String.format("%.2f",rs.getDouble("costo"))));
                     configuraciones.add(cp);
                 }
             }

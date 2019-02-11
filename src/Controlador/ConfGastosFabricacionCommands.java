@@ -48,7 +48,7 @@ public class ConfGastosFabricacionCommands {
                     cg.setIdConfGastosFabricacion(rs.getInt("idConfGastosFabricacion"));
                     cg.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
                     cg.setDescTipoRecorte(rs.getString("descTipoRecorte"));
-                    cg.setCosto(rs.getDouble("costo"));
+                    cg.setCosto(Double.parseDouble(String.format("%.2f",rs.getDouble("costo"))));
                     configuraciones.add(cg);
                 }
             }

@@ -2942,13 +2942,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmSubProcesosActionPerformed
 
     private void jmMermasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmMermasActionPerformed
-        abrirDialogo(dlgMermas, 310, 280);
         cargarConfActMerma();
+        abrirDialogo(dlgMermas, 310, 280);
     }//GEN-LAST:event_jmMermasActionPerformed
 
     private void jmRangosPesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmRangosPesoActionPerformed
-        abrirDialogo(dlgRangos, 325, 210);
         cargarConfActRango();
+        abrirDialogo(dlgRangos, 325, 210);
     }//GEN-LAST:event_jmRangosPesoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -3109,8 +3109,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void jmCostoCueroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCostoCueroActionPerformed
-       abrirDialogo(dlgPrecioCuero, 450, 300);
-       cargarConfPrecioCuero();
+        cargarConfPrecioCuero();
+        abrirDialogo(dlgPrecioCuero, 450, 300);
     }//GEN-LAST:event_jmCostoCueroActionPerformed
 
     private void jmCalibresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCalibresActionPerformed
@@ -3141,8 +3141,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        abrirDialogo(dlgCostoGarra, 310, 180);
         cargarConfActPrecGarra();
+        abrirDialogo(dlgCostoGarra, 310, 180);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void txtCostoGarraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoGarraKeyReleased
@@ -3153,8 +3153,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCostoGarraKeyReleased
 
     private void jmCostoManoDeObraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCostoManoDeObraActionPerformed
-        abrirDialogo(dlgPrecioManoDeObra1, 450, 450);
         cargarConfPrecioManoDeObra1();
+        abrirDialogo(dlgPrecioManoDeObra1, 450, 450);
     }//GEN-LAST:event_jmCostoManoDeObraActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
@@ -3218,8 +3218,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cpmc.actualizarCosto(cpm);
             dlgPrecioManoDeObra1.setVisible(false);
             JOptionPane.showMessageDialog(null, "Cambio realizado correctamente","Mensaje",JOptionPane.WARNING_MESSAGE);
+            cargarConfPrecioManoDeObra1();
             dlgPrecioManoDeObra1.setVisible(true);
-            cargarConfPrecioManoDeObra();
         } 
         catch (Exception e) 
         {
@@ -3328,8 +3328,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cgfc.actualizarCosto(cgf);
             dlgGastosDeFabricacion.setVisible(false);
             JOptionPane.showMessageDialog(null, "Cambio realizado correctamente","Mensaje",JOptionPane.WARNING_MESSAGE);
-            dlgGastosDeFabricacion.setVisible(true);
             cargarConfGastosFabricacion();
+            dlgGastosDeFabricacion.setVisible(true);
         } 
         catch (Exception e) 
         {
@@ -3397,8 +3397,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCostoCentro1KeyTyped
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        abrirDialogo(dlgGastosDeFabricacion, 450, 450);
         cargarConfGastosFabricacion();
+        abrirDialogo(dlgGastosDeFabricacion, 450, 450);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**

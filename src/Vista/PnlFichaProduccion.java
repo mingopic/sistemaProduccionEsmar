@@ -215,6 +215,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             btnEliminarPartida.setEnabled(false);
             btnEliminarRecorte.setEnabled(false);
+            btnRecortar.setEnabled(true);
         }
         
         btnSelAcabado.setEnabled(false);
@@ -1752,6 +1753,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         btnRecortar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnRecortar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cut_red.png"))); // NOI18N
         btnRecortar.setText("Recortar");
+        btnRecortar.setEnabled(false);
         btnRecortar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRecortarActionPerformed(evt);
@@ -1922,7 +1924,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
             .addComponent(jScrollPane3)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2032,7 +2034,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 589, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

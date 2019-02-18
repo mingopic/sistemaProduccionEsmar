@@ -21,12 +21,17 @@ as begin
     , c.descripcion as calibre
     , s.descripcion as seleccion
     , pv.precio
-    , pv.unidadMedida
+    , um.descripcion
     , pv.fecha
     , pv.idPrecioVenta
     
   from
     tb_PrecioVenta as pv
+  inner join
+    tb_unidadMedida as um
+  on
+    um.idUnidadMedida = pv.idUnidadMedida
+    
   inner join
     tb_tipoRecorte as tr
   on

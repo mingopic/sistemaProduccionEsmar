@@ -19,5 +19,6 @@ create table tb_fichaProdDet
   , costoInsumos     float
   , costoManoObra    float
   , costoFabricacion float
+  , costoInsumosAcum float
 )
 go

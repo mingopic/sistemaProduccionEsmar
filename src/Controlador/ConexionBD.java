@@ -50,7 +50,8 @@ public class ConexionBD
     {
         
         //String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
-        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[1];
+        //String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[1];
+        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";instance="+datosBD[4]+";databaseName="+datosBD[1];
         String usuario = datosBD[2];
         String password = datosBD[3];
         
@@ -63,7 +64,8 @@ public class ConexionBD
     {
         
         //String url = "jdbc:sqlserver://MINGO-LAP:1433;databaseName=esmarProd";
-        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[6];
+//        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";databaseName="+datosBD[6];
+        String url = "jdbc:sqlserver://"+datosBD[0]+":"+datosBD[5]+";instance="+datosBD[4]+";databaseName="+datosBD[6];
         String usuario = datosBD[2];
         String password = datosBD[3];
         

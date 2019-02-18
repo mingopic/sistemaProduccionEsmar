@@ -27,7 +27,7 @@ as begin
     , it.decimetrosActual as decimetros
     , it.piesActual as pies
     , it.fechaEntrada
-    , ((fpd.costoTotalCuero/fpd.noPiezasTotal) * it.noPiezasActuales) + ((fpd.costoInsumos/fpd.noPiezasTotal) * it.noPiezasActuales) as 'costoMateriaPrima'
+    , ((fpd.costoTotalCuero/fpd.noPiezasTotal) * it.noPiezasActuales) + (fpd.costoInsumosAcum) as 'costoMateriaPrima'
     , ((fpd.costoManoObra/fpd.noPiezasTotal) * it.noPiezasActuales) as 'costoManoObra'
     , ((fpd.costoFabricacion/fpd.noPiezasTotal) * it.noPiezasActuales) as 'costoFabricacion'
     , ((fpd.costoTotalCuero/fpd.noPiezasTotal) * it.noPiezasActuales) + ((fpd.costoInsumos/fpd.noPiezasTotal) * it.noPiezasActuales) 

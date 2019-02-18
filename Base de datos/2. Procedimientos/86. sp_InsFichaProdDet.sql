@@ -138,6 +138,35 @@ as begin
     set
       @costoGastosFabricacion = @gastosFabricacion * @noPiezasPartida
   
+  declare
+    @costoInsumosAcum float
+  
+  -- Validar si es una ficha creada en el proceso de Remojo  
+  if (@idProceso = 2)
+  begin
+    set @costoInsumosAcum = @costoInsumosPartida
+  end
+  else begin
+    
+    set @costoInsumosAcum = 
+    (
+      select 
+        (costoInsumosAcum / noPiezasTotal) * @noPiezasPartida
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = (select idRecortePartidaDet from tb_partidaDet where idPartidaDet = @idPartidaDet)
+    )
+    
+    if (@costoInsumosAcum is null)
+    begin
+      set
+        @costoInsumosAcum = 0
+    end
+    
+    set @costoInsumosAcum = @costoInsumosAcum + @costoInsumosPartida
+  end
+  
   insert into
     tb_fichaProdDet
     (
@@ -149,6 +178,7 @@ as begin
       , costoInsumos
       , costoManoObra
       , costoFabricacion
+      , costoInsumosAcum
     )
     
   values
@@ -161,6 +191,7 @@ as begin
     , @costoInsumosPartida
     , @costoManoObra
     , @costoGastosFabricacion
+    , @costoInsumosAcum
   )
   
   set

@@ -97,6 +97,15 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         llenarComboAnio();
         llenarComboSubProcesos();
         actualizarTablaProduccionProceso();
+        
+        for (int i = 0; i < FrmPrincipal.roles.length; i++)
+        {
+            if (FrmPrincipal.roles[i].equals("Produccion") || FrmPrincipal.roles[i].equals("Sistemas"))
+            {
+                btnEliminarFichaProd.setEnabled(true);
+                break;
+            }
+        }
     }
     
     public void llenarComboProcesos() throws Exception
@@ -569,7 +578,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnEliminarFichaProd = new javax.swing.JButton();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
@@ -925,17 +934,18 @@ try {
     jLabel31.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jToolBar3.add(jLabel31);
 
-    jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-    jButton2.setText("Eliminar Ficha de Producción");
-    jButton2.setFocusable(false);
-    jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton2.addActionListener(new java.awt.event.ActionListener() {
+    btnEliminarFichaProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    btnEliminarFichaProd.setText("Eliminar Ficha de Producción");
+    btnEliminarFichaProd.setEnabled(false);
+    btnEliminarFichaProd.setFocusable(false);
+    btnEliminarFichaProd.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEliminarFichaProd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEliminarFichaProd.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton2ActionPerformed(evt);
+            btnEliminarFichaProdActionPerformed(evt);
         }
     });
-    jToolBar3.add(jButton2);
+    jToolBar3.add(btnEliminarFichaProd);
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -1122,13 +1132,14 @@ try {
         actualizarTablaProduccionProceso();
     }//GEN-LAST:event_cmbSubprocesoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnEliminarFichaProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFichaProdActionPerformed
         eliminarFichaProduccion();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnEliminarFichaProdActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEntrada;
+    private javax.swing.JButton btnEliminarFichaProd;
     private javax.swing.JButton btnReporteCostoPartida;
     private javax.swing.JButton btnReporteFichaProd;
     private javax.swing.JButton btnReporteListaPartProdProc;
@@ -1140,7 +1151,6 @@ try {
     private datechooser.beans.DateChooserCombo dcFecha1EntradaProduccionProceso;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaProduccionProceso;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

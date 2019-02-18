@@ -340,17 +340,17 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {   
         try 
         {
-            dlgAgregarPrecioVenta.setSize(435, 335);
-            dlgAgregarPrecioVenta.setPreferredSize(dlgAgregarPrecioVenta.getSize());
-            dlgAgregarPrecioVenta.setLocationRelativeTo(null);
-            dlgAgregarPrecioVenta.setModal(true);
-            dlgAgregarPrecioVenta.setVisible(true);
-            
             llenarComboTipoRecorteAgregar();
             llenarComboCalibreAgregar();
             llenarComboSeleccionAgregar();
             llenarComboUnidadMedida();
             txtPrecioAgregar.setText("");
+            
+            dlgAgregarPrecioVenta.setSize(435, 335);
+            dlgAgregarPrecioVenta.setPreferredSize(dlgAgregarPrecioVenta.getSize());
+            dlgAgregarPrecioVenta.setLocationRelativeTo(null);
+            dlgAgregarPrecioVenta.setModal(true);
+            dlgAgregarPrecioVenta.setVisible(true);
         } 
         catch (Exception e) 
         {

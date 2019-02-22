@@ -24,6 +24,7 @@
 	<field name="CNOMBREUNIDAD" class="java.lang.String"/>
 	<field name="existencia" class="java.lang.Double"/>
 	<field name="costo" class="java.lang.Double"/>
+	<field name="costoXUnidad" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -73,7 +74,7 @@
 				<text><![CDATA[Insumo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="217" y="7" width="106" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8289a5e3-5eb3-403e-8dc2-7502e64ee767"/>
+				<reportElement style="Column header" mode="Transparent" x="217" y="7" width="95" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="8289a5e3-5eb3-403e-8dc2-7502e64ee767"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -81,7 +82,7 @@
 				<text><![CDATA[Unidad de medida]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="323" y="7" width="107" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a53fbe62-a5af-45de-bbbd-946e69c34ace"/>
+				<reportElement style="Column header" mode="Transparent" x="312" y="7" width="77" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="a53fbe62-a5af-45de-bbbd-946e69c34ace"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -89,12 +90,20 @@
 				<text><![CDATA[Existencia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="430" y="7" width="125" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="7ff9bd35-fb91-46a1-b734-bdc23517492d"/>
+				<reportElement style="Column header" mode="Transparent" x="470" y="7" width="83" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="7ff9bd35-fb91-46a1-b734-bdc23517492d"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Costo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="389" y="7" width="81" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="c642bd18-1a53-4afe-98f6-d8b77c9a2a10"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Costo X Unidad]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -110,25 +119,33 @@
 					<textFieldExpression><![CDATA[$F{CNOMBREPRODUCTO}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="217" y="0" width="107" height="18" uuid="fd18fadf-46f4-47d3-9864-1b4575f222a0"/>
+					<reportElement style="Detail" positionType="Float" x="217" y="0" width="95" height="18" uuid="fd18fadf-46f4-47d3-9864-1b4575f222a0"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CNOMBREUNIDAD}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0">
-					<reportElement style="Detail" positionType="Float" x="323" y="0" width="107" height="18" uuid="bbf1721b-b20a-461d-bde0-d946fd055bf5"/>
+					<reportElement style="Detail" positionType="Float" x="312" y="0" width="71" height="18" uuid="bbf1721b-b20a-461d-bde0-d946fd055bf5"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{existencia}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00">
-					<reportElement style="Detail" positionType="Float" x="430" y="0" width="125" height="18" uuid="b1c8b58b-9c65-4158-8ce8-186a8bd47aec"/>
+					<reportElement style="Detail" positionType="Float" x="470" y="0" width="83" height="18" uuid="b1c8b58b-9c65-4158-8ce8-186a8bd47aec"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="383" y="0" width="87" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="ef73dc95-2449-42cd-927a-cdee25843ce5"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{costoXUnidad}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

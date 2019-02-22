@@ -94,6 +94,56 @@ as begin
     
   end
   
+  declare
+    @idDocumento   int
+    , @tipoMoneda  int
+    , @importe     float
+    
+  set
+    @idDocumento =
+    (
+      select
+        CIDDOCUMENTO
+      from
+        admMovimientos
+      where
+        CIDPRODUCTO = @idProducto
+        and CIDMOVIMIENTO =
+        (
+          select
+            max(CIDMOVIMIENTO)
+          
+          from 
+            admMovimientos
+          where
+            CIDPRODUCTO = @idProducto
+        )
+    )
+  
+  select
+    @tipoMoneda = d.CIDMONEDA
+    , @importe = tc.CIMPORTE
+  from
+    admTiposCambio as tc
+  inner join
+    admDocumentos as d
+  on
+    d.CIDMONEDA = tc.CIDMONEDA
+    and tc.CFECHA =
+    (
+      select
+        max(tc.CFECHA)
+      from
+        admTiposCambio as tc
+    )
+  where
+    d.CIDDOCUMENTO = @idDocumento
+  
+  if (@tipoMoneda = 2)
+  begin
+    set @precio = @precio * @importe
+  end
+  
   select
     [precio] = @precio
   

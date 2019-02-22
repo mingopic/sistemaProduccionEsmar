@@ -148,15 +148,35 @@ as begin
   end
   else begin
     
-    set @costoInsumosAcum = 
-    (
-      select 
-        (costoInsumosAcum / noPiezasTotal) * @noPiezasPartida
-      from
-        tb_fichaProdDet
-      where
-        idPartidaDet = (select idRecortePartidaDet from tb_partidaDet where idPartidaDet = @idPartidaDet)
-    )
+    -- Aqui comienza codigo nuevo ------------------------------------------------------------------------
+    declare @existe int
+    
+    select
+      @existe = 1
+    from
+      fichaProdDetAux
+    where
+      idPartidaDet = @idPartidaDet
+    
+    if (@existe = 1)
+    begin
+      -- codigo chidori
+      -- Que busque en fichaProdDetAux los datos de costos, kg, etc
+    end
+    
+    else
+    begin
+      set @costoInsumosAcum = 
+      (
+        select 
+          (costoInsumosAcum / noPiezasTotal) * @noPiezasPartida
+        from
+          tb_fichaProdDet
+        where
+          idPartidaDet = (select idRecortePartidaDet from tb_partidaDet where idPartidaDet = @idPartidaDet)
+      )
+    end
+    -- Fin codigo Nuevo ------------------------------------------------------------------------
     
     if (@costoInsumosAcum is null)
     begin

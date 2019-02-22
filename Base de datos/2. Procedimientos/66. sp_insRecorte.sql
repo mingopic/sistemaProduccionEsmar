@@ -373,6 +373,8 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+      
+      -- Aqui va codigo Nuevo
         
       insert into
         tb_partidaDet
@@ -400,6 +402,8 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+      
+      -- Aqui va codigo Nuevo
         
         set
         @garra =
@@ -458,7 +462,7 @@ create procedure sp_insRecorte
           , procedenciaCrudo
           , idRecortePartidaDet
         )
-        
+      
       values
         (
           @noPiezas
@@ -471,6 +475,8 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+        
+      -- Aqui va codigo Nuevo
     end
   end
 go

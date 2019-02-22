@@ -31,7 +31,7 @@ as begin
     , [Piezas] = pd.noPiezasAct
     , [Kg] = pd.noPiezasAct * (fpd.kgTotal/fpd.noPiezasTotal)
     , [CostoCuero] = pd.noPiezasAct * (fpd.costoTotalCuero/fpd.noPiezasTotal)
-    , [CostoInsumos] = pd.noPiezasAct * (fpd.costoInsumos/fpd.noPiezasTotal)
+    , [CostoInsumos] = pd.noPiezasAct * (fpd.costoInsumosAcum/fpd.noPiezasTotal)
     , pr.descripcion as 'Proceso'
     , pr.idProceso
 

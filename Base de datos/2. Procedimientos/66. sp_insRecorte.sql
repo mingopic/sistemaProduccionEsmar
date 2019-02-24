@@ -20,11 +20,16 @@ create procedure sp_insRecorte
   as begin
     
     declare 
-      @idRecepcionCuero  int
-      , @idInventarioCrudo int
-      , @garra            float
-      , @garraDesc        float
-      , @noGarras         int
+      @idRecepcionCuero     int
+      , @idInventarioCrudo  int
+      , @garra              float
+      , @garraDesc          float
+      , @noGarras           int
+      , @ultimaIdPartidaDet int
+      , @kgTotal            float
+      , @costoTotal         float
+      , @costoInsumos       float
+      , @porcCuero          float
       
     update
       tb_partidaDet
@@ -76,6 +81,48 @@ create procedure sp_insRecorte
           , 0
           , @idPartidaDet
         )
+      
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 2
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
         
       insert into
         tb_partidaDet
@@ -102,6 +149,48 @@ create procedure sp_insRecorte
           , @idInventarioCrudo
           , 0
           , @idPartidaDet
+        )
+        
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 3
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
         )
       
       set
@@ -176,6 +265,56 @@ create procedure sp_insRecorte
           , @idPartidaDet
         )
         
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 5
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
+        
         insert into
           tb_partidaDet
           (
@@ -201,6 +340,48 @@ create procedure sp_insRecorte
           , @idInventarioCrudo
           , 0
           , @idPartidaDet
+        )
+        
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 7
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
         )
         
       set
@@ -275,6 +456,48 @@ create procedure sp_insRecorte
           , @idPartidaDet
         )
         
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 6
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
+        
       insert into
         tb_partidaDet
         (
@@ -300,6 +523,48 @@ create procedure sp_insRecorte
           , @idInventarioCrudo
           , 0
           , @idPartidaDet
+        )
+        
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 7
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
         )
         
         set
@@ -374,7 +639,47 @@ create procedure sp_insRecorte
           , @idPartidaDet
         )
       
-      -- Aqui va codigo Nuevo
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 8
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
         
       insert into
         tb_partidaDet
@@ -403,7 +708,47 @@ create procedure sp_insRecorte
           , @idPartidaDet
         )
       
-      -- Aqui va codigo Nuevo
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = 7
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
         
         set
         @garra =
@@ -476,7 +821,47 @@ create procedure sp_insRecorte
           , @idPartidaDet
         )
         
-      -- Aqui va codigo Nuevo
+      select
+        @porcCuero = porcentaje
+      from
+        tb_confPrecioCuero
+      where
+        idTipoRecorte = @idTipoRecorte
+        
+      select
+        @kgTotal = ((kgTotal / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoTotal = ((costoTotalCuero / noPiezasTotal) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((costoInsumos / noPiezasTotal) * @noPiezas) * @porcCuero
+      from
+        tb_fichaProdDet
+      where
+        idPartidaDet = @idPartidaDet
+        
+      set
+        @ultimaIdPartidaDet =
+        (
+          select
+            max(idPartidaDet)
+          from
+            tb_partidaDet
+        )
+      
+      insert into
+        tb_partidaDetAux
+        (
+          idPartidaDet
+          , kgTotal
+          , costoTotal
+          , costoInsumos
+        )
+      
+      values
+        (
+          @ultimaIdPartidaDet
+          , @kgTotal
+          , @costoTotal
+          , @costoInsumos
+        )
     end
   end
 go

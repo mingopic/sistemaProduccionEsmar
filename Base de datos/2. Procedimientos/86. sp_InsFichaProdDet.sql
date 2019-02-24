@@ -146,6 +146,7 @@ as begin
   begin
     set @costoInsumosAcum = @costoInsumosPartida
   end
+  
   else begin
     
     -- Aqui comienza codigo nuevo ------------------------------------------------------------------------
@@ -154,7 +155,7 @@ as begin
     select
       @existe = 1
     from
-      fichaProdDetAux
+      tb_partidaDetAux
     where
       idPartidaDet = @idPartidaDet
     
@@ -162,6 +163,14 @@ as begin
     begin
       -- codigo chidori
       -- Que busque en fichaProdDetAux los datos de costos, kg, etc
+      select
+        kgTotal
+        , costoTotal
+        , costoInsumos
+      from
+        tb_partidaDetAux
+      where
+        idPartidaDet = @idPartidaDet
     end
     
     else

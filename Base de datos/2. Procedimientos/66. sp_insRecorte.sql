@@ -98,6 +98,22 @@ create procedure sp_insRecorte
       where
         idPartidaDet = @idPartidaDet
         
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
+        
       set
         @ultimaIdPartidaDet =
         (
@@ -166,6 +182,22 @@ create procedure sp_insRecorte
         tb_fichaProdDet
       where
         idPartidaDet = @idPartidaDet
+        
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
         
       set
         @ultimaIdPartidaDet =
@@ -281,6 +313,22 @@ create procedure sp_insRecorte
       where
         idPartidaDet = @idPartidaDet
         
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
+        
       set
         @ultimaIdPartidaDet =
         (
@@ -297,14 +345,6 @@ create procedure sp_insRecorte
           , kgTotal
           , costoTotal
           , costoInsumos
-        )
-      
-      values
-        (
-          @ultimaIdPartidaDet
-          , @kgTotal
-          , @costoTotal
-          , @costoInsumos
         )
       
       values
@@ -357,6 +397,22 @@ create procedure sp_insRecorte
         tb_fichaProdDet
       where
         idPartidaDet = @idPartidaDet
+        
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
         
       set
         @ultimaIdPartidaDet =
@@ -472,6 +528,22 @@ create procedure sp_insRecorte
       where
         idPartidaDet = @idPartidaDet
         
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
+        
       set
         @ultimaIdPartidaDet =
         (
@@ -540,6 +612,22 @@ create procedure sp_insRecorte
         tb_fichaProdDet
       where
         idPartidaDet = @idPartidaDet
+        
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
         
       set
         @ultimaIdPartidaDet =
@@ -655,6 +743,22 @@ create procedure sp_insRecorte
       where
         idPartidaDet = @idPartidaDet
         
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
+        
       set
         @ultimaIdPartidaDet =
         (
@@ -723,6 +827,22 @@ create procedure sp_insRecorte
         tb_fichaProdDet
       where
         idPartidaDet = @idPartidaDet
+        
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
         
       set
         @ultimaIdPartidaDet =
@@ -836,6 +956,22 @@ create procedure sp_insRecorte
         tb_fichaProdDet
       where
         idPartidaDet = @idPartidaDet
+        
+      if (@kgTotal is null or @costoTotal is null or @costoInsumos is null)
+      begin
+        select
+        @kgTotal = ((pda.kgTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoTotal = ((pda.costoTotal / pd.noPiezas) * @noPiezas) * @porcCuero
+        , @costoInsumos = ((pda.costoInsumos / pd.noPiezas) * @noPiezas) * @porcCuero
+      from
+        tb_partidaDetAux as pda
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = pda.idPartidaDet
+      where
+        pda.idPartidaDet = @idPartidaDet
+      end
         
       set
         @ultimaIdPartidaDet =

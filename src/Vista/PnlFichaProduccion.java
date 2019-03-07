@@ -89,6 +89,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             actualizarTablaSubProc();
             inicializarTablaPartidasAgregadas();
             actualizarTablaInsumos(0);
+            btnEliminarRecorte.setVisible(false);
         } 
         catch (Exception e)
         {
@@ -2231,7 +2232,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNoPiezasRecortarKeyTyped
 
     private void txtNoPiezasRecortarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasRecortarKeyReleased
-        if (recorteSeleccionado.equals("Delantero/Crupon") || recorteSeleccionado.equals("Centro Castaño/Delantero Suela") || recorteSeleccionado.equals("Centro Quebracho/Delantero Suela"))
+        if (recorteSeleccionado.equals("Delantero/Crupon") || recorteSeleccionado.equals("Centro Castaño/Delantero Suela") || recorteSeleccionado.equals("Centro Quebracho/Delantero Suela") || recorteSeleccionado.equals("Centro/Delantero Suela"))
         {
             if (txtNoPiezasRecortar.getText().equals(""))
             {

@@ -179,7 +179,7 @@ public class SubProcesoCommands {
 
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
-                    precioProducto = rs.getDouble("precio");
+                    precioProducto = (Double.parseDouble(String.format("%.2f",rs.getDouble("precio"))));
                 }
             }
             rs.close();

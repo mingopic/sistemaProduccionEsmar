@@ -157,20 +157,18 @@ as begin
     from
       tb_partidaDetAux
     where
-      idPartidaDet = @idPartidaDet
+      idPartidaDet = (select idRecortePartidaDet from tb_partidaDet where idPartidaDet = @idPartidaDet)
     
     if (@existe = 1)
     begin
       -- codigo chidori
       -- Que busque en fichaProdDetAux los datos de costos, kg, etc
       select
-        kgTotal
-        , costoTotal
-        , costoInsumos
+        @costoInsumosAcum = costoInsumos
       from
         tb_partidaDetAux
       where
-        idPartidaDet = @idPartidaDet
+        idPartidaDet = (select idRecortePartidaDet from tb_partidaDet where idPartidaDet = @idPartidaDet)
     end
     
     else

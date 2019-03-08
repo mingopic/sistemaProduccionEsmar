@@ -134,6 +134,12 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             int noTotalPiezas;
             int refMerma;
             String tipoCamion;
+            double cachetes;
+            double colas;
+            double humedad;
+            double humedadDiaSig;
+            double cacheteColas;
+            double diferenciaHumedad;
 
             if (txtKgTotales.getText().isEmpty())
             {
@@ -241,6 +247,46 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             {
                 costoCamion = noTotalPiezas*precio;
             }
+            
+            if (txtCachetes.getText().isEmpty())
+            {
+                cachetes = 0;
+            }
+            else
+            {
+                cachetes = Double.parseDouble(txtCachetes.getText());
+            }
+            
+            if (txtColas.getText().isEmpty())
+            {
+                colas = 0;
+            }
+            else
+            {
+                colas = Double.parseDouble(txtColas.getText());
+            }
+            
+            cacheteColas = cachetes + colas;
+            
+            if (txtHumedad.getText().isEmpty())
+            {
+                humedad = 0;
+            }
+            else
+            {
+                humedad = Double.parseDouble(txtHumedad.getText());
+            }
+            
+            if (txtHumedadDiaSig.getText().isEmpty())
+            {
+                humedadDiaSig = 0;
+            }
+            else
+            {
+                humedadDiaSig = Double.parseDouble(txtHumedadDiaSig.getText());
+            }
+            
+            diferenciaHumedad = humedad - humedadDiaSig;
 
             txtCostoCamion.setText(String.valueOf(costoCamion));
 
@@ -294,6 +340,10 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             lblCostoTotalCamion.setText("");
             lblCostoTotalCamion.setText("$"+String.format("%.2f",costoTotalCamion));
             txtCostoTotalCamion.setText(String.format("%.2f",(kgTotalesConTarimas-totalDescontar)));
+            txtCacheteColas.setText(String.valueOf(cacheteColas));
+            txtDiferenciaHumedad.setText(String.valueOf(diferenciaHumedad));
+            txtMermaCachete.setText(txtCacheteColas.getText());
+            txtMermaHumedad.setText(txtDiferenciaHumedad.getText());
         }
         catch (Exception e)
         {
@@ -583,6 +633,18 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jLabel95 = new javax.swing.JLabel();
         txtMermaTarimasDiferencia = new javax.swing.JTextField();
         txtTarimasDescontar = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtCachetes = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtColas = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        txtCacheteColas = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        txtHumedad = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
+        txtHumedadDiaSig = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        txtDiferenciaHumedad = new javax.swing.JTextField();
         jPanel9 = new javax.swing.JPanel();
         txtTotalKgDescontar = new javax.swing.JTextField();
         jLabel59 = new javax.swing.JLabel();
@@ -1021,6 +1083,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jLabel62.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel62.setText("Humedad");
 
+        txtMermaHumedad.setEditable(false);
         txtMermaHumedad.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtMermaHumedad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMermaHumedad.setText("0");
@@ -1123,7 +1186,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                     .addComponent(jLabel72, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtMermaHumedadDescontar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1169,6 +1232,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jLabel75.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel75.setText("Cachete");
 
+        txtMermaCachete.setEditable(false);
         txtMermaCachete.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtMermaCachete.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtMermaCachete.setText("0");
@@ -1271,7 +1335,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                     .addComponent(jLabel83))
                 .addGap(18, 18, 18)
                 .addComponent(txtMermaCacheteDescontar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1413,7 +1477,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                     .addComponent(jLabel94, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(txtTarimasDescontar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1449,6 +1513,62 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 .addComponent(jLabel95))
         );
 
+        jLabel4.setText("Cachetes");
+
+        txtCachetes.setText("0");
+        txtCachetes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCachetesKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCachetesKeyTyped(evt);
+            }
+        });
+
+        jLabel9.setText("Colas");
+
+        txtColas.setText("0");
+        txtColas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtColasKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtColasKeyTyped(evt);
+            }
+        });
+
+        jLabel26.setText("Cachetes y colas");
+
+        txtCacheteColas.setEditable(false);
+
+        jLabel27.setText("Humedad");
+
+        txtHumedad.setText("0");
+        txtHumedad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtHumedadKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHumedadKeyTyped(evt);
+            }
+        });
+
+        jLabel29.setText("Humedad día siguiente");
+
+        txtHumedadDiaSig.setText("0");
+        txtHumedadDiaSig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtHumedadDiaSigKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHumedadDiaSigKeyTyped(evt);
+            }
+        });
+
+        jLabel30.setText("Diferencia de humedad");
+
+        txtDiferenciaHumedad.setEditable(false);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1457,10 +1577,54 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCachetes, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(txtColas))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCacheteColas, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel29)
+                    .addComponent(jLabel27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(txtHumedad, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtDiferenciaHumedad, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtHumedadDiaSig, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtCachetes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26)
+                    .addComponent(txtCacheteColas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27)
+                    .addComponent(txtHumedad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel30)
+                    .addComponent(txtDiferenciaHumedad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtColas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel29)
+                    .addComponent(txtHumedadDiaSig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1685,6 +1849,38 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cmbTipoCamionItemStateChanged
 
+    private void txtCachetesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCachetesKeyReleased
+        calcularCostoTotalCamion();
+    }//GEN-LAST:event_txtCachetesKeyReleased
+
+    private void txtColasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColasKeyReleased
+        calcularCostoTotalCamion();
+    }//GEN-LAST:event_txtColasKeyReleased
+
+    private void txtHumedadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHumedadKeyReleased
+        calcularCostoTotalCamion();
+    }//GEN-LAST:event_txtHumedadKeyReleased
+
+    private void txtHumedadDiaSigKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHumedadDiaSigKeyReleased
+        calcularCostoTotalCamion();
+    }//GEN-LAST:event_txtHumedadDiaSigKeyReleased
+
+    private void txtCachetesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCachetesKeyTyped
+        validarNumeros(evt, txtCachetes.getText());
+    }//GEN-LAST:event_txtCachetesKeyTyped
+
+    private void txtColasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColasKeyTyped
+        validarNumeros(evt, txtColas.getText());
+    }//GEN-LAST:event_txtColasKeyTyped
+
+    private void txtHumedadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHumedadKeyTyped
+        validarNumeros(evt, txtHumedad.getText());
+    }//GEN-LAST:event_txtHumedadKeyTyped
+
+    private void txtHumedadDiaSigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHumedadDiaSigKeyTyped
+        validarNumeros(evt, txtHumedadDiaSig.getText());
+    }//GEN-LAST:event_txtHumedadDiaSigKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbProveedorAgregar;
@@ -1709,8 +1905,13 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
@@ -1744,6 +1945,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel89;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
     private javax.swing.JLabel jLabel92;
@@ -1764,8 +1966,14 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
     private javax.swing.JLabel lblDeKgTotal;
     private javax.swing.JLabel lblRangoMax;
     private javax.swing.JLabel lblRangoMin;
+    private javax.swing.JTextField txtCacheteColas;
+    private javax.swing.JTextField txtCachetes;
+    private javax.swing.JTextField txtColas;
     private javax.swing.JTextField txtCostoCamion;
     private javax.swing.JTextField txtCostoTotalCamion;
+    private javax.swing.JTextField txtDiferenciaHumedad;
+    private javax.swing.JTextField txtHumedad;
+    private javax.swing.JTextField txtHumedadDiaSig;
     private javax.swing.JTextField txtKgTotales;
     private javax.swing.JTextField txtMermaCachete;
     private javax.swing.JTextField txtMermaCacheteAceptada;

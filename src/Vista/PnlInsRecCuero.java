@@ -294,7 +294,7 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
             
             tipoCamion = cmbTipoCamion.getSelectedItem().toString();
 
-            datosConfMerma = cmc.obtenerConfiguracionMerma(mermaSal,mermaHumedad,mermaCachete,tarimas,kgTotales,precio,noTotalPiezas,refMerma,tipoCamion);
+            datosConfMerma = cmc.obtenerConfiguracionMerma(mermaSal,diferenciaHumedad,cacheteColas,tarimas,kgTotales,precio,noTotalPiezas,refMerma,tipoCamion);
             
             double costoTotalCamion = (Double.parseDouble(datosConfMerma[0][0]));
             double salAcep = (Double.parseDouble(datosConfMerma[0][1]));
@@ -450,6 +450,10 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 int idMerHum;
                 int idMerCac;
                 int idMerTar;
+                double cachetes;
+                double colas;
+                double humedad;
+                double humedadDiaSig;
 
                 for (int i = 0; i < proveedoresAgregar.length; i++)
                 {
@@ -485,6 +489,10 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 idMerCac = Integer.parseInt(datosConfMerma[0][21]);
                 idMerTar = Integer.parseInt(datosConfMerma[0][22]);
                 tipoCamion = cmbTipoCamion.getSelectedItem().toString();
+                cachetes = Double.parseDouble(txtCachetes.getText());
+                colas = Double.parseDouble(txtColas.getText());
+                humedad = Double.parseDouble(txtHumedad.getText());
+                humedadDiaSig = Double.parseDouble(txtHumedadDiaSig.getText());
 
                 rc.setIdProveedor(idProveedor);
                 rc.setNoCamion(noCamion);
@@ -505,6 +513,10 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
                 rc.setIdMerCac(idMerCac);
                 rc.setIdMerTar(idMerTar);
                 rc.setTipoCamion(tipoCamion);
+                rc.setCachetes(cachetes);
+                rc.setColas(colas);
+                rc.setHumedad(humedad);
+                rc.setHumedadDiaSig(humedadDiaSig);
 
                 rcc.InsertarEntradaRecepcionCuero(rc);
                 

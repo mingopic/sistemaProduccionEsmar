@@ -37,6 +37,42 @@ public class RecepcionCuero {
     int idMerTar;
     int idRecepcionCuero;
     String tipoCamion;
+    double cachetes;
+    double colas;
+    double humedad;
+    double humedadDiaSig;
+
+    public double getCachetes() {
+        return cachetes;
+    }
+
+    public void setCachetes(double cachetes) {
+        this.cachetes = cachetes;
+    }
+
+    public double getColas() {
+        return colas;
+    }
+
+    public void setColas(double colas) {
+        this.colas = colas;
+    }
+
+    public double getHumedad() {
+        return humedad;
+    }
+
+    public void setHumedad(double humedad) {
+        this.humedad = humedad;
+    }
+
+    public double getHumedadDiaSig() {
+        return humedadDiaSig;
+    }
+
+    public void setHumedadDiaSig(double humedadDiaSig) {
+        this.humedadDiaSig = humedadDiaSig;
+    }
 
     public String getTipoCamion() {
         return tipoCamion;

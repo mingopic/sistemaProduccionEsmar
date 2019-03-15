@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="53717dff-4c88-4a02-93f5-0b6c2f0f56b7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="63"/>
+	<property name="ireport.y" value="22"/>
 	<parameter name="idRecepcionCuero" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -49,6 +49,10 @@
 	<field name="totalPagar" class="java.lang.Double"/>
 	<field name="refParaMerma" class="java.lang.Integer"/>
 	<field name="humedadAcep" class="java.lang.Double"/>
+	<field name="cachetes" class="java.lang.Double"/>
+	<field name="colas" class="java.lang.Double"/>
+	<field name="humedad" class="java.lang.Double"/>
+	<field name="humedadDiaSig" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -85,6 +89,18 @@
 	</pageFooter>
 	<summary>
 		<band height="465" splitType="Stretch">
+			<rectangle>
+				<reportElement x="491" y="100" width="90" height="20" uuid="8ba7e7fa-c483-44d2-9826-56f89fa741b4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="491" y="40" width="90" height="20" uuid="4ed0981c-c7a5-48aa-bdc8-f1cecd290406"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="376" y="100" width="90" height="20" uuid="6840bcb3-e4b7-4653-bbdb-240b5abaecfc"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="376" y="40" width="90" height="20" uuid="d2a647c9-4681-4bf2-b001-a5168f504b3c"/>
+			</rectangle>
 			<rectangle>
 				<reportElement x="0" y="140" width="90" height="20" uuid="fac92f93-5976-4297-98f1-cf174241dd64"/>
 			</rectangle>
@@ -944,6 +960,50 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalPagar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="376" y="40" width="90" height="20" uuid="595bb113-903a-4625-ba49-24aa91b47519"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cachetes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="100" width="90" height="20" uuid="4dfb4a6f-0431-4011-ac56-78ebb9146511"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Colas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="40" width="90" height="20" uuid="18b25087-5d9d-4ccc-8159-4b1c75729cb6"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Humedad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="100" width="90" height="20" uuid="c8514d21-dc7b-4e4a-a2f4-f0c6e435c051"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Humedad Día Sig]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="377" y="60" width="89" height="20" uuid="0b0d95f3-1871-450b-9408-468e4c7f9df0"/>
+				<textFieldExpression><![CDATA[$F{cachetes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="120" width="89" height="20" uuid="45f12c12-5fa2-4a7a-9525-cdc78097c574"/>
+				<textFieldExpression><![CDATA[$F{colas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="491" y="60" width="90" height="20" uuid="ae95b292-9d7c-4fd2-ab08-08dc19bc0c14"/>
+				<textFieldExpression><![CDATA[$F{humedad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="491" y="120" width="90" height="20" uuid="ce9a80ab-4e21-47c4-90aa-f2c64e23e6af"/>
+				<textFieldExpression><![CDATA[$F{humedadDiaSig}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

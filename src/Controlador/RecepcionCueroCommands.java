@@ -111,11 +111,12 @@ public class RecepcionCueroCommands {
     public static void InsertarEntradaRecepcionCuero(RecepcionCuero rc) throws Exception {
         String query;
         
-        query= "EXEC sp_agrEntRecCuero "+rc.getIdProveedor()+","+rc.getNoCamion()+","+rc.getIdTipoCuero()+","
+            query= "EXEC sp_agrEntRecCuero "+rc.getIdProveedor()+","+rc.getNoCamion()+","+rc.getIdTipoCuero()+","
                 +rc.getIdRangoPesoCuero()+","+rc.getNoPiezasLigero()+","+rc.getNoPiezasPesado()+","
                 +rc.getNoTotalPiezas()+","+rc.getKgTotal()+","+rc.getPrecioXKilo()+","+rc.getMermaSal()+","
                 +rc.getMermaHumedad()+","+rc.getMermaCachete()+","+rc.getMermaTarimas()+","+rc.getRefParaMerma()+","
-                +rc.getIdMerSal()+","+rc.getIdMerHum()+","+rc.getIdMerCac()+","+rc.getIdMerTar()+", '"+rc.getTipoCamion()+"'";
+                +rc.getIdMerSal()+","+rc.getIdMerHum()+","+rc.getIdMerCac()+","+rc.getIdMerTar()+", '"+rc.getTipoCamion()+"',"
+                +rc.getCachetes()+","+rc.getColas()+","+rc.getHumedad()+","+rc.getHumedadDiaSig();
 
         
         PreparedStatement pstmt = null;

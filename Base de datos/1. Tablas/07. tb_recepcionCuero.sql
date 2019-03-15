@@ -33,5 +33,9 @@ create table tb_recepcionCuero
   , idMerTar         int
   , origen           varchar(50)
   , fechaEntrada     date
+  , cachetes         float
+  , colas            float
+  , humedad          float
+  , humedadDiaSig    float
 );
 go

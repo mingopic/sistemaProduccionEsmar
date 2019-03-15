@@ -29,6 +29,10 @@ create procedure sp_agrEntRecCuero
   ,@idMerCac         int
   ,@idMerTar         int
   ,@tipoCamion       varchar(50)
+  ,@cachetes         float
+  ,@colas            float
+  ,@humedad          float
+  ,@humedadDiaSig    float
 )
 as begin
   
@@ -86,6 +90,10 @@ as begin
       , @idMerTar
       , @tipoCamion
       , @fechaEntrada
+      , @cachetes
+      , @colas
+      , @humedad
+      , @humedadDiaSig
     )
 end
 go

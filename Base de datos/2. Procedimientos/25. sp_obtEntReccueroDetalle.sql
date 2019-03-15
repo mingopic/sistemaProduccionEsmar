@@ -286,6 +286,10 @@ as begin
     , @totalPagar as totalPagar
     , @refParaMerma as refParaMerma
     , @humedadAcep * 100 as humedadAcep
+    , rc.cachetes
+    , rc.colas
+    , rc.humedad
+    , rc.humedadDiaSig
     
   from
     tb_proveedor as p

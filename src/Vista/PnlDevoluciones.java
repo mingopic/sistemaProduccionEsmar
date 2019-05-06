@@ -9,6 +9,7 @@ package Vista;
 import Controlador.BajasInventarioTerminadoCommands;
 import Controlador.CalibreCommands;
 import Controlador.ConexionBD;
+import Controlador.DevolucionCommands;
 import Controlador.InventarioCrossCommands;
 import Controlador.InventarioCrossSemiterminadoCommands;
 import Controlador.InventarioSalTerminadoCommands;
@@ -19,6 +20,7 @@ import Controlador.SeleccionCommands;
 import Controlador.TipoRecorteCommands;
 import Modelo.BajasInventarioTerminado;
 import Modelo.Calibre;
+import Modelo.Devolucion;
 import Modelo.InventarioCross;
 import Modelo.InventarioCrossSemiterminado;
 import Modelo.InventarioSalTerminado;
@@ -34,8 +36,10 @@ import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -44,6 +48,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -55,7 +60,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author Mingo
  */
-public class PnlTerminado extends javax.swing.JPanel {
+public class PnlDevoluciones extends javax.swing.JPanel {
     ConexionBD conexion;
     TipoRecorte tr;
     TipoRecorteCommands trc;
@@ -70,17 +75,18 @@ public class PnlTerminado extends javax.swing.JPanel {
     InventarioCrossSemiterminado ics;
     InventarioCrossSemiterminadoCommands icsc;
     InventarioSemiterminadoTerminado ist;
-    InventarioTerminado it;
+    Devolucion d;
     InventarioSemiterminadoTerminadoCommands istc;
-    InventarioTerminadoCommands itc;
+    DevolucionCommands dc;
     InventarioSalTerminado isalt;
     InventarioSalTerminadoCommands isaltc;
     Partida p;
     BajasInventarioTerminado bit;
     BajasInventarioTerminadoCommands bitc;
     double promXPieza;
-    String[][] datosTerminado = null;
-    String[][] datos = null;
+    List<Devolucion> lstDevolucion;
+    List<InventarioSalTerminado> lstInvSalTer;
+    
     String[][] calibres = null;
     String[][] selecciones = null;
     String[][] tipoRecorte = null;
@@ -105,7 +111,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     /**
      * Creates new form PnlEntradas
      */
-    public PnlTerminado() throws Exception {
+    public PnlDevoluciones() throws Exception {
         initComponents();
         inicializar();
     }
@@ -115,7 +121,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     public void inicializar() throws Exception
     {
         conexion = new ConexionBD();
-        it = new InventarioTerminado();
+        d = new Devolucion();
         tr = new TipoRecorte();
         trc = new TipoRecorteCommands();
         c = new Calibre();
@@ -123,6 +129,9 @@ public class PnlTerminado extends javax.swing.JPanel {
         s = new Seleccion();
         sc = new SeleccionCommands();
         p = new Partida();
+        lstDevolucion = new ArrayList<>();
+        dc = new DevolucionCommands();
+        lstInvSalTer = new ArrayList<>();
         
         jrFiltroFechasEntrada.setSelected(false);
         dcFecha1EntradaSemiterminado.setEnabled(false);
@@ -130,7 +139,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         llenarComboTipoRecorte();
         llenarComboCalibre();
         llenarComboSeleccion();
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
@@ -199,12 +208,12 @@ public class PnlTerminado extends javax.swing.JPanel {
                 evt.consume();
             }
         } catch (Exception ex) {
-            Logger.getLogger(PnlTerminado.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlDevoluciones.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 //    
 //    //Método para actualizar la tabla de las entradas de cuero por trabajar, se inicializa al llamar la clase
-    public void actualizarTablaTerminado() 
+    public void actualizarTablaDevoluciones() 
     {
         //validamos si esta seleccionada lo opción de rango de fechas para tomar el valor seleccionado,
         //si no esta seleccionado se ponen automáticamente los valores 1900-01-01 y 2040-01-01
@@ -236,11 +245,11 @@ public class PnlTerminado extends javax.swing.JPanel {
                         fechaAux=fechaAux+fecha.charAt(i);
                     }
                             
-                    it.setFecha(fechaAux);
+                    d.setFecha(fechaAux);
                 }
             catch (Exception ex) 
                 {
-                    it.setFecha("0");
+                    d.setFecha("0");
                 }
             
             try {
@@ -272,17 +281,17 @@ public class PnlTerminado extends javax.swing.JPanel {
                         fechaAux=fechaAux+fecha.charAt(i);
                     }
                             
-                    it.setFecha1(fechaAux);
+                    d.setFecha1(fechaAux);
                 }
             catch (Exception ex) 
                 {
-                    it.setFecha1("0");
+                    d.setFecha1("0");
                 }
         }
         else
         {
-            it.setFecha("1900-01-01");
-            it.setFecha1("2040-01-01");
+            d.setFecha("1900-01-01");
+            d.setFecha1("2040-01-01");
         }
         
         //validamos si esta seleccionado algún tipo de cuero para hacer filtro
@@ -313,32 +322,46 @@ public class PnlTerminado extends javax.swing.JPanel {
             s.setDescripcion(cmbSeleccion.getSelectedItem().toString());
         }
         
-        if (txtNoPartida.getText().isEmpty())
-        {
-            p.setNoPartida(0);
-        }
-        else
-        {
-            int noPartida = Integer.parseInt(txtNoPartida.getText());
-            p.setNoPartida(noPartida);
-        }
-        
         DefaultTableModel dtm = null;
         
         try {
             
-            // llenar la tabla de tb_invTerminadoCompleto
-            itc.insInvTerminadoCompleto();
+            lstDevolucion = dc.ObtenerListaDevoluciones(tr,c,s,d);
             
-            datosTerminado = itc.obtenerListaInvTerminado(p,tr,c,s,it);
+            String[] cols = new String[]
+            {
+                "Tipo Recorte", "No. Piezas", "Calibre", "Seleccion", "Motivo", "fecha"
+            };
             
-            dtm = new DefaultTableModel(datosTerminado, cols){
+            dtm = new DefaultTableModel(){
             public boolean isCellEditable(int row, int column) {
             return false;
             }
             };
-            tblTerminado.setModel(dtm);
-            tblTerminado.getTableHeader().setReorderingAllowed(false);
+            
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(lstDevolucion.size());
+            
+            for (int i = 0; i < lstDevolucion.size(); i++)
+            {
+                dtm.setValueAt(lstDevolucion.get(i).getTipoRecorte(), i, 0);
+                dtm.setValueAt(lstDevolucion.get(i).getNoPiezas(), i, 1);
+                dtm.setValueAt(lstDevolucion.get(i).getCalibre(), i, 2);
+                dtm.setValueAt(lstDevolucion.get(i).getSeleccion(), i, 3);
+                dtm.setValueAt(lstDevolucion.get(i).getMotivo(), i, 4);
+                dtm.setValueAt(lstDevolucion.get(i).getFecha(), i, 5);
+            }
+            
+            tblDevolucion.setModel(dtm);
+            
+//            TableColumnModel columnModel = tblDevolucion.getColumnModel();
+//            
+//            columnModel.getColumn(0).setPreferredWidth(120);
+//            columnModel.getColumn(1).setPreferredWidth(210);
+//            columnModel.getColumn(2).setPreferredWidth(200);
+//            columnModel.getColumn(3).setPreferredWidth(120);
+            
+            tblDevolucion.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -355,7 +378,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         btnGroup.add(jrArea);
         
         jrKg.setSelected(true);
-        txtNoPartidaAgregar.setText("");
+        //txtNoPartidaAgregar.setText("");
         txtTipoRecorteAgregar.setText("");
         txtNoPiezasAgregar.setText("");
         txtKgTotalesAgregar.setText("");
@@ -403,23 +426,51 @@ public class PnlTerminado extends javax.swing.JPanel {
     }
     
     //Método para actualizar la tabla de inventario cross semiterminado
-    public void actualizarTablaInvSemTer() 
+    public void actualizarTablaInvSalTer() 
     {  
         DefaultTableModel dtm = null;
         
         try {
             
             // Este es el mètodo que debes de modificar
-            datos = istc.obtenerListaInvSemTer();
+            lstInvSalTer = isaltc.ObtenerListaInvSalTerminado();
             
-            dtm = new DefaultTableModel(datos, colsInvTermi)
+            String[] cols = new String[]
             {
-                public boolean isCellEditable(int row, int column) 
-                {
-                    return false;
-                }
+                "Tipo Recorte", "Calibre", "Selección", "No. Piezas", "Kg", "Decimetros", "Pies", "Fecha"
             };
-            tblBuscarPartidaInvSemTer.setModel(dtm);
+            
+            dtm = new DefaultTableModel(){
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+            };
+            
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(lstInvSalTer.size());
+            
+            for (int i = 0; i < lstInvSalTer.size(); i++)
+            {
+                dtm.setValueAt(lstInvSalTer.get(i).getTipoRecorte(), i, 0);
+                dtm.setValueAt(lstInvSalTer.get(i).getCalibre(), i, 1);
+                dtm.setValueAt(lstInvSalTer.get(i).getSeleccion(), i, 2);
+                dtm.setValueAt(lstInvSalTer.get(i).getNoPiezas(), i, 3);
+                dtm.setValueAt(lstInvSalTer.get(i).getKg(), i, 4);
+                dtm.setValueAt(lstInvSalTer.get(i).getDecimetros(), i, 5);
+                dtm.setValueAt(lstInvSalTer.get(i).getPies(), i, 6);
+                dtm.setValueAt(lstInvSalTer.get(i).getFechaEntrada(), i, 7);
+            }
+            
+            tblBuscarPartidaInvSalTer.setModel(dtm);
+            
+//            TableColumnModel columnModel = tblDevolucion.getColumnModel();
+//            
+//            columnModel.getColumn(0).setPreferredWidth(120);
+//            columnModel.getColumn(1).setPreferredWidth(210);
+//            columnModel.getColumn(2).setPreferredWidth(200);
+//            columnModel.getColumn(3).setPreferredWidth(120);
+            
+            tblBuscarPartidaInvSalTer.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -434,10 +485,10 @@ public class PnlTerminado extends javax.swing.JPanel {
     {   
         dlgAgregar.setVisible(false);
         //AQUI VAS A TENER QUE LLAMAR EL SP QUE INSERTA EN LA TABLA tb_InSemTerCompleto
-        istc.insInvSemTerCompleto();
+//        istc.insInvSemTerCompleto();
         
         //Modificar mètodo actualizarTablaInvSemTer() para llenar la tabla de busqueda
-        actualizarTablaInvSemTer();
+        actualizarTablaInvSalTer();
         
         dlgBuscar.setSize(600,320);
         dlgBuscar.setPreferredSize(dlgBuscar.getSize());
@@ -471,42 +522,41 @@ public class PnlTerminado extends javax.swing.JPanel {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(PnlTerminado.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlDevoluciones.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     //Método para validar que se selecciono un producto de la lista, se usa en dldBuscar
     public void SeleccionarEntrada() throws Exception
      {
-        int renglonSeleccionado = tblBuscarPartidaInvSemTer.getSelectedRow();
+        int renglonSeleccionado = tblBuscarPartidaInvSalTer.getSelectedRow();
+        
         if (renglonSeleccionado!=-1) 
         {
-            ist = new InventarioSemiterminadoTerminado();
-            is =new InventarioSemiterminado();
+            isalt = new InventarioSalTerminado();
+            is = new InventarioSemiterminado();
             tr = new TipoRecorte();
             c = new Calibre();
             s = new Seleccion();
             
-            is.setNoPartida(Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 0).toString()));
-            tr.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 1).toString());
-            c.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 2).toString());
-            s.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 3).toString());
-            ist.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
-            ist.setBandera(Integer.parseInt(datos[renglonSeleccionado][7]));
-            ist.setIdInvSemTer(Integer.parseInt(datos[renglonSeleccionado][8]));
+            tr.setDescripcion(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 0).toString());
+            c.setDescripcion(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 1).toString());
+            s.setDescripcion(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 2).toString());
+            isalt.setNoPiezas(Integer.parseInt(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 3).toString()));
+            isalt.setBandera(lstInvSalTer.get(renglonSeleccionado).getBandera());
+            isalt.setIdInvSalTerminado(lstInvSalTer.get(renglonSeleccionado).getIdInvSalTerminado());
             
-            promXPieza = (Double.parseDouble(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 5).toString())) / (Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
-            double kgTotales = promXPieza * ist.getNoPiezasActuales();
+            promXPieza = (Double.parseDouble(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 4).toString())) / (Integer.parseInt(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 3).toString()));
+            double kgTotales = promXPieza * isalt.getNoPiezas();
             
             dlgBuscar.setVisible(false);
             
             inicializarCamposAgregar();
             
-            txtNoPartidaAgregar.setText(String.valueOf(is.getNoPartida()));
             txtTipoRecorteAgregar.setText(tr.getDescripcion());
             cmbCalibreAgregar.setSelectedItem(c.getDescripcion());
             cmbSeleccionAgregar.setSelectedItem(s.getDescripcion());
-            txtNoPiezasAgregar.setText(String.valueOf(ist.getNoPiezasActuales()));      
+            txtNoPiezasAgregar.setText(String.valueOf(isalt.getNoPiezas()));
             txtKgTotalesAgregar.setText(String.valueOf(kgTotales));
             
             abrirDialogoAgregar();
@@ -519,173 +569,173 @@ public class PnlTerminado extends javax.swing.JPanel {
         }
      }
     
-    public void realizarEntradaTerminado()
+    public void realizarEntradaDevoluciones()
     {
-        if (!txtNoPartidaAgregar.getText().equals("") && !txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals(""))
-        {
-            if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
-            {
-                if (Integer.parseInt(txtNoPiezasAgregar.getText()) <= ist.getNoPiezasActuales())
-                {
-                    try 
-                    {
-                        it.setIdInvSemTer(ist.getIdInvSemTer());
-                        it.setBandera(ist.getBandera());
-                        it.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
-                        it.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
-                        it.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
-                        
-                        if (jrKg.isSelected())
-                        {
-                            if (txtKgTotalesAgregar.getText().length() <=0)
-                            {
-                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                            if (Double.parseDouble(txtKgTotalesAgregar.getText()) <= 0)
-                            {
-                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                            it.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
-                            
-                            it.setDecimetros(0);
-                            it.setPies(0);
-                        }
-                        else if (jrArea.isSelected())
-                        {
-                            if (txtDecimetrosAgregar.getText().length() <=0)
-                            {
-                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                            if (Double.parseDouble(txtDecimetrosAgregar.getText()) <= 0)
-                            {
-                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                            it.setDecimetros(Double.parseDouble(txtDecimetrosAgregar.getText()));
-                            
-                             if (txtPiesCuadradosAgregar.getText().length() <=0)
-                            {
-                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                            if (Double.parseDouble(txtPiesCuadradosAgregar.getText()) <= 0)
-                            {
-                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                            it.setPies(Double.parseDouble(txtPiesCuadradosAgregar.getText()));
-                            
-                            it.setKgTotales(0);
-                        }
-                        
-                        itc.agregarInvTerminado(it);
-                        istc.actualizarNoPiezasActual(it);
-                        dlgAgregar.setVisible(false);
-                        JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
-                        actualizarTablaTerminado();
-                    } 
-                    catch (Exception e) 
-                    {
-                        System.out.println(e);
-                        dlgAgregar.setVisible(false);
-                        JOptionPane.showMessageDialog(null, "Error de conexión en la base de datos", "Mensaje de error", JOptionPane.ERROR_MESSAGE);
-                        dlgAgregar.setVisible(true);
-                    }
-                }
-                else
-                {
-                    dlgAgregar.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Cantidad en inventario insuficiente", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                    dlgAgregar.setVisible(true);
-                }
-            }   
-            else
-            {
-                dlgAgregar.setVisible(false);
-                JOptionPane.showMessageDialog(null, "El número de piezas debe de ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-                dlgAgregar.setVisible(true);
-            }
-        }
-        else
-        {
-            dlgAgregar.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-            dlgAgregar.setVisible(true);
-        }
+//        if (!txtNoPartidaAgregar.getText().equals("") && !txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals(""))
+//        {
+//            if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
+//            {
+//                if (Integer.parseInt(txtNoPiezasAgregar.getText()) <= ist.getNoPiezasActuales())
+//                {
+//                    try 
+//                    {
+//                        it.setIdInvSemTer(ist.getIdInvSemTer());
+//                        it.setBandera(ist.getBandera());
+//                        it.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
+//                        it.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
+//                        it.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
+//                        
+//                        if (jrKg.isSelected())
+//                        {
+//                            if (txtKgTotalesAgregar.getText().length() <=0)
+//                            {
+//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                            if (Double.parseDouble(txtKgTotalesAgregar.getText()) <= 0)
+//                            {
+//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                            it.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
+//                            
+//                            it.setDecimetros(0);
+//                            it.setPies(0);
+//                        }
+//                        else if (jrArea.isSelected())
+//                        {
+//                            if (txtDecimetrosAgregar.getText().length() <=0)
+//                            {
+//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                            if (Double.parseDouble(txtDecimetrosAgregar.getText()) <= 0)
+//                            {
+//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                            it.setDecimetros(Double.parseDouble(txtDecimetrosAgregar.getText()));
+//                            
+//                             if (txtPiesCuadradosAgregar.getText().length() <=0)
+//                            {
+//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                            if (Double.parseDouble(txtPiesCuadradosAgregar.getText()) <= 0)
+//                            {
+//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                            it.setPies(Double.parseDouble(txtPiesCuadradosAgregar.getText()));
+//                            
+//                            it.setKgTotales(0);
+//                        }
+//                        
+//                        itc.agregarInvTerminado(it);
+//                        istc.actualizarNoPiezasActual(it);
+//                        dlgAgregar.setVisible(false);
+//                        JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
+//                        actualizarTablaDevoluciones();
+//                    } 
+//                    catch (Exception e) 
+//                    {
+//                        System.out.println(e);
+//                        dlgAgregar.setVisible(false);
+//                        JOptionPane.showMessageDialog(null, "Error de conexión en la base de datos", "Mensaje de error", JOptionPane.ERROR_MESSAGE);
+//                        dlgAgregar.setVisible(true);
+//                    }
+//                }
+//                else
+//                {
+//                    dlgAgregar.setVisible(false);
+//                    JOptionPane.showMessageDialog(null, "Cantidad en inventario insuficiente", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                    dlgAgregar.setVisible(true);
+//                }
+//            }   
+//            else
+//            {
+//                dlgAgregar.setVisible(false);
+//                JOptionPane.showMessageDialog(null, "El número de piezas debe de ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//                dlgAgregar.setVisible(true);
+//            }
+//        }
+//        else
+//        {
+//            dlgAgregar.setVisible(false);
+//            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+//            dlgAgregar.setVisible(true);
+//        }
     }
     
     public void generarReporteEntradaTerminado()
     {
-        try
-        {
-            URL path = this.getClass().getResource("/Reportes/ReporteEntTermi.jasper");
-            
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            parametros.put("tipoRecorte", tr.getDescripcion());
-            parametros.put("calibre", c.getDescripcion());
-            parametros.put("seleccion", s.getDescripcion());
-            parametros.put("fecha", it.getFecha());
-            parametros.put("fecha1", it.getFecha1());
-            parametros.put("noPartida", p.getNoPartida());
-            parametros.put("accion", 1);
-            
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-            
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try
+//        {
+//            URL path = this.getClass().getResource("/Reportes/ReporteEntTermi.jasper");
+//            
+//            Map parametros = new HashMap();
+//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+//            parametros.put("tipoRecorte", tr.getDescripcion());
+//            parametros.put("calibre", c.getDescripcion());
+//            parametros.put("seleccion", s.getDescripcion());
+//            parametros.put("fecha", it.getFecha());
+//            parametros.put("fecha1", it.getFecha1());
+//            parametros.put("noPartida", p.getNoPartida());
+//            parametros.put("accion", 1);
+//            
+//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+//            
+//            conexion.conectar();
+//            
+//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+//            
+//            JasperViewer view = new JasperViewer(jprint, false);
+//            
+//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+//            
+//            view.setVisible(true);
+//            conexion.desconectar();
+//        } catch (JRException ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+//        } catch (Exception ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
     public void generarReporteSalidaTerminado()
     {
-        try
-        {
-            URL path = this.getClass().getResource("/Reportes/ReporteSalTermi.jasper");
-            
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            parametros.put("tipoRecorte", tr.getDescripcion());
-            parametros.put("calibre", c.getDescripcion());
-            parametros.put("seleccion", s.getDescripcion());
-            parametros.put("fecha", it.getFecha());
-            parametros.put("fecha1", it.getFecha1());
-            parametros.put("noPartida", p.getNoPartida());
-            
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-            
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try
+//        {
+//            URL path = this.getClass().getResource("/Reportes/ReporteSalTermi.jasper");
+//            
+//            Map parametros = new HashMap();
+//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+//            parametros.put("tipoRecorte", tr.getDescripcion());
+//            parametros.put("calibre", c.getDescripcion());
+//            parametros.put("seleccion", s.getDescripcion());
+//            parametros.put("fecha", it.getFecha());
+//            parametros.put("fecha1", it.getFecha1());
+//            parametros.put("noPartida", p.getNoPartida());
+//            
+//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+//            
+//            conexion.conectar();
+//            
+//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+//            
+//            JasperViewer view = new JasperViewer(jprint, false);
+//            
+//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+//            
+//            view.setVisible(true);
+//            conexion.desconectar();
+//        } catch (JRException ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+//        } catch (Exception ex) {
+//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
     public void generarReporteInventarioXTrabajar()
@@ -765,7 +815,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         txtPiesEnvSal.setEnabled(false);
         txtKgTotalesEnvSal.setEnabled(true);
         
-        int fila = tblTerminado.getSelectedRow();
+        int fila = tblDevolucion.getSelectedRow();
         
         //Llenar comboBox con los tipos de calibre
         //----------------------------------------------------------------------
@@ -792,11 +842,11 @@ public class PnlTerminado extends javax.swing.JPanel {
             j++;
         }
         
-        txtNoPartidaEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
-        txtTipoRecorteEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
-        cmbCalibreEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 8)));
-        cmbSeleccionEnvSal.setSelectedItem(String.valueOf(tblTerminado.getValueAt(fila, 7)));
-        txtNoPiezasActualesEnvSal.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
+        txtNoPartidaEnvSal.setText(String.valueOf(tblDevolucion.getValueAt(fila, 0)));
+        txtTipoRecorteEnvSal.setText(String.valueOf(tblDevolucion.getValueAt(fila, 1)));
+        cmbCalibreEnvSal.setSelectedItem(String.valueOf(tblDevolucion.getValueAt(fila, 8)));
+        cmbSeleccionEnvSal.setSelectedItem(String.valueOf(tblDevolucion.getValueAt(fila, 7)));
+        txtNoPiezasActualesEnvSal.setText(String.valueOf(tblDevolucion.getValueAt(fila, 2)));
     }
     
     //Método que abre el dialogo para enviar a terminado 
@@ -814,163 +864,94 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Método para realizar salida de material y actualizar inventarios
     public void realizarEntradaEnvSal () throws Exception
     {
-        if ( !txtNoPiezasEnvSal.getText().isEmpty() && Integer.parseInt(txtNoPiezasEnvSal.getText()) != 0)
-        {
-            try 
-            {
-                if (Integer.parseInt(txtNoPiezasEnvSal.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSal.getText()))
-                {
-                    JOptionPane.showMessageDialog(dlgEnvSal, "El numero de piezas debe ser menor o igual al número de piezas actuales","Advertencia",JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                
-                if (jrkgEnvSal.isSelected())
-                {
-                    if (txtKgTotalesEnvSal.getText().length() <= 0)
-                    {
-                        JOptionPane.showMessageDialog(dlgEnvSal, "Ingrese un número válido de Kg","Advertencia",JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
-                }
-                else
-                {
-                    if (txtDecimetrosEnvSal.getText().length() <= 0 || txtPiesEnvSal.getText().length() <= 0)
-                    {
-                        JOptionPane.showMessageDialog(dlgEnvSal, "Ingrese un número válido de Decimetros/Pies","Advertencia",JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
-                }
-
-                isalt = new InventarioSalTerminado();
-                isaltc = new InventarioSalTerminadoCommands();
-
-                isalt.setIdInvTerminado(Integer.parseInt(datosSalida[10]));
-                isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
-
-                if (jrkgEnvSal.isSelected())
-                {
-                    isalt.setKg(Double.parseDouble(txtKgTotalesEnvSal.getText()));
-
-                    isalt.setDecimetros(0);
-                    isalt.setPies(0);
-                }
-                else if (jrAreaEnvSal.isSelected())
-                {
-                    isalt.setDecimetros(Double.parseDouble(txtDecimetrosEnvSal.getText()));
-                    isalt.setPies(Double.parseDouble(txtPiesEnvSal.getText()));
-
-                    isalt.setKg(0);
-                }
-
-                isalt.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEnvSal.getSelectedIndex()][0]));
-                isalt.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionEnvSal.getSelectedIndex()][0]));
-
-                isalt.setBandera(Integer.parseInt(datosSalida[11]));
-
-                isaltc.agregarInvSalTer(isalt);
-                itc.actualizarNoPiezasActual(isalt);
-                actualizarTablaTerminado();
-                dlgEnvSal.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Salida realizada correctamente");
-            } 
-            catch (Exception e) 
-            {
-                e.printStackTrace();
-                dlgEnvSal.setVisible(false);                
-                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
-            }   
-        }
-        else
-        {
-            dlgEnvSal.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Capture no. Piezas a enviar mayores a 0","Mensaje",JOptionPane.WARNING_MESSAGE);
-            dlgEnvSal.setVisible(true);
-        }
-    }
-    
-    public void calcKgTotales()
-    {
-        try
-        {
-            double kgTotales = promXPieza * Integer.parseInt(txtNoPiezasAgregar.getText());
-            txtKgTotalesAgregar.setText(String.valueOf(kgTotales));
-        }
-        catch (Exception e)
-        {
-            txtKgTotalesAgregar.setText("0");
-        }
+//        if ( !txtNoPiezasEnvSal.getText().isEmpty() && Integer.parseInt(txtNoPiezasEnvSal.getText()) != 0)
+//        {
+//            try 
+//            {
+//                if (Integer.parseInt(txtNoPiezasEnvSal.getText()) > Integer.parseInt(txtNoPiezasActualesEnvSal.getText()))
+//                {
+//                    JOptionPane.showMessageDialog(dlgEnvSal, "El numero de piezas debe ser menor o igual al número de piezas actuales","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                    return;
+//                }
+//                
+//                if (jrkgEnvSal.isSelected())
+//                {
+//                    if (txtKgTotalesEnvSal.getText().length() <= 0)
+//                    {
+//                        JOptionPane.showMessageDialog(dlgEnvSal, "Ingrese un número válido de Kg","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                        return;
+//                    }
+//                }
+//                else
+//                {
+//                    if (txtDecimetrosEnvSal.getText().length() <= 0 || txtPiesEnvSal.getText().length() <= 0)
+//                    {
+//                        JOptionPane.showMessageDialog(dlgEnvSal, "Ingrese un número válido de Decimetros/Pies","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                        return;
+//                    }
+//                }
+//
+//                isalt = new InventarioSalTerminado();
+//                isaltc = new InventarioSalTerminadoCommands();
+//
+//                isalt.setIdInvTerminado(Integer.parseInt(datosSalida[10]));
+//                isalt.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSal.getText()));
+//
+//                if (jrkgEnvSal.isSelected())
+//                {
+//                    isalt.setKg(Double.parseDouble(txtKgTotalesEnvSal.getText()));
+//
+//                    isalt.setDecimetros(0);
+//                    isalt.setPies(0);
+//                }
+//                else if (jrAreaEnvSal.isSelected())
+//                {
+//                    isalt.setDecimetros(Double.parseDouble(txtDecimetrosEnvSal.getText()));
+//                    isalt.setPies(Double.parseDouble(txtPiesEnvSal.getText()));
+//
+//                    isalt.setKg(0);
+//                }
+//
+//                isalt.setIdCalibre(Integer.parseInt(calibres[cmbCalibreEnvSal.getSelectedIndex()][0]));
+//                isalt.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionEnvSal.getSelectedIndex()][0]));
+//
+//                isalt.setBandera(Integer.parseInt(datosSalida[11]));
+//
+//                isaltc.agregarInvSalTer(isalt);
+//                itc.actualizarNoPiezasActual(isalt);
+//                actualizarTablaDevoluciones();
+//                dlgEnvSal.setVisible(false);
+//                JOptionPane.showMessageDialog(null, "Salida realizada correctamente");
+//            } 
+//            catch (Exception e) 
+//            {
+//                e.printStackTrace();
+//                dlgEnvSal.setVisible(false);                
+//                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+//            }   
+//        }
+//        else
+//        {
+//            dlgEnvSal.setVisible(false);
+//            JOptionPane.showMessageDialog(null, "Capture no. Piezas a enviar mayores a 0","Mensaje",JOptionPane.WARNING_MESSAGE);
+//            dlgEnvSal.setVisible(true);
+//        }
     }
     
     public void calcKgTotalesEnvSal()
     {
-        try
-        {
-            int fila = tblTerminado.getSelectedRow();
-            
-            double promXPieza = Double.parseDouble(datosTerminado[fila][5]);
-            double kgTotales = promXPieza * Integer.parseInt(txtNoPiezasEnvSal.getText());
-            txtKgTotalesEnvSal.setText(String.valueOf(kgTotales));
-        }
-        catch (Exception e)
-        {
-            txtKgTotalesEnvSal.setText("0");
-        }
-    }
-    
-    public void calcPiesTotalesAgregar()
-    {
-        try
-        {
-            double decimetros = Double.parseDouble(txtDecimetrosAgregar.getText());
-            double pies = decimetros * 0.328084;
-            txtPiesCuadradosAgregar.setText(String.valueOf(pies));
-        }
-        catch (Exception e)
-        {
-            txtPiesCuadradosAgregar.setText("");
-        }
-    }
-    
-    public void calcDecimetrosTotalesAgregar()
-    {
-        try
-        {
-            double pies = Double.parseDouble(txtPiesCuadradosAgregar.getText());
-            double decimetros = pies * 3.048;
-            txtDecimetrosAgregar.setText(String.valueOf(decimetros));
-        }
-        catch (Exception e)
-        {
-            txtDecimetrosAgregar.setText("");
-        }
-    }
-    
-    public void calcPiesTotalesEnvSal()
-    {
-        try
-        {
-            double decimetros = Double.parseDouble(txtDecimetrosEnvSal.getText());
-            double pies = decimetros * 0.328084;
-            txtPiesEnvSal.setText(String.valueOf(pies));
-        }
-        catch (Exception e)
-        {
-            txtPiesEnvSal.setText("");
-        }
-    }
-    
-    public void calcDecimetrosTotalesEnvSal()
-    {
-        try
-        {
-            double pies = Double.parseDouble(txtPiesEnvSal.getText());
-            double decimetros = pies * 3.048;
-            txtDecimetrosEnvSal.setText(String.valueOf(decimetros));
-        }
-        catch (Exception e)
-        {
-            txtDecimetrosEnvSal.setText("");
-        }
+//        try
+//        {
+//            int fila = tblTerminado.getSelectedRow();
+//            
+//            double promXPieza = Double.parseDouble(datosDevolucion[fila][5]);
+//            double kgTotales = promXPieza * Integer.parseInt(txtNoPiezasEnvSal.getText());
+//            txtKgTotalesEnvSal.setText(String.valueOf(kgTotales));
+//        }
+//        catch (Exception e)
+//        {
+//            txtKgTotalesEnvSal.setText("0");
+//        }
     }
     
     //Método que abre el dialogo para eliminar piezas del inventario terminado
@@ -986,87 +967,87 @@ public class PnlTerminado extends javax.swing.JPanel {
     //Método para realizar entrada de material y actualizar inventarios
     public void eliminarPiezasInvTerminado() throws Exception
     {
-        if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
-        {
-            try 
-            {
-                if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
-                {
-                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El numero de piezas debe ser menor o igual al número de piezas actuales", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                }
-                else if (txtrMotivo.getText().length() > 200)
-                {
-                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El motivo no debe sobrepasar los 200 catacteres","Advertencia",JOptionPane.WARNING_MESSAGE);
-                }
-                else
-                {
-                    bit = new BajasInventarioTerminado();
-                    bitc = new BajasInventarioTerminadoCommands();
-                    
-                    if (Double.parseDouble(datosBaja[3]) > 0)
-                    {
-                        double promKg = Double.parseDouble(datosBaja[4]);
-                        double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
-                        
-                        if (kg > Double.parseDouble(datosBaja[3]))
-                        {
-                            kg = Double.parseDouble(datosBaja[3]);
-                        }
-                        
-                        bit.setKg(kg);
-                        bit.setPies(0);
-                        bit.setDecimetros(0);
-                    }
-                    else
-                    {
-                        double promPies = Double.parseDouble(datosBaja[6]) / Double.parseDouble(datosBaja[2]);
-                        double pies = promPies * Integer.parseInt(txtNoPiezasEliminar.getText());
-                        
-                        double promDecimetros = Double.parseDouble(datosBaja[5]) / Double.parseDouble(datosBaja[2]);
-                        double decimetros = promDecimetros * Integer.parseInt(txtNoPiezasEliminar.getText());
-                        
-                        if (pies > Double.parseDouble(datosBaja[6]))
-                        {
-                            pies = Double.parseDouble(datosBaja[6]);
-                        }
-                        
-                        if (decimetros > Double.parseDouble(datosBaja[5]))
-                        {
-                            decimetros = Double.parseDouble(datosBaja[5]);
-                        }
-                        
-                        bit.setKg(0);
-                        bit.setPies(pies);
-                        bit.setDecimetros(decimetros);
-                    }
-
-                    bit.setIdInvTerminado(Integer.parseInt(datosBaja[10]));
-                    bit.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
-                    bit.setMotivo(txtrMotivo.getText());
-                    bit.setBandera(Integer.parseInt(datosBaja[11]));
-
-                    //insertar baja en la tabla tb_bajasInvTerminado
-                    bitc.agregarBajaInvTerminado(bit);
-                    
-                    itc.actualizarNoPiezasBaja(bit);
-                    actualizarTablaTerminado();
-                    dlgEliPzaInvTerminado.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
-                }
-            } 
-            catch (Exception e) 
-            {
-                e.printStackTrace();
-                dlgEliPzaInvTerminado.setVisible(false);                
-                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
-            }   
-        }
-        else
-        {
-            dlgEliPzaInvTerminado.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
-            dlgEliPzaInvTerminado.setVisible(true);
-        }
+//        if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
+//        {
+//            try 
+//            {
+//                if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
+//                {
+//                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El numero de piezas debe ser menor o igual al número de piezas actuales", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//                }
+//                else if (txtrMotivo.getText().length() > 200)
+//                {
+//                    JOptionPane.showMessageDialog(dlgEliPzaInvTerminado, "El motivo no debe sobrepasar los 200 catacteres","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                }
+//                else
+//                {
+//                    bit = new BajasInventarioTerminado();
+//                    bitc = new BajasInventarioTerminadoCommands();
+//                    
+//                    if (Double.parseDouble(datosBaja[3]) > 0)
+//                    {
+//                        double promKg = Double.parseDouble(datosBaja[4]);
+//                        double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
+//                        
+//                        if (kg > Double.parseDouble(datosBaja[3]))
+//                        {
+//                            kg = Double.parseDouble(datosBaja[3]);
+//                        }
+//                        
+//                        bit.setKg(kg);
+//                        bit.setPies(0);
+//                        bit.setDecimetros(0);
+//                    }
+//                    else
+//                    {
+//                        double promPies = Double.parseDouble(datosBaja[6]) / Double.parseDouble(datosBaja[2]);
+//                        double pies = promPies * Integer.parseInt(txtNoPiezasEliminar.getText());
+//                        
+//                        double promDecimetros = Double.parseDouble(datosBaja[5]) / Double.parseDouble(datosBaja[2]);
+//                        double decimetros = promDecimetros * Integer.parseInt(txtNoPiezasEliminar.getText());
+//                        
+//                        if (pies > Double.parseDouble(datosBaja[6]))
+//                        {
+//                            pies = Double.parseDouble(datosBaja[6]);
+//                        }
+//                        
+//                        if (decimetros > Double.parseDouble(datosBaja[5]))
+//                        {
+//                            decimetros = Double.parseDouble(datosBaja[5]);
+//                        }
+//                        
+//                        bit.setKg(0);
+//                        bit.setPies(pies);
+//                        bit.setDecimetros(decimetros);
+//                    }
+//
+//                    bit.setIdInvTerminado(Integer.parseInt(datosBaja[10]));
+//                    bit.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
+//                    bit.setMotivo(txtrMotivo.getText());
+//                    bit.setBandera(Integer.parseInt(datosBaja[11]));
+//
+//                    //insertar baja en la tabla tb_bajasInvTerminado
+//                    bitc.agregarBajaInvTerminado(bit);
+//                    
+//                    itc.actualizarNoPiezasBaja(bit);
+//                    actualizarTablaDevoluciones();
+//                    dlgEliPzaInvTerminado.setVisible(false);
+//                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
+//                }
+//            } 
+//            catch (Exception e) 
+//            {
+//                e.printStackTrace();
+//                dlgEliPzaInvTerminado.setVisible(false);                
+//                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+//            }   
+//        }
+//        else
+//        {
+//            dlgEliPzaInvTerminado.setVisible(false);
+//            JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
+//            dlgEliPzaInvTerminado.setVisible(true);
+//        }
     }
     
     public void generarReporteBajasInvTerminado()
@@ -1097,6 +1078,34 @@ public class PnlTerminado extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void calcPiesTotalesAgregar()
+    {
+        try
+        {
+            double decimetros = Double.parseDouble(txtDecimetrosAgregar.getText());
+            double pies = decimetros * 0.328084;
+            txtPiesCuadradosAgregar.setText(String.valueOf(pies));
+        }
+        catch (Exception e)
+        {
+            txtPiesCuadradosAgregar.setText("");
+        }
+    }
+    
+    public void calcDecimetrosTotalesAgregar()
+    {
+        try
+        {
+            double pies = Double.parseDouble(txtPiesCuadradosAgregar.getText());
+            double decimetros = pies * 3.048;
+            txtDecimetrosAgregar.setText(String.valueOf(decimetros));
+        }
+        catch (Exception e)
+        {
+            txtDecimetrosAgregar.setText("");
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1107,35 +1116,10 @@ public class PnlTerminado extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dlgAgregar = new javax.swing.JDialog();
-        jPanel1 = new javax.swing.JPanel();
-        btnRealizarEntrada = new javax.swing.JButton();
-        btnCancelarAgregar = new javax.swing.JButton();
-        jLabel32 = new javax.swing.JLabel();
-        jLabel52 = new javax.swing.JLabel();
-        jLabel62 = new javax.swing.JLabel();
-        txtNoPartidaAgregar = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        txtTipoRecorteAgregar = new javax.swing.JTextField();
-        jLabel63 = new javax.swing.JLabel();
-        txtNoPiezasAgregar = new javax.swing.JTextField();
-        cmbCalibreAgregar = new javax.swing.JComboBox();
-        jLabel64 = new javax.swing.JLabel();
-        cmbSeleccionAgregar = new javax.swing.JComboBox();
-        jLabel65 = new javax.swing.JLabel();
-        txtKgTotalesAgregar = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jrKg = new javax.swing.JRadioButton();
-        jrArea = new javax.swing.JRadioButton();
-        txtDecimetrosAgregar = new javax.swing.JTextField();
-        txtPiesCuadradosAgregar = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         dlgBuscar = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblBuscarPartidaInvSemTer = new javax.swing.JTable();
+        tblBuscarPartidaInvSalTer = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -1189,9 +1173,32 @@ public class PnlTerminado extends javax.swing.JPanel {
         txtNoPiezasEliminar = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
+        dlgAgregar = new javax.swing.JDialog();
+        jPanel1 = new javax.swing.JPanel();
+        btnRealizarEntrada = new javax.swing.JButton();
+        btnCancelarAgregar = new javax.swing.JButton();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel62 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        txtTipoRecorteAgregar = new javax.swing.JTextField();
+        jLabel63 = new javax.swing.JLabel();
+        txtNoPiezasAgregar = new javax.swing.JTextField();
+        cmbCalibreAgregar = new javax.swing.JComboBox();
+        jLabel64 = new javax.swing.JLabel();
+        cmbSeleccionAgregar = new javax.swing.JComboBox();
+        jLabel65 = new javax.swing.JLabel();
+        txtKgTotalesAgregar = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jrKg = new javax.swing.JRadioButton();
+        jrArea = new javax.swing.JRadioButton();
+        txtDecimetrosAgregar = new javax.swing.JTextField();
+        txtPiesCuadradosAgregar = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblTerminado = new javax.swing.JTable();
+        tblDevolucion = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel12 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -1240,266 +1247,10 @@ public class PnlTerminado extends javax.swing.JPanel {
         btnEliminarPiezas = new javax.swing.JButton();
         jLabel75 = new javax.swing.JLabel();
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        btnRealizarEntrada.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnRealizarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
-        btnRealizarEntrada.setText("Aceptar");
-        btnRealizarEntrada.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRealizarEntradaActionPerformed(evt);
-            }
-        });
-
-        btnCancelarAgregar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCancelarAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
-        btnCancelarAgregar.setText("Cancelar");
-        btnCancelarAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarAgregarActionPerformed(evt);
-            }
-        });
-
-        jLabel32.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel32.setText("No. Partida:");
-
-        jLabel52.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel52.setText("Tipo de recorte:");
-
-        jLabel62.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel62.setText("Calibre:");
-
-        txtNoPartidaAgregar.setEditable(false);
-        txtNoPartidaAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNoPartidaAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoPartidaAgregarKeyTyped(evt);
-            }
-        });
-
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/magnifier.png"))); // NOI18N
-        jButton3.setText("Buscar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        txtTipoRecorteAgregar.setEditable(false);
-        txtTipoRecorteAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtTipoRecorteAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTipoRecorteAgregarKeyTyped(evt);
-            }
-        });
-
-        jLabel63.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel63.setText("No. Piezas:");
-
-        txtNoPiezasAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNoPiezasAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNoPiezasAgregarKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoPiezasAgregarKeyTyped(evt);
-            }
-        });
-
-        cmbCalibreAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-
-        jLabel64.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel64.setText("Selección");
-
-        cmbSeleccionAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-
-        jLabel65.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel65.setText("Kg Totales:");
-
-        txtKgTotalesAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtKgTotalesAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtKgTotalesAgregarKeyTyped(evt);
-            }
-        });
-
-        jPanel2.setBackground(new java.awt.Color(0, 204, 51));
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
-        jLabel13.setText("Agregar entrada");
-        jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel13)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jrKg.setText("Kilogramos");
-        jrKg.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jrKgActionPerformed(evt);
-            }
-        });
-
-        jrArea.setText("Área");
-        jrArea.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jrAreaActionPerformed(evt);
-            }
-        });
-
-        txtDecimetrosAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDecimetrosAgregarKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDecimetrosAgregarKeyTyped(evt);
-            }
-        });
-
-        txtPiesCuadradosAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtPiesCuadradosAgregarKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPiesCuadradosAgregarKeyTyped(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Decimetros:");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Pies:");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnRealizarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCancelarAgregar)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jrKg)
-                                .addGap(61, 61, 61)
-                                .addComponent(jrArea)
-                                .addGap(82, 82, 82))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel63)
-                            .addComponent(jLabel52)
-                            .addComponent(jLabel32)
-                            .addComponent(jLabel62)
-                            .addComponent(jLabel64)
-                            .addComponent(jLabel65)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPiesCuadradosAgregar)
-                            .addComponent(txtDecimetrosAgregar)
-                            .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNoPiezasAgregar)
-                            .addComponent(txtNoPartidaAgregar)
-                            .addComponent(txtTipoRecorteAgregar)
-                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addGap(0, 0, Short.MAX_VALUE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jrKg)
-                    .addComponent(jrArea))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel32)
-                            .addComponent(txtNoPartidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel52)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jButton3)))
-                .addGap(11, 11, 11)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel62))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel64))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNoPiezasAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel63))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel65))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDecimetrosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPiesCuadradosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRealizarEntrada)
-                    .addComponent(btnCancelarAgregar))
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout dlgAgregarLayout = new javax.swing.GroupLayout(dlgAgregar.getContentPane());
-        dlgAgregar.getContentPane().setLayout(dlgAgregarLayout);
-        dlgAgregarLayout.setHorizontalGroup(
-            dlgAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        dlgAgregarLayout.setVerticalGroup(
-            dlgAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        tblBuscarPartidaInvSemTer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tblBuscarPartidaInvSemTer.setModel(new javax.swing.table.DefaultTableModel(
+        tblBuscarPartidaInvSalTer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblBuscarPartidaInvSalTer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1510,7 +1261,7 @@ public class PnlTerminado extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(tblBuscarPartidaInvSemTer);
+        jScrollPane2.setViewportView(tblBuscarPartidaInvSalTer);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
@@ -2044,10 +1795,249 @@ public class PnlTerminado extends javax.swing.JPanel {
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnRealizarEntrada.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnRealizarEntrada.setText("Aceptar");
+        btnRealizarEntrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarEntradaActionPerformed(evt);
+            }
+        });
+
+        btnCancelarAgregar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelarAgregar.setText("Cancelar");
+        btnCancelarAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarAgregarActionPerformed(evt);
+            }
+        });
+
+        jLabel52.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel52.setText("Tipo de recorte:");
+
+        jLabel62.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel62.setText("Calibre:");
+
+        jButton3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/magnifier.png"))); // NOI18N
+        jButton3.setText("Buscar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        txtTipoRecorteAgregar.setEditable(false);
+        txtTipoRecorteAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTipoRecorteAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTipoRecorteAgregarKeyTyped(evt);
+            }
+        });
+
+        jLabel63.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel63.setText("No. Piezas:");
+
+        txtNoPiezasAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNoPiezasAgregarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasAgregarKeyTyped(evt);
+            }
+        });
+
+        cmbCalibreAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel64.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel64.setText("Selección");
+
+        cmbSeleccionAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel65.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel65.setText("Kg Totales:");
+
+        txtKgTotalesAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtKgTotalesAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtKgTotalesAgregarKeyTyped(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+        jLabel13.setText("Agregar entrada");
+        jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jrKg.setText("Kilogramos");
+        jrKg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrKgActionPerformed(evt);
+            }
+        });
+
+        jrArea.setText("Área");
+        jrArea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrAreaActionPerformed(evt);
+            }
+        });
+
+        txtDecimetrosAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDecimetrosAgregarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDecimetrosAgregarKeyTyped(evt);
+            }
+        });
+
+        txtPiesCuadradosAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPiesCuadradosAgregarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPiesCuadradosAgregarKeyTyped(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Decimetros:");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Pies:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnRealizarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCancelarAgregar)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jrKg)
+                                .addGap(61, 61, 61)
+                                .addComponent(jrArea)
+                                .addGap(82, 82, 82))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel63)
+                            .addComponent(jLabel52)
+                            .addComponent(jLabel62)
+                            .addComponent(jLabel64)
+                            .addComponent(jLabel65)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPiesCuadradosAgregar)
+                            .addComponent(txtDecimetrosAgregar)
+                            .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtNoPiezasAgregar)
+                            .addComponent(txtTipoRecorteAgregar)
+                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)
+                        .addGap(0, 14, Short.MAX_VALUE))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrKg)
+                    .addComponent(jrArea))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel52)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addComponent(jButton3)))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel62))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel64))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNoPiezasAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel63))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel65))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDecimetrosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPiesCuadradosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarEntrada)
+                    .addComponent(btnCancelarAgregar))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout dlgAgregarLayout = new javax.swing.GroupLayout(dlgAgregar.getContentPane());
+        dlgAgregar.getContentPane().setLayout(dlgAgregarLayout);
+        dlgAgregarLayout.setHorizontalGroup(
+            dlgAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgAgregarLayout.setVerticalGroup(
+            dlgAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setBackground(new java.awt.Color(255, 255, 255));
 
-        tblTerminado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tblTerminado.setModel(new javax.swing.table.DefaultTableModel(
+        tblDevolucion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblDevolucion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -2058,8 +2048,8 @@ public class PnlTerminado extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblTerminado.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tblTerminado);
+        tblDevolucion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tblDevolucion);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jToolBar1.setFloatable(false);
@@ -2509,7 +2499,7 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEntradaActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
     }//GEN-LAST:event_btnBuscarEntradaActionPerformed
 
     private void jrFiltroFechasEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrFiltroFechasEntradaActionPerformed
@@ -2528,11 +2518,11 @@ try {
     }//GEN-LAST:event_jrFiltroFechasEntradaActionPerformed
 
     private void cmbTipoRecorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoRecorteActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
     }//GEN-LAST:event_cmbTipoRecorteActionPerformed
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
         generarReporteEntradaTerminado();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
 
@@ -2541,7 +2531,7 @@ try {
     }//GEN-LAST:event_btnInvXtrabajarActionPerformed
 
     private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
         generarReporteSalidaTerminado();
     }//GEN-LAST:event_btnReporteEntrada3ActionPerformed
 
@@ -2550,46 +2540,46 @@ try {
     }//GEN-LAST:event_txtNoPartidaKeyTyped
 
     private void btnEnviarTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTerminadoActionPerformed
-        try 
-        {
-            int fila = tblTerminado.getSelectedRow();
-            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
-            int numPiezasActuales = Integer.parseInt(piezas);
-            
-            if (numPiezasActuales != 0)
-            {
-                datosSalida = new String[datosTerminado[fila].length];
-                datosSalida = datosTerminado[fila];
-                
-                abrirDialogoEnvSal();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Terminado","Advertencia",JOptionPane.WARNING_MESSAGE);
-        }
+//        try 
+//        {
+//            int fila = tblTerminado.getSelectedRow();
+//            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
+//            int numPiezasActuales = Integer.parseInt(piezas);
+//            
+//            if (numPiezasActuales != 0)
+//            {
+//                datosSalida = new String[datosDevolucion[fila].length];
+//                datosSalida = datosDevolucion[fila];
+//                
+//                abrirDialogoEnvSal();
+//            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+//            }
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Terminado","Advertencia",JOptionPane.WARNING_MESSAGE);
+//        }
     }//GEN-LAST:event_btnEnviarTerminadoActionPerformed
 
     private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_ENTER)
         {
-            actualizarTablaTerminado();
+            actualizarTablaDevoluciones();
         }
     }//GEN-LAST:event_txtNoPartidaKeyPressed
 
     private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
         generarReporteInventarioTerminado();
     }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
 
     private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
     }//GEN-LAST:event_cmbCalibreActionPerformed
 
     private void cmbSeleccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSeleccionActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
     }//GEN-LAST:event_cmbSeleccionActionPerformed
 
     private void btnAgregarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEntradaActionPerformed
@@ -2602,50 +2592,11 @@ try {
         }
     }//GEN-LAST:event_btnAgregarEntradaActionPerformed
 
-    private void btnRealizarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaActionPerformed
-        realizarEntradaTerminado();
-    }//GEN-LAST:event_btnRealizarEntradaActionPerformed
-
-    private void btnCancelarAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarActionPerformed
-        dlgAgregar.setVisible(false);
-    }//GEN-LAST:event_btnCancelarAgregarActionPerformed
-
-    private void txtNoPartidaAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaAgregarKeyTyped
-
-    }//GEN-LAST:event_txtNoPartidaAgregarKeyTyped
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            abrirDialogoBuscarPartida();
-        } catch (Exception ex) {
-            Logger.getLogger(PnlTerminado.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void txtTipoRecorteAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteAgregarKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTipoRecorteAgregarKeyTyped
-
-    private void txtNoPiezasAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasAgregarKeyTyped
-        char c;
-        c=evt.getKeyChar();
-
-        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtNoPiezasAgregarKeyTyped
-
-    private void txtKgTotalesAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKgTotalesAgregarKeyTyped
-        validarNumeros(evt, txtKgTotalesAgregar.getText());
-    }//GEN-LAST:event_txtKgTotalesAgregarKeyTyped
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
             SeleccionarEntrada();
         } catch (Exception ex) {
-            Logger.getLogger(PnlTerminado.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlDevoluciones.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -2653,10 +2604,6 @@ try {
         dlgBuscar.setVisible(false);
         dlgAgregar.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void txtNoPiezasAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasAgregarKeyReleased
-//        calcKgTotales();
-    }//GEN-LAST:event_txtNoPiezasAgregarKeyReleased
 
     private void btnRealizarEntrada1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntrada1ActionPerformed
         try
@@ -2704,42 +2651,6 @@ try {
         }
     }//GEN-LAST:event_txtNoPiezasEnvSalKeyTyped
 
-    private void jrAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrAreaActionPerformed
-        txtKgTotalesAgregar.setEnabled(false);
-        txtKgTotalesAgregar.setText("");
-        
-        txtDecimetrosAgregar.setEnabled(true);
-        txtDecimetrosAgregar.setText("");
-        txtPiesCuadradosAgregar.setEnabled(true);
-        txtPiesCuadradosAgregar.setText("");
-    }//GEN-LAST:event_jrAreaActionPerformed
-
-    private void jrKgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrKgActionPerformed
-        txtKgTotalesAgregar.setEnabled(true);
-        txtKgTotalesAgregar.setText("");
-        
-        txtDecimetrosAgregar.setEnabled(false);
-        txtDecimetrosAgregar.setText("");
-        txtPiesCuadradosAgregar.setEnabled(false);
-        txtPiesCuadradosAgregar.setText("");
-    }//GEN-LAST:event_jrKgActionPerformed
-
-    private void txtDecimetrosAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosAgregarKeyReleased
-        calcPiesTotalesAgregar();
-    }//GEN-LAST:event_txtDecimetrosAgregarKeyReleased
-
-    private void txtPiesCuadradosAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesCuadradosAgregarKeyReleased
-        calcDecimetrosTotalesAgregar();
-    }//GEN-LAST:event_txtPiesCuadradosAgregarKeyReleased
-
-    private void txtDecimetrosAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosAgregarKeyTyped
-        validarNumeros(evt, txtDecimetrosAgregar.getText());
-    }//GEN-LAST:event_txtDecimetrosAgregarKeyTyped
-
-    private void txtPiesCuadradosAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesCuadradosAgregarKeyTyped
-        validarNumeros(evt, txtPiesCuadradosAgregar.getText());
-    }//GEN-LAST:event_txtPiesCuadradosAgregarKeyTyped
-
     private void txtKgTotalesEnvSalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKgTotalesEnvSalKeyTyped
         validarNumeros(evt, txtKgTotalesEnvSal.getText());
     }//GEN-LAST:event_txtKgTotalesEnvSalKeyTyped
@@ -2773,11 +2684,11 @@ try {
     }//GEN-LAST:event_jrAreaEnvSalActionPerformed
 
     private void txtDecimetrosEnvSalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosEnvSalKeyReleased
-        calcPiesTotalesEnvSal();
+//        calcPiesTotalesEnvSal();
     }//GEN-LAST:event_txtDecimetrosEnvSalKeyReleased
 
     private void txtPiesEnvSalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesEnvSalKeyReleased
-        calcDecimetrosTotalesEnvSal();
+//        calcDecimetrosTotalesEnvSal();
     }//GEN-LAST:event_txtPiesEnvSalKeyReleased
 
     private void txtCalibreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCalibreKeyTyped
@@ -2811,39 +2722,39 @@ try {
     }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
 
     private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
-        try 
-        {
-            int fila = tblTerminado.getSelectedRow();
-            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
-            
-            int numPiezasActuales = Integer.parseInt(piezas);
-
-            if (numPiezasActuales != 0)
-            {
-                txtNoPiezasEliminar.setText("");
-                txtrMotivo.setText("");
-
-                txtNoPartida1.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
-                txtTipoRecorte.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
-                txtCalibre.setText(String.valueOf(tblTerminado.getValueAt(fila, 8)));
-                txtSeleccion.setText(String.valueOf(tblTerminado.getValueAt(fila, 7)));
-                txtNoPiezasActuales.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
-                
-                datosBaja = new String[datosTerminado[fila].length];
-                datosBaja = datosTerminado[fila];
-                abrirDialogoEliPzaInvTerminado();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
-        }
+//        try 
+//        {
+//            int fila = tblTerminado.getSelectedRow();
+//            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
+//            
+//            int numPiezasActuales = Integer.parseInt(piezas);
+//
+//            if (numPiezasActuales != 0)
+//            {
+//                txtNoPiezasEliminar.setText("");
+//                txtrMotivo.setText("");
+//
+//                txtNoPartida1.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
+//                txtTipoRecorte.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
+//                txtCalibre.setText(String.valueOf(tblTerminado.getValueAt(fila, 8)));
+//                txtSeleccion.setText(String.valueOf(tblTerminado.getValueAt(fila, 7)));
+//                txtNoPiezasActuales.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
+//                
+//                datosBaja = new String[datosDevolucion[fila].length];
+//                datosBaja = datosDevolucion[fila];
+//                abrirDialogoEliPzaInvTerminado();
+//            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
+//            }
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
+//        }
     }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        actualizarTablaTerminado();
+        actualizarTablaDevoluciones();
         generarReporteBajasInvTerminado();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -2857,6 +2768,81 @@ try {
             evt.consume();
         }
     }//GEN-LAST:event_txtNoPiezasEliminarKeyTyped
+
+    private void btnRealizarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaActionPerformed
+        realizarEntradaDevoluciones();
+    }//GEN-LAST:event_btnRealizarEntradaActionPerformed
+
+    private void btnCancelarAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAgregarActionPerformed
+        dlgAgregar.setVisible(false);
+    }//GEN-LAST:event_btnCancelarAgregarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            abrirDialogoBuscarPartida();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlTerminado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtTipoRecorteAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteAgregarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoRecorteAgregarKeyTyped
+
+    private void txtNoPiezasAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasAgregarKeyReleased
+        //        calcKgTotales();
+    }//GEN-LAST:event_txtNoPiezasAgregarKeyReleased
+
+    private void txtNoPiezasAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasAgregarKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNoPiezasAgregarKeyTyped
+
+    private void txtKgTotalesAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKgTotalesAgregarKeyTyped
+        validarNumeros(evt, txtKgTotalesAgregar.getText());
+    }//GEN-LAST:event_txtKgTotalesAgregarKeyTyped
+
+    private void jrKgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrKgActionPerformed
+        txtKgTotalesAgregar.setEnabled(true);
+        txtKgTotalesAgregar.setText("");
+
+        txtDecimetrosAgregar.setEnabled(false);
+        txtDecimetrosAgregar.setText("");
+        txtPiesCuadradosAgregar.setEnabled(false);
+        txtPiesCuadradosAgregar.setText("");
+    }//GEN-LAST:event_jrKgActionPerformed
+
+    private void jrAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrAreaActionPerformed
+        txtKgTotalesAgregar.setEnabled(false);
+        txtKgTotalesAgregar.setText("");
+
+        txtDecimetrosAgregar.setEnabled(true);
+        txtDecimetrosAgregar.setText("");
+        txtPiesCuadradosAgregar.setEnabled(true);
+        txtPiesCuadradosAgregar.setText("");
+    }//GEN-LAST:event_jrAreaActionPerformed
+
+    private void txtDecimetrosAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosAgregarKeyReleased
+        calcPiesTotalesAgregar();
+    }//GEN-LAST:event_txtDecimetrosAgregarKeyReleased
+
+    private void txtDecimetrosAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDecimetrosAgregarKeyTyped
+        validarNumeros(evt, txtDecimetrosAgregar.getText());
+    }//GEN-LAST:event_txtDecimetrosAgregarKeyTyped
+
+    private void txtPiesCuadradosAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesCuadradosAgregarKeyReleased
+        calcDecimetrosTotalesAgregar();
+    }//GEN-LAST:event_txtPiesCuadradosAgregarKeyReleased
+
+    private void txtPiesCuadradosAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPiesCuadradosAgregarKeyTyped
+        validarNumeros(evt, txtPiesCuadradosAgregar.getText());
+    }//GEN-LAST:event_txtPiesCuadradosAgregarKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2913,7 +2899,6 @@ try {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
@@ -2969,8 +2954,8 @@ try {
     private javax.swing.JRadioButton jrkgEnvSal;
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lblEnviarTerminado;
-    private javax.swing.JTable tblBuscarPartidaInvSemTer;
-    private javax.swing.JTable tblTerminado;
+    private javax.swing.JTable tblBuscarPartidaInvSalTer;
+    private javax.swing.JTable tblDevolucion;
     private javax.swing.JTextField txtCalibre;
     private javax.swing.JTextField txtDecimetrosAgregar;
     private javax.swing.JTextField txtDecimetrosEnvSal;
@@ -2978,7 +2963,6 @@ try {
     private javax.swing.JTextField txtKgTotalesEnvSal;
     private javax.swing.JTextField txtNoPartida;
     private javax.swing.JTextField txtNoPartida1;
-    private javax.swing.JTextField txtNoPartidaAgregar;
     private javax.swing.JTextField txtNoPartidaEnvSal;
     private javax.swing.JTextField txtNoPiezasActuales;
     private javax.swing.JTextField txtNoPiezasActualesEnvSal;
@@ -2993,4 +2977,15 @@ try {
     private javax.swing.JTextField txtTipoRecorteEnvSal;
     private javax.swing.JTextArea txtrMotivo;
     // End of variables declaration//GEN-END:variables
+
+    private static class DefaultTableModelImpl extends DefaultTableModel {
+
+        public DefaultTableModelImpl(List<Devolucion> lstDevolucion, String[] cols) {
+//            super(lstDevolucion, cols);
+        }
+
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    }
 }

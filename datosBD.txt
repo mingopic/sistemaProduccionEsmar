@@ -1,7 +1,7 @@
-usuarioPC:192.168.56.1
+usuarioPC:127.0.0.1
 baseDatos: esmarProd        
 usuario:sa
 password:root
 instancia:SQLEXPRESS
-puerto:49991
+puerto:64888
 BDcompaq: adESMAR2018

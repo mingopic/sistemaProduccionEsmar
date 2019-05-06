@@ -15,10 +15,10 @@ create table tb_invSalTerminado
   , idInvTerminado  int
   , idCalibre       int
   , idSeleccion     int
-  , noPiezas				int
+  , noPiezas		int
   , kg              float
   , decimetros      float
   , pies            float
-  , fechaEntrada		date
+  , fechaEntrada	date
 )
 go

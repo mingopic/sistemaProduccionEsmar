@@ -1,2 +1,2 @@
-for %%G in (*.sql) do sqlcmd /S MINGO-LAPTOP\SQLEXPRESS /d esmarProd -E -i"%%G"
+for %%G in (*.sql) do sqlcmd /S LAP-MINGO\SQLEXPRESS /d esmarProd -E -i"%%G"
 pause

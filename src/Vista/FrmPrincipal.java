@@ -66,6 +66,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlFichaProduccion pnlFichaProduccion;
     PnlUsuarios pnlUsuarios;
     PnlTerminado pnlTerminado;
+    PnlDevoluciones pnlDevoluciones;
     PnlProduccionEnProceso pnlProduccionEnProceso;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
@@ -878,6 +879,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnTerminado = new javax.swing.JButton();
         btnProdEnProc = new javax.swing.JButton();
         btnFichasProduccion = new javax.swing.JButton();
+        btnTerminado1 = new javax.swing.JButton();
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
@@ -2261,6 +2263,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnTerminado1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnTerminado1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        btnTerminado1.setText("Devoluciones");
+        btnTerminado1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnTerminado1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnTerminado1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTerminado1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
         pnlMenuLayout.setHorizontalGroup(
@@ -2279,7 +2292,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSemiterminado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProdEnProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnFichasProduccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnFichasProduccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnTerminado1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -2303,7 +2317,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnSemiterminado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTerminado)
-                .addContainerGap(244, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnTerminado1)
+                .addContainerGap(212, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -3198,6 +3214,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
         abrirDialogo(dlgGastosDeFabricacion, 450, 450);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void btnTerminado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminado1ActionPerformed
+        try {
+            pnlDevoluciones = new PnlDevoluciones();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlDevoluciones, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlDevoluciones.getGraphics());
+            
+            lblVentana.setText("Devoluciones");
+            ImageIcon ico=new ImageIcon("src/Imagenes/arrow_down_up.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnTerminado1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3250,6 +3281,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnSemiterminado;
     private javax.swing.JButton btnTerminado;
+    private javax.swing.JButton btnTerminado1;
     private javax.swing.JDialog dlgCostoGarra;
     private javax.swing.JDialog dlgGastosDeFabricacion;
     private javax.swing.JDialog dlgLogin;

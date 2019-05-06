@@ -12,7 +12,7 @@ create procedure sp_obtInvSemTer
 as begin
 		
     select
-			istc.noPartida
+	  istc.noPartida
       , tr.descripcion as tipoRecorte
       , c.descripcion as calibre
       , s.descripcion as seleccion

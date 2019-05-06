@@ -20,6 +20,33 @@ public class InventarioSalTerminado {
     int bandera;
     int idCalibre;
     int idSeleccion;
+    String tipoRecorte;
+    String calibre;
+    String seleccion;
+
+    public String getCalibre() {
+        return calibre;
+    }
+
+    public void setCalibre(String calibre) {
+        this.calibre = calibre;
+    }
+
+    public String getSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(String seleccion) {
+        this.seleccion = seleccion;
+    }
+
+    public String getTipoRecorte() {
+        return tipoRecorte;
+    }
+
+    public void setTipoRecorte(String tipoRecorte) {
+        this.tipoRecorte = tipoRecorte;
+    }
 
     public int getIdCalibre() {
         return idCalibre;

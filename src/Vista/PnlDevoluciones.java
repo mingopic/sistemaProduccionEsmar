@@ -571,100 +571,100 @@ public class PnlDevoluciones extends javax.swing.JPanel {
     
     public void realizarEntradaDevoluciones()
     {
-//        if (!txtNoPartidaAgregar.getText().equals("") && !txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals(""))
-//        {
-//            if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
-//            {
-//                if (Integer.parseInt(txtNoPiezasAgregar.getText()) <= ist.getNoPiezasActuales())
-//                {
-//                    try 
-//                    {
-//                        it.setIdInvSemTer(ist.getIdInvSemTer());
-//                        it.setBandera(ist.getBandera());
-//                        it.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
-//                        it.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
-//                        it.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
-//                        
-//                        if (jrKg.isSelected())
-//                        {
-//                            if (txtKgTotalesAgregar.getText().length() <=0)
-//                            {
-//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                                return;
-//                            }
-//                            if (Double.parseDouble(txtKgTotalesAgregar.getText()) <= 0)
-//                            {
-//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                                return;
-//                            }
-//                            it.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
-//                            
-//                            it.setDecimetros(0);
-//                            it.setPies(0);
-//                        }
-//                        else if (jrArea.isSelected())
-//                        {
-//                            if (txtDecimetrosAgregar.getText().length() <=0)
-//                            {
-//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                                return;
-//                            }
-//                            if (Double.parseDouble(txtDecimetrosAgregar.getText()) <= 0)
-//                            {
-//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                                return;
-//                            }
-//                            it.setDecimetros(Double.parseDouble(txtDecimetrosAgregar.getText()));
-//                            
-//                             if (txtPiesCuadradosAgregar.getText().length() <=0)
-//                            {
-//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                                return;
-//                            }
-//                            if (Double.parseDouble(txtPiesCuadradosAgregar.getText()) <= 0)
-//                            {
-//                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                                return;
-//                            }
-//                            it.setPies(Double.parseDouble(txtPiesCuadradosAgregar.getText()));
-//                            
-//                            it.setKgTotales(0);
-//                        }
-//                        
-//                        itc.agregarInvTerminado(it);
+        if (!txtTipoRecorteAgregar.getText().equals("") && !txtNoPiezasAgregar.getText().equals(""))
+        {
+            if (Integer.parseInt(txtNoPiezasAgregar.getText()) >= 1)
+            {
+                if (Integer.parseInt(txtNoPiezasAgregar.getText()) <= isalt.getNoPiezas())
+                {
+                    try 
+                    {
+                        d.setIdInvSalTerminado(isalt.getIdInvSalTerminado());
+                        d.setBandera(isalt.getBandera());
+                        d.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
+                        d.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
+                        d.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
+                        
+                        if (jrKg.isSelected())
+                        {
+                            if (txtKgTotalesAgregar.getText().length() <=0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            if (Double.parseDouble(txtKgTotalesAgregar.getText()) <= 0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de Kg debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            d.setKg(Double.parseDouble(txtKgTotalesAgregar.getText()));
+                            
+                            d.setDecimetros(0);
+                            d.setPies(0);
+                        }
+                        else if (jrArea.isSelected())
+                        {
+                            if (txtDecimetrosAgregar.getText().length() <=0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            if (Double.parseDouble(txtDecimetrosAgregar.getText()) <= 0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de decimetros debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            d.setDecimetros(Double.parseDouble(txtDecimetrosAgregar.getText()));
+                            
+                             if (txtPiesCuadradosAgregar.getText().length() <=0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies no válido", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            if (Double.parseDouble(txtPiesCuadradosAgregar.getText()) <= 0)
+                            {
+                                JOptionPane.showMessageDialog(dlgAgregar, "Total de pies debe ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                            d.setPies(Double.parseDouble(txtPiesCuadradosAgregar.getText()));
+                            
+                            d.setKg(0);
+                        }
+                        
+                        dc.agregarDevolucion(d);
 //                        istc.actualizarNoPiezasActual(it);
-//                        dlgAgregar.setVisible(false);
-//                        JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
-//                        actualizarTablaDevoluciones();
-//                    } 
-//                    catch (Exception e) 
-//                    {
-//                        System.out.println(e);
-//                        dlgAgregar.setVisible(false);
-//                        JOptionPane.showMessageDialog(null, "Error de conexión en la base de datos", "Mensaje de error", JOptionPane.ERROR_MESSAGE);
-//                        dlgAgregar.setVisible(true);
-//                    }
-//                }
-//                else
-//                {
-//                    dlgAgregar.setVisible(false);
-//                    JOptionPane.showMessageDialog(null, "Cantidad en inventario insuficiente", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                    dlgAgregar.setVisible(true);
-//                }
-//            }   
-//            else
-//            {
-//                dlgAgregar.setVisible(false);
-//                JOptionPane.showMessageDialog(null, "El número de piezas debe de ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//                dlgAgregar.setVisible(true);
-//            }
-//        }
-//        else
-//        {
-//            dlgAgregar.setVisible(false);
-//            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
-//            dlgAgregar.setVisible(true);
-//        }
+                        dlgAgregar.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
+                        actualizarTablaDevoluciones();
+                    } 
+                    catch (Exception e) 
+                    {
+                        System.out.println(e);
+                        dlgAgregar.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Error de conexión en la base de datos", "Mensaje de error", JOptionPane.ERROR_MESSAGE);
+                        dlgAgregar.setVisible(true);
+                    }
+                }
+                else
+                {
+                    dlgAgregar.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Cantidad en inventario insuficiente", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                    dlgAgregar.setVisible(true);
+                }
+            }   
+            else
+            {
+                dlgAgregar.setVisible(false);
+                JOptionPane.showMessageDialog(null, "El número de piezas debe de ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                dlgAgregar.setVisible(true);
+            }
+        }
+        else
+        {
+            dlgAgregar.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+            dlgAgregar.setVisible(true);
+        }
     }
     
     public void generarReporteEntradaTerminado()

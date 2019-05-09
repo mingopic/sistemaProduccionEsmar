@@ -21,6 +21,51 @@ public class Devolucion {
     String motivo;
     String fecha;
     String fecha1;
+    int idInvSalTerminado;
+    int bandera;
+    double kg;
+    double decimetros;
+    double pies;
+
+    public double getKg() {
+        return kg;
+    }
+
+    public void setKg(double kg) {
+        this.kg = kg;
+    }
+
+    public double getDecimetros() {
+        return decimetros;
+    }
+
+    public void setDecimetros(double decimetros) {
+        this.decimetros = decimetros;
+    }
+
+    public double getPies() {
+        return pies;
+    }
+
+    public void setPies(double pies) {
+        this.pies = pies;
+    }
+
+    public int getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(int bandera) {
+        this.bandera = bandera;
+    }
+
+    public int getIdInvSalTerminado() {
+        return idInvSalTerminado;
+    }
+
+    public void setIdInvSalTerminado(int idInvSalTerminado) {
+        this.idInvSalTerminado = idInvSalTerminado;
+    }
 
     public int getIdDevolucion() {
         return idDevolucion;

@@ -9,6 +9,7 @@ import Modelo.Calibre;
 import Modelo.Devolucion;
 import Modelo.Seleccion;
 import Modelo.TipoRecorte;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -61,8 +62,7 @@ public class DevolucionCommands {
                 
                 Date sqlDate = rs.getDate("fecha");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String fecha = sdf.format(sqlDate);
-                obj.setFecha(rs.getString(fecha));
+                obj.setFecha(sdf.format(sqlDate));
                 lstDevolucion.add(obj);
             }
         }
@@ -70,5 +70,22 @@ public class DevolucionCommands {
         stmt.close();
         c.desconectar();
         return lstDevolucion;
+    }
+    
+    //Método para agregar una entrada a la tabla td_devoluciones
+    public static void agregarDevolucion(Devolucion d) throws Exception
+    {
+        String query = "execute sp_agrDevolucion "
+                + d.getIdInvSalTerminado()
+                + "," + d.getNoPiezas()
+                + ",'"+ d.getMotivo()
+                + "',"+ d.getBandera();
+        
+        PreparedStatement pstmt = null;
+        c.conectar();
+        System.out.println(query);
+        pstmt = c.getConexion().prepareStatement(query);
+        pstmt.executeUpdate();
+        c.desconectar();
     }
 }

@@ -330,7 +330,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
             
             String[] cols = new String[]
             {
-                "Tipo Recorte", "No. Piezas", "Calibre", "Seleccion", "Motivo", "fecha"
+                "Tipo Recorte", "No. Piezas", "Kg", "Decimetros", "Pies", "Calibre", "Seleccion", "Motivo", "fecha"
             };
             
             dtm = new DefaultTableModel(){
@@ -346,10 +346,13 @@ public class PnlDevoluciones extends javax.swing.JPanel {
             {
                 dtm.setValueAt(lstDevolucion.get(i).getTipoRecorte(), i, 0);
                 dtm.setValueAt(lstDevolucion.get(i).getNoPiezas(), i, 1);
-                dtm.setValueAt(lstDevolucion.get(i).getCalibre(), i, 2);
-                dtm.setValueAt(lstDevolucion.get(i).getSeleccion(), i, 3);
-                dtm.setValueAt(lstDevolucion.get(i).getMotivo(), i, 4);
-                dtm.setValueAt(lstDevolucion.get(i).getFecha(), i, 5);
+                dtm.setValueAt(lstDevolucion.get(i).getKg(), i, 2);
+                dtm.setValueAt(lstDevolucion.get(i).getDecimetros(), i, 3);
+                dtm.setValueAt(lstDevolucion.get(i).getPies(), i, 4);
+                dtm.setValueAt(lstDevolucion.get(i).getCalibre(), i, 5);
+                dtm.setValueAt(lstDevolucion.get(i).getSeleccion(), i, 6);
+                dtm.setValueAt(lstDevolucion.get(i).getMotivo(), i, 7);
+                dtm.setValueAt(lstDevolucion.get(i).getFecha(), i, 8);
             }
             
             tblDevolucion.setModel(dtm);
@@ -384,6 +387,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         txtKgTotalesAgregar.setText("");
         txtDecimetrosAgregar.setText("");
         txtPiesCuadradosAgregar.setText("");
+        txtMotivoAgregar.setText("");
         
         txtDecimetrosAgregar.setEnabled(false);
         txtPiesCuadradosAgregar.setEnabled(false);
@@ -418,7 +422,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
     //Método que abre el dialogo de agregar entrada de Semiterminad
     public void abrirDialogoAgregar() throws Exception
     {   
-        dlgAgregar.setSize(370, 490);
+        dlgAgregar.setSize(390, 590);
         dlgAgregar.setPreferredSize(dlgAgregar.getSize());
         dlgAgregar.setLocationRelativeTo(null);
         dlgAgregar.setModal(true);
@@ -584,6 +588,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
                         d.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         d.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
                         d.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
+                        d.setMotivo(txtMotivoAgregar.getText());
                         
                         if (jrKg.isSelected())
                         {
@@ -667,40 +672,38 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         }
     }
     
-    public void generarReporteEntradaTerminado()
+    public void generarReporteEntradaDevolucion()
     {
-//        try
-//        {
-//            URL path = this.getClass().getResource("/Reportes/ReporteEntTermi.jasper");
-//            
-//            Map parametros = new HashMap();
-//            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-//            parametros.put("tipoRecorte", tr.getDescripcion());
-//            parametros.put("calibre", c.getDescripcion());
-//            parametros.put("seleccion", s.getDescripcion());
-//            parametros.put("fecha", it.getFecha());
-//            parametros.put("fecha1", it.getFecha1());
-//            parametros.put("noPartida", p.getNoPartida());
-//            parametros.put("accion", 1);
-//            
-//            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
-//            
-//            conexion.conectar();
-//            
-//            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-//            
-//            JasperViewer view = new JasperViewer(jprint, false);
-//            
-//            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//            
-//            view.setVisible(true);
-//            conexion.desconectar();
-//        } catch (JRException ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception ex) {
-//            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try
+        {
+            URL path = this.getClass().getResource("/Reportes/EntradasDevolucion.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("tipoRecorte", tr.getDescripcion());
+            parametros.put("calibre", c.getDescripcion());
+            parametros.put("seleccion", s.getDescripcion());
+            parametros.put("fecha", d.getFecha());
+            parametros.put("fecha1", d.getFecha1());
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void generarReporteSalidaTerminado()
@@ -1196,6 +1199,9 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         txtPiesCuadradosAgregar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtMotivoAgregar = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDevolucion = new javax.swing.JTable();
@@ -1213,9 +1219,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         cmbSeleccion = new javax.swing.JComboBox();
         jLabel60 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtNoPartida = new javax.swing.JTextField();
         jLabel59 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel27 = new javax.swing.JLabel();
@@ -1231,13 +1235,9 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         jToolBar2 = new javax.swing.JToolBar();
         btnReporteEntrada = new javax.swing.JButton();
         jLabel50 = new javax.swing.JLabel();
-        btnReporteEntrada3 = new javax.swing.JButton();
         jLabel51 = new javax.swing.JLabel();
-        btnInvXtrabajar = new javax.swing.JButton();
         jLabel57 = new javax.swing.JLabel();
-        btnReporteEntrada6 = new javax.swing.JButton();
         jLabel72 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jToolBar3 = new javax.swing.JToolBar();
         lblEnviarTerminado = new javax.swing.JLabel();
         btnAgregarEntrada = new javax.swing.JButton();
@@ -1932,6 +1932,13 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Pies:");
 
+        jLabel26.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel26.setText("Motivo:");
+
+        txtMotivoAgregar.setColumns(20);
+        txtMotivoAgregar.setRows(5);
+        jScrollPane4.setViewportView(txtMotivoAgregar);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1941,7 +1948,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 56, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnRealizarEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1961,19 +1968,23 @@ public class PnlDevoluciones extends javax.swing.JPanel {
                             .addComponent(jLabel64)
                             .addComponent(jLabel65)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel26))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPiesCuadradosAgregar)
-                            .addComponent(txtDecimetrosAgregar)
-                            .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNoPiezasAgregar)
-                            .addComponent(txtTipoRecorteAgregar)
-                            .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addGap(0, 14, Short.MAX_VALUE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtPiesCuadradosAgregar)
+                                    .addComponent(txtDecimetrosAgregar)
+                                    .addComponent(txtKgTotalesAgregar, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(cmbSeleccionAgregar, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtNoPiezasAgregar)
+                                    .addComponent(txtTipoRecorteAgregar)
+                                    .addComponent(cmbCalibreAgregar, 0, 122, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton3))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1983,15 +1994,12 @@ public class PnlDevoluciones extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jrKg)
                     .addComponent(jrArea))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel52)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel52))
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbCalibreAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2016,7 +2024,11 @@ public class PnlDevoluciones extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPiesCuadradosAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel26)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRealizarEntrada)
                     .addComponent(btnCancelarAgregar))
@@ -2130,27 +2142,10 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         jLabel60.setText("   ");
         jToolBar1.add(jLabel60);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel7.setText("No. Partida");
-        jToolBar1.add(jLabel7);
-
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(227, 222, 222));
         jLabel9.setText("  ");
         jToolBar1.add(jLabel9);
-
-        txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
-        txtNoPartida.setName(""); // NOI18N
-        txtNoPartida.setPreferredSize(new java.awt.Dimension(40, 25));
-        txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtNoPartidaKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoPartidaKeyTyped(evt);
-            }
-        });
-        jToolBar1.add(txtNoPartida);
 
         jLabel59.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel59.setForeground(new java.awt.Color(227, 222, 222));
@@ -2332,74 +2327,20 @@ try {
     jLabel50.setText("     ");
     jToolBar2.add(jLabel50);
 
-    btnReporteEntrada3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteEntrada3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntrada3.setText("Reporte Salidas");
-    btnReporteEntrada3.setFocusable(false);
-    btnReporteEntrada3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    btnReporteEntrada3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteEntrada3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteEntrada3.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteEntrada3ActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteEntrada3);
-
     jLabel51.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel51.setForeground(new java.awt.Color(227, 222, 222));
     jLabel51.setText("     ");
     jToolBar2.add(jLabel51);
-
-    btnInvXtrabajar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnInvXtrabajar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnInvXtrabajar.setText("Reporte Inventario x Trabajar");
-    btnInvXtrabajar.setFocusable(false);
-    btnInvXtrabajar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    btnInvXtrabajar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnInvXtrabajar.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnInvXtrabajarActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnInvXtrabajar);
 
     jLabel57.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel57.setForeground(new java.awt.Color(227, 222, 222));
     jLabel57.setText("     ");
     jToolBar2.add(jLabel57);
 
-    btnReporteEntrada6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteEntrada6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntrada6.setText("Reporte Inventario Terminado");
-    btnReporteEntrada6.setFocusable(false);
-    btnReporteEntrada6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    btnReporteEntrada6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteEntrada6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteEntrada6.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteEntrada6ActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteEntrada6);
-
     jLabel72.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel72.setForeground(new java.awt.Color(227, 222, 222));
     jLabel72.setText("     ");
     jToolBar2.add(jLabel72);
-
-    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    jButton1.setText("Reporte Piezas Eliminadas");
-    jButton1.setFocusable(false);
-    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(jButton1);
 
     jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar3.setFloatable(false);
@@ -2523,21 +2464,8 @@ try {
 
     private void btnReporteEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradaActionPerformed
         actualizarTablaDevoluciones();
-        generarReporteEntradaTerminado();
+        generarReporteEntradaDevolucion();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
-
-    private void btnInvXtrabajarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvXtrabajarActionPerformed
-        generarReporteInventarioXTrabajar();
-    }//GEN-LAST:event_btnInvXtrabajarActionPerformed
-
-    private void btnReporteEntrada3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada3ActionPerformed
-        actualizarTablaDevoluciones();
-        generarReporteSalidaTerminado();
-    }//GEN-LAST:event_btnReporteEntrada3ActionPerformed
-
-    private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
-        validarNumerosEnteros(evt, txtNoPartida.getText());
-    }//GEN-LAST:event_txtNoPartidaKeyTyped
 
     private void btnEnviarTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTerminadoActionPerformed
 //        try 
@@ -2561,18 +2489,6 @@ try {
 //            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Terminado","Advertencia",JOptionPane.WARNING_MESSAGE);
 //        }
     }//GEN-LAST:event_btnEnviarTerminadoActionPerformed
-
-    private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
-        {
-            actualizarTablaDevoluciones();
-        }
-    }//GEN-LAST:event_txtNoPartidaKeyPressed
-
-    private void btnReporteEntrada6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntrada6ActionPerformed
-        actualizarTablaDevoluciones();
-        generarReporteInventarioTerminado();
-    }//GEN-LAST:event_btnReporteEntrada6ActionPerformed
 
     private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed
         actualizarTablaDevoluciones();
@@ -2753,11 +2669,6 @@ try {
 //        }
     }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        actualizarTablaDevoluciones();
-        generarReporteBajasInvTerminado();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void txtNoPiezasEliminarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEliminarKeyTyped
         char c;
         c=evt.getKeyChar();
@@ -2855,13 +2766,10 @@ try {
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroup1;
-    private javax.swing.JButton btnInvXtrabajar;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntrada1;
     private javax.swing.JButton btnRealizarEntradaEnvSemi2;
     private javax.swing.JButton btnReporteEntrada;
-    private javax.swing.JButton btnReporteEntrada3;
-    private javax.swing.JButton btnReporteEntrada6;
     private javax.swing.JComboBox cmbCalibre;
     private javax.swing.JComboBox cmbCalibreAgregar;
     private javax.swing.JComboBox cmbCalibreEnvSal;
@@ -2875,7 +2783,6 @@ try {
     private javax.swing.JDialog dlgBuscar;
     private javax.swing.JDialog dlgEliPzaInvTerminado;
     private javax.swing.JDialog dlgEnvSal;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -2897,6 +2804,7 @@ try {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel33;
@@ -2921,7 +2829,6 @@ try {
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
@@ -2942,6 +2849,7 @@ try {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
@@ -2961,7 +2869,7 @@ try {
     private javax.swing.JTextField txtDecimetrosEnvSal;
     private javax.swing.JTextField txtKgTotalesAgregar;
     private javax.swing.JTextField txtKgTotalesEnvSal;
-    private javax.swing.JTextField txtNoPartida;
+    private javax.swing.JTextArea txtMotivoAgregar;
     private javax.swing.JTextField txtNoPartida1;
     private javax.swing.JTextField txtNoPartidaEnvSal;
     private javax.swing.JTextField txtNoPiezasActuales;

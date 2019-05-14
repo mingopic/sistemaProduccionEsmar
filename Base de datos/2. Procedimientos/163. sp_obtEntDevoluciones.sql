@@ -1,14 +1,14 @@
 use esmarProd
 go
 
-if exists (select name from sys.sysobjects WHERE name = 'sp_ObtDevoluciones')
+if exists (select name from sys.sysobjects WHERE name = 'sp_obtEntDevoluciones')
 begin 
   drop
-    procedure sp_ObtDevoluciones
+    procedure sp_obtEntDevoluciones
 end
 go
 
-create procedure sp_ObtDevoluciones
+create procedure sp_obtEntDevoluciones
 (
   @tipoRecorte varchar(20)
   , @calibre varchar(20)

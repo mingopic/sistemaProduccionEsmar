@@ -16,5 +16,8 @@ create table tb_devolucion
   , noPiezas		int
   , motivo			varchar(100)
   , fecha           datetime
+	, kg									float
+	, decimetros					float
+	, pies								float
 )
 go

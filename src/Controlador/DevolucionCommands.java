@@ -56,6 +56,9 @@ public class DevolucionCommands {
                 obj.setIdDevolucion(rs.getInt("idDevolucion"));
                 obj.setTipoRecorte(rs.getString("tipoRecorte"));
                 obj.setNoPiezas(rs.getInt("noPiezas"));
+                obj.setKg(rs.getDouble("kg"));
+                obj.setDecimetros(rs.getDouble("decimetros"));
+                obj.setPies(rs.getDouble("pies"));
                 obj.setCalibre(rs.getString("calibre"));
                 obj.setSeleccion(rs.getString("seleccion"));
                 obj.setMotivo(rs.getString("motivo"));
@@ -79,7 +82,10 @@ public class DevolucionCommands {
                 + d.getIdInvSalTerminado()
                 + "," + d.getNoPiezas()
                 + ",'"+ d.getMotivo()
-                + "',"+ d.getBandera();
+                + "',"+ d.getBandera()
+                + "," + d.getKg()
+                + "," + d.getDecimetros()
+                + "," + d.getPies();
         
         PreparedStatement pstmt = null;
         c.conectar();

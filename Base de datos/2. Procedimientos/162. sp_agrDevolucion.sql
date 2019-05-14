@@ -14,6 +14,9 @@ create procedure sp_agrDevolucion
   , @noPiezas           int
   , @motivo             varchar(100)
 	, @bandera						int
+	, @kg								float
+	, @decimetros				float
+	, @pies							float
 )
 as begin
 
@@ -26,6 +29,9 @@ as begin
 			, noPiezas
 			, motivo
 			, fecha
+			, kg
+			, decimetros
+			, pies
 		)
 		
 	values
@@ -34,6 +40,9 @@ as begin
 			, @noPiezas
 			, @motivo
 			, getdate()
+			, @kg
+			, @decimetros
+			, @pies
 		)
 		
 	select

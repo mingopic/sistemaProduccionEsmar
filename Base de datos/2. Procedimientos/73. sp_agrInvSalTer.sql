@@ -36,6 +36,7 @@ as begin
       , idCalibre
       , idSeleccion
       , noPiezas
+			, noPiezasActuales
       , kg
       , decimetros
       , pies
@@ -49,6 +50,7 @@ as begin
     , @idCalibre
     , @idSeleccion
     , @noPiezas
+		, @noPiezas
     , @kg
     , @decimetros
     , @pies

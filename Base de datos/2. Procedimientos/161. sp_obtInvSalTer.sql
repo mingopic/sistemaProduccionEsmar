@@ -15,7 +15,7 @@ as begin
       tr.descripcion as tipoRecorte
       , c.descripcion as calibre
       , s.descripcion as seleccion
-      , isalt.noPiezas
+      , isalt.noPiezasActuales
       , isalt.kg
 	  , isalt.decimetros
 	  , isalt.pies

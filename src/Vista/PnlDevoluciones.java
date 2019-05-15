@@ -146,8 +146,6 @@ public class PnlDevoluciones extends javax.swing.JPanel {
             if (FrmPrincipal.roles[i].equals("Terminado") || FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Produccion"))
             {
                 btnAgregarEntrada.setEnabled(true);
-                btnEnviarTerminado.setEnabled(true);
-                btnEliminarPiezas.setEnabled(true);
                 break;
             }
         }
@@ -458,7 +456,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
                 dtm.setValueAt(lstInvSalTer.get(i).getTipoRecorte(), i, 0);
                 dtm.setValueAt(lstInvSalTer.get(i).getCalibre(), i, 1);
                 dtm.setValueAt(lstInvSalTer.get(i).getSeleccion(), i, 2);
-                dtm.setValueAt(lstInvSalTer.get(i).getNoPiezas(), i, 3);
+                dtm.setValueAt(lstInvSalTer.get(i).getNoPiezasActuales(), i, 3);
                 dtm.setValueAt(lstInvSalTer.get(i).getKg(), i, 4);
                 dtm.setValueAt(lstInvSalTer.get(i).getDecimetros(), i, 5);
                 dtm.setValueAt(lstInvSalTer.get(i).getPies(), i, 6);
@@ -1242,9 +1240,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
         lblEnviarTerminado = new javax.swing.JLabel();
         btnAgregarEntrada = new javax.swing.JButton();
         jLabel61 = new javax.swing.JLabel();
-        btnEnviarTerminado = new javax.swing.JButton();
         jLabel73 = new javax.swing.JLabel();
-        btnEliminarPiezas = new javax.swing.JButton();
         jLabel75 = new javax.swing.JLabel();
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -2368,38 +2364,10 @@ try {
     jLabel61.setText("   ");
     jToolBar3.add(jLabel61);
 
-    btnEnviarTerminado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnEnviarTerminado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
-    btnEnviarTerminado.setText("Realizar Salida");
-    btnEnviarTerminado.setEnabled(false);
-    btnEnviarTerminado.setFocusable(false);
-    btnEnviarTerminado.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnEnviarTerminado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnEnviarTerminado.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnEnviarTerminadoActionPerformed(evt);
-        }
-    });
-    jToolBar3.add(btnEnviarTerminado);
-
     jLabel73.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel73.setForeground(new java.awt.Color(227, 222, 222));
     jLabel73.setText("   ");
     jToolBar3.add(jLabel73);
-
-    btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-    btnEliminarPiezas.setText("Eliminar Piezas");
-    btnEliminarPiezas.setEnabled(false);
-    btnEliminarPiezas.setFocusable(false);
-    btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnEliminarPiezasActionPerformed(evt);
-        }
-    });
-    jToolBar3.add(btnEliminarPiezas);
 
     jLabel75.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel75.setForeground(new java.awt.Color(227, 222, 222));
@@ -2466,29 +2434,6 @@ try {
         actualizarTablaDevoluciones();
         generarReporteEntradaDevolucion();
     }//GEN-LAST:event_btnReporteEntradaActionPerformed
-
-    private void btnEnviarTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTerminadoActionPerformed
-//        try 
-//        {
-//            int fila = tblTerminado.getSelectedRow();
-//            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
-//            int numPiezasActuales = Integer.parseInt(piezas);
-//            
-//            if (numPiezasActuales != 0)
-//            {
-//                datosSalida = new String[datosDevolucion[fila].length];
-//                datosSalida = datosDevolucion[fila];
-//                
-//                abrirDialogoEnvSal();
-//            }
-//            else
-//            {
-//                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Inventario Terminado","Advertencia",JOptionPane.WARNING_MESSAGE);
-//        }
-    }//GEN-LAST:event_btnEnviarTerminadoActionPerformed
 
     private void cmbCalibreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCalibreActionPerformed
         actualizarTablaDevoluciones();
@@ -2637,38 +2582,6 @@ try {
         dlgEliPzaInvTerminado.setVisible(false);
     }//GEN-LAST:event_btnCancelarAgregarEnvSemi2ActionPerformed
 
-    private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
-//        try 
-//        {
-//            int fila = tblTerminado.getSelectedRow();
-//            String piezas = (String.valueOf(tblTerminado.getValueAt(fila, 2)));
-//            
-//            int numPiezasActuales = Integer.parseInt(piezas);
-//
-//            if (numPiezasActuales != 0)
-//            {
-//                txtNoPiezasEliminar.setText("");
-//                txtrMotivo.setText("");
-//
-//                txtNoPartida1.setText(String.valueOf(tblTerminado.getValueAt(fila, 0)));
-//                txtTipoRecorte.setText(String.valueOf(tblTerminado.getValueAt(fila, 1)));
-//                txtCalibre.setText(String.valueOf(tblTerminado.getValueAt(fila, 8)));
-//                txtSeleccion.setText(String.valueOf(tblTerminado.getValueAt(fila, 7)));
-//                txtNoPiezasActuales.setText(String.valueOf(tblTerminado.getValueAt(fila, 2)));
-//                
-//                datosBaja = new String[datosDevolucion[fila].length];
-//                datosBaja = datosDevolucion[fila];
-//                abrirDialogoEliPzaInvTerminado();
-//            }
-//            else
-//            {
-//                JOptionPane.showMessageDialog(null, "El número de piezas actuales debe ser mayor a 0","Advertencia",JOptionPane.WARNING_MESSAGE);
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de inventario semiterminado","Advertencia",JOptionPane.WARNING_MESSAGE);
-//        }
-    }//GEN-LAST:event_btnEliminarPiezasActionPerformed
-
     private void txtNoPiezasEliminarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasEliminarKeyTyped
         char c;
         c=evt.getKeyChar();
@@ -2762,8 +2675,6 @@ try {
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregar1;
     private javax.swing.JButton btnCancelarAgregarEnvSemi2;
-    private javax.swing.JButton btnEliminarPiezas;
-    private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroup1;
     private javax.swing.JButton btnRealizarEntrada;

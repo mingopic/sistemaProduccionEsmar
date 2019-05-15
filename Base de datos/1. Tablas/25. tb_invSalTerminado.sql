@@ -16,6 +16,7 @@ create table tb_invSalTerminado
   , idCalibre       int
   , idSeleccion     int
   , noPiezas		int
+	, noPiezasActuales	int
   , kg              float
   , decimetros      float
   , pies            float

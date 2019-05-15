@@ -23,6 +23,15 @@ public class InventarioSalTerminado {
     String tipoRecorte;
     String calibre;
     String seleccion;
+    int noPiezasActuales;
+
+    public int getNoPiezasActuales() {
+        return noPiezasActuales;
+    }
+
+    public void setNoPiezasActuales(int noPiezasActuales) {
+        this.noPiezasActuales = noPiezasActuales;
+    }
 
     public String getCalibre() {
         return calibre;

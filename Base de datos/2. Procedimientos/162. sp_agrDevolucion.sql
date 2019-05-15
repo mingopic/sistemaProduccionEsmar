@@ -81,5 +81,12 @@ as begin
 		where
 			idInvTerminadoManual = @idInvTerminado
 	end
+	
+	update
+		tb_invSalTerminado
+	set
+		noPiezasActuales = noPiezasActuales - @noPiezas
+	where
+		idInvSalTerminado = @idInvSalTerminado
 end
 go

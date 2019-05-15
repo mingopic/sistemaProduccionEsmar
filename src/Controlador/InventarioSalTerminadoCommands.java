@@ -72,7 +72,7 @@ public class InventarioSalTerminadoCommands {
                 obj.setTipoRecorte(rs.getString("tipoRecorte"));
                 obj.setCalibre(rs.getString("calibre"));
                 obj.setSeleccion(rs.getString("seleccion"));
-                obj.setNoPiezas(rs.getInt("noPiezas"));
+                obj.setNoPiezasActuales(rs.getInt("noPiezasActuales"));
                 obj.setKg(rs.getDouble("kg"));
                 obj.setDecimetros(rs.getDouble("decimetros"));
                 obj.setPies(rs.getDouble("pies"));

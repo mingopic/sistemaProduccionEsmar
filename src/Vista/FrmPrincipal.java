@@ -67,6 +67,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlUsuarios pnlUsuarios;
     PnlTerminado pnlTerminado;
     PnlDevoluciones pnlDevoluciones;
+    PnlReproceso pnlReproceso;
     PnlProduccionEnProceso pnlProduccionEnProceso;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
@@ -879,7 +880,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnTerminado = new javax.swing.JButton();
         btnProdEnProc = new javax.swing.JButton();
         btnFichasProduccion = new javax.swing.JButton();
-        btnTerminado1 = new javax.swing.JButton();
+        btnDevoluciones = new javax.swing.JButton();
+        btnReproceso = new javax.swing.JButton();
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
@@ -2263,14 +2265,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnTerminado1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnTerminado1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
-        btnTerminado1.setText("Devoluciones");
-        btnTerminado1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnTerminado1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnTerminado1.addActionListener(new java.awt.event.ActionListener() {
+        btnDevoluciones.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnDevoluciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        btnDevoluciones.setText("Devoluciones");
+        btnDevoluciones.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDevoluciones.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnDevoluciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTerminado1ActionPerformed(evt);
+                btnDevolucionesActionPerformed(evt);
+            }
+        });
+
+        btnReproceso.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnReproceso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        btnReproceso.setText("Reproceso");
+        btnReproceso.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReproceso.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnReproceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReprocesoActionPerformed(evt);
             }
         });
 
@@ -2293,7 +2306,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnSemiterminado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProdEnProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnFichasProduccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTerminado1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDevoluciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReproceso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -2318,8 +2332,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTerminado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTerminado1)
-                .addContainerGap(212, Short.MAX_VALUE))
+                .addComponent(btnDevoluciones)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnReproceso)
+                .addContainerGap(180, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -3214,7 +3230,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         abrirDialogo(dlgGastosDeFabricacion, 450, 450);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void btnTerminado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminado1ActionPerformed
+    private void btnDevolucionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolucionesActionPerformed
         try {
             pnlDevoluciones = new PnlDevoluciones();
             pnlPrincipalx.removeAll();
@@ -3227,7 +3243,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnTerminado1ActionPerformed
+    }//GEN-LAST:event_btnDevolucionesActionPerformed
+
+    private void btnReprocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReprocesoActionPerformed
+        try {
+            pnlReproceso = new PnlReproceso();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlReproceso, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlReproceso.getGraphics());
+            
+            lblVentana.setText("Reproceso");
+            ImageIcon ico=new ImageIcon("src/Imagenes/arrow_down_up.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnReprocesoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3271,6 +3302,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCross;
+    private javax.swing.JButton btnDevoluciones;
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnFichasProduccion;
     private javax.swing.JButton btnGuardar;
@@ -3278,10 +3310,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnPartidas;
     private javax.swing.JButton btnProdEnProc;
     private javax.swing.JButton btnRecepcionCuero;
+    private javax.swing.JButton btnReproceso;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnSemiterminado;
     private javax.swing.JButton btnTerminado;
-    private javax.swing.JButton btnTerminado1;
     private javax.swing.JDialog dlgCostoGarra;
     private javax.swing.JDialog dlgGastosDeFabricacion;
     private javax.swing.JDialog dlgLogin;

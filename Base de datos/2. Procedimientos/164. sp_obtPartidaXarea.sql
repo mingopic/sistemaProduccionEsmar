@@ -127,13 +127,10 @@ as begin
 	begin
 		select 
       p.noPartida
+			, [Proveedor] = pr.nombreProveedor + ' - ' + cast(rc.noCamion as varchar)
       , tr.descripcion
-      , ic.noPiezas
-      , ic.noPiezasActuales
-      , ic.kgTotal
-      , ic.kgActual
-      , ic.fechaentrada
-      , ic.idInvPCross
+      , ic.noPiezasActuales as noPiezasAct
+			, pd.idPartidaDet
       
     from 
       tb_invCross as ic
@@ -152,6 +149,16 @@ as begin
         tb_tipoRecorte as tr
       on
         tr.idTipoRecorte = pd.idTipoRecorte
+			
+			inner join
+				tb_recepcionCuero as rc
+			on
+				rc.idRecepcionCuero = pd.idRecepcionCuero
+			
+			inner join
+				tb_proveedor as pr
+			on
+				pr.idProveedor = rc.idProveedor
         
     where
       ic.noPiezasActuales > 0
@@ -161,16 +168,10 @@ as begin
 	begin
 		select  
 			p.noPartida
-      , tr.descripcion as tipoRecorte
-      , ins.noPiezas
-      , ins.noPiezasActuales
-      , ins.kgTotales
-      , ins.kgTotalesActuales
-      , (ins.kgTotales/ins.noPiezas) as PesoPromXPza
-      , s.descripcion as seleccion
-      , c.descripcion as calibre
-      , ins.fechaEntrada
-      , ins.idInvSemiterminado
+			, [Proveedor] = pr.nombreProveedor + ' - ' + cast(rc.noCamion as varchar)
+      , tr.descripcion as descripcion
+      , ins.noPiezasActuales as noPiezasAct
+			, pd.idPartidaDet
       
     from
       tb_invSemiterminado as ins
@@ -209,6 +210,16 @@ as begin
         tb_seleccion as s
       on
         s.idSeleccion = ins.idSeleccion
+			
+			inner join
+				tb_recepcionCuero as rc
+			on
+				rc.idRecepcionCuero = pd.idRecepcionCuero
+			
+			inner join
+				tb_proveedor as pr
+			on
+				pr.idProveedor = rc.idProveedor
         
     where
       ins.noPiezasActuales > 0
@@ -218,17 +229,10 @@ as begin
 	begin
 		select  
 			itc.noPartida
-      , tr.descripcion as tipoRecorte
-      , itc.noPiezasActuales
-      , itc.kgTotalesActual
-      , (itc.kgTotalesActual/itc.noPiezasActuales) as PesoPromXPza
-      , itc.decimetrosActual
-      , itc.piesActual
-      , s.descripcion as seleccion
-      , c.descripcion as calibre
-      , itc.fechaEntrada
-      , itc.idInvTerminado
-      , itc.bandera
+			, [Proveedor] = pr.nombreProveedor + ' - ' + cast(rc.noCamion as varchar)
+      , tr.descripcion as descripcion
+      , itc.noPiezasActuales as noPiezasAct
+			, pd.idPartidaDet
       
     from
 	  tb_invTerminadoCompleto as itc
@@ -247,6 +251,46 @@ as begin
       tb_seleccion as s
     on
       s.idSeleccion = itc.idSeleccion
+		
+		inner join
+			tb_invTerminado as it
+		on
+			it.idInvTerminado = itc.idInvTerminado
+			
+		inner join
+			tb_invSemTer as ist
+		on
+			ist.idInvSemTer = it.idInvSemTer
+			
+		inner join
+			tb_invSemiterminado as ins
+		on
+			ins.idInvSemiterminado = ist.idInvSemiterminado
+		
+		inner join
+			tb_invCrossSemi as ics
+		on
+			ics.idInvCrossSemi = ins.idInvCrossSemi
+		
+		inner join
+			tb_invCross as ic
+		on
+			ic.idInvPCross = ics.idInvPCross
+		
+		inner join
+			tb_partidaDet as pd
+		on
+			pd.idPartidaDet = ic.idPartidaDet
+		
+		inner join
+			tb_recepcionCuero as rc
+		on
+			rc.idRecepcionCuero = pd.idRecepcionCuero
+		
+		inner join
+			tb_proveedor as pr
+		on
+			pr.idProveedor = rc.idProveedor
       
   where
     itc.noPiezasActuales > 0

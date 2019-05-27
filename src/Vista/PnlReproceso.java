@@ -13,6 +13,7 @@ import Controlador.InsumosFichaProdDetCommands;
 import Controlador.PartidaCommands;
 import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
+import Controlador.ReprocesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TamborCommands;
 import Modelo.BajasPartidaDet;
@@ -25,6 +26,7 @@ import Modelo.Partida;
 import Modelo.PartidaDetalle;
 import Modelo.PartidaDisp;
 import Modelo.Proceso;
+import Modelo.Reproceso;
 import Modelo.SubProceso;
 import Modelo.Tambor;
 import static Vista.FrmPrincipal.pnlPrincipalx;
@@ -59,13 +61,15 @@ public class PnlReproceso extends javax.swing.JPanel {
     String[][] proceso = null;
     String[][] subProceso = null;
     List<Tambor> lstTambor;
-    List<PartidaDisp> lstPartidas = null;
+    List<Reproceso> lstReproceso = null;
     String recorteSeleccionado = null;
     String[][] asignados;
     DefaultTableModel dtms;
     DefaultTableModel dtmInsumos;
     int idSubproceso = 0;
     List<InsumosXFichaProd> lstInsumos;
+    Reproceso r;
+    ReprocesoCommands rc;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -219,18 +223,21 @@ public class PnlReproceso extends javax.swing.JPanel {
             btnRecortar.setEnabled(true);
         }
         
+        r = new Reproceso();
+        r.setArea(String.valueOf(cmbAreaReproceso.getSelectedItem()));
+        
         btnSelAcabado.setEnabled(false);
 
         DefaultTableModel dtm = null;
         
         try 
         {
-            pc = new PartidaCommands();
-            lstPartidas = pc.obtenerPartidasDisponibles(p);
+            rc = new ReprocesoCommands();
+            lstReproceso = rc.obtenerPartidasDisponibles(r);
             
-            if (lstPartidas != null)
+            if (lstReproceso != null)
             {
-                asignados = new String[lstPartidas.size()][1];
+                asignados = new String[lstReproceso.size()][1];
                 
                 for (int i = 0; i < asignados.length; i++)
                 {
@@ -253,13 +260,13 @@ public class PnlReproceso extends javax.swing.JPanel {
             }
             };
             dtm.setColumnIdentifiers(cols);
-            dtm.setRowCount(lstPartidas.size());
-            for (int i = 0; i < lstPartidas.size(); i++)
+            dtm.setRowCount(lstReproceso.size());
+            for (int i = 0; i < lstReproceso.size(); i++)
             {
-                dtm.setValueAt(lstPartidas.get(i).getNoPartida(), i, 0);
-                dtm.setValueAt(lstPartidas.get(i).getProveedor(), i, 1);
-                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 2);
-                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 3);
+                dtm.setValueAt(lstReproceso.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(lstReproceso.get(i).getProveedorCamion(), i, 1);
+                dtm.setValueAt(lstReproceso.get(i).getTipoRecorte(), i, 2);
+                dtm.setValueAt(lstReproceso.get(i).getNoPiezasActuales(), i, 3);
             }
             tblPartidasDisponibles.setModel(dtm);
             
@@ -282,19 +289,19 @@ public class PnlReproceso extends javax.swing.JPanel {
     //Método para actualizar la tabla de las partidas disponibles por proceso
     public void actualizarPartidasDisponibles() 
     {
-        p = new Partida();
-        p.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+        r = new Reproceso();
+        r.setArea(String.valueOf(cmbAreaReproceso.getSelectedItem()));
 
         DefaultTableModel dtm = null;
         
         try 
         {
-            pc = new PartidaCommands();
-            lstPartidas = pc.obtenerPartidasDisponibles(p);
+            rc = new ReprocesoCommands();
+            lstReproceso = rc.obtenerPartidasDisponibles(r);
             
-            if (lstPartidas != null)
+            if (lstReproceso != null)
             {
-                asignados = new String[lstPartidas.size()][1];
+                asignados = new String[lstReproceso.size()][1];
                 
                 for (int i = 0; i < asignados.length; i++)
                 {
@@ -307,12 +314,13 @@ public class PnlReproceso extends javax.swing.JPanel {
             return false;
             }
             };
-            dtm.setRowCount(lstPartidas.size());
-            for (int i = 0; i < lstPartidas.size(); i++)
+            dtm.setRowCount(lstReproceso.size());
+            for (int i = 0; i < lstReproceso.size(); i++)
             {
-                dtm.setValueAt(lstPartidas.get(i).getNoPartida(), i, 0);
-                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 1);
-                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 2);
+                dtm.setValueAt(lstReproceso.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(lstReproceso.get(i).getProveedorCamion(), i, 1);
+                dtm.setValueAt(lstReproceso.get(i).getTipoRecorte(), i, 2);
+                dtm.setValueAt(lstReproceso.get(i).getNoPiezasActuales(), i, 3);
             }
             tblPartidasDisponibles.setModel(dtm);
             tblPartidasDisponibles.getTableHeader().setReorderingAllowed(false);
@@ -805,11 +813,11 @@ public class PnlReproceso extends javax.swing.JPanel {
                 {
                     //obtener número de piezas originales de la tabla tblPartidasDisponibles
                     int piezasOriginal = 0;
-                    for (int i = 0; i < lstPartidas.size(); i++)
+                    for (int i = 0; i < lstReproceso.size(); i++)
                     {
-                        if (lstPartidas.get(i).getIdPartidaDet() == Integer.parseInt(tblPartidasAgregadas.getValueAt(fila, 4).toString()))
+                        if (lstReproceso.get(i).getIdPartidaDet() == Integer.parseInt(tblPartidasAgregadas.getValueAt(fila, 4).toString()))
                         {
-                            piezasOriginal = lstPartidas.get(i).getNoPiezasAct();
+                            piezasOriginal = lstReproceso.get(i).getNoPiezasActuales();
                         }
                     }
 
@@ -888,140 +896,140 @@ public class PnlReproceso extends javax.swing.JPanel {
     
     public void eliminarPartida()
     {
-        try
-        {
-            int fila = tblPartidasDisponibles.getSelectedRow();
-            
-            if (fila != -1)
-            {
-                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la partida seleccionada?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
-                {
-                    pd = new PartidaDetalle();
-                    pdc = new PartidaDetalleCommands();
-
-                    pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
-                    pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
-                    pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
-                    pd.setIdInventarioCrudo(lstPartidas.get(fila).getIdInventarioCrudo());
-                    
-                    if (pd.getIdRecortePartidaDet() == 0)
-                    {
-                        for (int i = 0; i < lstPartidas.size(); i++)
-                        {
-                            if(lstPartidas.get(i).getIdRecortePartidaDet() == pd.getIdPartidaDet())
-                            {
-                                JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                        }
-                    }
-                    
-                    else
-                    {
-                        for (int i = 0; i < lstPartidas.size(); i++)
-                        {
-                            if(lstPartidas.get(i).getIdPartida() == pd.getIdPartida() && lstPartidas.get(i).getIdTipoRecorte() != 1)
-                            {
-                                JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
-                                return;
-                            }
-                        }
-                    }                    
-
-                    int eliminar = pdc.obtenerPartidaDetalleEliminar(pd);
-
-                    if (eliminar == 1)
-                    {
-                        pdc.eliminarPartidaDet(pd);
-                        JOptionPane.showMessageDialog(null, "Detalle de partida eliminada");
-                        
-                        PnlReproceso pnlFichaProduccion = new PnlReproceso();
-                        pnlPrincipalx.removeAll();
-                        pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
-                        pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null, "La partida que desea eliminar ya esta siendo utilizada en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas","Advertencia",JOptionPane.WARNING_MESSAGE);
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
-        }
+//        try
+//        {
+//            int fila = tblPartidasDisponibles.getSelectedRow();
+//            
+//            if (fila != -1)
+//            {
+//                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la partida seleccionada?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+//                {
+//                    pd = new PartidaDetalle();
+//                    pdc = new PartidaDetalleCommands();
+//
+//                    pd.setIdPartidaDet(lstReproceso.get(fila).getIdPartidaDet());
+//                    pd.setIdPartida(lstReproceso.get(fila).getIdPartida());
+//                    pd.setIdRecortePartidaDet(lstReproceso.get(fila).getIdRecortePartidaDet());
+//                    pd.setIdInventarioCrudo(lstReproceso.get(fila).getIdInventarioCrudo());
+//                    
+//                    if (pd.getIdRecortePartidaDet() == 0)
+//                    {
+//                        for (int i = 0; i < lstReproceso.size(); i++)
+//                        {
+//                            if(lstReproceso.get(i).getIdRecortePartidaDet() == pd.getIdPartidaDet())
+//                            {
+//                                JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                        }
+//                    }
+//                    
+//                    else
+//                    {
+//                        for (int i = 0; i < lstReproceso.size(); i++)
+//                        {
+//                            if(lstReproceso.get(i).getIdPartida() == pd.getIdPartida() && lstReproceso.get(i).getIdTipoRecorte() != 1)
+//                            {
+//                                JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                                return;
+//                            }
+//                        }
+//                    }                    
+//
+//                    int eliminar = pdc.obtenerPartidaDetalleEliminar(pd);
+//
+//                    if (eliminar == 1)
+//                    {
+//                        pdc.eliminarPartidaDet(pd);
+//                        JOptionPane.showMessageDialog(null, "Detalle de partida eliminada");
+//                        
+//                        PnlReproceso pnlFichaProduccion = new PnlReproceso();
+//                        pnlPrincipalx.removeAll();
+//                        pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+//                        pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
+//                    }
+//                    else
+//                    {
+//                        JOptionPane.showMessageDialog(null, "La partida que desea eliminar ya esta siendo utilizada en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas","Advertencia",JOptionPane.WARNING_MESSAGE);
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+//        }
     }
     
     public void eliminarRecorte()
     {
-        try
-        {
-            int fila = tblPartidasDisponibles.getSelectedRow();
-            
-            if (fila != -1)
-            {
-                if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el recorte seleccionado?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
-                {
-                    pd = new PartidaDetalle();
-                    pdc = new PartidaDetalleCommands();
-
-                    pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
-                    pd.setNoPiezas(lstPartidas.get(fila).getNoPiezasAct());
-                    pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
-                    pd.setIdRecepcionCuero(lstPartidas.get(fila).getIdRecepcionCuero());
-                    pd.setIdTipoRecorte(lstPartidas.get(fila).getIdTipoRecorte());
-                    pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
-                    
-                    if (pd.getIdTipoRecorte() == 1)
-                    {
-                        JOptionPane.showMessageDialog(null, "No se puede eliminar este tipo de recorte","Advertencia",JOptionPane.WARNING_MESSAGE);
-                    }
-                    else
-                    {
-                        int eliminar = pdc.validarBorrarRecorte(pd);
-
-                        if (eliminar == 1)
-                        {
-                            pdc.eliminarRecorte(pd);
-                            JOptionPane.showMessageDialog(null, "Recorte eliminado correctamente");
-
-                            PnlReproceso pnlFichaProduccion = new PnlReproceso();
-                            pnlPrincipalx.removeAll();
-                            pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
-                            pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
-                        }
-                        else if (eliminar == 1)
-                        {
-                            if (pd.getIdTipoRecorte() == 2 || pd.getIdTipoRecorte() == 3)
-                            {
-                                JOptionPane.showMessageDialog(null, "El recorte Delantero Sillero o Crupon Sillero ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
-                            }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null, "El recorte que desea eliminar ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
-                            }
-                        }
-                        else
-                        {
-                            JOptionPane.showMessageDialog(null, "No se puede eliminar recorte creado desde la creación de la partida","Advertencia",JOptionPane.WARNING_MESSAGE);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas","Advertencia",JOptionPane.WARNING_MESSAGE);
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
-        }
+//        try
+//        {
+//            int fila = tblPartidasDisponibles.getSelectedRow();
+//            
+//            if (fila != -1)
+//            {
+//                if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el recorte seleccionado?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+//                {
+//                    pd = new PartidaDetalle();
+//                    pdc = new PartidaDetalleCommands();
+//
+//                    pd.setIdPartidaDet(lstReproceso.get(fila).getIdPartidaDet());
+//                    pd.setNoPiezas(lstReproceso.get(fila).getNoPiezasAct());
+//                    pd.setIdPartida(lstReproceso.get(fila).getIdPartida());
+//                    pd.setIdRecepcionCuero(lstReproceso.get(fila).getIdRecepcionCuero());
+//                    pd.setIdTipoRecorte(lstReproceso.get(fila).getIdTipoRecorte());
+//                    pd.setIdRecortePartidaDet(lstReproceso.get(fila).getIdRecortePartidaDet());
+//                    
+//                    if (pd.getIdTipoRecorte() == 1)
+//                    {
+//                        JOptionPane.showMessageDialog(null, "No se puede eliminar este tipo de recorte","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                    }
+//                    else
+//                    {
+//                        int eliminar = pdc.validarBorrarRecorte(pd);
+//
+//                        if (eliminar == 1)
+//                        {
+//                            pdc.eliminarRecorte(pd);
+//                            JOptionPane.showMessageDialog(null, "Recorte eliminado correctamente");
+//
+//                            PnlReproceso pnlFichaProduccion = new PnlReproceso();
+//                            pnlPrincipalx.removeAll();
+//                            pnlPrincipalx.add(pnlFichaProduccion, BorderLayout.CENTER);
+//                            pnlPrincipalx.paintAll(pnlFichaProduccion.getGraphics());
+//                        }
+//                        else if (eliminar == 1)
+//                        {
+//                            if (pd.getIdTipoRecorte() == 2 || pd.getIdTipoRecorte() == 3)
+//                            {
+//                                JOptionPane.showMessageDialog(null, "El recorte Delantero Sillero o Crupon Sillero ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                            }
+//                            else
+//                            {
+//                                JOptionPane.showMessageDialog(null, "El recorte que desea eliminar ya esta siendo utilizado en otros procesos","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                            }
+//                        }
+//                        else
+//                        {
+//                            JOptionPane.showMessageDialog(null, "No se puede eliminar recorte creado desde la creación de la partida","Advertencia",JOptionPane.WARNING_MESSAGE);
+//                        }
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas","Advertencia",JOptionPane.WARNING_MESSAGE);
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+//        }
     }
     
     //Metodo para inicializar los campos de dlgEliPzaFichaProd
@@ -1053,53 +1061,53 @@ public class PnlReproceso extends javax.swing.JPanel {
     //Método para eliminar piezas del inventario en proceso
     public void eliminarPiezasFichaProd () throws Exception
     {
-        if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
-        {
-            try 
-            {
-                if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
-                {
-                    JOptionPane.showMessageDialog(dlgEliPzaFichaProd, "El numero de piezas debe ser menor o igual al número de piezas actuales");
-                }
-                else
-                {
-                    int fila = tblPartidasDisponibles.getSelectedRow();
-                    bpd = new BajasPartidaDet();
-                    bpdc = new BajasPartidaDetCommands();
-                    
-//                    double promKg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 6).toString());
-//                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
+//        if ( !txtNoPiezasEliminar.getText().isEmpty() && Integer.parseInt(txtNoPiezasEliminar.getText()) != 0)
+//        {
+//            try 
+//            {
+//                if (Integer.parseInt(txtNoPiezasEliminar.getText()) > Integer.parseInt(txtNoPiezasActuales.getText()))
+//                {
+//                    JOptionPane.showMessageDialog(dlgEliPzaFichaProd, "El numero de piezas debe ser menor o igual al número de piezas actuales");
+//                }
+//                else
+//                {
+//                    int fila = tblPartidasDisponibles.getSelectedRow();
+//                    bpd = new BajasPartidaDet();
+//                    bpdc = new BajasPartidaDetCommands();
 //                    
-//                    if (kg > Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString()))
-//                    {
-//                        kg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString());
-//                    }
-
-                    bpd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
-                    bpd.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
-                    bpd.setMotivo(txtrMotivo.getText());
-//                    bic.setKgTotal(kg);
-
-                    bpdc.agregarBajaPartidaDet(bpd);
-                    pdc.actualizarNoPiezasBaja(bpd);
-                    actualizarTablaPartidasDisponibles();
-                    dlgEliPzaFichaProd.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
-                }
-            } 
-            catch (Exception e) 
-            {
-                e.printStackTrace();
-                dlgEliPzaFichaProd.setVisible(false);                
-                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
-            }   
-        }
-        else
-        {
-            dlgEliPzaFichaProd.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
-            dlgEliPzaFichaProd.setVisible(true);
-        }
+////                    double promKg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 6).toString());
+////                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
+////                    
+////                    if (kg > Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString()))
+////                    {
+////                        kg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString());
+////                    }
+//
+//                    bpd.setIdPartidaDet(lstReproceso.get(fila).getIdPartidaDet());
+//                    bpd.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
+//                    bpd.setMotivo(txtrMotivo.getText());
+////                    bic.setKgTotal(kg);
+//
+//                    bpdc.agregarBajaPartidaDet(bpd);
+//                    pdc.actualizarNoPiezasBaja(bpd);
+//                    actualizarTablaPartidasDisponibles();
+//                    dlgEliPzaFichaProd.setVisible(false);
+//                    JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
+//                }
+//            } 
+//            catch (Exception e) 
+//            {
+//                e.printStackTrace();
+//                dlgEliPzaFichaProd.setVisible(false);                
+//                JOptionPane.showMessageDialog(null, "Error de conexión", "Error",JOptionPane.ERROR_MESSAGE);
+//            }   
+//        }
+//        else
+//        {
+//            dlgEliPzaFichaProd.setVisible(false);
+//            JOptionPane.showMessageDialog(null, "Capture no. Piezas a eliminar","Mensaje",JOptionPane.WARNING_MESSAGE);
+//            dlgEliPzaFichaProd.setVisible(true);
+//        }
     }
 
     /**
@@ -2164,26 +2172,26 @@ public class PnlReproceso extends javax.swing.JPanel {
     }//GEN-LAST:event_tblSubprocesoMouseClicked
 
     private void btnRecortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecortarActionPerformed
-        try 
-        {
-            pad = new PartidaDisp();
-            int i = tblPartidasDisponibles.getSelectedRow();
-            
-            pad.setNoPartida(lstPartidas.get(i).getNoPartida());
-            pad.setTipoRecorte(lstPartidas.get(i).getTipoRecorte());
-            pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
-            pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
-            pad.setIdPartida(lstPartidas.get(i).getIdPartida());
-            pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
-            pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
-            
-            abrirDialogoRecortar();
-        } 
-        catch (Exception e) 
-        {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla \nde partidas disponibles","Mensaje",JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+//        try 
+//        {
+//            pad = new PartidaDisp();
+//            int i = tblPartidasDisponibles.getSelectedRow();
+//            
+//            pad.setNoPartida(lstReproceso.get(i).getNoPartida());
+//            pad.setTipoRecorte(lstReproceso.get(i).getTipoRecorte());
+//            pad.setNoPiezasAct(lstReproceso.get(i).getNoPiezasAct());
+//            pad.setIdPartidaDet(lstReproceso.get(i).getIdPartidaDet());
+//            pad.setIdPartida(lstReproceso.get(i).getIdPartida());
+//            pad.setIdTipoRecorte(lstReproceso.get(i).getIdTipoRecorte());
+//            pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+//            
+//            abrirDialogoRecortar();
+//        } 
+//        catch (Exception e) 
+//        {
+//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla \nde partidas disponibles","Mensaje",JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
     }//GEN-LAST:event_btnRecortarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -2283,11 +2291,11 @@ public class PnlReproceso extends javax.swing.JPanel {
                 String datosPartidas[];
                 datosPartidas = new String[5];
 
-                datosPartidas[0]= String.valueOf(lstPartidas.get(fila).getNoPartida());
-                datosPartidas[1]= lstPartidas.get(fila).getTipoRecorte();
-                datosPartidas[2]= String.valueOf(lstPartidas.get(fila).getNoPiezasAct());
+                datosPartidas[0]= String.valueOf(lstReproceso.get(fila).getNoPartida());
+                datosPartidas[1]= lstReproceso.get(fila).getTipoRecorte();
+                datosPartidas[2]= String.valueOf(lstReproceso.get(fila).getNoPiezasActuales());
                 datosPartidas[3]= "0.0";
-                datosPartidas[4]= String.valueOf(lstPartidas.get(fila).getIdPartidaDet());
+                datosPartidas[4]= String.valueOf(lstReproceso.get(fila).getIdPartidaDet());
 
                 dtms.addRow(datosPartidas);
                 asignados[fila][0] = "1";
@@ -2302,31 +2310,31 @@ public class PnlReproceso extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAsignarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int fila;
-        try
-        {
-            fila = this.tblPartidasAgregadas.getSelectedRow();
-            
-            for (int i = 0; i < lstPartidas.size(); i++)
-            {
-                if (String.valueOf(lstPartidas.get(i).getIdPartidaDet()).equals(tblPartidasAgregadas.getValueAt(fila, 4)))
-                {
-                    asignados[i][0] = "0";
-                }
-            }
-            
-            dtms.removeRow(fila);
-            actualizarTotalInsumos();
-            if (tblPartidasAgregadas.getRowCount() == 0)
-            {
-                btnGenerarFicha.setEnabled(false);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas Agregadas","Advertencia",JOptionPane.WARNING_MESSAGE);
-        }
+//        int fila;
+//        try
+//        {
+//            fila = this.tblPartidasAgregadas.getSelectedRow();
+//            
+//            for (int i = 0; i < lstReproceso.size(); i++)
+//            {
+//                if (String.valueOf(lstReproceso.get(i).getIdPartidaDet()).equals(tblPartidasAgregadas.getValueAt(fila, 4)))
+//                {
+//                    asignados[i][0] = "0";
+//                }
+//            }
+//            
+//            dtms.removeRow(fila);
+//            actualizarTotalInsumos();
+//            if (tblPartidasAgregadas.getRowCount() == 0)
+//            {
+//                btnGenerarFicha.setEnabled(false);
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de Partidas Agregadas","Advertencia",JOptionPane.WARNING_MESSAGE);
+//        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void tblPartidasAgregadasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPartidasAgregadasKeyReleased
@@ -2410,12 +2418,12 @@ public class PnlReproceso extends javax.swing.JPanel {
                     int noPiezasPartida = Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString());
 
                     pd.setNoPiezas(noPiezasPartida);
-                    for (int j = 0; j < lstPartidas.size(); j++)
+                    for (int j = 0; j < lstReproceso.size(); j++)
                     {
-                        if (Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) == lstPartidas.get(j).getIdPartidaDet())
+                        if (Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) == lstReproceso.get(j).getIdPartidaDet())
                         {
-                            pd.setIdPartida(lstPartidas.get(j).getIdPartida());
-                            pd.setIdTipoRecorte(lstPartidas.get(j).getIdTipoRecorte());
+                            pd.setIdPartida(lstReproceso.get(j).getIdPartida());
+                            pd.setIdTipoRecorte(lstReproceso.get(j).getIdTipoRecorte());
                         }
                     }
                     pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
@@ -2504,26 +2512,26 @@ public class PnlReproceso extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarRecorteActionPerformed
 
     private void btnSelAcabadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelAcabadoActionPerformed
-        try 
-        {
-            pad = new PartidaDisp();
-            int i = tblPartidasDisponibles.getSelectedRow();
-            
-            pad.setNoPartida(lstPartidas.get(i).getNoPartida());
-            pad.setTipoRecorte(lstPartidas.get(i).getTipoRecorte());
-            pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
-            pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
-            pad.setIdPartida(lstPartidas.get(i).getIdPartida());
-            pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
-            pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
-            
-            abrirDialogoSeleccionarAcabado();
-        } 
-        catch (Exception e) 
-        {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla \nde partidas disponibles","Mensaje",JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+//        try 
+//        {
+//            pad = new PartidaDisp();
+//            int i = tblPartidasDisponibles.getSelectedRow();
+//            
+//            pad.setNoPartida(lstReproceso.get(i).getNoPartida());
+//            pad.setTipoRecorte(lstReproceso.get(i).getTipoRecorte());
+//            pad.setNoPiezasAct(lstReproceso.get(i).getNoPiezasAct());
+//            pad.setIdPartidaDet(lstReproceso.get(i).getIdPartidaDet());
+//            pad.setIdPartida(lstReproceso.get(i).getIdPartida());
+//            pad.setIdTipoRecorte(lstReproceso.get(i).getIdTipoRecorte());
+//            pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+//            
+//            abrirDialogoSeleccionarAcabado();
+//        } 
+//        catch (Exception e) 
+//        {
+//            JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla \nde partidas disponibles","Mensaje",JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
     }//GEN-LAST:event_btnSelAcabadoActionPerformed
 
     private void tblPartidasDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPartidasDisponiblesMouseClicked

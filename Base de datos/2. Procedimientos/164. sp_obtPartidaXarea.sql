@@ -131,6 +131,8 @@ as begin
       , tr.descripcion
       , ic.noPiezasActuales as noPiezasAct
 			, pd.idPartidaDet
+			, p.idPartida
+			, tr.idTipoRecorte
       
     from 
       tb_invCross as ic
@@ -172,6 +174,8 @@ as begin
       , tr.descripcion as descripcion
       , ins.noPiezasActuales as noPiezasAct
 			, pd.idPartidaDet
+			, p.idPartida
+			, tr.idTipoRecorte
       
     from
       tb_invSemiterminado as ins
@@ -233,6 +237,8 @@ as begin
       , tr.descripcion as descripcion
       , itc.noPiezasActuales as noPiezasAct
 			, pd.idPartidaDet
+			, p.idPartida
+			, tr.idTipoRecorte
       
     from
 	  tb_invTerminadoCompleto as itc

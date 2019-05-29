@@ -49,6 +49,7 @@ public class ReprocesoCommands {
                     obj.setTipoRecorte(rs.getString("descripcion"));
                     obj.setNoPiezasActuales(rs.getInt("noPiezasAct"));
                     obj.setIdPartidaDet(rs.getInt("idPartidaDet"));
+                    obj.setIdPartida(rs.getInt("idPartida"));
                     obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
                     reproceso.add(obj);
                 }

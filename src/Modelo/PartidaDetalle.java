@@ -19,6 +19,15 @@ public class PartidaDetalle {
     int noPartida;
     int idRecortePartidaDet;
     int idInventarioCrudo;
+    int idProceso;
+
+    public int getIdProceso() {
+        return idProceso;
+    }
+
+    public void setIdProceso(int idProceso) {
+        this.idProceso = idProceso;
+    }
 
     public int getIdPartidaDet() {
         return idPartidaDet;

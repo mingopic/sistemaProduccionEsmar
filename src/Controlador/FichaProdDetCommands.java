@@ -51,4 +51,23 @@ public class FichaProdDetCommands {
         pstmt.executeUpdate();
         c.desconectar();
     }
+    
+    //Método para agregar el detalle de una ficha de producción
+    public static void agregarFichaProdDetReproceso(FichaProdDet fpd, int noPiezasPartida, Double kgPartida, Double costoInsumosFicha) throws Exception {
+        String query = "execute sp_InsFichaProdDetReproceso "
+                + fpd.getIdFichaProd()
+                + ", " + fpd.getIdPartidaDet()
+                + ", " + noPiezasPartida
+                + ", " + fpd.getNoPiezasTotal()
+                + ", " + kgPartida 
+                + ", " + fpd.getKgTotal()
+                + ", " + costoInsumosFicha;
+        
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
 }

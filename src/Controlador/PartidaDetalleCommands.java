@@ -358,4 +358,20 @@ public class PartidaDetalleCommands {
         c.desconectar();
         return datos;
     }
+    
+    //Método para agregar una entrada a la tabla entradaProductoAlmacen
+    public static void insPartidaDetFichaReproceso(PartidaDetalle pd) throws Exception {
+        String query = "exec sp_InsPartidaDetalleFichaReproceso "
+                + pd.getNoPiezas()
+                + ", " + pd.getIdPartida()
+                + ", " + pd.getIdPartidaDet()
+                + ", " + pd.getIdTipoRecorte()
+                + ", " + pd.getIdProceso();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        pstmt = c.getConexion().prepareStatement(query);
+        System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
 }

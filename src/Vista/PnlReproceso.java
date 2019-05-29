@@ -2427,8 +2427,9 @@ public class PnlReproceso extends javax.swing.JPanel {
                         }
                     }
                     pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
+                    pd.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
 
-                    pdc.insPartidaDetFicha(pd);
+                    pdc.insPartidaDetFichaReproceso(pd);
 
 
                     fpd.setIdPartidaDet(pdc.obtenerUltPartidaDet());
@@ -2436,7 +2437,7 @@ public class PnlReproceso extends javax.swing.JPanel {
                     Double kgPartida = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
                     fpd.setKgTotal(fp.getKgTotal());
 
-                    fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
+                    fpdc.agregarFichaProdDetReproceso(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
                 }
 
                 InsumosFichaProd ifp = new InsumosFichaProd();

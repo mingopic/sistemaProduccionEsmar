@@ -18,6 +18,15 @@ public class Reproceso {
     int idPartidaDet;
     int idPartida;
     int idTipoRecorte;
+    int idDescontar;
+
+    public int getIdDescontar() {
+        return idDescontar;
+    }
+
+    public void setIdDescontar(int idDescontar) {
+        this.idDescontar = idDescontar;
+    }
 
     public int getIdTipoRecorte() {
         return idTipoRecorte;

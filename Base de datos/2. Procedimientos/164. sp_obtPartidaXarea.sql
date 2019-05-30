@@ -45,6 +45,7 @@ as begin
       , rc.idRecepcionCuero
       , pd.idRecortePartidaDet
       , pd.idInventarioCrudo
+			, pd.idPartidaDet as idDescontar
       
     from
       tb_partidaDet as pd
@@ -94,6 +95,7 @@ as begin
       , rc.idRecepcionCuero
       , pd.idRecortePartidaDet
       , pd.idInventarioCrudo
+			, pd.idPartidaDet as idDescontar
       
     from
       tb_partidaDet as pd
@@ -133,6 +135,7 @@ as begin
 			, pd.idPartidaDet
 			, p.idPartida
 			, tr.idTipoRecorte
+			, ic.idInvPCross as idDescontar
       
     from 
       tb_invCross as ic
@@ -176,6 +179,7 @@ as begin
 			, pd.idPartidaDet
 			, p.idPartida
 			, tr.idTipoRecorte
+			, ins.idInvSemiterminado as idDescontar
       
     from
       tb_invSemiterminado as ins
@@ -239,6 +243,7 @@ as begin
 			, pd.idPartidaDet
 			, p.idPartida
 			, tr.idTipoRecorte
+			, itc.idInvTerminado as idDescontar
       
     from
 	  tb_invTerminadoCompleto as itc
@@ -287,6 +292,11 @@ as begin
 			tb_partidaDet as pd
 		on
 			pd.idPartidaDet = ic.idPartidaDet
+		
+		inner join
+			tb_partida as p
+		on
+			p.idPartida = pd.idPartida
 		
 		inner join
 			tb_recepcionCuero as rc

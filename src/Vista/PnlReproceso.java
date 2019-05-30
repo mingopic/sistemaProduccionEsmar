@@ -2289,13 +2289,14 @@ public class PnlReproceso extends javax.swing.JPanel {
             else
             {
                 String datosPartidas[];
-                datosPartidas = new String[5];
+                datosPartidas = new String[6];
 
                 datosPartidas[0]= String.valueOf(lstReproceso.get(fila).getNoPartida());
                 datosPartidas[1]= lstReproceso.get(fila).getTipoRecorte();
                 datosPartidas[2]= String.valueOf(lstReproceso.get(fila).getNoPiezasActuales());
                 datosPartidas[3]= "0.0";
                 datosPartidas[4]= String.valueOf(lstReproceso.get(fila).getIdPartidaDet());
+                datosPartidas[5]= String.valueOf(lstReproceso.get(fila).getIdDescontar());
 
                 dtms.addRow(datosPartidas);
                 asignados[fila][0] = "1";
@@ -2424,10 +2425,12 @@ public class PnlReproceso extends javax.swing.JPanel {
                         {
                             pd.setIdPartida(lstReproceso.get(j).getIdPartida());
                             pd.setIdTipoRecorte(lstReproceso.get(j).getIdTipoRecorte());
+                            pd.setIdDescontar(lstReproceso.get(j).getIdDescontar());
                         }
                     }
                     pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
                     pd.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+                    pd.setArea(String.valueOf(cmbAreaReproceso.getSelectedItem()));
 
                     pdc.insPartidaDetFichaReproceso(pd);
 
@@ -2483,6 +2486,7 @@ public class PnlReproceso extends javax.swing.JPanel {
                     }
 
                     ifpdc.insertarInsumosFichaProdDet(ifpd);
+                    
                 }
 
                 JOptionPane.showMessageDialog(null, "Se generó correctamente la ficha no. "+ fpd.getIdFichaProd());

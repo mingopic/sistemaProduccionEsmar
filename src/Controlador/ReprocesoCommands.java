@@ -51,6 +51,7 @@ public class ReprocesoCommands {
                     obj.setIdPartidaDet(rs.getInt("idPartidaDet"));
                     obj.setIdPartida(rs.getInt("idPartida"));
                     obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                    obj.setIdDescontar(rs.getInt("idDescontar"));
                     reproceso.add(obj);
                 }
             }

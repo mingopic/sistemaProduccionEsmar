@@ -366,7 +366,9 @@ public class PartidaDetalleCommands {
                 + ", " + pd.getIdPartida()
                 + ", " + pd.getIdPartidaDet()
                 + ", " + pd.getIdTipoRecorte()
-                + ", " + pd.getIdProceso();
+                + ", " + pd.getIdProceso()
+                + ", '" + pd.getArea() + "'"
+                + ", " + pd.getIdDescontar();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

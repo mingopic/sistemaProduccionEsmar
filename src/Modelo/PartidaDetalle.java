@@ -20,6 +20,24 @@ public class PartidaDetalle {
     int idRecortePartidaDet;
     int idInventarioCrudo;
     int idProceso;
+    String area;
+    int idDescontar;
+
+    public int getIdDescontar() {
+        return idDescontar;
+    }
+
+    public void setIdDescontar(int idDescontar) {
+        this.idDescontar = idDescontar;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public int getIdProceso() {
         return idProceso;

@@ -62,7 +62,8 @@ as begin
           case
             when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 1 then it.kgTotalesActual
             when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 2 then it.decimetrosActual
-            else it.piesActual
+            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 3 then it.piesActual
+            else 0
           end
         )
       )

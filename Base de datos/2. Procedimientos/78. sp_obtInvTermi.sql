@@ -60,8 +60,9 @@ as begin
         *
         (
           case
-            when it.kgTotalesActual > 0 then it.kgTotalesActual
-            else it.decimetrosActual
+            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 1 then it.kgTotalesActual
+            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 2 then it.decimetrosActual
+            else it.piesActual
           end
         )
       )

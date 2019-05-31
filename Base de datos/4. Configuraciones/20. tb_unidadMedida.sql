@@ -17,3 +17,8 @@ values
     'Decimetro'
     , 'Dm'
   )
+	,
+  (
+    'Pie Cuadrado'
+    , 'SQFT'
+  )

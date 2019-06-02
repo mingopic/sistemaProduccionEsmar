@@ -93,7 +93,9 @@ public class PnlReproceso extends javax.swing.JPanel {
             actualizarTablaSubProc();
             inicializarTablaPartidasAgregadas();
             actualizarTablaInsumos(0);
+            actualizarTablaPartidasDisponibles();
             btnEliminarRecorte.setVisible(false);
+            btnRecortar.setVisible(false);
         } 
         catch (Exception e)
         {
@@ -282,7 +284,7 @@ public class PnlReproceso extends javax.swing.JPanel {
         catch (Exception e) 
         {   
             e.printStackTrace();   
-            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD" , "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No hay existencias de este inventario" , "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

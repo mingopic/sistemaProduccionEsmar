@@ -37,7 +37,7 @@ public class PrecioVentaCommands {
         Statement stmt = null;
         ResultSet rs = null;
         int renglones = 0;
-        int columnas = 7;
+        int columnas = 8;
         int i = 0;
         
         c.conectar();
@@ -55,13 +55,14 @@ public class PrecioVentaCommands {
                 precioVenta[i][0]= rs.getString("tipoRecorte");
                 precioVenta[i][1]= rs.getString("calibre");
                 precioVenta[i][2]= rs.getString("seleccion");
-                precioVenta[i][3]= rs.getString("precio");
-                precioVenta[i][4]= rs.getString("descripcion");
+                precioVenta[i][3]= rs.getString("precio_original");
+                precioVenta[i][4]= rs.getString("moneda");
+                precioVenta[i][5]= rs.getString("descripcion");
                 
                 Date sqlDate = rs.getDate("fecha");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                precioVenta[i][5] = sdf.format(sqlDate);
-                precioVenta[i][6]= rs.getString("idPrecioVenta");
+                precioVenta[i][6] = sdf.format(sqlDate);
+                precioVenta[i][7]= rs.getString("idPrecioVenta");
                 i++;
             }
         }
@@ -79,7 +80,9 @@ public class PrecioVentaCommands {
                 + pv.getIdCalibre()+","
                 + pv.getIdTipoRecorte()+","
                 + pv.getPrecio()+","
-                + pv.getUnidadMedida();
+                + pv.getUnidadMedida()+","
+                + pv.getPrecio_original()+","
+                +pv.getIdTipoMoneda();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -124,7 +127,8 @@ public class PrecioVentaCommands {
     public static void actualizarPrecioVenta(PrecioVenta pv) throws Exception {
         String query= "execute sp_actPrecioVenta "
                 + "" + pv.getIdPrecioVenta()+ ""
-                + ", " + pv.getPrecio();
+                + ", " + pv.getPrecio()
+                + ", " + pv.getPrecio_original();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

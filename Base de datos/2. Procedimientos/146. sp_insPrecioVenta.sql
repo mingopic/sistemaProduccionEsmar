@@ -10,11 +10,13 @@ go
 
 create procedure sp_insPrecioVenta
   (
-    @idSeleccion     int
-    , @idCalibre     int
-    , @idTipoRecorte int
-    , @precio        float
-    , @idUnidadMedida  int
+    @idSeleccion        int
+    , @idCalibre        int
+    , @idTipoRecorte    int
+    , @precio           float
+    , @idUnidadMedida   int
+    , @precio_original  float
+    , @idMoneda         int
   )
   as begin
   
@@ -25,6 +27,8 @@ create procedure sp_insPrecioVenta
         , idCalibre
         , idTipoRecorte
         , precio
+        , precio_original
+        , idTipoMoneda
         , idUnidadMedida
         , fecha
       )
@@ -35,6 +39,8 @@ create procedure sp_insPrecioVenta
         , @idCalibre
         , @idTipoRecorte
         , @precio
+        , @precio_original
+        , @idMoneda
         , @idUnidadMedida
         , getdate()
       )

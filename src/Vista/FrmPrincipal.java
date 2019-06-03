@@ -14,13 +14,16 @@ import Controlador.ControladorUsuario;
 import Controlador.CostoGarraCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.RolesXUsuarioCommands;
+import Controlador.TipoMonedaCommands;
 import Modelo.ConfGastosFabricacion;
 import Modelo.ConfPrecioCuero;
 import Modelo.ConfPrecioManoDeObra;
 import Modelo.ConfiguracionMerma;
 import Modelo.CostoGarra;
 import Modelo.RangoPesoCuero;
+import Modelo.TipoMoneda;
 import Modelo.Usuario;
+import Service.TipoCambioService;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -276,6 +279,29 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         jmpConfiguraciones.setVisible(true);
                         break;
                     }
+                }
+                
+                // Actualizar tipo de  cambio
+                TipoMonedaCommands tmc = new TipoMonedaCommands();
+                TipoCambioService tcs = new TipoCambioService();
+                Map m = new HashMap();
+                try {
+                    String resultado = tcs.sendPost();
+                    if (!resultado.equals(""))
+                    {
+                        m = tcs.obtenerTipoCambio(resultado);
+                        if (Integer.parseInt(String.valueOf(m.get("idMsg"))) > -1)
+                        {
+                            tmc.actualizarTipoCambio(Double.parseDouble(String.valueOf(m.get("cotizacion"))));
+//                            JOptionPane.showMessageDialog(null, "SIIIII","", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else
+                            JOptionPane.showMessageDialog(null, "Error al obtener tipo de cambio", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null, "No se pudo conectar a www.banxico.org.mx", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             else

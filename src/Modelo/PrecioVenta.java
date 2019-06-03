@@ -15,6 +15,8 @@ public class PrecioVenta {
     int idCalibre;
     int idTipoRecorte;
     float precio;
+    float precio_original;
+    int idTipoMoneda;
     String fecha;
     int unidadMedida;
     String descUnidadMedida;
@@ -83,4 +85,21 @@ public class PrecioVenta {
         this.descUnidadMedida = descUnidadMedida;
     }
 
+    public float getPrecio_original() {
+        return precio_original;
+    }
+
+    public void setPrecio_original(float precio_original) {
+        this.precio_original = precio_original;
+    }
+
+    public int getIdTipoMoneda() {
+        return idTipoMoneda;
+    }
+
+    public void setIdTipoMoneda(int idTipoMoneda) {
+        this.idTipoMoneda = idTipoMoneda;
+    }
+
+    
 }

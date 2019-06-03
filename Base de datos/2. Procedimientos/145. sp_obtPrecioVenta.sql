@@ -20,13 +20,15 @@ as begin
     tr.descripcion as tipoRecorte
     , c.descripcion as calibre
     , s.descripcion as seleccion
-    , pv.precio
+    , pv.precio_original
+    , tm.descripcion as moneda
     , um.descripcion
     , pv.fecha
     , pv.idPrecioVenta
     
   from
     tb_PrecioVenta as pv
+    
   inner join
     tb_unidadMedida as um
   on
@@ -46,6 +48,11 @@ as begin
     tb_seleccion as s
   on
     pv.idSeleccion = s.idSeleccion
+    
+  inner join
+    tb_tipoMoneda as tm
+  on
+    pv.idTipoMoneda = tm.idTipoMoneda
     
   where
   (

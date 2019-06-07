@@ -32,11 +32,11 @@ as begin
     )
   
   select 
-    TIPODEPRODUCTO
+    TIPORECORTE
     , CALIBRE
     , SELECCION
-    , TOTAL131
-    , TOTALACTUAL
+    , NOPIEZAS
+    , NOPIEZAS
     , KGTOTAL
     , KGTOTAL
     , DMTOTAL
@@ -49,7 +49,7 @@ as begin
     INVENTARIOPRODUCTOTERMINADO$
   
   where
-    TOTALACTUAL > 0
+    NOPIEZAS > 0
   
 end
 go

@@ -550,6 +550,7 @@ public class PnlDevoluciones extends javax.swing.JPanel {
             
             promXPieza = (Double.parseDouble(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 4).toString())) / (Integer.parseInt(tblBuscarPartidaInvSalTer.getValueAt(renglonSeleccionado, 3).toString()));
             double kgTotales = promXPieza * isalt.getNoPiezas();
+            kgTotales = Double.parseDouble(String.format("%.2f",kgTotales));
             
             dlgBuscar.setVisible(false);
             

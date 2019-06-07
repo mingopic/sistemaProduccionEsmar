@@ -120,9 +120,6 @@ as begin
   on
     p.idPartida = pd.idPartida
     
-  where
-    it.noPiezasActuales > 0
-    
   -- Tercer insert en la tabla -------------------------------------------------------------------------------------------------
   insert into 
     tb_invTerminadoCompleto

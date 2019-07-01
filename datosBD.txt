@@ -3,5 +3,5 @@ baseDatos: esmarProd
 usuario:sa
 password:root
 instancia:SQLEXPRESS
-puerto:64888
+puerto:50713
 BDcompaq: adESMAR2018

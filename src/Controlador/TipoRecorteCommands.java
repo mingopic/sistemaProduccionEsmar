@@ -52,4 +52,40 @@ public class TipoRecorteCommands {
         c.desconectar();
         return tipoCuero;
     }
+    
+    //Método para llenar el combobox con los tipos de cuero existentes en pnlPrecioVenta
+    public static String[][] llenarComboboxTipoRecorteVentas(String tipoMoneda) throws Exception
+    {
+        String[][] tipoCuero=null;
+        
+        String query="execute sp_obtTipoRecorteVentas '"+tipoMoneda+"'";
+        
+        Statement stmt = null;
+        ResultSet rs = null;
+        int renglones = 0;
+        int columnas = 2;
+        int i = 0;
+        
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        
+        if (rs.last()) {
+            renglones = rs.getRow();
+            tipoCuero = new String[renglones][columnas];
+            rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                tipoCuero[i][0]= rs.getString("idTipoRecorte");
+                tipoCuero[i][1]= rs.getString("descripcion");
+                i++;
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return tipoCuero;
+    }
 }

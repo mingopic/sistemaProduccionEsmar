@@ -17,10 +17,20 @@ create procedure sp_obtPrecioVenta
 as begin
   
   select
-    tr.descripcion as tipoRecorte
+    case
+	  when pv.idTipoMoneda = 2 then tri.descripcion
+	  when tr.descripcion = 'Delantero Sillero' then 'Del. Sillero Novillo/Del. Sillero Toro'
+	  when tr.descripcion = 'Crupon Sillero' then 'Crupon Sillero'
+	  when tr.descripcion = 'Centro Castaño' then 'Centro Castaño'
+	  when tr.descripcion = 'Centro Quebracho' then 'Centro Quebracho'
+	  when tr.descripcion = 'Delantero Suela' then 'Delantero'
+	  when tr.descripcion = 'Sottopiede' then 'Sottopiede'
+	  else tr.descripcion 
+	end as tipoRecorte
     , c.descripcion as calibre
     , s.descripcion as seleccion
     , pv.precio_original
+	, pv.precio_buffed
     , tm.descripcion as moneda
     , um.descripcion
     , pv.fecha
@@ -53,7 +63,12 @@ as begin
     tb_tipoMoneda as tm
   on
     pv.idTipoMoneda = tm.idTipoMoneda
-    
+  
+  inner join
+    tb_tipoRecorte_ingles tri
+  on
+    tr.idTipoRecorte = tri.idTipoRecorte
+	
   where
   (
     (

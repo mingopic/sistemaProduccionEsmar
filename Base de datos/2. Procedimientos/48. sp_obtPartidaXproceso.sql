@@ -27,6 +27,7 @@ as begin
           when tr.descripcion = 'Centro Quebracho' then 'Centro Quebracho'
           when tr.descripcion = 'Centro' then 'Centro'
           when tr.descripcion = 'Delantero Suela' then 'Delantero Suela'
+		  else tr.descripcion
         end as descripcion
       , pd.noPiezasAct
       , pd.idPartidaDet

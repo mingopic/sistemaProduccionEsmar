@@ -32,6 +32,7 @@
 	<field name="calibre" class="java.lang.String"/>
 	<field name="seleccion" class="java.lang.String"/>
 	<field name="precio_original" class="java.lang.Double"/>
+	<field name="precio_buffed" class="java.lang.Double"/>
 	<field name="moneda" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="fecha" class="java.sql.Timestamp"/>
@@ -85,7 +86,7 @@
 				<text><![CDATA[Tipo de recorte]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="142" y="7" width="80" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f0ee8593-16c0-4d0f-b9d9-d29ae20575b0"/>
+				<reportElement style="Column header" mode="Transparent" x="142" y="7" width="57" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f0ee8593-16c0-4d0f-b9d9-d29ae20575b0"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -93,7 +94,7 @@
 				<text><![CDATA[Calibre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="222" y="7" width="66" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d5e2e108-c393-4e48-a625-bcf8c0c42242"/>
+				<reportElement style="Column header" mode="Transparent" x="199" y="7" width="61" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d5e2e108-c393-4e48-a625-bcf8c0c42242"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -101,7 +102,7 @@
 				<text><![CDATA[Selección]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="288" y="7" width="71" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="5103382d-9b0d-4522-9d0f-3292d84da05d"/>
+				<reportElement style="Column header" mode="Transparent" x="260" y="7" width="38" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="5103382d-9b0d-4522-9d0f-3292d84da05d"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -132,6 +133,14 @@
 				</textElement>
 				<text><![CDATA[Moneda]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="298" y="7" width="61" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="433236ab-a889-407b-a1b4-174e0f345346"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Precio Buffed]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -146,14 +155,14 @@
 					<textFieldExpression><![CDATA[$F{tipoRecorte}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="142" y="0" width="78" height="18" uuid="eb6fa7bc-95c2-45ae-b6d7-fb7efd47f491"/>
+					<reportElement style="Detail" positionType="Float" x="142" y="0" width="57" height="18" uuid="eb6fa7bc-95c2-45ae-b6d7-fb7efd47f491"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{calibre}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="220" y="0" width="68" height="18" uuid="bc087bc0-55f7-41ca-a59e-376e6c389bcc"/>
+					<reportElement style="Detail" positionType="Float" x="199" y="0" width="61" height="18" uuid="bc087bc0-55f7-41ca-a59e-376e6c389bcc"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
@@ -175,7 +184,7 @@
 					<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="288" y="0" width="71" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e57c03c4-3d9c-4f8d-a3ef-442abd21fabd"/>
+					<reportElement mode="Transparent" x="260" y="0" width="38" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e57c03c4-3d9c-4f8d-a3ef-442abd21fabd"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -189,6 +198,14 @@
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="298" y="2" width="61" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="8cf35857-abfd-4445-afd2-1add98263f85"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{precio_buffed}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

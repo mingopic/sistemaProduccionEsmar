@@ -120,6 +120,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnCross.setVisible(false);
         btnSemiterminado.setVisible(false);
         btnTerminado.setVisible(false);
+        btnDevoluciones.setVisible(false);
+        btnReproceso.setVisible(false);
         jmpCatalogos.setVisible(false);
         jmpConfiguraciones.setVisible(false);
         jmpBaseDeDatos.setVisible(false);
@@ -167,6 +169,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         btnCross.setVisible(true);
                         btnSemiterminado.setVisible(true);
                         btnTerminado.setVisible(true);
+                        btnDevoluciones.setVisible(true);
                         
                         jmpCatalogos.setVisible(true);
                         jmPrecioVenta.setVisible(true);
@@ -194,6 +197,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         btnCross.setVisible(true);
                         btnSemiterminado.setVisible(true);
                         btnTerminado.setVisible(true);
+                        btnDevoluciones.setVisible(true);
+                        btnReproceso.setVisible(true);
                         jmpCatalogos.setVisible(true);
                         jmCalibres.setVisible(true);
                         jmTambores.setVisible(true);
@@ -226,6 +231,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         btnCross.setVisible(true);
                         btnSemiterminado.setVisible(true);
                         btnTerminado.setVisible(true);
+                        btnDevoluciones.setVisible(true);
+                        btnReproceso.setVisible(true);
                         
                         jmpCatalogos.setVisible(true);
                         jmCalibres.setVisible(true);
@@ -246,6 +253,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     if (roles[i].equals("Terminado"))
                     {
                         btnTerminado.setVisible(true);
+                        btnDevoluciones.setVisible(true);
                         jmpCatalogos.setVisible(true);
                         jmCalibres.setVisible(true);
                         break;
@@ -2663,7 +2671,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jmpAcercaDeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmpAcercaDeMouseClicked
         JOptionPane.showMessageDialog(null, "'Sistema de Producción V.1.0' \n"
-            + "Diciembre 2018\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
+            + "Junio 2019\n\nDesarrollado por: \nIng. César Domingo Luna Gutiérrez"
             + "\nIng. Mario Daniel Luna Gutiérrez \n\n"
             + "Dudas o comentarios: \n"
             + "mingo.utl@gmail.com", "Acerca de...",

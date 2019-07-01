@@ -760,7 +760,6 @@ public class PnlInsRecCuero extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel10.setText("No. Camión");
 
-        txtNoCamion.setEditable(false);
         txtNoCamion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N

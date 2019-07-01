@@ -13,6 +13,7 @@ create procedure sp_obtPrecioVentaDisp
     @idSeleccion     int
     , @idCalibre     int
     , @idTipoRecorte int
+	, @idTipoMoneda	 int
   )
   as begin
   
@@ -26,5 +27,7 @@ create procedure sp_obtPrecioVentaDisp
       idCalibre = @idCalibre
     and
       idTipoRecorte = @idTipoRecorte
+	and
+	  idTipoMoneda = @idTipoMoneda
   end
 go

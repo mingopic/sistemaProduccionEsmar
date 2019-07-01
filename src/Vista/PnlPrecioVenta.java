@@ -67,7 +67,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols_tblPrecioVenta = new String[]
     {
-        "Tipo de Recorte" , "Calibre", "Selección", "Precio", "Moneda", "Unidad de medida", "Fecha Actualización" 
+        "Tipo de Recorte" , "Calibre", "Selección", "Precio", "Precio Buffed", "Moneda", "Unidad de medida", "Fecha Actualización" 
     };
    
     public PnlPrecioVenta() throws Exception {
@@ -104,6 +104,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {
         cc = new CalibreCommands();
         calibres = cc.llenarComboboxCalibre();
+        try {
+            cmbCalibreAgregar.removeAllItems();
+        } catch (Exception e) {
+        }
         
         int i=0;
         while (i<calibres.length)
@@ -117,6 +121,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {
         cc = new CalibreCommands();
         calibres = cc.llenarComboboxCalibre();
+        try {
+            cmbCalibreEditar.removeAllItems();
+        } catch (Exception e) {
+        }
         
         int i=0;
         while (i<calibres.length)
@@ -143,7 +151,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     public void llenarComboTipoRecorteAgregar() throws Exception
     {
         trc = new TipoRecorteCommands();
-        tipoRecorte = trc.llenarComboboxTipoRecorte();
+        cmbTipoRecorteAgregar.removeAllItems();
+        tipoRecorte = trc.llenarComboboxTipoRecorteVentas(lstTipoMoneda.get(cmbMonedaAgregar.getSelectedIndex()).getDescripcion());
         
         int i=0;
         while (i<tipoRecorte.length)
@@ -151,12 +160,25 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             cmbTipoRecorteAgregar.addItem(tipoRecorte[i][1]);
             i++;
         }
+        
+        // Si la moneda seleccionada es dolar se habilita la caja
+        if (lstTipoMoneda.get(cmbMonedaAgregar.getSelectedIndex()).getIdTipoMoneda() == 2)
+        {
+            txtPrecioBuffedAgregar.setText("");
+            txtPrecioBuffedAgregar.setEnabled(true);
+        }
+        else
+        {
+            txtPrecioBuffedAgregar.setText("");
+            txtPrecioBuffedAgregar.setEnabled(false);
+        }
     }
     
     public void llenarComboTipoRecorteEditar() throws Exception
     {
         trc = new TipoRecorteCommands();
-        tipoRecorte = trc.llenarComboboxTipoRecorte();
+        cmbTipoRecorteEditar.removeAllItems();
+        tipoRecorte = trc.llenarComboboxTipoRecorteVentas(String.valueOf(tblPrecioVenta.getValueAt(tblPrecioVenta.getSelectedRow(), 5)));
         
         int i=0;
         while (i<tipoRecorte.length)
@@ -184,6 +206,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {
         sc = new SeleccionCommands();
         seleccion = sc.llenarComboboxSeleccion();
+        try {
+            cmbSeleccionAgregar.removeAllItems();
+        } catch (Exception e) {
+        }
         
         int i=0;
         while (i<seleccion.length)
@@ -197,6 +223,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {
         sc = new SeleccionCommands();
         seleccion = sc.llenarComboboxSeleccion();
+        try {
+            cmbCalibreEditar.removeAllItems();
+        } catch (Exception e) {
+        }
         
         int i=0;
         while (i<seleccion.length)
@@ -318,6 +348,15 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 pv.setPrecio(Float.parseFloat(txtPrecioMXNAgregar.getText()));
             }
             
+            if (txtPrecioBuffedAgregar.getText().isEmpty())
+            {
+                pv.setPrecio_buffed(0);
+            }
+            else
+            {
+                pv.setPrecio_buffed(Float.parseFloat(txtPrecioBuffedAgregar.getText()));
+            }
+            
             if (txtPrecioAgregar.getText().isEmpty())
             {
                 pv.setPrecio_original(0);
@@ -373,14 +412,16 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     {   
         try 
         {
-            llenarComboTipoRecorteAgregar();
             llenarComboCalibreAgregar();
             llenarComboSeleccionAgregar();
             llenarComboUnidadMedida();
             llenarComboTipoMoneda();
+            llenarComboTipoRecorteAgregar();
             txtPrecioAgregar.setText("");
+            txtPrecioBuffedAgregar.setText("");
+            txtPrecioBuffedAgregar.setEnabled(false);
             
-            dlgAgregarPrecioVenta.setSize(435, 380);
+            dlgAgregarPrecioVenta.setSize(435, 430);
             dlgAgregarPrecioVenta.setPreferredSize(dlgAgregarPrecioVenta.getSize());
             dlgAgregarPrecioVenta.setLocationRelativeTo(null);
             dlgAgregarPrecioVenta.setModal(true);
@@ -402,25 +443,34 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         {
             int fila = tblPrecioVenta.getSelectedRow();
             
-            llenarComboTipoRecorteEditar();
             llenarComboSeleccionEditar();
             llenarComboCalibreEditar();
             llenarComboUnidadMedida();
             llenarComboTipoMoneda();
+            llenarComboTipoRecorteEditar();
             
             cmbTipoRecorteEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 0)));
             cmbCalibreEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 1)));
             cmbSeleccionEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 2)));
             txtPrecioEditar.setText(String.valueOf(tblPrecioVenta.getValueAt(fila, 3)));
-            cmbMonedaEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 4)));
-            cmbUnidadMedidaEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 5)));
+            txtPrecioBuffedEditar.setText(String.valueOf(tblPrecioVenta.getValueAt(fila, 4)));
+            if (String.valueOf(tblPrecioVenta.getValueAt(fila, 5)).equals("Dolar"))
+            {
+                txtPrecioBuffedEditar.setEnabled(true);
+            }
+            else
+            {
+                txtPrecioBuffedEditar.setEnabled(false);
+            }
+            cmbMonedaEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 5)));
+            cmbUnidadMedidaEditar.setSelectedItem(String.valueOf(tblPrecioVenta.getValueAt(fila, 6)));
             
             if (!txtPrecioEditar.getText().equals(""))
                 txtPrecioMXNEditar.setText(String.valueOf(Double.parseDouble(txtPrecioEditar.getText()) * lstTipoMoneda.get(cmbMonedaEditar.getSelectedIndex()).getTipoCambio()));
             else
                 txtPrecioMXNEditar.setText("");
             
-            dlgEditarPrecioVenta.setSize(475, 390);
+            dlgEditarPrecioVenta.setSize(475, 420);
             dlgEditarPrecioVenta.setPreferredSize(dlgEditarPrecioVenta.getSize());
             dlgEditarPrecioVenta.setLocationRelativeTo(null);
             dlgEditarPrecioVenta.setModal(true);
@@ -479,19 +529,21 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 
                 //Elimina espacios, tabuladores y retornos delante.
                 String precio = txtPrecioEditar.getText().replaceAll("^\\s*","");
+                String precio_buffed = txtPrecioBuffedEditar.getText().replaceAll("^\\s*","");
                 
                 //Validar que el precio de venta no este vacío
-                if (precio.equals(""))
+                if (precio.equals("") || precio_buffed.equals(""))
                 {   
                     dlgEditarPrecioVenta.setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Ingrese un precio de venta","Mensaje",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Ingrese todos los precios de venta","Mensaje",JOptionPane.WARNING_MESSAGE);
                     dlgEditarPrecioVenta.setVisible(true);
                     return;
                 }
 
-                pv.setIdPrecioVenta(Integer.parseInt(datos[fila][7]));
+                pv.setIdPrecioVenta(Integer.parseInt(datos[fila][8]));
                 pv.setPrecio(Float.parseFloat(txtPrecioMXNEditar.getText()));
                 pv.setPrecio_original(Float.parseFloat(txtPrecioEditar.getText()));
+                pv.setPrecio_buffed(Float.parseFloat(txtPrecioBuffedEditar.getText()));
                 pvc.actualizarPrecioVenta(pv);
                 dlgEditarPrecioVenta.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Precio de venta actualizado correctamente");
@@ -570,6 +622,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         txtPrecioMXNAgregar = new javax.swing.JTextField();
         cmbMonedaAgregar = new javax.swing.JComboBox<>();
         jLabel23 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        txtPrecioBuffedAgregar = new javax.swing.JTextField();
         dlgEditarPrecioVenta = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -589,6 +643,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         cmbMonedaEditar = new javax.swing.JComboBox<>();
         jLabel25 = new javax.swing.JLabel();
         txtPrecioMXNEditar = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        txtPrecioBuffedEditar = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrecioVenta = new javax.swing.JTable();
@@ -692,6 +748,19 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jLabel23.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel23.setText("Moneda:");
 
+        jLabel26.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel26.setText("Precio Buffed:");
+
+        txtPrecioBuffedAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioBuffedAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPrecioBuffedAgregarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioBuffedAgregarKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -699,18 +768,24 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGuardarAgregar))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel26, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -719,6 +794,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                             .addComponent(cmbMonedaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPrecioMXNAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrecioBuffedAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
@@ -738,9 +814,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                         .addGap(19, 19, 19)
                         .addComponent(jLabel3)
                         .addGap(19, 19, 19)
-                        .addComponent(jLabel22)
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel6))
+                        .addComponent(jLabel22))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(cmbTipoRecorteAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
@@ -752,10 +826,16 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                         .addGap(13, 13, 13)
                         .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
-                        .addComponent(txtPrecioMXNAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)
-                        .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtPrecioMXNAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPrecioBuffedAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(btnGuardarAgregar)
                 .addContainerGap())
         );
@@ -860,10 +940,27 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             }
         });
 
+        jLabel27.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel27.setText("Precio Buffed:");
+
+        txtPrecioBuffedEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioBuffedEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPrecioBuffedEditarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioBuffedEditarKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGuardarEditar)
+                .addContainerGap())
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -871,9 +968,10 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbSeleccionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -882,12 +980,9 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                     .addComponent(cmbMonedaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbTipoRecorteEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrecioMXNEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCalibreEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbCalibreEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioBuffedEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardarEditar)
-                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -918,11 +1013,15 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                     .addComponent(txtPrecioMXNEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txtPrecioBuffedEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(btnGuardarEditar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout dlgEditarPrecioVentaLayout = new javax.swing.GroupLayout(dlgEditarPrecioVenta.getContentPane());
@@ -1067,9 +1166,9 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
-            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
-            .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1097, Short.MAX_VALUE)
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1097, Short.MAX_VALUE)
+            .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1097, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
         );
         jPanel4Layout.setVerticalGroup(
@@ -1081,7 +1180,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1150,7 +1249,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtPrecioEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEditarKeyTyped
-        // TODO add your handling code here:
+        validarNumeros(evt, txtPrecioEditar.getText());
     }//GEN-LAST:event_txtPrecioEditarKeyTyped
 
     private void txtPrecioMXNAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioMXNAgregarKeyTyped
@@ -1170,11 +1269,17 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
 
     private void cmbMonedaAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMonedaAgregarActionPerformed
         if (cmbMonedaAgregar.getItemCount() > 0)
-        {
+        { 
             if (!txtPrecioAgregar.getText().equals(""))
                 txtPrecioMXNAgregar.setText(String.valueOf(Double.parseDouble(txtPrecioAgregar.getText()) * lstTipoMoneda.get(cmbMonedaAgregar.getSelectedIndex()).getTipoCambio()));
-            else
+            else 
                 txtPrecioMXNAgregar.setText("");
+            
+            try {
+                llenarComboTipoRecorteAgregar();
+            } catch (Exception ex) {
+                Logger.getLogger(PnlPrecioVenta.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }//GEN-LAST:event_cmbMonedaAgregarActionPerformed
@@ -1185,6 +1290,22 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
         else
             txtPrecioMXNEditar.setText("");
     }//GEN-LAST:event_txtPrecioEditarKeyReleased
+
+    private void txtPrecioBuffedAgregarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioBuffedAgregarKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioBuffedAgregarKeyReleased
+
+    private void txtPrecioBuffedAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioBuffedAgregarKeyTyped
+        validarNumeros(evt, txtPrecioBuffedAgregar.getText());
+    }//GEN-LAST:event_txtPrecioBuffedAgregarKeyTyped
+
+    private void txtPrecioBuffedEditarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioBuffedEditarKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioBuffedEditarKeyReleased
+
+    private void txtPrecioBuffedEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioBuffedEditarKeyTyped
+       validarNumeros(evt, txtPrecioBuffedEditar.getText());
+    }//GEN-LAST:event_txtPrecioBuffedEditarKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1227,6 +1348,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1245,6 +1368,8 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JTable tblPrecioVenta;
     private javax.swing.JTextField txtPrecioAgregar;
+    private javax.swing.JTextField txtPrecioBuffedAgregar;
+    private javax.swing.JTextField txtPrecioBuffedEditar;
     private javax.swing.JTextField txtPrecioEditar;
     private javax.swing.JTextField txtPrecioMXNAgregar;
     private javax.swing.JTextField txtPrecioMXNEditar;

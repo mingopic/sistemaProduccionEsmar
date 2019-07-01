@@ -55,14 +55,15 @@ as begin
                   pv.idSeleccion = s.idSeleccion
                   and pv.idCalibre = c.idCalibre
                   and pv.idTipoRecorte = tr.idTipoRecorte
+				  and pv.idTipoMoneda = 1
               )
         )
         *
         (
           case
-            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 1 then it.kgTotalesActual
-            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 2 then it.decimetrosActual
-            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte) = 3 then it.piesActual
+            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte and idTipoMoneda = 1) = 1 then it.kgTotalesActual
+            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte and idTipoMoneda = 1) = 2 then it.decimetrosActual
+            when (select idUnidadMedida from tb_PrecioVenta um where idSeleccion = s.idSeleccion and idCalibre = c.idCalibre and idTipoRecorte = tr.idTipoRecorte and idTipoMoneda = 1) = 3 then it.piesActual
             else 0
           end
         )

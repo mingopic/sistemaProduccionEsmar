@@ -17,6 +17,7 @@ create table tb_PrecioVenta
   , idTipoRecorte   int not null foreign key references tb_tipoRecorte(idTipoRecorte)
   , precio          float
   , precio_original float
+  , precio_buffed	float
   , idTipoMoneda    int not null foreign key references tb_tipoMoneda (idTipoMoneda)
   , idUnidadMedida  int not null foreign key references tb_unidadMedida(idUnidadMedida)
   , fecha           datetime

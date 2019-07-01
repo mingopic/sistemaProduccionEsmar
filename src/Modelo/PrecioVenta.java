@@ -16,6 +16,7 @@ public class PrecioVenta {
     int idTipoRecorte;
     float precio;
     float precio_original;
+    float precio_buffed;
     int idTipoMoneda;
     String fecha;
     int unidadMedida;
@@ -99,6 +100,14 @@ public class PrecioVenta {
 
     public void setIdTipoMoneda(int idTipoMoneda) {
         this.idTipoMoneda = idTipoMoneda;
+    }
+
+    public float getPrecio_buffed() {
+        return precio_buffed;
+    }
+
+    public void setPrecio_buffed(float precio_buffed) {
+        this.precio_buffed = precio_buffed;
     }
 
     

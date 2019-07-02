@@ -139,6 +139,24 @@ as begin
   where
     d.CIDDOCUMENTO = @idDocumento
   
+  if (@importe = 1)
+  begin
+	select
+		@importe = CIMPORTE
+	from
+		admTiposCambio
+	where
+	  CFECHA =
+	  (
+	    select
+		  max(CFECHA)
+	    from
+		  admTiposCambio
+		where
+		  CIMPORTE > 1
+	  )
+  end
+  
   if (@tipoMoneda = 2)
   begin
     set @precio = @precio * @importe

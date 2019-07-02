@@ -468,6 +468,20 @@ public class PnlPartidas extends javax.swing.JPanel {
             Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void validarNumerosEnteros(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c = evt.getKeyChar();
+            
+            if (c<'0' || c>'9') 
+            {
+                evt.consume();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1020,7 +1034,7 @@ public class PnlPartidas extends javax.swing.JPanel {
                 .addComponent(btnEliminarPiezas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRecortar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAsignarEntrada)
@@ -1068,8 +1082,12 @@ public class PnlPartidas extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("No. Partida");
 
-        txtNoPartida.setEditable(false);
         txtNoPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPartidaKeyTyped(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
@@ -1644,6 +1662,10 @@ public class PnlPartidas extends javax.swing.JPanel {
         actualizarTablaInvCrudo();
         generarReporteBajasInvCrudo();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
+        validarNumerosEnteros(evt, txtNoPartida.getText());
+    }//GEN-LAST:event_txtNoPartidaKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -32,6 +32,7 @@
 	<field name="calibre" class="java.lang.String"/>
 	<field name="seleccion" class="java.lang.String"/>
 	<field name="precio_original" class="java.lang.Double"/>
+	<field name="precio_credito" class="java.lang.Double"/>
 	<field name="precio_buffed" class="java.lang.Double"/>
 	<field name="moneda" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
@@ -78,7 +79,7 @@
 				<reportElement mode="Opaque" x="0" y="7" width="555" height="28" forecolor="#000000" backcolor="#CCCCFF" uuid="9ebd32d0-093c-4107-9831-3fc9f3aef089"/>
 			</frame>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="0" y="7" width="142" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="1186991d-ffad-49e9-86ba-c50cc2427b61"/>
+				<reportElement style="Column header" mode="Transparent" x="0" y="7" width="89" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="1186991d-ffad-49e9-86ba-c50cc2427b61"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -86,7 +87,7 @@
 				<text><![CDATA[Tipo de recorte]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="142" y="7" width="57" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f0ee8593-16c0-4d0f-b9d9-d29ae20575b0"/>
+				<reportElement style="Column header" mode="Transparent" x="89" y="7" width="47" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="f0ee8593-16c0-4d0f-b9d9-d29ae20575b0"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -94,7 +95,7 @@
 				<text><![CDATA[Calibre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="199" y="7" width="61" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d5e2e108-c393-4e48-a625-bcf8c0c42242"/>
+				<reportElement style="Column header" mode="Transparent" x="136" y="7" width="51" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d5e2e108-c393-4e48-a625-bcf8c0c42242"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -102,7 +103,7 @@
 				<text><![CDATA[Selección]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Transparent" x="260" y="7" width="38" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="5103382d-9b0d-4522-9d0f-3292d84da05d"/>
+				<reportElement style="Column header" mode="Transparent" x="187" y="7" width="38" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="5103382d-9b0d-4522-9d0f-3292d84da05d"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -141,6 +142,14 @@
 				</textElement>
 				<text><![CDATA[Precio Buffed]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="225" y="7" width="73" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="dbe62bad-4e2c-44c8-93ae-03c2c40960fe"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Precio Crédito]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -148,21 +157,21 @@
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="34dbc1bd-5ec3-42a5-aff2-f52732604b5c"/>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="142" height="18" uuid="21749bc3-8139-46c1-ac1a-8fbf816150f3"/>
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="89" height="18" uuid="21749bc3-8139-46c1-ac1a-8fbf816150f3"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{tipoRecorte}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="142" y="0" width="57" height="18" uuid="eb6fa7bc-95c2-45ae-b6d7-fb7efd47f491"/>
+					<reportElement style="Detail" positionType="Float" x="89" y="0" width="47" height="18" uuid="eb6fa7bc-95c2-45ae-b6d7-fb7efd47f491"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{calibre}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Detail" positionType="Float" x="199" y="0" width="61" height="18" uuid="bc087bc0-55f7-41ca-a59e-376e6c389bcc"/>
+					<reportElement style="Detail" positionType="Float" x="136" y="0" width="51" height="18" uuid="bc087bc0-55f7-41ca-a59e-376e6c389bcc"/>
 					<textElement>
 						<font size="10"/>
 					</textElement>
@@ -184,7 +193,7 @@
 					<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="260" y="0" width="38" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e57c03c4-3d9c-4f8d-a3ef-442abd21fabd"/>
+					<reportElement mode="Transparent" x="187" y="0" width="38" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e57c03c4-3d9c-4f8d-a3ef-442abd21fabd"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -206,6 +215,14 @@
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{precio_buffed}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="225" y="0" width="73" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="3843671e-672b-49d9-9f62-59d516f2e21b"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{precio_credito}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

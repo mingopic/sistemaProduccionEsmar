@@ -30,6 +30,7 @@ as begin
     , c.descripcion as calibre
     , s.descripcion as seleccion
     , pv.precio_original
+	, pv.precio_credito
 	, pv.precio_buffed
     , tm.descripcion as moneda
     , um.descripcion

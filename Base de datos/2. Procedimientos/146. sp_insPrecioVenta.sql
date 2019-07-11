@@ -18,6 +18,7 @@ create procedure sp_insPrecioVenta
     , @precio_original  float
     , @idMoneda         int
 	, @precio_buffed    float
+	, @precio_credito	float
   )
   as begin
   
@@ -33,6 +34,7 @@ create procedure sp_insPrecioVenta
         , idUnidadMedida
         , fecha
 		, precio_buffed
+		, precio_credito
       )
       
     values
@@ -46,6 +48,7 @@ create procedure sp_insPrecioVenta
         , @idUnidadMedida
         , getdate()
 		, @precio_buffed
+		, @precio_credito
       )
   end
 go

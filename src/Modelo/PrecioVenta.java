@@ -21,6 +21,15 @@ public class PrecioVenta {
     String fecha;
     int unidadMedida;
     String descUnidadMedida;
+    float precio_credito;
+
+    public float getPrecio_credito() {
+        return precio_credito;
+    }
+
+    public void setPrecio_credito(float precio_credito) {
+        this.precio_credito = precio_credito;
+    }
 
     public int getUnidadMedida() {
         return unidadMedida;

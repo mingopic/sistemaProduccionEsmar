@@ -42,7 +42,7 @@ as begin
 				  when descripcion = 'Crupon Sillero' then 'Double Butt'
 				  when descripcion = 'Centro Castaño' then 'Single Bend Chesnut'
 				  when descripcion = 'Centro Quebracho' then 'Single Bend Quebracho'
-				  when descripcion = 'Delantero Suela' then 'Shoulder Quebracho/Shouder Chesnut'
+				  when descripcion = 'Delantero Suela' then 'Shoulder Quebracho'
 				  when descripcion = 'Sottopiede' then 'Sottopiede'
 				  else descripcion
 				end as descripcion

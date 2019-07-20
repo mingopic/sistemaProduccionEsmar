@@ -13,21 +13,44 @@ create procedure sp_obtPrecioVentaDisp
     @idSeleccion     int
     , @idCalibre     int
     , @idTipoRecorte int
-	, @idTipoMoneda	 int
+    , @idTipoMoneda	 int
+    , @identificaRecorte varchar(30)
   )
   as begin
-  
-    select
-      idPrecioVenta
-    from
-      tb_PrecioVenta
-    where
-      idSeleccion = @idSeleccion
-    and
-      idCalibre = @idCalibre
-    and
-      idTipoRecorte = @idTipoRecorte
-	and
-	  idTipoMoneda = @idTipoMoneda
+      
+    if (@idTipoRecorte = 7)
+    begin
+      select
+        idPrecioVenta
+      from
+        tb_PrecioVenta
+      where
+        idSeleccion = @idSeleccion
+      and
+        idCalibre = @idCalibre
+      and
+        idTipoRecorte = @idTipoRecorte
+      and
+        idTipoMoneda = @idTipoMoneda
+      and 
+        identificaRecorte = @identificaRecorte
+    end
+    
+    else 
+    begin
+      select
+        idPrecioVenta
+      from
+        tb_PrecioVenta
+      where
+        idSeleccion = @idSeleccion
+      and
+        idCalibre = @idCalibre
+      and
+        idTipoRecorte = @idTipoRecorte
+      and
+        idTipoMoneda = @idTipoMoneda
+    end
+    
   end
 go

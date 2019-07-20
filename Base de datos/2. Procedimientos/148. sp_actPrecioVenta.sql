@@ -15,6 +15,7 @@ create procedure sp_actPrecioVenta
     , @precio_original  float
 	, @precio_buffed    float
 	, @precio_credito	float
+	, @idUnidadMedida	int
   )
   as begin
   
@@ -26,6 +27,7 @@ create procedure sp_actPrecioVenta
       , precio_original = @precio_original
 	  , precio_buffed = @precio_buffed
 	  , precio_credito = @precio_credito
+	  , idUnidadMedida = @idUnidadMedida
       , fecha = getdate()
       
     where

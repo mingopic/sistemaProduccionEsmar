@@ -22,6 +22,7 @@ public class PrecioVenta {
     int unidadMedida;
     String descUnidadMedida;
     float precio_credito;
+    String identificaRecorte;
 
     public float getPrecio_credito() {
         return precio_credito;
@@ -119,5 +120,11 @@ public class PrecioVenta {
         this.precio_buffed = precio_buffed;
     }
 
-    
+    public String getIdentificaRecorte() {
+        return identificaRecorte;
+    }
+
+    public void setIdentificaRecorte(String identificaRecorte) {
+        this.identificaRecorte = identificaRecorte;
+    }
 }

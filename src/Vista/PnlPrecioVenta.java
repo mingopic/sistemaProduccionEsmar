@@ -394,6 +394,19 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteAgregar.getSelectedIndex()][0]));
             pv.setUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaAgregar.getSelectedIndex()).getIdUnidadMedida());
             pv.setIdTipoMoneda(lstTipoMoneda.get(cmbMonedaAgregar.getSelectedIndex()).getIdTipoMoneda());
+            // IdTipoRecorte = 7 -> Delantero Suela, IdTipoMoneda = 2 -> Dolar
+            if (pv.getIdTipoRecorte() == 7 && pv.getIdTipoMoneda() == 2 && cmbTipoRecorteAgregar.getSelectedItem().toString().equals("Shoulder Quebracho")) 
+            {
+                pv.setIdentificaRecorte("Quebracho");
+            }
+            else if (pv.getIdTipoRecorte() == 7 && pv.getIdTipoMoneda() == 2 && cmbTipoRecorteAgregar.getSelectedItem().toString().equals("Shoulder Chesnut")) 
+            {
+                pv.setIdentificaRecorte("Chesnut");
+            }
+            else
+            {
+                pv.setIdentificaRecorte("");
+            }
             
             //Valida que no haya un precio de venta registrado con los mismos datos en BD
             int valida = pvc.obtenerPrecioVentaDisp(pv);
@@ -563,6 +576,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
                 pv.setPrecio_original(Float.parseFloat(txtPrecioEditar.getText()));
                 pv.setPrecio_buffed(Float.parseFloat(txtPrecioBuffedEditar.getText()));
                 pv.setPrecio_credito(Float.parseFloat(txtPrecioCreditoEditar.getText()));
+                pv.setUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaEditar.getSelectedIndex()).getIdUnidadMedida());
                 pvc.actualizarPrecioVenta(pv);
                 dlgEditarPrecioVenta.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Precio de venta actualizado correctamente");
@@ -975,8 +989,6 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText("Unidad de medida:");
-
-        cmbUnidadMedidaEditar.setEnabled(false);
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel24.setText("Moneda:");

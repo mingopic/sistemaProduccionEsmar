@@ -87,7 +87,8 @@ public class PrecioVentaCommands {
                 + pv.getPrecio_original()+","
                 + pv.getIdTipoMoneda() +","
                 + pv.getPrecio_buffed()+","
-                + pv.getPrecio_credito();
+                + pv.getPrecio_credito()
+                + ",'" + pv.getIdentificaRecorte() + "'";
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -105,7 +106,8 @@ public class PrecioVentaCommands {
                 + pv.getIdSeleccion()
                 + "," + pv.getIdCalibre()
                 + "," + pv.getIdTipoRecorte()
-                + "," + pv.getIdTipoMoneda();
+                + "," + pv.getIdTipoMoneda() 
+                + ", '" + pv.getIdentificaRecorte() + "'";
         
         Statement stmt = null;
         ResultSet rs = null;
@@ -137,7 +139,8 @@ public class PrecioVentaCommands {
                 + ", " + pv.getPrecio()
                 + ", " + pv.getPrecio_original()
                 + ", " + pv.getPrecio_buffed()
-                + ", " + pv.getPrecio_credito();
+                + ", " + pv.getPrecio_credito()
+                + ", " + pv.getUnidadMedida();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

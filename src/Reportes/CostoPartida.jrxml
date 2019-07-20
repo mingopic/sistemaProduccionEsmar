@@ -42,6 +42,9 @@
 	<field name="idTipoRecorte" class="java.lang.Integer"/>
 	<field name="costoGarras" class="java.lang.Double"/>
 	<field name="costoManoObra" class="java.lang.Double"/>
+	<field name="costoFabricacion" class="java.lang.Double"/>
+	<field name="MaxPiezas" class="java.lang.Integer"/>
+	<field name="MaxKg" class="java.lang.Double"/>
 	<variable name="Piezas_1" class="java.lang.Integer" resetType="Group" resetGroup="Proceso" calculation="Sum">
 		<variableExpression><![CDATA[$F{Piezas}]]></variableExpression>
 	</variable>
@@ -325,22 +328,6 @@
 				<text><![CDATA[Costo Insumos]]></text>
 			</staticText>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="62" y="16" width="82" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="fe6c0ed6-80bf-45ee-a5c1-225e04f8e6d3"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Piezas_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="144" y="16" width="82" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="74a9ff34-4ab4-4211-aa1e-e8356c832181"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Kg_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="226" y="16" width="82" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="97e19d08-eb8a-41b7-8c69-691fc3f8d5c9"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -427,6 +414,22 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{costoManoObra_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="64" y="16" width="80" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="11a92ec3-e61f-4530-9fe0-b9558bb36856"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MaxPiezas}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="144" y="16" width="82" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="579d38f5-9136-403c-a9d3-4f268fe639af"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MaxKg}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

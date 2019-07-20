@@ -18,6 +18,8 @@ create procedure sp_obtCostoPartida
 as begin
 
   declare @costoTotalGarras float
+  declare @maxPiezas		int
+  declare @maxKg			float
   
   set
     @costoTotalGarras =
@@ -39,6 +41,41 @@ as begin
     set @costoTotalGarras = 0
   end
   
+  
+  select
+	@maxPiezas = pd.noPiezas
+	, @maxKg = fpd.kgTotal
+  
+  from
+	tb_partidaDet as pd
+  
+  inner join
+	tb_proceso as p
+  on
+	p.idProceso = pd.idProceso
+  
+  inner join
+	tb_partida as pa
+  on
+	pa.idPartida = pd.idPartida
+  
+  inner join
+    tb_fichaProdDet as fpd
+  on
+    fpd.idPartidaDet = pd.idPartidaDet
+  
+  where
+	pd.idProceso =
+	(
+      select
+	    max(idProceso)
+	  from
+	    tb_partidaDet
+	  where
+	    idProceso < 7
+	  and
+	    noPartida = 1
+	)
   
 
   select
@@ -63,6 +100,8 @@ as begin
         when pr.idProceso = 6 then fpd.costoFabricacion
         else 0.0
       end as costoFabricacion
+	, [MaxPiezas] = @maxPiezas
+	, [MaxKg] = @maxKg
 
   from
     tb_partidaDet pd

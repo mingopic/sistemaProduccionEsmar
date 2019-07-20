@@ -18,6 +18,8 @@ as begin
   
   select
     case
+	  when (select identificaRecorte from tb_PrecioVenta where idPrecioVenta = pv.idPrecioVenta) = 'Quebracho' then 'Shoulder Quebracho'
+	  when (select identificaRecorte from tb_PrecioVenta where idPrecioVenta = pv.idPrecioVenta) = 'Chesnut' then 'Shoulder Chesnut'
 	  when pv.idTipoMoneda = 2 then tri.descripcion
 	  when tr.descripcion = 'Delantero Sillero' then 'Del. Sillero Novillo/Del. Sillero Toro'
 	  when tr.descripcion = 'Crupon Sillero' then 'Crupon Sillero'
@@ -30,8 +32,8 @@ as begin
     , c.descripcion as calibre
     , s.descripcion as seleccion
     , pv.precio_original
-	, pv.precio_credito
-	, pv.precio_buffed
+	  , pv.precio_credito
+	  , pv.precio_buffed
     , tm.descripcion as moneda
     , um.descripcion
     , pv.fecha
@@ -106,5 +108,7 @@ as begin
       and pv.idTipoRecorte = @idTipoRecorte
     )
   )
+  order by
+    moneda desc, tipoRecorte asc, calibre asc, seleccion asc 
 end
 go

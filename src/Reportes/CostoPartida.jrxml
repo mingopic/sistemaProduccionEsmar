@@ -415,7 +415,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{costoManoObra_4}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="64" y="16" width="80" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="11a92ec3-e61f-4530-9fe0-b9558bb36856"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

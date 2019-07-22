@@ -43,21 +43,21 @@ as begin
   
   
   select
-	@maxPiezas = pd.noPiezas
-	, @maxKg = fpd.kgTotal
+    @maxPiezas = sum(pd.noPiezas)
+    , @maxKg = sum(fpd.kgTotal)
   
   from
-	tb_partidaDet as pd
+    tb_partidaDet as pd
   
   inner join
-	tb_proceso as p
+    tb_proceso as p
   on
-	p.idProceso = pd.idProceso
+    p.idProceso = pd.idProceso
   
   inner join
-	tb_partida as pa
+    tb_partida as pa
   on
-	pa.idPartida = pd.idPartida
+    pa.idPartida = pd.idPartida
   
   inner join
     tb_fichaProdDet as fpd
@@ -67,15 +67,30 @@ as begin
   where
 	pd.idProceso =
 	(
-      select
-	    max(idProceso)
+    select
+      max(pade.idProceso)
 	  from
-	    tb_partidaDet
+	    tb_partidaDet as pade
+    inner join
+      tb_partida as par
+    on
+      par.idPartida = pade.idPartida
+      and year(par.fecha) =@anio
+      and par.noPartida = @noPartida
 	  where
-	    idProceso < 7
-	  and
-	    noPartida = 1
+	    pade.idProceso < 7
 	)
+	and
+	 pa.idPartida = 
+	 (
+		select 
+		  idPartida
+		from
+		  tb_partida
+	    where
+		  noPartida = @noPartida
+		  and year(fecha) = @anio
+	 )
   
 
   select

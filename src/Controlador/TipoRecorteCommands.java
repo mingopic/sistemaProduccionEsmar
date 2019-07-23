@@ -96,6 +96,11 @@ public class TipoRecorteCommands {
                 tipoCuero[renglones-1][0]= "7";
                 tipoCuero[renglones-1][1]= "Shoulder Chesnut";
             }
+            else if (tipoMoneda.equals("Peso MXN"))
+            {
+                tipoCuero[renglones-1][0]= "7";
+                tipoCuero[renglones-1][1]= "Delantero Castaño";
+            }
         }
        
        rs.close();

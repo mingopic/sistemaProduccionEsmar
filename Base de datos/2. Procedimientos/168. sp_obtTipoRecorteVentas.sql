@@ -22,7 +22,7 @@ as begin
 			  when descripcion = 'Crupon Sillero' then 'Crupon Sillero'
 			  when descripcion = 'Centro Castaño' then 'Centro Castaño'
 			  when descripcion = 'Centro Quebracho' then 'Centro Quebracho'
-			  when descripcion = 'Delantero Suela' then 'Delantero'
+			  when descripcion = 'Delantero Suela' then 'Delantero Quebracho'
 			  when descripcion = 'Sottopiede' then 'Sottopiede'
 			  else descripcion
 			end as descripcion

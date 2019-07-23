@@ -394,6 +394,7 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             pv.setIdTipoRecorte(Integer.parseInt(tipoRecorte[cmbTipoRecorteAgregar.getSelectedIndex()][0]));
             pv.setUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaAgregar.getSelectedIndex()).getIdUnidadMedida());
             pv.setIdTipoMoneda(lstTipoMoneda.get(cmbMonedaAgregar.getSelectedIndex()).getIdTipoMoneda());
+            
             // IdTipoRecorte = 7 -> Delantero Suela, IdTipoMoneda = 2 -> Dolar
             if (pv.getIdTipoRecorte() == 7 && pv.getIdTipoMoneda() == 2 && cmbTipoRecorteAgregar.getSelectedItem().toString().equals("Shoulder Quebracho")) 
             {
@@ -402,6 +403,16 @@ public class PnlPrecioVenta extends javax.swing.JPanel {
             else if (pv.getIdTipoRecorte() == 7 && pv.getIdTipoMoneda() == 2 && cmbTipoRecorteAgregar.getSelectedItem().toString().equals("Shoulder Chesnut")) 
             {
                 pv.setIdentificaRecorte("Chesnut");
+            }
+            
+            // IdTipoRecorte = 7 -> Delantero Suela, IdTipoMoneda = 1 -> Peso MXN
+            else if (pv.getIdTipoRecorte() == 7 && pv.getIdTipoMoneda() == 1 && cmbTipoRecorteAgregar.getSelectedItem().toString().equals("Delantero Quebracho")) 
+            {
+                pv.setIdentificaRecorte("Del. Quebracho");
+            }
+            else if (pv.getIdTipoRecorte() == 7 && pv.getIdTipoMoneda() == 1 && cmbTipoRecorteAgregar.getSelectedItem().toString().equals("Delantero Castaño")) 
+            {
+                pv.setIdentificaRecorte("Del. Castaño");
             }
             else
             {

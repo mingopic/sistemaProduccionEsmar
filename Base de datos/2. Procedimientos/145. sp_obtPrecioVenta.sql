@@ -20,12 +20,13 @@ as begin
     case
 	  when (select identificaRecorte from tb_PrecioVenta where idPrecioVenta = pv.idPrecioVenta) = 'Quebracho' then 'Shoulder Quebracho'
 	  when (select identificaRecorte from tb_PrecioVenta where idPrecioVenta = pv.idPrecioVenta) = 'Chesnut' then 'Shoulder Chesnut'
+    when (select identificaRecorte from tb_PrecioVenta where idPrecioVenta = pv.idPrecioVenta) = 'Del. Quebracho' then 'Delantero Quebracho'
+	  when (select identificaRecorte from tb_PrecioVenta where idPrecioVenta = pv.idPrecioVenta) = 'Del. Castaño' then 'Delantero Castaño'
 	  when pv.idTipoMoneda = 2 then tri.descripcion
 	  when tr.descripcion = 'Delantero Sillero' then 'Del. Sillero Novillo/Del. Sillero Toro'
 	  when tr.descripcion = 'Crupon Sillero' then 'Crupon Sillero'
 	  when tr.descripcion = 'Centro Castaño' then 'Centro Castaño'
 	  when tr.descripcion = 'Centro Quebracho' then 'Centro Quebracho'
-	  when tr.descripcion = 'Delantero Suela' then 'Delantero'
 	  when tr.descripcion = 'Sottopiede' then 'Sottopiede'
 	  else tr.descripcion 
 	end as tipoRecorte

@@ -10,6 +10,7 @@ import Controlador.ConfGastosFabricacionCommands;
 import Controlador.ConfPrecioManoDeObraCommands;
 import Controlador.ConfiPrecioCueroCommands;
 import Controlador.ConfiguracionMermaCommands;
+import Controlador.ConfiguracionesCommands;
 import Controlador.ControladorUsuario;
 import Controlador.CostoGarraCommands;
 import Controlador.RangoPesoCueroCommands;
@@ -23,6 +24,10 @@ import Modelo.CostoGarra;
 import Modelo.RangoPesoCuero;
 import Modelo.TipoMoneda;
 import Modelo.Usuario;
+import RestService.Model.DataSerie;
+import RestService.Model.Response;
+import RestService.Model.Serie;
+import RestService.Series;
 import Service.TipoCambioService;
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -291,6 +296,38 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 
                 // Actualizar tipo de  cambio
                 TipoMonedaCommands tmc = new TipoMonedaCommands();
+                ConfiguracionesCommands cc = new ConfiguracionesCommands();
+                String fecha = cc.obtenerFecha();
+                Series s = new Series();
+                Response response = s.readSeries(fecha);
+                
+                if (response != null)
+                {
+                    if (response.getBmx().getSeries().get(0).getDatos() != null)
+                    {
+                        Serie serie = response.getBmx().getSeries().get(0);
+                        System.out.println("Serie: "+serie.getTitulo());
+                        for(DataSerie data:serie.getDatos())
+                        {
+                            //Se omiten las observaciones sin dato (N/E)
+                            if(data.getDato().equals("N/E")) continue;
+                            System.out.println("Fecha: "+data.getFecha());
+                            System.out.println("Dato: "+data.getDato());
+                        }
+                        tmc.actualizarTipoCambio(Double.parseDouble(serie.getDatos().get(0).getDato()));
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Banxico no a actualizado el tipo de cambio del día, intente más tarde", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "No se pudo conectar a www.banxico.org.mx", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                /*
+                TipoMonedaCommands tmc = new TipoMonedaCommands();
                 TipoCambioService tcs = new TipoCambioService();
                 Map m = new HashMap();
                 try {
@@ -311,6 +348,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                */
             }
             else
                 JOptionPane.showMessageDialog(dlgLogin, "Datos incorrectos o usuario inactivo", "Error de Login", JOptionPane.ERROR_MESSAGE);

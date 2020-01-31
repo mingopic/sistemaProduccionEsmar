@@ -104,7 +104,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Image ico = new ImageIcon(getClass().getResource("/Imagenes/esmar.png")).getImage();
         setIconImage(ico);        
         //Titulo de la aplicación
-        this.setTitle("Sistema de producción V.1.0");
+        this.setTitle("Sistema de producción V.1.0 ");
         
         ImageIcon fot = new ImageIcon("src/Imagenes/logoEsmar_CH.png");
         Icon icono = new ImageIcon(fot.getImage().getScaledInstance(lblLogoSistema.getWidth(), lblLogoSistema.getHeight(), Image.SCALE_DEFAULT));
@@ -163,6 +163,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 ImageIcon ico=new ImageIcon(".\\src\\Imagenes\\house.png");
                 lblVentana.setIcon(ico);
                 lblNombreUsuario.setText(u.getNombre());
+                lblAmbiente.setText(conexionBD.buscaDatos()[7]);
                 
                 for (int i = 0; i < roles.length; i++)
                 {
@@ -957,6 +958,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
+        lblAmbiente = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         lblVentana = new javax.swing.JLabel();
         lblLogoSistema = new javax.swing.JLabel();
@@ -2407,7 +2409,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnDevoluciones)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnReproceso)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -2416,20 +2418,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         lblNombreUsuario.setText("Nombre usuario");
 
+        lblAmbiente.setText("Ambiente BD");
+
         javax.swing.GroupLayout pnlFooterLayout = new javax.swing.GroupLayout(pnlFooter);
         pnlFooter.setLayout(pnlFooterLayout);
         pnlFooterLayout.setHorizontalGroup(
             pnlFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFooterLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(lblAmbiente)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblNombreUsuario)
                 .addGap(18, 18, 18))
         );
         pnlFooterLayout.setVerticalGroup(
             pnlFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFooterLayout.createSequentialGroup()
-                .addGap(0, 1, Short.MAX_VALUE)
-                .addComponent(lblNombreUsuario))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(pnlFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNombreUsuario)
+                    .addComponent(lblAmbiente)))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -2479,7 +2487,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
+                        .addComponent(pnlPrincipalx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlFooter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -3495,6 +3503,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jmpBaseDeDatos;
     private javax.swing.JMenu jmpCatalogos;
     private javax.swing.JMenu jmpConfiguraciones;
+    private javax.swing.JLabel lblAmbiente;
     private javax.swing.JLabel lblContrasenia;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblLogoSistema;

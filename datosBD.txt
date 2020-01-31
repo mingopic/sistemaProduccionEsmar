@@ -5,3 +5,4 @@ password:root
 instancia:SQLEXPRESS
 puerto:50713
 BDcompaq: adESMAR2018
+ambiente: PRUEBAS

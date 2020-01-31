@@ -86,7 +86,7 @@ public class ConexionBD
     
     public String[] buscaDatos() throws FileNotFoundException, IOException {
         String cadena;
-        String[] datos = new String[7];
+        String[] datos = new String[8];
         int j=0;
         
         FileReader f = new FileReader("datosBD.txt");

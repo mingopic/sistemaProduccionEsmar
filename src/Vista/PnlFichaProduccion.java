@@ -211,6 +211,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         {
             btnEliminarPartida.setEnabled(true);
             btnEliminarRecorte.setEnabled(true);
+            btnRecortar.setEnabled(false);
         }
         else
         {

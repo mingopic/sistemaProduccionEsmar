@@ -6,7 +6,7 @@
 package Controlador;
 
 import static Controlador.FichaProdCommands.c;
-import Modelo.FichaProdDet;
+import Modelo.Entity.FichaProdDet;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

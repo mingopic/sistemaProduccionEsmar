@@ -6,7 +6,7 @@
 package Controlador;
 
 import static Controlador.TamborCommands.c;
-import Modelo.UnidadMedida;
+import Modelo.Entity.UnidadMedida;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;

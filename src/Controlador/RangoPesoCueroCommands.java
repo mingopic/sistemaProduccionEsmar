@@ -5,8 +5,8 @@
  */
 package Controlador;
 
-import Modelo.RangoPesoCuero;
-import Modelo.RecepcionCuero;
+import Modelo.Entity.RangoPesoCuero;
+import Modelo.Entity.RecepcionCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

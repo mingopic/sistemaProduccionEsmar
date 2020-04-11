@@ -5,8 +5,8 @@
  */
 package Controlador;
 
-import Modelo.RecepcionCuero;
-import Modelo.TipoCuero;
+import Modelo.Entity.RecepcionCuero;
+import Modelo.Entity.TipoCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

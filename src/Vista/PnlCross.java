@@ -16,17 +16,17 @@ import Controlador.ProveedorCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.TipoCueroCommands;
 import Controlador.TipoRecorteCommands;
-import Modelo.BajasInventarioCross;
-import Modelo.ConfiguracionMerma;
-import Modelo.InventarioCross;
-import Modelo.InventarioCrossSemiterminado;
-import Modelo.Partida;
-import Modelo.PartidaDetalle;
-import Modelo.Proveedor;
-import Modelo.RangoPesoCuero;
-import Modelo.RecepcionCuero;
-import Modelo.TipoCuero;
-import Modelo.TipoRecorte;
+import Modelo.Entity.BajasInventarioCross;
+import Modelo.Entity.ConfiguracionMerma;
+import Modelo.Entity.InventarioCross;
+import Modelo.Entity.InventarioCrossSemiterminado;
+import Modelo.Entity.Partida;
+import Modelo.Entity.PartidaDetalle;
+import Modelo.Entity.Proveedor;
+import Modelo.Entity.RangoPesoCuero;
+import Modelo.Entity.RecepcionCuero;
+import Modelo.Entity.TipoCuero;
+import Modelo.Entity.TipoRecorte;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.HashMap;
@@ -690,13 +690,6 @@ public class PnlCross extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblInvCross = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        EnviarSemiterminado = new javax.swing.JLabel();
-        btnAgregar = new javax.swing.JButton();
-        jLabel15 = new javax.swing.JLabel();
-        btnEnviarSemiterminado = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
-        btnEliminarPiezas = new javax.swing.JButton();
-        jLabel17 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         cmbTipoRecorte = new javax.swing.JComboBox();
@@ -723,6 +716,14 @@ public class PnlCross extends javax.swing.JPanel {
         btnReporteEntrada2 = new javax.swing.JButton();
         jLabel52 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jToolBar3 = new javax.swing.JToolBar();
+        btnAgregar = new javax.swing.JButton();
+        EnviarSemiterminado = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        btnEnviarSemiterminado = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        btnEliminarPiezas = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1359,60 +1360,6 @@ public class PnlCross extends javax.swing.JPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        EnviarSemiterminado.setText("   ");
-        jToolBar1.add(EnviarSemiterminado);
-
-        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
-        btnAgregar.setText("Agregar");
-        btnAgregar.setEnabled(false);
-        btnAgregar.setFocusable(false);
-        btnAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnAgregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnAgregar);
-
-        jLabel15.setText("   ");
-        jToolBar1.add(jLabel15);
-
-        btnEnviarSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnEnviarSemiterminado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
-        btnEnviarSemiterminado.setText("Enviar a Semiterminado");
-        btnEnviarSemiterminado.setEnabled(false);
-        btnEnviarSemiterminado.setFocusable(false);
-        btnEnviarSemiterminado.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnEnviarSemiterminado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnEnviarSemiterminado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarSemiterminadoActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnEnviarSemiterminado);
-
-        jLabel12.setText("   ");
-        jToolBar1.add(jLabel12);
-
-        btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-        btnEliminarPiezas.setText("Eliminar Piezas");
-        btnEliminarPiezas.setEnabled(false);
-        btnEliminarPiezas.setFocusable(false);
-        btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarPiezasActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnEliminarPiezas);
-
-        jLabel17.setText("   ");
-        jToolBar1.add(jLabel17);
-
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Tipo Recorte:");
         jToolBar1.add(jLabel6);
@@ -1688,6 +1635,64 @@ try {
     });
     jToolBar2.add(jButton2);
 
+    jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jToolBar3.setFloatable(false);
+    jToolBar3.setRollover(true);
+
+    btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+    btnAgregar.setText("Agregar");
+    btnAgregar.setEnabled(false);
+    btnAgregar.setFocusable(false);
+    btnAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnAgregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnAgregarActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnAgregar);
+
+    EnviarSemiterminado.setText("   ");
+    jToolBar3.add(EnviarSemiterminado);
+
+    jLabel15.setText("   ");
+    jToolBar3.add(jLabel15);
+
+    btnEnviarSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnEnviarSemiterminado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+    btnEnviarSemiterminado.setText("Enviar a Semiterminado");
+    btnEnviarSemiterminado.setEnabled(false);
+    btnEnviarSemiterminado.setFocusable(false);
+    btnEnviarSemiterminado.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEnviarSemiterminado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEnviarSemiterminado.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEnviarSemiterminadoActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnEnviarSemiterminado);
+
+    jLabel12.setText("   ");
+    jToolBar3.add(jLabel12);
+
+    btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    btnEliminarPiezas.setText("Eliminar Pzas");
+    btnEliminarPiezas.setEnabled(false);
+    btnEliminarPiezas.setFocusable(false);
+    btnEliminarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEliminarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEliminarPiezasActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnEliminarPiezas);
+
+    jLabel17.setText("   ");
+    jToolBar3.add(jLabel17);
+
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
@@ -1695,6 +1700,7 @@ try {
         .addComponent(jScrollPane1)
         .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
         .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
+        .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1049, Short.MAX_VALUE)
     );
     jPanel4Layout.setVerticalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1703,7 +1709,9 @@ try {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+            .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -2097,6 +2105,7 @@ try {
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JRadioButton jrFiltroFechasEntrada;
     private javax.swing.JLabel lbl;
     private javax.swing.JTable tblBuscarPartidas;

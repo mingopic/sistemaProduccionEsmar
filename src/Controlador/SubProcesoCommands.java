@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 package Controlador;
-import Modelo.InsumosXFichaProd;
-import Modelo.Proceso;
-import Modelo.SubProceso;
+import Modelo.Entity.InsumosXFichaProd;
+import Modelo.Entity.Proceso;
+import Modelo.Entity.SubProceso;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.BajasInventarioCross;
+import Modelo.Entity.BajasInventarioCross;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

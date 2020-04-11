@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.Calibre;
+import Modelo.Entity.Calibre;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

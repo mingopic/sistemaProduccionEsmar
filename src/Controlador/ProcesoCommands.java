@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.Proceso;
+import Modelo.Entity.Proceso;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;

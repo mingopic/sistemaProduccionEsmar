@@ -5,8 +5,8 @@
  */
 package Controlador;
 
-import Modelo.FichaProd;
-import Modelo.Insumo;
+import Modelo.Entity.FichaProd;
+import Modelo.Entity.Insumo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

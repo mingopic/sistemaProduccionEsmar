@@ -5,9 +5,9 @@
  */
 package Controlador;
 
-import Modelo.Insumo;
-import Modelo.InsumoPorProceso;
-import Modelo.SubProceso;
+import Modelo.Entity.Insumo;
+import Modelo.Entity.InsumoPorProceso;
+import Modelo.Entity.SubProceso;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

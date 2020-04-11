@@ -5,8 +5,8 @@
  */
 package Controlador;
 
-import Modelo.Partida;
-import Modelo.PartidaDisp;
+import Modelo.Entity.Partida;
+import Modelo.Entity.PartidaDisp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

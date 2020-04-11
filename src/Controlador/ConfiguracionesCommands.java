@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.UnidadMedida;
+import Modelo.Entity.UnidadMedida;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;

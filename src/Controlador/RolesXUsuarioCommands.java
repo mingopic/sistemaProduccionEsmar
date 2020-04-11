@@ -5,8 +5,8 @@
  */
 package Controlador;
 
-import Modelo.RolesXUsuario;
-import Modelo.Usuario;
+import Modelo.Entity.RolesXUsuario;
+import Modelo.Entity.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

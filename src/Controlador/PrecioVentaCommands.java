@@ -5,10 +5,10 @@
  */
 package Controlador;
 
-import Modelo.Calibre;
-import Modelo.PrecioVenta;
-import Modelo.Seleccion;
-import Modelo.TipoRecorte;
+import Modelo.Entity.Calibre;
+import Modelo.Entity.PrecioVenta;
+import Modelo.Entity.Seleccion;
+import Modelo.Entity.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

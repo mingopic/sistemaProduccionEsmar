@@ -5,11 +5,11 @@
  */
 package Controlador;
 
-import Modelo.Calibre;
-import Modelo.Devolucion;
-import Modelo.InventarioSalTerminado;
-import Modelo.Seleccion;
-import Modelo.TipoRecorte;
+import Modelo.Entity.Calibre;
+import Modelo.Entity.Devolucion;
+import Modelo.Entity.InventarioSalTerminado;
+import Modelo.Entity.Seleccion;
+import Modelo.Entity.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

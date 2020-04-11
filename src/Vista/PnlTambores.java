@@ -8,7 +8,7 @@ package Vista;
 
 import Controlador.ConexionBD;
 import Controlador.TamborCommands;
-import Modelo.Tambor;
+import Modelo.Entity.Tambor;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 

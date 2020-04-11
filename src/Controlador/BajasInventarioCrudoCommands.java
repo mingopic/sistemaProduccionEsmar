@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.BajasInventarioCrudo;
+import Modelo.Entity.BajasInventarioCrudo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

@@ -16,14 +16,14 @@ import Controlador.CostoGarraCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.RolesXUsuarioCommands;
 import Controlador.TipoMonedaCommands;
-import Modelo.ConfGastosFabricacion;
-import Modelo.ConfPrecioCuero;
-import Modelo.ConfPrecioManoDeObra;
-import Modelo.ConfiguracionMerma;
-import Modelo.CostoGarra;
-import Modelo.RangoPesoCuero;
-import Modelo.TipoMoneda;
-import Modelo.Usuario;
+import Modelo.Entity.ConfGastosFabricacion;
+import Modelo.Entity.ConfPrecioCuero;
+import Modelo.Entity.ConfPrecioManoDeObra;
+import Modelo.Entity.ConfiguracionMerma;
+import Modelo.Entity.CostoGarra;
+import Modelo.Entity.RangoPesoCuero;
+import Modelo.Entity.TipoMoneda;
+import Modelo.Entity.Usuario;
 import RestService.Model.DataSerie;
 import RestService.Model.Response;
 import RestService.Model.Serie;
@@ -77,6 +77,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     PnlDevoluciones pnlDevoluciones;
     PnlReproceso pnlReproceso;
     PnlProduccionEnProceso pnlProduccionEnProceso;
+    PnlAlmacen pnlAlmacen;
     ConexionBD conexionBD;
     ConfiguracionMerma cm;
     ConfiguracionMermaCommands cmc;
@@ -955,6 +956,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnFichasProduccion = new javax.swing.JButton();
         btnDevoluciones = new javax.swing.JButton();
         btnReproceso = new javax.swing.JButton();
+        btnAlmacén = new javax.swing.JButton();
         pnlPrincipalx = new javax.swing.JPanel();
         pnlFooter = new javax.swing.JPanel();
         lblNombreUsuario = new javax.swing.JLabel();
@@ -2361,6 +2363,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnAlmacén.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAlmacén.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/baggage_cart_box.png"))); // NOI18N
+        btnAlmacén.setText("Almacén");
+        btnAlmacén.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAlmacén.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnAlmacén.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlmacénActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
         pnlMenu.setLayout(pnlMenuLayout);
         pnlMenuLayout.setHorizontalGroup(
@@ -2381,7 +2394,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnProdEnProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnFichasProduccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnDevoluciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnReproceso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnReproceso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAlmacén, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMenuLayout.setVerticalGroup(
@@ -2409,7 +2423,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnDevoluciones)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnReproceso)
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAlmacén)
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         pnlPrincipalx.setBackground(new java.awt.Color(255, 255, 255));
@@ -3340,6 +3356,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnReprocesoActionPerformed
 
+    private void btnAlmacénActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlmacénActionPerformed
+        try {
+            pnlAlmacen = new PnlAlmacen();
+            pnlPrincipalx.removeAll();
+            pnlPrincipalx.add(pnlAlmacen, BorderLayout.CENTER);
+            pnlPrincipalx.paintAll(pnlAlmacen.getGraphics());
+            
+            lblVentana.setText("Almacén");
+            ImageIcon ico=new ImageIcon("src/Imagenes/baggage_cart_box.png");
+            lblVentana.setIcon(ico);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAlmacénActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3381,6 +3412,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlmacén;
     private javax.swing.JButton btnCross;
     private javax.swing.JButton btnDevoluciones;
     private javax.swing.JButton btnEntrar;

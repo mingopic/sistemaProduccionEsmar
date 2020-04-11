@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.CostoGarra;
+import Modelo.Entity.CostoGarra;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.Tambor;
+import Modelo.Entity.Tambor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

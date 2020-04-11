@@ -5,12 +5,12 @@
  */
 package Controlador;
 
-import Modelo.BajasPartidaDet;
-import Modelo.FichaProdDet;
-import Modelo.FichaProduccion;
-import Modelo.PartidaDetalle;
-import Modelo.PartidaDisp;
-import Modelo.RecepcionCuero;
+import Modelo.Entity.BajasPartidaDet;
+import Modelo.Entity.FichaProdDet;
+import Modelo.Entity.FichaProduccion;
+import Modelo.Entity.PartidaDetalle;
+import Modelo.Entity.PartidaDisp;
+import Modelo.Entity.RecepcionCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

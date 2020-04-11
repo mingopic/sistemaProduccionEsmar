@@ -5,12 +5,12 @@
  */
 package Controlador;
 
-import Modelo.BajasInventarioCross;
-import Modelo.InventarioCross;
-import Modelo.InventarioCrossSemiterminado;
-import Modelo.Partida;
-import Modelo.PartidaDetalle;
-import Modelo.TipoRecorte;
+import Modelo.Entity.BajasInventarioCross;
+import Modelo.Entity.InventarioCross;
+import Modelo.Entity.InventarioCrossSemiterminado;
+import Modelo.Entity.Partida;
+import Modelo.Entity.PartidaDetalle;
+import Modelo.Entity.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

@@ -9,8 +9,8 @@ package Vista;
 import Controlador.ConexionBD;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
-import Modelo.Proceso;
-import Modelo.SubProceso;
+import Modelo.Entity.Proceso;
+import Modelo.Entity.SubProceso;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 

@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.Proveedor;
+import Modelo.Entity.Proveedor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

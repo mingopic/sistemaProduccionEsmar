@@ -8,7 +8,7 @@ package Vista;
 
 import Controlador.CalibreCommands;
 import Controlador.ConexionBD;
-import Modelo.Calibre;
+import Modelo.Entity.Calibre;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 

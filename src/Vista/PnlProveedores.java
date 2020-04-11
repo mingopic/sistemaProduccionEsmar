@@ -8,7 +8,7 @@ package Vista;
 
 import Controlador.ConexionBD;
 import Controlador.ProveedorCommands;
-import Modelo.Proveedor;
+import Modelo.Entity.Proveedor;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 

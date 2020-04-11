@@ -4,7 +4,7 @@
  */
 package Controlador;
 
-import Modelo.Usuario;
+import Modelo.Entity.Usuario;
 
 
 

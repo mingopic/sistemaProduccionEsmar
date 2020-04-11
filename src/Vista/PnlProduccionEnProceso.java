@@ -13,13 +13,13 @@ import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TipoRecorteCommands;
-import Modelo.FichaProdDet;
-import Modelo.FichaProduccion;
-import Modelo.Partida;
-import Modelo.PartidaDetalle;
-import Modelo.Proceso;
-import Modelo.SubProceso;
-import Modelo.TipoRecorte;
+import Modelo.Entity.FichaProdDet;
+import Modelo.Entity.FichaProduccion;
+import Modelo.Entity.Partida;
+import Modelo.Entity.PartidaDetalle;
+import Modelo.Entity.Proceso;
+import Modelo.Entity.SubProceso;
+import Modelo.Entity.TipoRecorte;
 import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.net.URL;
@@ -544,24 +544,6 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         cmbSubproceso = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
-        jLabel27 = new javax.swing.JLabel();
-        jrFiltroFechasEntrada = new javax.swing.JRadioButton();
-        jLabel6 = new javax.swing.JLabel();
-        dcFecha1EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
-        lbl = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        dcFecha2EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        btnBuscarEntrada = new javax.swing.JButton();
-        lbl1 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        txtNoPartida = new javax.swing.JTextField();
-        lbl2 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        cmbAnioPartida = new javax.swing.JComboBox<>();
         jToolBar2 = new javax.swing.JToolBar();
         btnReporteFichaProd = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -578,6 +560,25 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jLabel27 = new javax.swing.JLabel();
+        jrFiltroFechasEntrada = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
+        dcFecha1EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
+        lbl = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        dcFecha2EntradaProduccionProceso = new datechooser.beans.DateChooserCombo();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtNoPartida = new javax.swing.JTextField();
+        lbl1 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        cmbAnioPartida = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnBuscarEntrada = new javax.swing.JButton();
+        lbl2 = new javax.swing.JLabel();
         btnEliminarFichaProd = new javax.swing.JButton();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -629,6 +630,7 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         jToolBar1.add(jLabel15);
 
         cmbSubproceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Todos>" }));
+        cmbSubproceso.setMinimumSize(new java.awt.Dimension(75, 22));
         cmbSubproceso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbSubprocesoActionPerformed(evt);
@@ -638,11 +640,114 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
 
         jLabel13.setText("   ");
         jToolBar1.add(jLabel13);
-        jToolBar1.add(jSeparator4);
+
+        jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
+
+        btnReporteFichaProd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnReporteFichaProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+        btnReporteFichaProd.setText("Reporte de Ficha de Producción");
+        btnReporteFichaProd.setFocusable(false);
+        btnReporteFichaProd.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnReporteFichaProd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReporteFichaProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteFichaProdActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnReporteFichaProd);
+
+        jLabel1.setText("   ");
+        jToolBar2.add(jLabel1);
+
+        btnReporteListaPartProdProc.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnReporteListaPartProdProc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+        btnReporteListaPartProdProc.setText("Reporte de Listado de Fichas");
+        btnReporteListaPartProdProc.setFocusable(false);
+        btnReporteListaPartProdProc.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnReporteListaPartProdProc.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReporteListaPartProdProc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteListaPartProdProcActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnReporteListaPartProdProc);
+
+        jLabel7.setText("   ");
+        jToolBar2.add(jLabel7);
+
+        btnReporteListaPartProdProc1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnReporteListaPartProdProc1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+        btnReporteListaPartProdProc1.setText("Reporte de Inventario");
+        btnReporteListaPartProdProc1.setFocusable(false);
+        btnReporteListaPartProdProc1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnReporteListaPartProdProc1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReporteListaPartProdProc1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteListaPartProdProc1ActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnReporteListaPartProdProc1);
+
+        jLabel10.setText("   ");
+        jToolBar2.add(jLabel10);
+
+        btnReporteCostoPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnReporteCostoPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+        btnReporteCostoPartida.setText("Reporte Costo Partida");
+        btnReporteCostoPartida.setFocusable(false);
+        btnReporteCostoPartida.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnReporteCostoPartida.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReporteCostoPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteCostoPartidaActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnReporteCostoPartida);
+
+        jLabel12.setText("   ");
+        jToolBar2.add(jLabel12);
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
+        jButton1.setText("Reporte Piezas Eliminadas");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jButton1);
+
+        tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "No. Ficha", "No. Partida", "Proceso", "Tipo Recorte", "No. Piezas", "Kg", "Costo Cuero", "$ Cuero/Pza", "Costo Insumos", "$ Insumo/Kg", "Tambor", "Fecha"
+            }
+        ));
+        tblProduccionProceso.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tblProduccionProceso);
+
+        jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jToolBar3.setFloatable(false);
+        jToolBar3.setRollover(true);
+
+        jLabel18.setText("  ");
+        jToolBar3.add(jLabel18);
+        jToolBar3.add(jLabel19);
+
+        jLabel31.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jToolBar3.add(jLabel31);
+        jToolBar3.add(jSeparator4);
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar.png"))); // NOI18N
-        jToolBar1.add(jLabel27);
+        jToolBar3.add(jLabel27);
 
         jrFiltroFechasEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jrFiltroFechasEntrada.setFocusable(false);
@@ -655,11 +760,11 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                 jrFiltroFechasEntradaActionPerformed(evt);
             }
         });
-        jToolBar1.add(jrFiltroFechasEntrada);
+        jToolBar3.add(jrFiltroFechasEntrada);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("De:");
-        jToolBar1.add(jLabel6);
+        jToolBar3.add(jLabel6);
 
         dcFecha1EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
@@ -703,7 +808,6 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
                 false,
                 true)));
     dcFecha1EntradaProduccionProceso.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-    dcFecha1EntradaProduccionProceso.setFormat(2);
     dcFecha1EntradaProduccionProceso.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
     try {
         dcFecha1EntradaProduccionProceso.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
@@ -711,16 +815,16 @@ public class PnlProduccionEnProceso extends javax.swing.JPanel {
         e1.printStackTrace();
     }
     dcFecha1EntradaProduccionProceso.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
-    jToolBar1.add(dcFecha1EntradaProduccionProceso);
+    jToolBar3.add(dcFecha1EntradaProduccionProceso);
 
     lbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     lbl.setForeground(new java.awt.Color(227, 222, 222));
     lbl.setText("   ");
-    jToolBar1.add(lbl);
+    jToolBar3.add(lbl);
 
     jLabel25.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel25.setText("Hasta:");
-    jToolBar1.add(jLabel25);
+    jToolBar3.add(jLabel25);
 
     dcFecha2EntradaProduccionProceso.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
@@ -770,8 +874,50 @@ try {
         e1.printStackTrace();
     }
     dcFecha2EntradaProduccionProceso.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
-    jToolBar1.add(dcFecha2EntradaProduccionProceso);
-    jToolBar1.add(jSeparator1);
+    jToolBar3.add(dcFecha2EntradaProduccionProceso);
+
+    jLabel17.setText("   ");
+    jToolBar3.add(jLabel17);
+
+    jLabel26.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel26.setText("No. Partida");
+    jToolBar3.add(jLabel26);
+
+    jLabel8.setText("  ");
+    jToolBar3.add(jLabel8);
+
+    txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
+    txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
+    txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            txtNoPartidaKeyPressed(evt);
+        }
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtNoPartidaKeyTyped(evt);
+        }
+    });
+    jToolBar3.add(txtNoPartida);
+
+    lbl1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    lbl1.setForeground(new java.awt.Color(227, 222, 222));
+    lbl1.setText("   ");
+    jToolBar3.add(lbl1);
+
+    jLabel28.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel28.setText("Año");
+    jToolBar3.add(jLabel28);
+
+    cmbAnioPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    cmbAnioPartida.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cmbAnioPartidaActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(cmbAnioPartida);
+
+    jLabel9.setText("  ");
+    jToolBar3.add(jLabel9);
+    jToolBar3.add(jSeparator1);
 
     btnBuscarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnBuscarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/magnifier.png"))); // NOI18N
@@ -785,154 +931,12 @@ try {
             btnBuscarEntradaActionPerformed(evt);
         }
     });
-    jToolBar1.add(btnBuscarEntrada);
-
-    lbl1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    lbl1.setForeground(new java.awt.Color(227, 222, 222));
-    lbl1.setText("   ");
-    jToolBar1.add(lbl1);
-
-    jLabel26.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jLabel26.setText("No. Partida");
-    jToolBar1.add(jLabel26);
-
-    jLabel8.setText("  ");
-    jToolBar1.add(jLabel8);
-
-    txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
-    txtNoPartida.setPreferredSize(new java.awt.Dimension(50, 25));
-    txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyPressed(java.awt.event.KeyEvent evt) {
-            txtNoPartidaKeyPressed(evt);
-        }
-        public void keyTyped(java.awt.event.KeyEvent evt) {
-            txtNoPartidaKeyTyped(evt);
-        }
-    });
-    jToolBar1.add(txtNoPartida);
+    jToolBar3.add(btnBuscarEntrada);
 
     lbl2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     lbl2.setForeground(new java.awt.Color(227, 222, 222));
     lbl2.setText("   ");
-    jToolBar1.add(lbl2);
-
-    jLabel28.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jLabel28.setText("Año");
-    jToolBar1.add(jLabel28);
-
-    jLabel9.setText("  ");
-    jToolBar1.add(jLabel9);
-
-    cmbAnioPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    cmbAnioPartida.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            cmbAnioPartidaActionPerformed(evt);
-        }
-    });
-    jToolBar1.add(cmbAnioPartida);
-
-    jToolBar2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-    jToolBar2.setFloatable(false);
-    jToolBar2.setRollover(true);
-
-    btnReporteFichaProd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteFichaProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    btnReporteFichaProd.setText("Reporte de Ficha de Producción");
-    btnReporteFichaProd.setFocusable(false);
-    btnReporteFichaProd.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteFichaProd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteFichaProd.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteFichaProdActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteFichaProd);
-
-    jLabel1.setText("   ");
-    jToolBar2.add(jLabel1);
-
-    btnReporteListaPartProdProc.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteListaPartProdProc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    btnReporteListaPartProdProc.setText("Reporte de Listado de Fichas");
-    btnReporteListaPartProdProc.setFocusable(false);
-    btnReporteListaPartProdProc.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteListaPartProdProc.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteListaPartProdProc.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteListaPartProdProcActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteListaPartProdProc);
-
-    jLabel7.setText("   ");
-    jToolBar2.add(jLabel7);
-
-    btnReporteListaPartProdProc1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteListaPartProdProc1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    btnReporteListaPartProdProc1.setText("Reporte de Inventario");
-    btnReporteListaPartProdProc1.setFocusable(false);
-    btnReporteListaPartProdProc1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteListaPartProdProc1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteListaPartProdProc1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteListaPartProdProc1ActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteListaPartProdProc1);
-
-    jLabel10.setText("   ");
-    jToolBar2.add(jLabel10);
-
-    btnReporteCostoPartida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteCostoPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    btnReporteCostoPartida.setText("Reporte Costo Partida");
-    btnReporteCostoPartida.setFocusable(false);
-    btnReporteCostoPartida.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteCostoPartida.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteCostoPartida.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteCostoPartidaActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteCostoPartida);
-
-    jLabel12.setText("   ");
-    jToolBar2.add(jLabel12);
-
-    jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/report.png"))); // NOI18N
-    jButton1.setText("Reporte Piezas Eliminadas");
-    jButton1.setFocusable(false);
-    jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(jButton1);
-
-    tblProduccionProceso.setModel(new javax.swing.table.DefaultTableModel(
-        new Object [][] {
-            {null, null, null, null, null, null, null, null, null, null, null, null}
-        },
-        new String [] {
-            "No. Ficha", "No. Partida", "Proceso", "Tipo Recorte", "No. Piezas", "Kg", "Costo Cuero", "$ Cuero/Pza", "Costo Insumos", "$ Insumo/Kg", "Tambor", "Fecha"
-        }
-    ));
-    tblProduccionProceso.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-    jScrollPane1.setViewportView(tblProduccionProceso);
-
-    jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-    jToolBar3.setFloatable(false);
-    jToolBar3.setRollover(true);
-
-    jLabel18.setText("  ");
-    jToolBar3.add(jLabel18);
-    jToolBar3.add(jLabel19);
-
-    jLabel31.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jToolBar3.add(jLabel31);
+    jToolBar3.add(lbl2);
 
     btnEliminarFichaProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
     btnEliminarFichaProd.setText("Eliminar Ficha de Producción");
@@ -953,8 +957,8 @@ try {
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jScrollPane1)
-        .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1048, Short.MAX_VALUE)
-        .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1048, Short.MAX_VALUE)
+        .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE)
+        .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1158,6 +1162,7 @@ try {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;

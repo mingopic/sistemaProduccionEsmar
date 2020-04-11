@@ -5,11 +5,11 @@
  */
 package Controlador;
 
-import Modelo.FichaProduccion;
-import Modelo.Partida;
-import Modelo.Proceso;
-import Modelo.SubProceso;
-import Modelo.TipoRecorte;
+import Modelo.Entity.FichaProduccion;
+import Modelo.Entity.Partida;
+import Modelo.Entity.Proceso;
+import Modelo.Entity.SubProceso;
+import Modelo.Entity.TipoRecorte;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;

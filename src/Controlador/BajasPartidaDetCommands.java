@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.BajasPartidaDet;
+import Modelo.Entity.BajasPartidaDet;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

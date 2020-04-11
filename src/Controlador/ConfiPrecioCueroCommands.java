@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.ConfPrecioCuero;
+import Modelo.Entity.ConfPrecioCuero;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;

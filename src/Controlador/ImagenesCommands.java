@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.Imagenes;
+import Modelo.Entity.Imagenes;
 import java.sql.ResultSet;
 import java.sql.Statement;
 

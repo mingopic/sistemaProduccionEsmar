@@ -385,5 +385,8 @@ create procedure dbo.Usp_MaterialGetAll
         Tb_CatalogoDet cdE
       on
         cdE.CatDetId = m.CatDetEstatusId
+    
+    order by
+      m.Descripcion asc
   end
 go

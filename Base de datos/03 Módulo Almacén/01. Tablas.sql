@@ -13,6 +13,10 @@ if object_id ('dbo.Tb_Material') is not null
 	drop table dbo.Tb_Material
 go
 
+if object_id ('dbo.Tb_EntradaMaterial') is not null
+	drop table dbo.Tb_EntradaMaterial
+go
+
 -- -----------------------------------------------------
 -- Tabla dbo.Tb_Catalogo
 -- -----------------------------------------------------
@@ -80,4 +84,27 @@ go
 
 alter table [dbo].Tb_Material with check add constraint [Fk_Estatus_Material] foreign key(CatDetEstatusId)
 references [dbo].Tb_Catalogodet (CatDetId)
+go
+
+-- -----------------------------------------------------
+-- Tabla dbo.Tb_EntradaMaterial
+-- -----------------------------------------------------
+create table dbo.Tb_EntradaMaterial
+(
+  EntradaMaterialId       int not null identity(1,1) primary key
+  , MaterialId            int not null
+  , Cantidad              float not null
+  , Comentarios           varchar(300)
+  , idUsuario             int not null
+  , FechaEntrada          datetime not null
+  , FechaInsercion        datetime default getdate()  
+);
+go
+
+alter table [dbo].Tb_EntradaMaterial with check add constraint [Fk_Material_EntradaMaterial] foreign key(MaterialId)
+references [dbo].Tb_Material (MaterialId)
+go
+
+alter table [dbo].Tb_EntradaMaterial with check add constraint [Fk_Usuario_EntradaMaterial] foreign key(idUsuario)
+references [dbo].tb_usuario (idUsuario)
 go

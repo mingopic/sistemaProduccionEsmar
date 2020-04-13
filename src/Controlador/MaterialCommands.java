@@ -6,7 +6,6 @@
 package Controlador;
 
 import Modelo.Entity.Material;
-import Modelo.Entity.TipoMoneda;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -23,7 +22,7 @@ public class MaterialCommands {
     static ResultSet rs = null;
     static ConexionBD c = new ConexionBD();
     
-    //Método para obtener todos los tipos de monedas en BD
+    //Método para obtener los datos de la tabla Tb_Material
     public static List<Material> MaterialGetAll() 
     {
         List<Material> lstMaterial = null;
@@ -36,7 +35,6 @@ public class MaterialCommands {
         {
             c.conectar();
             stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            System.out.println(query);
             rs = stmt.executeQuery(query);
 
             lstMaterial = new ArrayList<>();
@@ -77,15 +75,5 @@ public class MaterialCommands {
             System.err.println(e);
         }
         return lstMaterial;
-    }
-    
-    //Método que se llama para actualizar el tipo de cambio
-    public static void actualizarTipoCambio(Double valor) throws Exception {
-        String query= "execute sp_actTipoCambio "+valor+";";
-        c.conectar();
-        pstmt = c.getConexion().prepareStatement(query);
-        System.out.println(query);
-        pstmt.executeUpdate();
-        c.desconectar();
     }
 }

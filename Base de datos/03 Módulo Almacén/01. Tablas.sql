@@ -91,13 +91,13 @@ go
 -- -----------------------------------------------------
 create table dbo.Tb_EntradaMaterial
 (
-  EntradaMaterialId       int not null identity(1,1) primary key
-  , MaterialId            int not null
-  , Cantidad              float not null
-  , Comentarios           varchar(300)
-  , idUsuario             int not null
-  , FechaEntrada          datetime not null
-  , FechaInsercion        datetime default getdate()  
+  EntradaMaterialId  int not null identity(1,1) primary key
+  , MaterialId       int not null
+  , Cantidad         float not null
+  , Comentarios      varchar(300)
+  , idUsuario        int not null
+  , FechaEntrada     datetime not null
+  , FechaInsercion   datetime default getdate()  
 );
 go
 
@@ -106,5 +106,30 @@ references [dbo].Tb_Material (MaterialId)
 go
 
 alter table [dbo].Tb_EntradaMaterial with check add constraint [Fk_Usuario_EntradaMaterial] foreign key(idUsuario)
+references [dbo].tb_usuario (idUsuario)
+go
+
+-- -----------------------------------------------------
+-- Tabla dbo.Tb_SalidaMaterial
+-- -----------------------------------------------------
+create table dbo.Tb_SalidaMaterialId
+(
+  SalidaMaterialId     int not null identity(1,1) primary key
+  , MaterialId         int not null
+  , Cantidad           float not null
+  , Solicitante        varchar(100)
+  , Departamento       varchar(50)
+  , idInsumoFichaProd  int null
+  , idUsuario          int not null
+  , FechaSalida        datetime not null
+  , FechaInsercion     datetime default getdate()  
+);
+go
+
+alter table [dbo].Tb_SalidaMaterialId with check add constraint [Fk_Material_SalidaMaterial] foreign key(MaterialId)
+references [dbo].Tb_Material (MaterialId)
+go
+
+alter table [dbo].Tb_SalidaMaterialId with check add constraint [Fk_Usuario_SalidaMaterial] foreign key(idUsuario)
 references [dbo].tb_usuario (idUsuario)
 go

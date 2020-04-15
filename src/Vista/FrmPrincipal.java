@@ -22,19 +22,16 @@ import Modelo.Entity.ConfPrecioManoDeObra;
 import Modelo.Entity.ConfiguracionMerma;
 import Modelo.Entity.CostoGarra;
 import Modelo.Entity.RangoPesoCuero;
-import Modelo.Entity.TipoMoneda;
 import Modelo.Entity.Usuario;
 import RestService.Model.DataSerie;
 import RestService.Model.Response;
 import RestService.Model.Serie;
 import RestService.Series;
-import Service.TipoCambioService;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +42,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -85,6 +81,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     RangoPesoCueroCommands rpcc;
     CostoGarra cg;
     CostoGarraCommands cgc;
+    public static Usuario u = new Usuario();
     public static String[] roles;
     List<ConfPrecioCuero> lstConfPrecioCuero;
     List<ConfPrecioManoDeObra> lstConfPrecioManoDeObra;
@@ -144,7 +141,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void validarUsuario()
     {
         ControladorUsuario controladorUsuario = new ControladorUsuario(conexionBD);
-        Usuario u = new Usuario();
         u.setUserName(txtUsuario.getText());
         u.setPassword(new String(ptxtContrasenia.getPassword()));
         

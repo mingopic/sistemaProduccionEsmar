@@ -26,6 +26,12 @@ begin
 end
 go
 
+if object_id('dbo.Usp_EntradaMaterialCreate') is not null
+begin
+	drop procedure dbo.Usp_EntradaMaterialCreate
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_reiniciarPartida 
@@ -485,5 +491,55 @@ create procedure dbo.Usp_CatalogoDetGetByCatId
     
     where
       CatId = @CatId
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_EntradaMaterialCreate
+(
+  @MaterialId     int
+  , @Cantidad     float
+  , @Comentarios  varchar(300)
+  , @idUsuario    int
+  , @FechaEntrada datetime
+  , @Return_value int = -1 output
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   DLuna     2020/04/14   Creación
+    =================================================================================================================================
+    */ 
+    
+    update 
+      dbo.Tb_Material
+    set
+      Existencia = Existencia + @Cantidad
+    where
+      MaterialId = @MaterialId
+    
+    insert into dbo.Tb_EntradaMaterial
+    (
+      MaterialId     
+      , Cantidad     
+      , Comentarios  
+      , idUsuario    
+      , FechaEntrada
+    )
+    values 
+    (
+      @MaterialId     
+      , @Cantidad     
+      , @Comentarios  
+      , @idUsuario    
+      , @FechaEntrada
+    )
+    
+    set @Return_value = SCOPE_IDENTITY()
+    
+    select @Return_value
   end
 go

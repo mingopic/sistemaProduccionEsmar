@@ -11,21 +11,24 @@ import java.util.Date;
  *
  * @author mingo
  */
-public class EntradaMaterial {
-    int EntradaMaterialId;
+public class SalidaMaterial {
+    int SalidaMaterialId;
     int MaterialId;
     Double Cantidad;
+    String Solicitante;
+    String Departamento;
     String Comentarios;
+    int idInsumoFichaProd;
     int idUsuario;
-    Date FechaEntrada;
+    Date FechaSalida;
     Date FechaInsercion;
 
-    public int getEntradaMaterialId() {
-        return EntradaMaterialId;
+    public int getSalidaMaterialId() {
+        return SalidaMaterialId;
     }
 
-    public void setEntradaMaterialId(int EntradaMaterialId) {
-        this.EntradaMaterialId = EntradaMaterialId;
+    public void setSalidaMaterialId(int SalidaMaterialId) {
+        this.SalidaMaterialId = SalidaMaterialId;
     }
 
     public int getMaterialId() {
@@ -44,12 +47,36 @@ public class EntradaMaterial {
         this.Cantidad = Cantidad;
     }
 
+    public String getSolicitante() {
+        return Solicitante;
+    }
+
+    public void setSolicitante(String Solicitante) {
+        this.Solicitante = Solicitante;
+    }
+
+    public String getDepartamento() {
+        return Departamento;
+    }
+
+    public void setDepartamento(String Departamento) {
+        this.Departamento = Departamento;
+    }
+
     public String getComentarios() {
         return Comentarios;
     }
 
     public void setComentarios(String Comentarios) {
         this.Comentarios = Comentarios;
+    }
+
+    public int getIdInsumoFichaProd() {
+        return idInsumoFichaProd;
+    }
+
+    public void setIdInsumoFichaProd(int idInsumoFichaProd) {
+        this.idInsumoFichaProd = idInsumoFichaProd;
     }
 
     public int getIdUsuario() {
@@ -60,12 +87,12 @@ public class EntradaMaterial {
         this.idUsuario = idUsuario;
     }
 
-    public Date getFechaEntrada() {
-        return FechaEntrada;
+    public Date getFechaSalida() {
+        return FechaSalida;
     }
 
-    public void setFechaEntrada(Date FechaEntrada) {
-        this.FechaEntrada = FechaEntrada;
+    public void setFechaSalida(Date FechaSalida) {
+        this.FechaSalida = FechaSalida;
     }
 
     public Date getFechaInsercion() {
@@ -75,5 +102,6 @@ public class EntradaMaterial {
     public void setFechaInsercion(Date FechaInsercion) {
         this.FechaInsercion = FechaInsercion;
     }
+    
     
 }

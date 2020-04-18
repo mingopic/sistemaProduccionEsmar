@@ -32,6 +32,18 @@ begin
 end
 go
 
+if object_id('dbo.Usp_EntradaMaterialCreate') is not null
+begin
+	drop procedure dbo.Usp_EntradaMaterialCreate
+end
+go
+
+if object_id('dbo.Usp_SalidaMaterialCreate') is not null
+begin
+	drop procedure dbo.Usp_SalidaMaterialCreate
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_reiniciarPartida 
@@ -541,5 +553,79 @@ create procedure dbo.Usp_EntradaMaterialCreate
     set @Return_value = SCOPE_IDENTITY()
     
     select @Return_value
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_SalidaMaterialCreate
+(
+  @MaterialId          int
+  , @Cantidad          float
+  , @Solicitante       varchar(100)
+	, @Departamento      varchar(50)
+  , @Comentarios       varchar(300)
+  , @idInsumoFichaProd int
+  , @idUsuario         int
+  , @FechaSalida       datetime
+  --, @Return_value      int = -1 output
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   DLuna     2020/04/18   Creación
+    =================================================================================================================================
+    */
+    
+    set nocount on; 
+    
+    declare @Return_Value int
+    set @Return_Value = -1
+    
+    -- Validar que la cantidad em inventario sea suficiente
+    if ((select Existencia from dbo.Tb_Material where MaterialId = @MaterialId) < @Cantidad)
+    begin
+      set @Return_value = 0
+    end
+    
+    if (@Return_value = -1)
+    begin
+    
+      update 
+        dbo.Tb_Material
+      set
+        Existencia = Existencia - @Cantidad
+      where
+        MaterialId = @MaterialId
+      
+      insert into dbo.Tb_SalidaMaterial
+      (
+        MaterialId     
+        , Cantidad     
+        , Solicitante
+        , Departamento
+        , Comentarios  
+        , idInsumoFichaProd
+        , idUsuario    
+        , FechaSalida
+      )
+      values 
+      (
+        @MaterialId     
+        , @Cantidad     
+        , @Solicitante
+        , @Departamento
+        , @Comentarios  
+        , @idInsumoFichaProd
+        , @idUsuario    
+        , @FechaSalida
+      )
+    
+      set @Return_value = SCOPE_IDENTITY()
+    end
+    
+    select [Return_value] = @Return_value
   end
 go

@@ -6,18 +6,13 @@
 package Controlador;
 
 import Modelo.Entity.EntradaMaterial;
-import Modelo.Entity.Material;
 import java.sql.CallableStatement;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -34,20 +29,20 @@ public class EntradaMaterialCommands {
     {
         int return_value = 0;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-        String strDate = dateFormat.format(em.FechaEntrada());
+        String strDate = dateFormat.format(em.getFechaEntrada());
         CallableStatement st = null;
         
-        String query="execute Usp_EntradaMaterialCreate ?,?,?,?,?,?"; //moved out to parameters to avoid SQL injection.       
+        String query="execute dbo.Usp_EntradaMaterialCreate ?,?,?,?,?,?"; 
         
         try 
         {
             c.conectar();
             st = c.getConexion().prepareCall(query);
             
-            st.setInt(1,em.MaterialId());
-            st.setDouble(2,em.Cantidad());
-            st.setString(3,em.Comentarios());
-            st.setInt(4,em.IdUsuario());
+            st.setInt(1,em.getMaterialId());
+            st.setDouble(2,em.getCantidad());
+            st.setString(3,em.getComentarios());
+            st.setInt(4,em.getIdUsuario());
             st.setString(5,strDate);
             st.registerOutParameter(6, java.sql.Types.INTEGER);  
             
@@ -60,6 +55,7 @@ public class EntradaMaterialCommands {
         }
         finally
         {
+            st.close();
             c.desconectar();
         }
         return return_value;

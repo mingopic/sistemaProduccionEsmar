@@ -45,23 +45,23 @@ public class MaterialCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     Material m = new Material();
-                    m.MaterialId(rs.getInt("MaterialId"));
-                    m.Codigo(rs.getString("Codigo"));
-                    m.Descripcion(rs.getString("Descripcion"));
-                    m.Existencia(rs.getDouble("Existencia"));
-                    m.IdUnidadMedida(rs.getInt("idUnidadMedida"));
-                    m.Precio(rs.getDouble("Precio"));
-                    m.IdTipoMoneda(rs.getInt("idTipoMoneda"));
-                    m.CatDetTipoMaterialId(rs.getInt("CatDetTipoMaterialId"));
-                    m.CatDetClasificacionId(rs.getInt("CatDetClasificacionId"));
-                    m.CatDetEstatusId(rs.getInt("CatDetEstatusId"));
-                    m.FechaUltimaAct(rs.getString("FechaUltimaAct"));
+                    m.setMaterialId(rs.getInt("MaterialId"));
+                    m.setCodigo(rs.getString("Codigo"));
+                    m.setDescripcion(rs.getString("Descripcion"));
+                    m.setExistencia(rs.getDouble("Existencia"));
+                    m.setIdUnidadMedida(rs.getInt("idUnidadMedida"));
+                    m.setPrecio(rs.getDouble("Precio"));
+                    m.setIdTipoMoneda(rs.getInt("idTipoMoneda"));
+                    m.setCatDetTipoMaterialId(rs.getInt("CatDetTipoMaterialId"));
+                    m.setCatDetClasificacionId(rs.getInt("CatDetClasificacionId"));
+                    m.setCatDetEstatusId(rs.getInt("CatDetEstatusId"));
+                    m.setFechaUltimaAct(rs.getString("FechaUltimaAct"));
                     
-                    m.UnidadMedida(rs.getString("UnidadMedida"));
-                    m.TipoMoneda(rs.getString("TipoMoneda"));
-                    m.TipoMaterial(rs.getString("TipoMaterial"));
-                    m.Clasificacion(rs.getString("Clasificacion"));
-                    m.Estatus(rs.getString("Estatus"));
+                    m.setUnidadMedida(rs.getString("UnidadMedida"));
+                    m.setTipoMoneda(rs.getString("TipoMoneda"));
+                    m.setTipoMaterial(rs.getString("TipoMaterial"));
+                    m.setClasificacion(rs.getString("Clasificacion"));
+                    m.setEstatus(rs.getString("Estatus"));
                     
                     lstMaterial.add(m);
                 }

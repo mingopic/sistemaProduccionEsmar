@@ -16,43 +16,44 @@ public class MaterialDto {
     String Clasificacion;
     String Estatus;
 
-    public String UnidadMedida() {
+    public String getUnidadMedida() {
         return UnidadMedida;
     }
 
-    public void UnidadMedida(String UnidadMedida) {
+    public void setUnidadMedida(String UnidadMedida) {
         this.UnidadMedida = UnidadMedida;
     }
 
-    public String TipoMoneda() {
+    public String getTipoMoneda() {
         return TipoMoneda;
     }
 
-    public void TipoMoneda(String TipoMoneda) {
+    public void setTipoMoneda(String TipoMoneda) {
         this.TipoMoneda = TipoMoneda;
     }
 
-    public String TipoMaterial() {
+    public String getTipoMaterial() {
         return TipoMaterial;
     }
 
-    public void TipoMaterial(String TipoMaterial) {
+    public void setTipoMaterial(String TipoMaterial) {
         this.TipoMaterial = TipoMaterial;
     }
 
-    public String Clasificacion() {
+    public String getClasificacion() {
         return Clasificacion;
     }
 
-    public void Clasificacion(String Clasificacion) {
+    public void setClasificacion(String Clasificacion) {
         this.Clasificacion = Clasificacion;
     }
 
-    public String Estatus() {
+    public String getEstatus() {
         return Estatus;
     }
 
-    public void Estatus(String ActivoText) {
-        this.Estatus = ActivoText;
+    public void setEstatus(String Estatus) {
+        this.Estatus = Estatus;
     }
+
 }

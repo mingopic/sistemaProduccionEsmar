@@ -24,91 +24,92 @@ public class Material extends MaterialDto {
     int CatDetEstatusId;
     String FechaUltimaAct;
 
-    public int MaterialId() {
+    public int getMaterialId() {
         return MaterialId;
     }
 
-    public void MaterialId(int MaterialId) {
+    public void setMaterialId(int MaterialId) {
         this.MaterialId = MaterialId;
     }
 
-    public String Codigo() {
+    public String getCodigo() {
         return Codigo;
     }
 
-    public void Codigo(String Codigo) {
+    public void setCodigo(String Codigo) {
         this.Codigo = Codigo;
     }
 
-    public String Descripcion() {
+    public String getDescripcion() {
         return Descripcion;
     }
 
-    public void Descripcion(String Descripcion) {
+    public void setDescripcion(String Descripcion) {
         this.Descripcion = Descripcion;
     }
 
-    public Double Existencia() {
+    public Double getExistencia() {
         return Existencia;
     }
 
-    public void Existencia(Double Existencia) {
+    public void setExistencia(Double Existencia) {
         this.Existencia = Existencia;
     }
 
-    public int IdUnidadMedida() {
+    public int getIdUnidadMedida() {
         return idUnidadMedida;
     }
 
-    public void IdUnidadMedida(int idUnidadMedida) {
+    public void setIdUnidadMedida(int idUnidadMedida) {
         this.idUnidadMedida = idUnidadMedida;
     }
 
-    public Double Precio() {
+    public Double getPrecio() {
         return Precio;
     }
 
-    public void Precio(Double Precio) {
+    public void setPrecio(Double Precio) {
         this.Precio = Precio;
     }
 
-    public int IdTipoMoneda() {
+    public int getIdTipoMoneda() {
         return idTipoMoneda;
     }
 
-    public void IdTipoMoneda(int idTipoMoneda) {
+    public void setIdTipoMoneda(int idTipoMoneda) {
         this.idTipoMoneda = idTipoMoneda;
     }
 
-    public int CatDetTipoMaterialId() {
+    public int getCatDetTipoMaterialId() {
         return CatDetTipoMaterialId;
     }
 
-    public void CatDetTipoMaterialId(int CatDetTipoMaterialId) {
+    public void setCatDetTipoMaterialId(int CatDetTipoMaterialId) {
         this.CatDetTipoMaterialId = CatDetTipoMaterialId;
     }
 
-    public int CatDetClasificacionId() {
+    public int getCatDetClasificacionId() {
         return CatDetClasificacionId;
     }
 
-    public void CatDetClasificacionId(int CatDetClasificacionId) {
+    public void setCatDetClasificacionId(int CatDetClasificacionId) {
         this.CatDetClasificacionId = CatDetClasificacionId;
     }
 
-    public int CatDetEstatusId() {
+    public int getCatDetEstatusId() {
         return CatDetEstatusId;
     }
 
-    public void CatDetEstatusId(int Activo) {
-        this.CatDetEstatusId = Activo;
+    public void setCatDetEstatusId(int CatDetEstatusId) {
+        this.CatDetEstatusId = CatDetEstatusId;
     }
 
-    public String FechaUltimaAct() {
+    public String getFechaUltimaAct() {
         return FechaUltimaAct;
     }
 
-    public void FechaUltimaAct(String FechaUltimaAct) {
+    public void setFechaUltimaAct(String FechaUltimaAct) {
         this.FechaUltimaAct = FechaUltimaAct;
-    }  
+    }
+
 }

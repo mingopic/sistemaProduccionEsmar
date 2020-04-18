@@ -17,6 +17,10 @@ if object_id ('dbo.Tb_EntradaMaterial') is not null
 	drop table dbo.Tb_EntradaMaterial
 go
 
+if object_id ('dbo.Tb_SalidaMaterial') is not null
+	drop table dbo.Tb_SalidaMaterial
+go
+
 -- -----------------------------------------------------
 -- Tabla dbo.Tb_Catalogo
 -- -----------------------------------------------------
@@ -112,13 +116,14 @@ go
 -- -----------------------------------------------------
 -- Tabla dbo.Tb_SalidaMaterial
 -- -----------------------------------------------------
-create table dbo.Tb_SalidaMaterialId
+create table dbo.Tb_SalidaMaterial
 (
   SalidaMaterialId     int not null identity(1,1) primary key
   , MaterialId         int not null
   , Cantidad           float not null
   , Solicitante        varchar(100)
   , Departamento       varchar(50)
+  , Comentarios        varchar(300)
   , idInsumoFichaProd  int null
   , idUsuario          int not null
   , FechaSalida        datetime not null
@@ -126,10 +131,10 @@ create table dbo.Tb_SalidaMaterialId
 );
 go
 
-alter table [dbo].Tb_SalidaMaterialId with check add constraint [Fk_Material_SalidaMaterial] foreign key(MaterialId)
+alter table [dbo].Tb_SalidaMaterial with check add constraint [Fk_Material_SalidaMaterial] foreign key(MaterialId)
 references [dbo].Tb_Material (MaterialId)
 go
 
-alter table [dbo].Tb_SalidaMaterialId with check add constraint [Fk_Usuario_SalidaMaterial] foreign key(idUsuario)
+alter table [dbo].Tb_SalidaMaterial with check add constraint [Fk_Usuario_SalidaMaterial] foreign key(idUsuario)
 references [dbo].tb_usuario (idUsuario)
 go

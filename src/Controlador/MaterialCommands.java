@@ -5,9 +5,12 @@
  */
 package Controlador;
 
+import Modelo.Dto.RespuestaDto;
 import Modelo.Entity.Material;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +78,57 @@ public class MaterialCommands {
             System.err.println(e);
         }
         return lstMaterial;
+    }
+    
+    //Método para insertar un material
+    public RespuestaDto MaterialCreate(Material m) throws Exception
+    {
+        RespuestaDto respuesta = new RespuestaDto();
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_MaterialCreate ?,?,?,?,?,?,?,?,?,?"; 
+        
+        System.out.println("execute dbo.Usp_MaterialCreate "
+                + "'" + m.getCodigo() + "'"
+                + ", '" + m.getDescripcion()+ "'"
+                + ", " + m.getExistencia()
+                + ", " + m.getIdUnidadMedida()
+                + ", " + m.getPrecio()
+                + ", " + m.getIdTipoMoneda()
+                + ", " + m.getCatDetTipoMaterialId()
+                + ", " + m.getCatDetClasificacionId());
+         
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setString(1,m.getCodigo());
+            st.setString(2,m.getDescripcion());
+            st.setDouble(3,m.getExistencia());
+            st.setInt(4,m.getIdUnidadMedida());
+            st.setDouble(5,m.getPrecio());
+            st.setInt(6, m.getIdTipoMoneda());
+            st.setInt(7, m.getCatDetTipoMaterialId());
+            st.setInt(8, m.getCatDetClasificacionId());
+            st.registerOutParameter(9, java.sql.Types.INTEGER);
+            st.registerOutParameter(10, java.sql.Types.VARCHAR);
+            
+            st.execute();
+            respuesta.setRespuesta(st.getInt("Respuesta"));
+            respuesta.setMensaje(st.getString("Mensaje"));
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+            respuesta.setRespuesta(-1);
+            respuesta.setMensaje("Error al guardar material, " + e.getMessage());
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return respuesta;
     }
 }

@@ -20,59 +20,59 @@ public class CatalogoDet {
     Date FechaUltimaAct;
     int CatId;
 
-    public int CatDetId() {
+    public int getCatDetId() {
         return CatDetId;
     }
 
-    public void CatDetId(int CatDetId) {
+    public void setCatDetId(int CatDetId) {
         this.CatDetId = CatDetId;
     }
 
-    public String Nombre() {
+    public String getNombre() {
         return Nombre;
     }
 
-    public void Nombre(String Nombre) {
+    public void setNombre(String Nombre) {
         this.Nombre = Nombre;
     }
 
-    public String Abreviacion() {
+    public String getAbreviacion() {
         return Abreviacion;
     }
 
-    public void Abreviacion(String Abreviacion) {
+    public void setAbreviacion(String Abreviacion) {
         this.Abreviacion = Abreviacion;
     }
 
-    public int OrdenVisualizacion() {
+    public int getOrdenVisualizacion() {
         return OrdenVisualizacion;
     }
 
-    public void OrdenVisualizacion(int OrdenVisualizacion) {
+    public void setOrdenVisualizacion(int OrdenVisualizacion) {
         this.OrdenVisualizacion = OrdenVisualizacion;
     }
 
-    public String Auxiliar() {
+    public String getAuxiliar() {
         return Auxiliar;
     }
 
-    public void Auxiliar(String Auxiliar) {
+    public void setAuxiliar(String Auxiliar) {
         this.Auxiliar = Auxiliar;
     }
 
-    public Date FechaUltimaAct() {
+    public Date getFechaUltimaAct() {
         return FechaUltimaAct;
     }
 
-    public void FechaUltimaAct(Date FechaUltimaAct) {
+    public void setFechaUltimaAct(Date FechaUltimaAct) {
         this.FechaUltimaAct = FechaUltimaAct;
     }
 
-    public int CatId() {
+    public int getCatId() {
         return CatId;
     }
 
-    public void CatId(int CatId) {
+    public void setCatId(int CatId) {
         this.CatId = CatId;
     }
     

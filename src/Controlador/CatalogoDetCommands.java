@@ -45,12 +45,12 @@ public class CatalogoDetCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     CatalogoDet cd = new CatalogoDet();
-                    cd.CatDetId(rs.getInt("CatDetId"));
-                    cd.Nombre(rs.getString("Nombre"));
-                    cd.Abreviacion(rs.getString("Abreviacion"));
-                    cd.OrdenVisualizacion(rs.getInt("OrdenVisualizacion"));
-                    cd.Auxiliar(rs.getString("Auxiliar"));
-                    cd.FechaUltimaAct(rs.getDate("FechaUltimaAct"));
+                    cd.setCatDetId(rs.getInt("CatDetId"));
+                    cd.setNombre(rs.getString("Nombre"));
+                    cd.setAbreviacion(rs.getString("Abreviacion"));
+                    cd.setOrdenVisualizacion(rs.getInt("OrdenVisualizacion"));
+                    cd.setAuxiliar(rs.getString("Auxiliar"));
+                    cd.setFechaUltimaAct(rs.getDate("FechaUltimaAct"));
                     
                     lstCatalogoDet.add(cd);
                 }

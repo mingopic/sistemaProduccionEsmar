@@ -433,6 +433,8 @@ create procedure dbo.Usp_MaterialCreate
   , @idTipoMoneda          int
   , @CatDetTipoMaterialId  int
   , @CatDetClasificacionId int
+  , @Respuesta             int = -1 output
+  , @Mensaje               varchar(60) = '' output
 )
   as begin
     /*
@@ -443,35 +445,67 @@ create procedure dbo.Usp_MaterialCreate
     =================================================================================================================================
     */ 
     
-    declare @estatusActivo int
-    set @estatusActivo = 25
+    declare 
+      @EstatusActivo  int
+      , @Guardar      int
+      
+    select
+      @EstatusActivo = 25
+      , @Guardar = 1
+      
+    if exists ( select Codigo from dbo.Tb_Material where Codigo = @Codigo)
+    begin
+      select 
+        @Guardar = 0 
+        , @Mensaje = 'Ya existe el código ingresado para otro material'
+        , @Respuesta = 0
+    end
     
-    insert into dbo.Tb_Material
-    (
-      Codigo
-      , Descripcion
-      , Existencia
-      , idUnidadMedida
-      , Precio
-      , idTipoMoneda
-      , CatDetTipoMaterialId
-      , CatDetClasificacionId
-      , CatDetEstatusId
-    )
-    values
-    (
-      @Codigo
-      , @Descripcion
-      , @Existencia
-      , @idUnidadMedida
-      , @Precio
-      , @idTipoMoneda
-      , @CatDetTipoMaterialId
-      , @CatDetClasificacionId
-      , @estatusActivo
-    )
+    if exists ( select Descripcion from dbo.Tb_Material where Descripcion = @Descripcion)
+    begin
+      select 
+        @Guardar = 0 
+        , @Mensaje = 'Ya existe material con la descripcion ingresada'
+        , @Respuesta = 0
+    end
     
-    select scope_identity();
+    if (@Guardar = 1)
+    begin
+    
+      insert into dbo.Tb_Material
+      (
+        Codigo
+        , Descripcion
+        , Existencia
+        , idUnidadMedida
+        , Precio
+        , idTipoMoneda
+        , CatDetTipoMaterialId
+        , CatDetClasificacionId
+        , CatDetEstatusId
+      )
+      values
+      (
+        @Codigo
+        , @Descripcion
+        , @Existencia
+        , @idUnidadMedida
+        , @Precio
+        , @idTipoMoneda
+        , @CatDetTipoMaterialId
+        , @CatDetClasificacionId
+        , @EstatusActivo
+      )
+      
+      select
+        @Respuesta = SCOPE_IDENTITY()
+        , @Mensaje = 'Material Guardado correctamente'
+    end
+    
+    select 
+      @Respuesta
+      , @Mensaje
+    
   end
 go
 
@@ -568,7 +602,6 @@ create procedure dbo.Usp_SalidaMaterialCreate
   , @idInsumoFichaProd int
   , @idUsuario         int
   , @FechaSalida       datetime
-  --, @Return_value      int = -1 output
 )
   as begin
     /*

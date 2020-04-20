@@ -11,10 +11,15 @@ import Controlador.ConexionBD;
 import Controlador.EntradaMaterialCommands;
 import Controlador.MaterialCommands;
 import Controlador.SalidaMaterialCommands;
+import Controlador.TipoMonedaCommands;
+import Controlador.UnidadMedidaCommands;
+import Modelo.Dto.RespuestaDto;
 import Modelo.Entity.CatalogoDet;
 import Modelo.Entity.EntradaMaterial;
 import Modelo.Entity.Material;
 import Modelo.Entity.SalidaMaterial;
+import Modelo.Entity.TipoMoneda;
+import Modelo.Entity.UnidadMedida;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +40,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
     List<Material> lstMaterial; 
     List<CatalogoDet> lstCatDetTipoMaterial; 
     List<CatalogoDet> lstCatDetClasMaterial; 
+    List<UnidadMedida> lstUnidadMedida; 
+    List<TipoMoneda> lstTipoMoneda; 
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -46,6 +53,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
         initComponents();
         inicializar();
         llenarComboMateriales();
+        llenarComboUnidadMedida();
+        llenarComboTipoMoneda();
     }
     
     
@@ -95,11 +104,13 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lstCatDetTipoMaterial = cd.CatalogoDetGetByCatId(CatIdTipoMaterial);
         
         cmbTipoMaterial.removeAllItems();
+        cmbTipoMaterialAgregar.removeAllItems();
 
         int i = 0;
         while (i < lstCatDetTipoMaterial.size())
         {
-            cmbTipoMaterial.addItem(lstCatDetTipoMaterial.get(i).Nombre());
+            cmbTipoMaterial.addItem(lstCatDetTipoMaterial.get(i).getNombre());
+            cmbTipoMaterialAgregar.addItem(lstCatDetTipoMaterial.get(i).getNombre());
             i++;
         }
     }
@@ -111,11 +122,43 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lstCatDetClasMaterial = cd.CatalogoDetGetByCatId(CatIdClasMaterial);
         
         cmbClasificacionMaterial.removeAllItems();
+        cmbClasificacionAgregar.removeAllItems();
 
         int i = 0;
         while (i < lstCatDetClasMaterial.size())
         {
-            cmbClasificacionMaterial.addItem(lstCatDetClasMaterial.get(i).Nombre());
+            cmbClasificacionMaterial.addItem(lstCatDetClasMaterial.get(i).getNombre());
+            cmbClasificacionAgregar.addItem(lstCatDetClasMaterial.get(i).getNombre());
+            i++;
+        }
+    }
+    
+    private void llenarComboUnidadMedida() throws Exception
+    {   
+        UnidadMedidaCommands umc = new UnidadMedidaCommands();
+        lstUnidadMedida = umc.obtenerUnidadMedida();
+        
+        cmbUnidadMedidaAgregar.removeAllItems();
+
+        int i = 0;
+        while (i < lstUnidadMedida.size())
+        {
+            cmbUnidadMedidaAgregar.addItem(lstUnidadMedida.get(i).getDescripcion());
+            i++;
+        }
+    }
+    
+    private void llenarComboTipoMoneda() throws Exception
+    {   
+        TipoMonedaCommands tmc = new TipoMonedaCommands();
+        lstTipoMoneda = tmc.obtenerMonedas();
+        
+        cmbMonedaAgregar.removeAllItems();
+
+        int i = 0;
+        while (i < lstTipoMoneda.size())
+        {
+            cmbMonedaAgregar.addItem(lstTipoMoneda.get(i).getDescripcion());
             i++;
         }
     }
@@ -190,7 +233,20 @@ public class PnlAlmacen extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Error al abrir JDialog", "Error", JOptionPane.ERROR_MESSAGE);
             dialogo.setVisible(true);
         }
-    } 
+    }
+    
+    //Método para inicializar y abrir el JDialog para agregar un material 
+    private void iniDialogoAgregarMaterial()
+    {
+        txtCodigoAgregar.setText("");
+        txtDescripcionAgregar.setText("");
+        txtExistenciaAgregar.setText("");
+        cmbUnidadMedidaAgregar.setSelectedIndex(0);
+        txtPrecioAgregar.setText("");
+        cmbMonedaAgregar.setSelectedIndex(0);
+        cmbTipoMaterialAgregar.setSelectedIndex(0);
+        cmbClasificacionAgregar.setSelectedIndex(0);
+    }
     
     //Método para inicializar y abrir el JDialog para Realizar Entrada 
     private void iniDialogoEntrada()
@@ -299,6 +355,111 @@ public class PnlAlmacen extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Error al registrar salida, intente de nuevo","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    private void MaterialCreate() throws ParseException, Exception
+    {
+        Material material;
+        MaterialCommands mc;
+        RespuestaDto respuesta;
+        
+        if (ValidarAgregarMaterial())
+        {
+            material = new Material();
+            mc = new MaterialCommands();
+            
+            material.setCodigo(txtCodigoAgregar.getText().trim());
+            material.setDescripcion(txtDescripcionAgregar.getText().trim());
+            material.setExistencia(Double.parseDouble(txtExistenciaAgregar.getText().trim()));
+            material.setIdUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaAgregar.getSelectedIndex()).getIdUnidadMedida());
+            material.setPrecio(Double.parseDouble(txtPrecioAgregar.getText().trim()));
+            material.setIdTipoMoneda(lstTipoMoneda.get(cmbMonedaAgregar.getSelectedIndex()).getIdTipoMoneda());
+            material.setCatDetTipoMaterialId(lstCatDetTipoMaterial.get(cmbTipoMaterialAgregar.getSelectedIndex()).getCatDetId());
+            material.setCatDetClasificacionId(lstCatDetClasMaterial.get(cmbClasificacionAgregar.getSelectedIndex()).getCatDetId());
+            
+            respuesta = mc.MaterialCreate(material);
+            
+            if (respuesta.getRespuesta() > 0)
+            {
+                dlgAgregarMaterial.setVisible(false);
+                JOptionPane.showMessageDialog(null, respuesta.getMensaje());
+                actualizarTablaMateriales();
+            }
+            else if (respuesta.getRespuesta() == 0)
+            {
+                JOptionPane.showMessageDialog(null, respuesta.getMensaje(),"Mensaje",JOptionPane.WARNING_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, respuesta.getMensaje(),"Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private boolean ValidarAgregarMaterial()
+    {
+        boolean respuesta = true;
+        String mensaje = "";
+        
+        if (txtCodigoAgregar.getText().trim().equals(""))
+        {
+            mensaje = "Ingrese un código";
+            respuesta = false;
+        }
+        
+        if (respuesta)
+        {
+            if (txtDescripcionAgregar.getText().trim().equals(""))
+            {
+                mensaje = "Ingrese descripción del material";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (txtExistenciaAgregar.getText().trim().equals("") || txtExistenciaAgregar.getText().trim().equals("."))
+            {
+                mensaje = "Ingrese existencia";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtExistenciaAgregar.getText().trim()) <= 0)
+            {
+                mensaje = "Existencia debe ser mayor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (txtPrecioAgregar.getText().trim().equals("") || txtPrecioAgregar.getText().trim().equals("."))
+            {
+                mensaje = "Ingrese un precio";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtPrecioAgregar.getText().trim()) < 0)
+            {
+                mensaje = "Precio no puede ser menor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (!respuesta)
+        {
+            dlgAgregarMaterial.setVisible(false);
+            JOptionPane.showMessageDialog(dcEntrada, mensaje,"",JOptionPane.WARNING_MESSAGE);
+            dlgAgregarMaterial.setVisible(true);
+        }
+        
+        return respuesta;
     }
     
     private boolean ValidarEntrada()
@@ -488,7 +649,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lblUnidadMedidaEntrada = new javax.swing.JLabel();
         dlgSalidaMaterial = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
-        lblRealizarEntradaDlg1 = new javax.swing.JLabel();
+        lblSalidaMaterial = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         cmbMaterialSalida = new javax.swing.JComboBox<>();
@@ -507,6 +668,27 @@ public class PnlAlmacen extends javax.swing.JPanel {
         txtSolicitanteSalida = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         txtDepartamentoSalida = new javax.swing.JTextField();
+        dlgAgregarMaterial = new javax.swing.JDialog();
+        jPanel6 = new javax.swing.JPanel();
+        lblAgregarMaterial = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        txtCodigoAgregar = new javax.swing.JTextField();
+        txtDescripcionAgregar = new javax.swing.JTextField();
+        txtExistenciaAgregar = new javax.swing.JTextField();
+        cmbUnidadMedidaAgregar = new javax.swing.JComboBox<>();
+        txtPrecioAgregar = new javax.swing.JTextField();
+        cmbMonedaAgregar = new javax.swing.JComboBox<>();
+        jLabel26 = new javax.swing.JLabel();
+        cmbTipoMaterialAgregar = new javax.swing.JComboBox<>();
+        jLabel23 = new javax.swing.JLabel();
+        cmbClasificacionAgregar = new javax.swing.JComboBox<>();
+        btnGuardarAgregar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMateriales = new javax.swing.JTable();
@@ -746,11 +928,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
     jPanel3.setBackground(new java.awt.Color(255, 51, 51));
     jPanel3.setPreferredSize(new java.awt.Dimension(440, 33));
 
-    lblRealizarEntradaDlg1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-    lblRealizarEntradaDlg1.setForeground(new java.awt.Color(255, 255, 255));
-    lblRealizarEntradaDlg1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    lblRealizarEntradaDlg1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
-    lblRealizarEntradaDlg1.setText("Salida Material");
+    lblSalidaMaterial.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+    lblSalidaMaterial.setForeground(new java.awt.Color(255, 255, 255));
+    lblSalidaMaterial.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    lblSalidaMaterial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
+    lblSalidaMaterial.setText("Salida Material");
 
     javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
     jPanel3.setLayout(jPanel3Layout);
@@ -758,11 +940,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel3Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(lblRealizarEntradaDlg1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(lblSalidaMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel3Layout.setVerticalGroup(
         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(lblRealizarEntradaDlg1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(lblSalidaMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
     );
 
     jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -971,6 +1153,174 @@ try {
             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+
+    jPanel6.setBackground(new java.awt.Color(0, 204, 51));
+    jPanel6.setPreferredSize(new java.awt.Dimension(440, 33));
+
+    lblAgregarMaterial.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+    lblAgregarMaterial.setForeground(new java.awt.Color(255, 255, 255));
+    lblAgregarMaterial.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    lblAgregarMaterial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.png"))); // NOI18N
+    lblAgregarMaterial.setText("Agregar Material");
+
+    javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+    jPanel6.setLayout(jPanel6Layout);
+    jPanel6Layout.setHorizontalGroup(
+        jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel6Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(lblAgregarMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+    );
+    jPanel6Layout.setVerticalGroup(
+        jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(lblAgregarMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+
+    jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+
+    jLabel15.setText("Código");
+
+    jLabel19.setText("Descripción");
+
+    jLabel20.setText("Existencia");
+
+    jLabel21.setText("Unidad de Medida");
+
+    jLabel22.setText("Precio");
+
+    jLabel25.setText("Clasificación");
+
+    txtCodigoAgregar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            txtCodigoAgregarActionPerformed(evt);
+        }
+    });
+    txtCodigoAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCodigoAgregarKeyTyped(evt);
+        }
+    });
+
+    txtDescripcionAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtDescripcionAgregarKeyTyped(evt);
+        }
+    });
+
+    txtExistenciaAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtExistenciaAgregarKeyTyped(evt);
+        }
+    });
+
+    txtPrecioAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtPrecioAgregarKeyTyped(evt);
+        }
+    });
+
+    jLabel26.setText("Moneda");
+
+    jLabel23.setText("Tipo Material");
+
+    btnGuardarAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+    btnGuardarAgregar.setText("Guardar");
+    btnGuardarAgregar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnGuardarAgregarActionPerformed(evt);
+        }
+    });
+
+    javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+    jPanel7.setLayout(jPanel7Layout);
+    jPanel7Layout.setHorizontalGroup(
+        jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel7Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel7Layout.createSequentialGroup()
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel15)
+                        .addComponent(jLabel19)
+                        .addComponent(jLabel20)
+                        .addComponent(jLabel21)
+                        .addComponent(jLabel22)
+                        .addComponent(jLabel25)
+                        .addComponent(jLabel26)
+                        .addComponent(jLabel23))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtDescripcionAgregar)
+                        .addGroup(jPanel7Layout.createSequentialGroup()
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cmbTipoMaterialAgregar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtCodigoAgregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                    .addComponent(txtExistenciaAgregar, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbMonedaAgregar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(cmbClasificacionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(0, 0, Short.MAX_VALUE))))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(btnGuardarAgregar)))
+            .addContainerGap())
+    );
+    jPanel7Layout.setVerticalGroup(
+        jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel7Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel15)
+                .addComponent(txtCodigoAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel19)
+                .addComponent(txtDescripcionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel20)
+                .addComponent(txtExistenciaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel21)
+                .addComponent(cmbUnidadMedidaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txtPrecioAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel22))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(cmbMonedaAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel26))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(cmbTipoMaterialAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel23))
+            .addGap(12, 12, 12)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel25)
+                .addComponent(cmbClasificacionAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+            .addComponent(btnGuardarAgregar)
+            .addContainerGap())
+    );
+
+    javax.swing.GroupLayout dlgAgregarMaterialLayout = new javax.swing.GroupLayout(dlgAgregarMaterial.getContentPane());
+    dlgAgregarMaterial.getContentPane().setLayout(dlgAgregarMaterialLayout);
+    dlgAgregarMaterialLayout.setHorizontalGroup(
+        dlgAgregarMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    dlgAgregarMaterialLayout.setVerticalGroup(
+        dlgAgregarMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(dlgAgregarMaterialLayout.createSequentialGroup()
+            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     setBackground(new java.awt.Color(255, 255, 255));
@@ -1442,8 +1792,8 @@ try {
     }//GEN-LAST:event_cmbClasificacionMaterialActionPerformed
 
     private void btnAgregarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMaterialActionPerformed
-        
-        
+        iniDialogoAgregarMaterial();
+        abrirDialogo(dlgAgregarMaterial, 600, 450);
     }//GEN-LAST:event_btnAgregarMaterialActionPerformed
 
     private void btnRealizarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaActionPerformed
@@ -1499,11 +1849,40 @@ try {
         onChangeCmbMaterialSalida();
     }//GEN-LAST:event_cmbMaterialSalidaActionPerformed
 
+    private void txtCodigoAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoAgregarActionPerformed
+
+    private void btnGuardarAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAgregarActionPerformed
+        try {
+            MaterialCreate();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGuardarAgregarActionPerformed
+
+    private void txtCodigoAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoAgregarKeyTyped
+        ValidarLongitud(evt,txtCodigoAgregar.getText(),10);
+    }//GEN-LAST:event_txtCodigoAgregarKeyTyped
+
+    private void txtDescripcionAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionAgregarKeyTyped
+        ValidarLongitud(evt,txtDescripcionAgregar.getText(),100);
+    }//GEN-LAST:event_txtDescripcionAgregarKeyTyped
+
+    private void txtExistenciaAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaAgregarKeyTyped
+        ValidarNumeros(evt, txtExistenciaAgregar.getText());
+    }//GEN-LAST:event_txtExistenciaAgregarKeyTyped
+
+    private void txtPrecioAgregarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioAgregarKeyTyped
+        ValidarNumeros(evt, txtCantidadEntrada.getText());
+    }//GEN-LAST:event_txtPrecioAgregarKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarMaterial;
     private javax.swing.JButton btnBuscar;
     private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.JButton btnGuardarAgregar;
     private javax.swing.JButton btnGuardarEntrada;
     private javax.swing.JButton btnGuardarSalida;
     private javax.swing.JButton btnRealizarEntrada;
@@ -1511,14 +1890,19 @@ try {
     private javax.swing.JButton btnReporteEntradas;
     private javax.swing.JButton btnReporteInventario;
     private javax.swing.JButton btnReporteSalidas;
+    private javax.swing.JComboBox<String> cmbClasificacionAgregar;
     private javax.swing.JComboBox cmbClasificacionMaterial;
     private javax.swing.JComboBox<String> cmbMaterialEntrada;
     private javax.swing.JComboBox<String> cmbMaterialSalida;
+    private javax.swing.JComboBox<String> cmbMonedaAgregar;
     private javax.swing.JComboBox cmbTipoMaterial;
+    private javax.swing.JComboBox<String> cmbTipoMaterialAgregar;
+    private javax.swing.JComboBox<String> cmbUnidadMedidaAgregar;
     private datechooser.beans.DateChooserCombo dcEntrada;
     private datechooser.beans.DateChooserCombo dcFechaDe;
     private datechooser.beans.DateChooserCombo dcFechaHasta;
     private datechooser.beans.DateChooserCombo dcSalida;
+    private javax.swing.JDialog dlgAgregarMaterial;
     private javax.swing.JDialog dlgEntradaMaterial;
     private javax.swing.JDialog dlgSalidaMaterial;
     private javax.swing.JLabel jLabel1;
@@ -1527,10 +1911,18 @@ try {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1552,6 +1944,8 @@ try {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1562,6 +1956,7 @@ try {
     private javax.swing.JToolBar jToolBar3;
     private javax.swing.JRadioButton jrFiltroFechas;
     private javax.swing.JLabel lbl;
+    private javax.swing.JLabel lblAgregarMaterial;
     private javax.swing.JLabel lblCalendario;
     private javax.swing.JLabel lblClasificacion;
     private javax.swing.JLabel lblCodigo;
@@ -1569,17 +1964,21 @@ try {
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JLabel lblHasta;
     private javax.swing.JLabel lblRealizarEntradaDlg;
-    private javax.swing.JLabel lblRealizarEntradaDlg1;
+    private javax.swing.JLabel lblSalidaMaterial;
     private javax.swing.JLabel lblTipoMaterial;
     private javax.swing.JLabel lblUnidadMedidaEntrada;
     private javax.swing.JLabel lblUnidadMedidaSalida;
     private javax.swing.JTable tblMateriales;
     private javax.swing.JTextField txtCantidadEntrada;
     private javax.swing.JTextField txtCantidadSalida;
+    private javax.swing.JTextField txtCodigoAgregar;
     private javax.swing.JTextField txtCodigoEntrada;
     private javax.swing.JTextField txtCodigoSalida;
     private javax.swing.JTextField txtDepartamentoSalida;
+    private javax.swing.JTextField txtDescripcionAgregar;
+    private javax.swing.JTextField txtExistenciaAgregar;
     private javax.swing.JTextField txtNoPartida;
+    private javax.swing.JTextField txtPrecioAgregar;
     private javax.swing.JTextField txtSolicitanteSalida;
     private javax.swing.JTextArea txtaComentariosEntrada;
     private javax.swing.JTextArea txtaComentariosSalida;

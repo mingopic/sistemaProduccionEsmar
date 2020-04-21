@@ -17,6 +17,8 @@ public class InsumoPorProceso {
     int idInsumo;
     String nombreProducto;
     String comentario;
+    int MaterialId;
+    int CatDetOrigenMaterialId;
 
     public String getComentario() {
         return comentario;
@@ -73,4 +75,21 @@ public class InsumoPorProceso {
     public void setNombreProducto(String nombreProducto) {
         this.nombreProducto = nombreProducto;
     }
+
+    public int getCatDetOrigenMaterialId() {
+        return CatDetOrigenMaterialId;
+    }
+    
+    public int getMaterialId() {
+        return MaterialId;
+    }
+
+    public void setMaterialId(int MaterialId) {
+        this.MaterialId = MaterialId;
+    }
+
+    public void setCatDetOrigenMaterialId(int CatDetOrigenMaterialId) {
+        this.CatDetOrigenMaterialId = CatDetOrigenMaterialId;
+    }
+
 }

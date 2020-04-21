@@ -44,6 +44,18 @@ begin
 end
 go
 
+if object_id('dbo.Usp_MaterialGetCollectionByCatDetTipoMaterialId') is not null
+begin
+	drop procedure dbo.Usp_MaterialGetCollectionByCatDetTipoMaterialId
+end
+go
+
+if object_id('dbo.sp_obtFormInsXSubProc') is not null
+begin
+	drop procedure dbo.sp_obtFormInsXSubProc
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_reiniciarPartida 
@@ -662,3 +674,136 @@ create procedure dbo.Usp_SalidaMaterialCreate
     select [Return_value] = @Return_value
   end
 go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_MaterialGetCollectionByCatDetTipoMaterialId 
+(
+  @CatDetTipoMaterialId  int
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   DLuna     2020/04/20   Creación
+    =================================================================================================================================
+    */ 
+    
+    select
+      MaterialId
+      , Codigo
+      , m.Descripcion
+      , Existencia
+      , m.idUnidadMedida
+      , Precio
+      , m.idTipoMoneda
+      , CatDetTipoMaterialId
+      , CatDetClasificacionId
+      , CatDetEstatusId
+      , m.FechaUltimaAct
+      , [UnidadMedida] = um.descripcion
+      , [TipoMoneda] = tm.descripcion
+      , [TipoMaterial] = cdT.Nombre
+      , [Clasificacion] = cdC.Nombre
+      , [Estatus] = cdE.Nombre
+    
+    from
+      dbo.Tb_Material m
+    
+      inner join
+        tb_unidadMedida um
+      on
+        um.idUnidadMedida = m.idUnidadMedida
+      
+      inner join
+        tb_tipoMoneda tm
+      on
+        tm.idTipoMoneda = m.idTipoMoneda
+      
+      inner join
+        Tb_CatalogoDet cdT
+      on
+        cdT.CatDetId = m.CatDetTipoMaterialId
+        
+      inner join
+        Tb_CatalogoDet cdC
+      on
+        cdC.CatDetId = m.CatDetClasificacionId
+        
+      inner join
+        Tb_CatalogoDet cdE
+      on
+        cdE.CatDetId = m.CatDetEstatusId
+    
+    where
+      CatDetTipoMaterialId = @CatDetTipoMaterialId
+      
+    order by
+      m.Descripcion asc
+
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_obtFormInsXSubProc 
+  (
+    @idSubProceso int
+  )
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   ???       ???          Creación
+    02   DLuna     2020/04/21   Validar origenes de tabla de insumos (material)
+  =================================================================================================================================
+  */ 
+  
+    declare 
+      @idFormXSubProc           int
+      , @CatDetOrigenMaterialId int --#02
+    
+    -- #02 {
+    select
+      @idFormXSubProc = idFormXSubProc
+      , @CatDetOrigenMaterialId = CatDetOrigenMaterialId
+    from 
+      tb_formXsubProc
+    where 
+      fechaCreacion = 
+      (
+        select 
+          max (fechaCreacion)
+          
+        from 
+          tb_formXsubProc
+          
+        where 
+          idSubproceso = @idSubProceso
+      )
+      and idSubproceso = @idSubProceso
+    -- #02 }
+    
+    select
+      idInsumXProc
+      , idFormXSubProc
+      , clave
+      , porcentaje
+      , idInsumo
+      , nombreProducto
+      , comentario
+      , MaterialId
+      , [CatDetOrigenMaterialId] = @CatDetOrigenMaterialId --#02
+      
+    from 
+      tb_insumXproc
+      
+    where 
+      idFormXSubProc = @idFormXSubProc
+  end
+
+go
+
+

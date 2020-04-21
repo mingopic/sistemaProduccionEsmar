@@ -9,11 +9,12 @@ package Vista;
 import Controlador.ConexionBD;
 import Controlador.FormulaXSubProcesoCommands;
 import Controlador.InsumoPorProcesoCommands;
+import Controlador.MaterialCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Modelo.Entity.FormulaXSubProceso;
-import Modelo.Entity.Insumo;
 import Modelo.Entity.InsumoPorProceso;
+import Modelo.Entity.Material;
 import Modelo.Entity.Proceso;
 import Modelo.Entity.SubProceso;
 import java.util.ArrayList;
@@ -34,11 +35,11 @@ public class PnlInsXproc extends javax.swing.JPanel {
     InsumoPorProcesoCommands ippc;
     String[][] proceso = null;
     String[][] subProceso = null;
-    String[][] datosInsumXProc = null;
+    List<InsumoPorProceso> lstInsumXProc;
     int idSubproceso = 0;
     DefaultTableModel dtms=new DefaultTableModel();
-    DefaultTableModel dtmInsumos=new DefaultTableModel();
-    List<Insumo> lstInsumo;
+    DefaultTableModel dtmInsumos;
+    List<Material> lstInsumo;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -83,15 +84,16 @@ public class PnlInsXproc extends javax.swing.JPanel {
     //método que llena los combobox de los insumos en la base de datos
     public void llenarComboInsumos() throws Exception
     {
-        ippc = new InsumoPorProcesoCommands();
+        MaterialCommands mc = new MaterialCommands();
         lstInsumo = new ArrayList<>();
         
-        lstInsumo = ippc.ObtenerInsumos();
+        // 2 -> Insumo
+        lstInsumo = mc.MaterialGetCollectionByCatDetTipoMaterialId(2);
         
         int i=0;
         while (i < lstInsumo.size())
         {
-            cmbInsumo.addItem(lstInsumo.get(i).getCNOMBREPRODUCTO());
+            cmbInsumo.addItem(lstInsumo.get(i).getDescripcion());
             i++;
         }
     }
@@ -513,15 +515,57 @@ public class PnlInsXproc extends javax.swing.JPanel {
             }
         
             try {
-
-                datosInsumXProc = subPc.obtenerListaInsXSubProc(subP);
-
-                dtmInsumos = new DefaultTableModel(datosInsumXProc, cols2){ 
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return editables[columnIndex];
-                }
+                
+                dtmInsumos = new DefaultTableModel()
+                {
+                    public boolean isCellEditable(int row, int column) {
+                        return editables[column];
+                    }
                 };
+
+                lstInsumXProc = subPc.obtenerListaInsXSubProc(subP);
+                
+                if (!lstInsumXProc.isEmpty())
+                {
+                    // 28 -> Contpaq
+                    if (lstInsumXProc.get(0).getCatDetOrigenMaterialId() == 28)
+                    {
+                        btnAgregarInsumo.setEnabled(false);
+                        btnAgregarEspacio.setEnabled(false);
+                        btnQuitarInsumo.setEnabled(false);
+                        btnGuardarInsumo.setEnabled(false);
+                        btnCopiarFormula.setEnabled(false);
+                        cmbInsumo.setEnabled(false);
+                        
+                        dtmInsumos = new DefaultTableModel()
+                        {
+                            public boolean isCellEditable(int row, int column) {
+                                return false;
+                            }
+                        };
+                    }
+                }
+                
+                dtmInsumos.setColumnIdentifiers(cols2);
+                dtmInsumos.setRowCount(lstInsumXProc.size());
+                
+                for (int i = 0; i < lstInsumXProc.size(); i++)
+                {
+                    dtmInsumos.setValueAt(lstInsumXProc.get(i).getClave(), i, 0);
+                    if (lstInsumXProc.get(i).getPorcentaje() > 0)
+                    {
+                        dtmInsumos.setValueAt(lstInsumXProc.get(i).getPorcentaje(), i, 1);
+                    }
+                    else
+                    {
+                        dtmInsumos.setValueAt("", i, 1);
+                    }
+                    dtmInsumos.setValueAt(lstInsumXProc.get(i).getNombreProducto(), i, 2);
+                    dtmInsumos.setValueAt(lstInsumXProc.get(i).getComentario(), i, 3);
+                    dtmInsumos.setValueAt(lstInsumXProc.get(i).getIdInsumo(), i, 4);
+                }
                 tblInsXSubProc.setModel(dtmInsumos);
+                
                 tblInsXSubProc.getTableHeader().setReorderingAllowed(false);
                 tblInsXSubProc.getColumnModel().getColumn(4).setMaxWidth(0);
                 tblInsXSubProc.getColumnModel().getColumn(4).setMinWidth(0);
@@ -549,14 +593,6 @@ public class PnlInsXproc extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnQuitarInsumoActionPerformed
 
-    private void tblInsXSubProcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInsXSubProcMouseClicked
-        if(evt.getClickCount()==1)
-        {
-            btnAgregarInsumo.setEnabled(true);
-            btnQuitarInsumo.setEnabled(true);
-        }
-    }//GEN-LAST:event_tblInsXSubProcMouseClicked
-
     private void btnAgregarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInsumoActionPerformed
         int n;
         String datos[]=new String[5];
@@ -564,7 +600,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         datos[1]= "";
         datos[2]= cmbInsumo.getSelectedItem().toString();
         datos[3]= "";
-        datos[4]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getCIDPRODUCTO());
+        datos[4]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getMaterialId());
         dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarInsumoActionPerformed
 
@@ -626,6 +662,18 @@ public class PnlInsXproc extends javax.swing.JPanel {
         }
         
     }//GEN-LAST:event_btnCopiarFormulaActionPerformed
+
+    private void tblInsXSubProcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInsXSubProcMouseClicked
+        // 27 -> BD Propia
+        if (lstInsumXProc.get(0).getCatDetOrigenMaterialId() == 27)
+        {
+            if(evt.getClickCount()==1)
+            {
+                btnAgregarInsumo.setEnabled(true);
+                btnQuitarInsumo.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_tblInsXSubProcMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

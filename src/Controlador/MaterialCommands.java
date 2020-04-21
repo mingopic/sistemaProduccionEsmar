@@ -80,6 +80,61 @@ public class MaterialCommands {
         return lstMaterial;
     }
     
+    //Método para obtener los datos de la tabla Tb_Material
+    public static List<Material> MaterialGetCollectionByCatDetTipoMaterialId(int catDetTipoMaterialId) 
+    {
+        List<Material> lstMaterial = null;
+        Statement st = null;
+        ResultSet rs = null;
+        
+        String query = "execute Usp_MaterialGetCollectionByCatDetTipoMaterialId " + catDetTipoMaterialId;
+
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(query);
+
+            lstMaterial = new ArrayList<>();
+            if (rs.last()) 
+            {
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    Material m = new Material();
+                    m.setMaterialId(rs.getInt("MaterialId"));
+                    m.setCodigo(rs.getString("Codigo"));
+                    m.setDescripcion(rs.getString("Descripcion"));
+                    m.setExistencia(rs.getDouble("Existencia"));
+                    m.setIdUnidadMedida(rs.getInt("idUnidadMedida"));
+                    m.setPrecio(rs.getDouble("Precio"));
+                    m.setIdTipoMoneda(rs.getInt("idTipoMoneda"));
+                    m.setCatDetTipoMaterialId(rs.getInt("CatDetTipoMaterialId"));
+                    m.setCatDetClasificacionId(rs.getInt("CatDetClasificacionId"));
+                    m.setCatDetEstatusId(rs.getInt("CatDetEstatusId"));
+                    m.setFechaUltimaAct(rs.getString("FechaUltimaAct"));
+                    
+                    m.setUnidadMedida(rs.getString("UnidadMedida"));
+                    m.setTipoMoneda(rs.getString("TipoMoneda"));
+                    m.setTipoMaterial(rs.getString("TipoMaterial"));
+                    m.setClasificacion(rs.getString("Clasificacion"));
+                    m.setEstatus(rs.getString("Estatus"));
+                    
+                    lstMaterial.add(m);
+                }
+            }
+            rs.close();
+            st.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return lstMaterial;
+    }
+    
     //Método para insertar un material
     public RespuestaDto MaterialCreate(Material m) throws Exception
     {

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Controlador;
+import Modelo.Entity.InsumoPorProceso;
 import Modelo.Entity.InsumosXFichaProd;
 import Modelo.Entity.Proceso;
 import Modelo.Entity.SubProceso;
@@ -60,47 +61,68 @@ public class SubProcesoCommands {
     }
     
     //Método que se llama para obtener la lista de las formulas pertenecientes al subProceso señalado
-    public static String[][] obtenerListaInsXSubProc(SubProceso subP) throws Exception {
+    public static List<InsumoPorProceso> obtenerListaInsXSubProc(SubProceso subP) throws Exception {
+        List<InsumoPorProceso> lstInsumoPorProceso = null;
+        Statement st = null;
+        ResultSet rs = null;
+        
         String query = "execute sp_obtFormInsXSubProc "+subP.getIdSubProceso()+";";
-        String[][] datos = null;
-        int renglones = 0;
-        int columnas = 7;
-        int i = 0;
 
-        c.conectar();
-        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        System.out.println(query);
-        rs = stmt.executeQuery(query);
-        
-        if (rs.last()) 
+        try 
         {
-            renglones = rs.getRow();
-            datos = new String[renglones][columnas];
-            rs.beforeFirst();
-            
-            //Recorremos el ResultSet registro a registro
-            while (rs.next()) 
+            c.conectar();
+            st = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(query);
+            lstInsumoPorProceso = new ArrayList<>();
+
+            if (rs.last()) 
             {
-                datos[i][0] = rs.getString("clave");
-                
-                if (rs.getString("idInsumo").equals("0"))
-                    datos[i][1] = "";
-                else
-                    datos[i][1] = rs.getString("porcentaje");
-                
-                datos[i][2] = rs.getString("nombreProducto");
-                datos[i][3] = rs.getString("comentario");
-                datos[i][4] = rs.getString("idInsumo");
-                datos[i][5] = rs.getString("idFormXSubProc");
-                datos[i][6] = rs.getString("idInsumXProc");
-                i++; 
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) 
+                {
+                    InsumoPorProceso insumoPorProceso = new InsumoPorProceso();
+                    insumoPorProceso.setIdInsumXProc(rs.getInt("idInsumXProc"));
+                    insumoPorProceso.setIdFormXSubProc(rs.getInt("idFormXSubProc"));
+                    insumoPorProceso.setClave(rs.getString("clave"));
+                    insumoPorProceso.setPorcentaje(rs.getFloat("porcentaje"));
+                    insumoPorProceso.setIdInsumo(rs.getInt("idInsumo"));
+                    insumoPorProceso.setNombreProducto(rs.getString("nombreProducto"));
+                    insumoPorProceso.setComentario(rs.getString("comentario"));
+                    insumoPorProceso.setMaterialId(rs.getInt("MaterialId"));
+                    insumoPorProceso.setCatDetOrigenMaterialId(rs.getInt("CatDetOrigenMaterialId"));
+                    lstInsumoPorProceso.add(insumoPorProceso);
+
+                    /*
+                    datos[i][0] = rs.getString("clave");
+
+                    if (rs.getString("idInsumo").equals("0"))
+                        datos[i][1] = "";
+                    else
+                        datos[i][1] = rs.getString("porcentaje");
+
+                    datos[i][2] = rs.getString("nombreProducto");
+                    datos[i][3] = rs.getString("comentario");
+                    datos[i][4] = rs.getString("idInsumo");
+                    datos[i][5] = rs.getString("idFormXSubProc");
+                    datos[i][6] = rs.getString("idInsumXProc");
+                    */
+                }
             }
+            
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
         }
-        
-        rs.close();
-        stmt.close();
-        c.desconectar();
-        return datos;
+        finally
+        {
+            rs.close();
+            st.close();
+            c.desconectar();
+        }
+        return lstInsumoPorProceso;
     }
     
     //Método que se llama para obtener la fórmula de insumos del subproceso seleccionado

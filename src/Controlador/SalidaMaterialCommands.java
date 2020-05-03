@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import static Controlador.MaterialCommands.c;
 import Modelo.Entity.SalidaMaterial;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -13,6 +14,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -64,7 +69,11 @@ public class SalidaMaterialCommands {
             rs = st.executeQuery();
             if (rs.next())
             {
-                return_value = Integer.parseInt(rs.getString("Return_value"));
+                if (Integer.parseInt(rs.getString("Return_value")) > 0) {
+                    return_value = Integer.parseInt(rs.getString("Return_value"));
+                }else{
+                    return -1;
+                }
             }
             
         } 
@@ -79,5 +88,94 @@ public class SalidaMaterialCommands {
             c.desconectar();
         }
         return return_value;
+    }
+    
+    public int SalidaFichaMaterialCreate(ArrayList<SalidaMaterial> sm, int idFichaProd) throws Exception {
+        int return_value = -1;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        CallableStatement st = null;
+        try {
+            c.conectar();
+            String query = "execute dbo.Usp_SalidaMaterialCreate ?,?,?,?,?,?,?,?";
+            for (SalidaMaterial material : sm) {
+                String strDate = dateFormat.format(material.getFechaSalida());
+
+                st = c.getConexion().prepareCall(query);
+                st.setInt(1, material.getMaterialId());
+                st.setDouble(2, material.getCantidad());
+                st.setString(3, material.getSolicitante());
+                st.setString(4, material.getDepartamento());
+                st.setString(5, material.getComentarios());
+                st.setInt(6, material.getIdInsumoFichaProd());
+                st.setInt(7, material.getIdUsuario());
+                st.setString(8, strDate);
+                //st.registerOutParameter(9, java.sql.Types.INTEGER);  
+                rs = st.executeQuery();
+                if (rs.next()) {
+                    return_value = Integer.parseInt(rs.getString("Return_value"));
+                }
+            }
+            if (return_value == 1) {
+
+                query = "execute dbo.Usp_InsumosFichaProdUpdateEstatusSurtido ?";
+                st.setInt(1, idFichaProd);
+                rs = st.executeQuery();
+                if (rs.next()) {
+                    return_value = Integer.parseInt(rs.getString("Return_value"));
+                }
+
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        } finally {
+            rs.close();
+            st.close();
+            c.desconectar();
+        }
+        return return_value;
+    }
+    
+    //Método para obtener los datos de la tabla Tb_Material
+    public static List<Map> MaterialGetCollectionByIdFichaProd(int idFichaProd) 
+    {
+        List<Map> lstMaterial = null;
+        Statement st = null;
+        ResultSet rs = null;
+        
+        String query = "execute Usp_MaterialGetCollectionByIdFichaProd " + idFichaProd;
+
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(query);
+
+            lstMaterial = new ArrayList<>();
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    Map m = new HashMap();
+                    m.put("idfichaprod",rs.getInt("idFichaProd"));
+                    m.put("clave",rs.getString("clave"));
+                    m.put("idmaterial",rs.getInt("MaterialId"));
+                    m.put("codigo",rs.getString("Codigo"));
+                    m.put("material",rs.getString("material"));
+                    m.put("cantidad",rs.getFloat("cantidad"));
+                    m.put("unidadmedidad",rs.getString("unidadmedida"));
+                    m.put("existencia",rs.getFloat("Existencia"));
+                    m.put("idestatus",rs.getInt("CatDetId"));
+                    m.put("estatus",rs.getString("Nombre"));
+                    m.put("fechaultimaact",rs.getString("FechaUltimaAct"));
+                    lstMaterial.add(m);
+                }
+            
+            rs.close();
+            st.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return lstMaterial;
     }
 }

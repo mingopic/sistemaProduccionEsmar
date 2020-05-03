@@ -56,6 +56,20 @@ begin
 end
 go
 
+if object_id('dbo.Usp_InsumosFichaProdUpdateEstatusSurtido') is not null
+begin
+	drop procedure dbo.Usp_InsumosFichaProdUpdateEstatusSurtido
+end
+go
+
+
+
+if object_id('dbo.Usp_MaterialGetCollectionByIdFichaProd') is not null
+begin
+	drop procedure dbo.Usp_MaterialGetCollectionByIdFichaProd
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_reiniciarPartida 
@@ -807,6 +821,7 @@ create procedure sp_obtFormInsXSubProc
 go
 
 
+/*- - - - - - - - - - - - -  -*/
 
 
 USE [esmarProd]
@@ -819,7 +834,7 @@ GO
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-ALTER procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
+CREATE procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
 (
   @IdFichaProd  int
 )
@@ -833,11 +848,11 @@ ALTER procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
     */ 
 select fp.idFichaProd, 
 ifpd.clave,
-coalesce(m.MaterialId, ifpd.MaterialId) as MaterialId,
+[MaterialId] = coalesce(m.MaterialId, ifpd.MaterialId),
 m.Codigo,
-coalesce(m.descripcion,ifpd.material) as material,
+[material] = coalesce(m.descripcion,ifpd.material),
 ifpd.cantidad,
-um.descripcion as unidadmedida,
+[unidadmedida] = um.descripcion,
 m.Existencia,
 cd.CatDetId,
 cd.Nombre,
@@ -856,9 +871,7 @@ where fp.idFichaProd = @IdFichaProd and ifp.CatDetEstatusSurtidoId = 30 order by
 
 
 
-
-
-
+/*- - -- -- - - --- -- --  - - - - -  */
 
 
 
@@ -872,7 +885,7 @@ GO
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-ALTER procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
+CREATE procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
 (
   @IdFichaProd  int
 )

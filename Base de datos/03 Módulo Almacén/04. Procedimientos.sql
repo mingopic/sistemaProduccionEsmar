@@ -807,3 +807,99 @@ create procedure sp_obtFormInsXSubProc
 go
 
 
+
+
+USE [esmarProd]
+GO
+/****** Object:  StoredProcedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]    Script Date: 03/05/2020 01:52:13 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+ALTER procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
+(
+  @IdFichaProd  int
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+           JOlmedo   2020/05/02   Creación
+    =================================================================================================================================
+    */ 
+select fp.idFichaProd, 
+ifpd.clave,
+coalesce(m.MaterialId, ifpd.MaterialId) as MaterialId,
+m.Codigo,
+coalesce(m.descripcion,ifpd.material) as material,
+ifpd.cantidad,
+um.descripcion as unidadmedida,
+m.Existencia,
+cd.CatDetId,
+cd.Nombre,
+m.FechaUltimaAct 
+from tb_fichaProd fp 
+inner join tb_fichaProdDet fpd on fpd.idFichaProd = fp.idFichaProd 
+inner join tb_InsumosFichaProd  ifp on fp.idFichaProd = ifp.idFichaProd 
+inner join tb_InsumosFichaProdDet ifpd on ifpd.idInsumoFichaProd = ifp.idInsumoFichaProd 
+left join Tb_Material m on m.MaterialId = ifpd.MaterialId
+left join tb_unidadMedida um on um.idUnidadMedida = m.idUnidadMedida
+left join Tb_Catalogodet cd on m.CatDetEstatusId = cd.CatId
+left join Tb_Catalogo c on c.CatId = cd.CatDetId
+where fp.idFichaProd = @IdFichaProd and ifp.CatDetEstatusSurtidoId = 30 order by m.MaterialId asc, m.Descripcion asc, ifpd.material asc;
+  end
+
+
+
+
+
+
+
+
+
+
+USE [esmarProd]
+GO
+/****** Object:  StoredProcedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]    Script Date: 03/05/2020 01:55:38 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+ALTER procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
+(
+  @IdFichaProd  int
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+           JOlmedo   2020/05/02   Creación
+    =================================================================================================================================
+    */
+	set nocount on; 
+    
+    declare @Return_Value int
+    set @Return_Value = -1
+    
+    -- Validar que la cantidad em inventario sea suficiente
+    if ((select idFichaProd from dbo.tb_InsumosFichaProd where idFichaProd= @IdFichaProd) = null)
+    begin
+      set @Return_value = 0
+    end
+    
+    if (@Return_value = -1)
+    begin 
+update dbo.tb_InsumosFichaProd  set CatDetEstatusSurtidoId = 29 where idFichaProd = @IdFichaProd;
+set @Return_value = SCOPE_IDENTITY()
+    end
+    
+    select [Return_value] = @Return_value
+  end

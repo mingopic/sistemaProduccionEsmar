@@ -821,17 +821,6 @@ create procedure sp_obtFormInsXSubProc
 go
 
 
-/*- - - - - - - - - - - - -  -*/
-
-
-USE [esmarProd]
-GO
-/****** Object:  StoredProcedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]    Script Date: 03/05/2020 01:52:13 p. m. ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 CREATE procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
@@ -867,23 +856,8 @@ left join Tb_Catalogodet cd on m.CatDetEstatusId = cd.CatId
 left join Tb_Catalogo c on c.CatId = cd.CatDetId
 where fp.idFichaProd = @IdFichaProd and ifp.CatDetEstatusSurtidoId = 30 order by m.MaterialId asc, m.Descripcion asc, ifpd.material asc;
   end
+  go
 
-
-
-
-/*- - -- -- - - --- -- --  - - - - -  */
-
-
-
-USE [esmarProd]
-GO
-/****** Object:  StoredProcedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]    Script Date: 03/05/2020 01:55:38 p. m. ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 CREATE procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
 (
@@ -916,3 +890,4 @@ set @Return_value = SCOPE_IDENTITY()
     
     select [Return_value] = @Return_value
   end
+  go

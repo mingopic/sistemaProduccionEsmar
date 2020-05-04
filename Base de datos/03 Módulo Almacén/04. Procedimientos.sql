@@ -62,8 +62,6 @@ begin
 end
 go
 
-
-
 if object_id('dbo.Usp_MaterialGetCollectionByIdFichaProd') is not null
 begin
 	drop procedure dbo.Usp_MaterialGetCollectionByIdFichaProd
@@ -823,47 +821,93 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-CREATE procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
+create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
 (
   @IdFichaProd  int
 )
-  as begin
-    /*
-    =================================================================================================================================
-      #Id  Autor     Fecha        Description
-    ---------------------------------------------------------------------------------------------------------------------------------
-           JOlmedo   2020/05/02   Creación
-    =================================================================================================================================
-    */ 
-select fp.idFichaProd, 
-ifpd.clave,
-[MaterialId] = coalesce(m.MaterialId, ifpd.MaterialId),
-m.Codigo,
-[material] = coalesce(m.descripcion,ifpd.material),
-ifpd.cantidad,
-[unidadmedida] = um.descripcion,
-m.Existencia,
-cd.CatDetId,
-cd.Nombre,
-m.FechaUltimaAct 
-from tb_fichaProd fp 
-inner join tb_fichaProdDet fpd on fpd.idFichaProd = fp.idFichaProd 
-inner join tb_InsumosFichaProd  ifp on fp.idFichaProd = ifp.idFichaProd 
-inner join tb_InsumosFichaProdDet ifpd on ifpd.idInsumoFichaProd = ifp.idInsumoFichaProd 
-left join Tb_Material m on m.MaterialId = ifpd.MaterialId
-left join tb_unidadMedida um on um.idUnidadMedida = m.idUnidadMedida
-left join Tb_Catalogodet cd on m.CatDetEstatusId = cd.CatId
-left join Tb_Catalogo c on c.CatId = cd.CatDetId
-where fp.idFichaProd = @IdFichaProd and ifp.CatDetEstatusSurtidoId = 30 order by m.MaterialId asc, m.Descripcion asc, ifpd.material asc;
-  end
-  go
+as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01  JOlmedo    2020/05/02   Creación
+  =================================================================================================================================
+  */
 
+  declare 
+    @CatDetEstatusNoSurtido int
+    
+  set @CatDetEstatusActiva = 30
+  
+  select 
+    fp.idFichaProd
+    , ifpd.clave
+    , [MaterialId] = coalesce(m.MaterialId, ifpd.MaterialId)
+    , m.Codigo
+    , [material] = coalesce(m.descripcion,ifpd.material)
+    , ifpd.cantidad 
+    , [unidadmedida] = um.descripcion
+    , m.Existencia
+    , cd.CatDetId
+    , cd.Nombre
+    , m.FechaUltimaAct
 
-CREATE procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
+  from 
+    tb_fichaProd fp 
+    
+    inner join 
+      tb_fichaProdDet fpd 
+    on 
+      fpd.idFichaProd = fp.idFichaProd 
+      
+    inner join 
+      tb_InsumosFichaProd ifp 
+    on 
+      fp.idFichaProd = ifp.idFichaProd 
+      
+    inner join 
+      tb_InsumosFichaProdDet ifpd 
+    on 
+      ifpd.idInsumoFichaProd = ifp.idInsumoFichaProd 
+      
+    left join 
+      Tb_Material m 
+    on 
+      m.MaterialId = ifpd.MaterialId
+      
+    left join 
+      tb_unidadMedida um 
+    on 
+      um.idUnidadMedida = m.idUnidadMedida
+      
+    left join 
+      Tb_Catalogodet cd 
+    on 
+      m.CatDetEstatusId = cd.CatId
+    
+  left join 
+    Tb_Catalogo c 
+  on 
+    c.CatId = cd.CatDetId
+    
+  where 
+    fp.idFichaProd = @IdFichaProd  
+    and ifp.CatDetEstatusSurtidoId = @CatDetEstatusNoSurtido
+  
+  order by 
+    m.MaterialId asc
+    , m.Descripcion asc
+    , ifpd.material asc;
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
 (
   @IdFichaProd  int
 )
-  as begin
+as begin
     /*
     =================================================================================================================================
       #Id  Autor     Fecha        Description
@@ -876,18 +920,33 @@ CREATE procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
     declare @Return_Value int
     set @Return_Value = -1
     
-    -- Validar que la cantidad em inventario sea suficiente
-    if ((select idFichaProd from dbo.tb_InsumosFichaProd where idFichaProd= @IdFichaProd) = null)
+    -- Validar que la cantidad en inventario sea suficiente
+    if (
+       (select 
+          idFichaProd
+          
+        from dbo.tb_InsumosFichaProd 
+        
+        where idFichaProd = @IdFichaProd) = null
+        )
+        
     begin
       set @Return_value = 0
     end
     
     if (@Return_value = -1)
+    
     begin 
-update dbo.tb_InsumosFichaProd  set CatDetEstatusSurtidoId = 29 where idFichaProd = @IdFichaProd;
-set @Return_value = SCOPE_IDENTITY()
+    
+      update dbo.tb_InsumosFichaProd  
+        set CatDetEstatusSurtidoId = 29 
+        
+      where idFichaProd = @IdFichaProd;
+      
+      set @Return_value = SCOPE_IDENTITY()
     end
     
     select [Return_value] = @Return_value
+    
   end
   go

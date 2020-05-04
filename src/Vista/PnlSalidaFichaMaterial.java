@@ -53,6 +53,49 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         fp = new FichaProduccion();        
         lstMaterial = new ArrayList<>();
     }
+    
+    private void ValidarNumeros(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c;
+            c=evt.getKeyChar();    
+            int punto=textoCaja.indexOf(".")+1;
+
+            if (punto==0)
+            {
+                if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE && c!=KeyEvent.VK_PERIOD)
+                {
+                    getToolkit().beep();           
+                    evt.consume();
+                }
+            }
+
+            else
+            {
+                if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+                {
+                    getToolkit().beep();           
+                    evt.consume();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void validarNumerosEnteros(java.awt.event.KeyEvent evt, String textoCaja)
+    {
+        try {
+            char c = evt.getKeyChar();
+            
+            if (c<'0' || c>'9') 
+            {
+                evt.consume();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PnlDevoluciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -374,8 +417,10 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarSalidaActionPerformed
+        llenarTabla();
         if (ValidarSalidaFicha()) {
             try {
+                
                 SalidaFichaMaterialCreate();
             } catch (Exception ex) {
                 Logger.getLogger(PnlSalidaFichaMaterial.class.getName()).log(Level.SEVERE, null, ex);
@@ -430,92 +475,15 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
     
     private void txtNoFichaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoFichaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            lstMaterial = null;
-            String noFicha = txtNoFicha.getText();
-            lstMaterial = new ArrayList<Map>();
-            if (noFicha != null && noFicha.toString().trim().equals("")) {
-                limpiarComponentesSalidaMateriales();
-            } else {
-                limpiarComponentesSalidaMateriales();
-                SalidaMaterialCommands mc = new SalidaMaterialCommands();
-                lstMaterial = mc.MaterialGetCollectionByIdFichaProd(Integer.parseInt(noFicha));
-                if (lstMaterial.size() == 0) {
-                    JOptionPane.showMessageDialog(this, "La ficha no existe o ya fue surtida.", "", JOptionPane.INFORMATION_MESSAGE);
-
-                } else {
-                    DefaultTableModel dtm = new DefaultTableModel() {
-                        public boolean isCellEditable(int row, int column) {
-                            return false;
-                        }
-                    };
-                    String[] cols = new String[]{
-                        "idfichaprod", "clave", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus", "Última Actualización"
-                    };
-                    dtm.setColumnIdentifiers(cols);
-                    dtm.setRowCount(lstMaterial.size());
-                    String tmpIdMaterial = "";
-                    String tmpMaterial = "";
-                    int tmpFila = -1;
-                    int fila = 0;
-                    for (int i = 0; i < lstMaterial.size(); i++) {
-                        if (i > 0 && lstMaterial.get(i).get("idmaterial").toString().equalsIgnoreCase(tmpIdMaterial) && lstMaterial.get(i).get("material").toString().equalsIgnoreCase(tmpMaterial)) {
-                            float cantidad = Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
-                                    + Float.parseFloat(dtm.getValueAt(tmpFila, 5).toString());
-                            dtm.setValueAt(
-                                    cantidad,
-                                    tmpFila, 5);
-
-                            continue;
-                        }
-                        dtm.setValueAt(lstMaterial.get(i).get("idfichaprod"), fila, 0);
-                        dtm.setValueAt(lstMaterial.get(i).get("clave"), fila, 1);
-                        dtm.setValueAt(lstMaterial.get(i).get("idmaterial"), fila, 2);
-                        dtm.setValueAt(lstMaterial.get(i).get("codigo"), fila, 3);
-                        dtm.setValueAt(lstMaterial.get(i).get("material"), fila, 4);
-                        dtm.setValueAt(lstMaterial.get(i).get("cantidad"), fila, 5);
-                        dtm.setValueAt(lstMaterial.get(i).get("unidadmedidad"), fila, 6);
-                        dtm.setValueAt(lstMaterial.get(i).get("existencia"), fila, 7);
-                        dtm.setValueAt(lstMaterial.get(i).get("idestatus"), fila, 8);
-                        if (lstMaterial.get(i).get("idestatus").toString().equals("27")
-                                && Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
-                                <= Float.parseFloat(lstMaterial.get(i).get("existencia").toString())) {
-                            dtm.setValueAt("Disponible", fila, 9);
-                        } else if (lstMaterial.get(i).get("idestatus").toString().equals("27")
-                                && Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
-                                > Float.parseFloat(lstMaterial.get(i).get("existencia").toString())) {
-                            dtm.setValueAt("Cantidad Insuficiente", fila, 9);
-                        } else {
-                            dtm.setValueAt("No Existente En Almacen", fila, 9);
-                        }
-                        //dtm.setValueAt(lstMaterial.get(i).get("estatus"), fila, 9);
-                        dtm.setValueAt(lstMaterial.get(i).get("fechaultimaact"), fila, 10);
-                        tmpIdMaterial = lstMaterial.get(i).get("idmaterial").toString();
-                        tmpMaterial = lstMaterial.get(i).get("material").toString();
-                        tmpFila = fila;
-                        fila++;
-
-                    }
-
-                    tblMaterialesFicha.setModel(dtm);
-                    TableColumnModel columnModel = tblMaterialesFicha.getColumnModel();
-                    columnModel.getColumn(0).setMinWidth(0);
-                    columnModel.getColumn(0).setMaxWidth(0);
-                    columnModel.getColumn(1).setMinWidth(0);
-                    columnModel.getColumn(1).setMaxWidth(0);
-                    columnModel.getColumn(2).setMinWidth(0);
-                    columnModel.getColumn(2).setMaxWidth(0);
-                    columnModel.getColumn(8).setMinWidth(0);
-                    columnModel.getColumn(8).setMaxWidth(0);
-                    tblMaterialesFicha.getTableHeader().setReorderingAllowed(false);
-                }
-            }
+            llenarTabla();
         } else {
+            
             limpiarComponentesSalidaMateriales();
         }
     }//GEN-LAST:event_txtNoFichaKeyPressed
 
     private void txtNoFichaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoFichaKeyTyped
-        // TODO add your handling code here:
+        validarNumerosEnteros(evt, txtNoFicha.getText());
     }//GEN-LAST:event_txtNoFichaKeyTyped
 
 
@@ -610,12 +578,12 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, mensaje, "", JOptionPane.WARNING_MESSAGE);
         }
         if (respuesta) {
-            mensaje = "TOdochido";
+            
             lblRequired1.setVisible(false);
             lblRequired2.setVisible(false);
             lblRequired3.setVisible(false);
             lblRequired4.setVisible(false);
-            JOptionPane.showMessageDialog(this, mensaje, "", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(this, mensaje, "", JOptionPane.INFORMATION_MESSAGE);
         }
 
         return respuesta;
@@ -623,5 +591,87 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
 
     private void actualizarTablaMaterialesFicha() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void llenarTabla() {
+        lstMaterial = null;
+            String noFicha = txtNoFicha.getText();
+            lstMaterial = new ArrayList<Map>();
+            if (noFicha != null && noFicha.toString().trim().equals("")) {
+                limpiarComponentesSalidaMateriales();
+            } else {
+                limpiarComponentesSalidaMateriales();
+                SalidaMaterialCommands mc = new SalidaMaterialCommands();
+                lstMaterial = mc.MaterialGetCollectionByIdFichaProd(Integer.parseInt(noFicha));
+                if (lstMaterial.size() == 0) {
+                    JOptionPane.showMessageDialog(this, "La ficha no existe o ya fue surtida.", "", JOptionPane.INFORMATION_MESSAGE);
+
+                } else {
+                    DefaultTableModel dtm = new DefaultTableModel() {
+                        public boolean isCellEditable(int row, int column) {
+                            return false;
+                        }
+                    };
+                    String[] cols = new String[]{
+                        "idfichaprod", "clave", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus", "Última Actualización"
+                    };
+                    dtm.setColumnIdentifiers(cols);
+                    dtm.setRowCount(lstMaterial.size());
+                    String tmpIdMaterial = "";
+                    String tmpMaterial = "";
+                    int tmpFila = -1;
+                    int fila = 0;
+                    for (int i = 0; i < lstMaterial.size(); i++) {
+                        if (i > 0 && lstMaterial.get(i).get("idmaterial").toString().equalsIgnoreCase(tmpIdMaterial) && lstMaterial.get(i).get("material").toString().equalsIgnoreCase(tmpMaterial)) {
+                            float cantidad = Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
+                                    + Float.parseFloat(dtm.getValueAt(tmpFila, 5).toString());
+                            dtm.setValueAt(
+                                    cantidad,
+                                    tmpFila, 5);
+
+                            continue;
+                        }
+                        dtm.setValueAt(lstMaterial.get(i).get("idfichaprod"), fila, 0);
+                        dtm.setValueAt(lstMaterial.get(i).get("clave"), fila, 1);
+                        dtm.setValueAt(lstMaterial.get(i).get("idmaterial"), fila, 2);
+                        dtm.setValueAt(lstMaterial.get(i).get("codigo"), fila, 3);
+                        dtm.setValueAt(lstMaterial.get(i).get("material"), fila, 4);
+                        dtm.setValueAt(lstMaterial.get(i).get("cantidad"), fila, 5);
+                        dtm.setValueAt(lstMaterial.get(i).get("unidadmedidad"), fila, 6);
+                        dtm.setValueAt(lstMaterial.get(i).get("existencia"), fila, 7);
+                        dtm.setValueAt(lstMaterial.get(i).get("idestatus"), fila, 8);
+                        if (lstMaterial.get(i).get("idestatus").toString().equals("27")
+                                && Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
+                                <= Float.parseFloat(lstMaterial.get(i).get("existencia").toString())) {
+                            dtm.setValueAt("Disponible", fila, 9);
+                        } else if (lstMaterial.get(i).get("idestatus").toString().equals("27")
+                                && Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
+                                > Float.parseFloat(lstMaterial.get(i).get("existencia").toString())) {
+                            dtm.setValueAt("Cantidad Insuficiente", fila, 9);
+                        } else {
+                            dtm.setValueAt("No Existente En Almacen", fila, 9);
+                        }
+                        //dtm.setValueAt(lstMaterial.get(i).get("estatus"), fila, 9);
+                        dtm.setValueAt(lstMaterial.get(i).get("fechaultimaact"), fila, 10);
+                        tmpIdMaterial = lstMaterial.get(i).get("idmaterial").toString();
+                        tmpMaterial = lstMaterial.get(i).get("material").toString();
+                        tmpFila = fila;
+                        fila++;
+
+                    }
+
+                    tblMaterialesFicha.setModel(dtm);
+                    TableColumnModel columnModel = tblMaterialesFicha.getColumnModel();
+                    columnModel.getColumn(0).setMinWidth(0);
+                    columnModel.getColumn(0).setMaxWidth(0);
+                    columnModel.getColumn(1).setMinWidth(0);
+                    columnModel.getColumn(1).setMaxWidth(0);
+                    columnModel.getColumn(2).setMinWidth(0);
+                    columnModel.getColumn(2).setMaxWidth(0);
+                    columnModel.getColumn(8).setMinWidth(0);
+                    columnModel.getColumn(8).setMaxWidth(0);
+                    tblMaterialesFicha.getTableHeader().setReorderingAllowed(false);
+                }
+            }
     }
 }

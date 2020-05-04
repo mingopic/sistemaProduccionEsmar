@@ -31,7 +31,8 @@ public class InsumosFichaProdDetCommands {
                 + ", " + ifpd.getCantidad()
                 + ", '" + ifpd.getObservaciones() + "'"
                 + ", " + ifpd.getPrecioUnitario()
-                + ", " + ifpd.getTotal();
+                + ", " + ifpd.getTotal()
+                + ", " + ifpd.getMaterialId();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

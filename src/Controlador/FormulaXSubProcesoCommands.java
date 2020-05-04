@@ -21,7 +21,8 @@ public class FormulaXSubProcesoCommands {
     
     //Método para agregar una formula por subproceso
     public static void agregarFormXSubProc(FormulaXSubProceso fxs) throws Exception {
-        String query = "exec sp_agrFormSubProc "+fxs.getIdSubproceso();
+        String query = "exec sp_agrFormSubProc "+fxs.getIdSubproceso() 
+                        + ", " + fxs.getCatDetOrigenMaterialId();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

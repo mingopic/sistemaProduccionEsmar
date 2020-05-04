@@ -13,6 +13,7 @@ public class FormulaXSubProceso {
     int idFormXSubproc;
     int idSubproceso;
     String fechaCreacion;
+    int CatDetOrigenMaterialId;
 
     public int getIdFormXSubproc() {
         return idFormXSubproc;
@@ -36,5 +37,13 @@ public class FormulaXSubProceso {
 
     public void setFechaCreacion(String fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public int getCatDetOrigenMaterialId() {
+        return CatDetOrigenMaterialId;
+    }
+
+    public void setCatDetOrigenMaterialId(int CatDetOrigenMaterialId) {
+        this.CatDetOrigenMaterialId = CatDetOrigenMaterialId;
     }
 }

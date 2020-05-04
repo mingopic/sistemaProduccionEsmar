@@ -55,7 +55,8 @@ public class InsumosFichaProdCommands {
                 + ", " + ifp.getIdProceso()
                 + ", " + ifp.getIdSubproceso()
                 + ", " + ifp.getIdFormXSubProc()
-                + ", " + ifp.getTotalInsumos();
+                + ", " + ifp.getTotalInsumos()
+                + ", " + ifp.getCatDetEstatusSurtidoId();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

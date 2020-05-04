@@ -165,6 +165,7 @@ public class SubProcesoCommands {
                     obj.setIdProducto(rs.getInt("idInsumo"));
                     obj.setIdFormXSubProc(rs.getInt("IdFormXSubProc"));
                     obj.setTemperatura("");
+                    obj.setPrecioUnitario(Double.parseDouble(String.format("%.2f",rs.getDouble("precioUnitario"))));
                     lstInsumos.add(obj);
                 }
             }

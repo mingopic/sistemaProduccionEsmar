@@ -16,6 +16,7 @@ public class InsumosFichaProd {
     int idSubproceso;
     int idFormXSubProc;
     Double totalInsumos;
+    int CatDetEstatusSurtidoId;
 
     public int getIdInsumoFichaProd() {
         return idInsumoFichaProd;
@@ -64,4 +65,13 @@ public class InsumosFichaProd {
     public void setTotalInsumos(Double totalInsumos) {
         this.totalInsumos = totalInsumos;
     }
+
+    public int getCatDetEstatusSurtidoId() {
+        return CatDetEstatusSurtidoId;
+    }
+
+    public void setCatDetEstatusSurtidoId(int CatDetEstatusSurtidoId) {
+        this.CatDetEstatusSurtidoId = CatDetEstatusSurtidoId;
+    }
+    
 }

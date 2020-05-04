@@ -66,6 +66,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     DefaultTableModel dtmInsumos;
     int idSubproceso = 0;
     List<InsumosXFichaProd> lstInsumos;
+    static int catDetEstatusNoSurtido = 30;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -649,16 +650,18 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             {
                 lstInsumos = new ArrayList<>();
                 lstInsumos = subPc.obtInsXSubProcList(idSubproceso);
-            
+                
+                /*
                 for (int i = 0; i < lstInsumos.size(); i++)
                 {
                     lstInsumos.get(i).setPrecioUnitario(subPc.obtPrecioProducto(lstInsumos.get(i).getIdProducto()));
                 }
+                */
             }
             
             String[] cols = new String[]
             {
-                "Clave", "%", "Material", "Temp", "Rodar", "Cantidad", "Observaciones", "P/U", "Total"
+                "Clave", "%", "Material", "Temp", "Rodar", "Cantidad", "Observaciones", "P/U", "Total","MaterialId"
             };
 
             dtmInsumos = new DefaultTableModel()
@@ -697,10 +700,16 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 dtmInsumos.setValueAt(lstInsumos.get(i).getTemperatura(), i, 3);
                 dtmInsumos.setValueAt(lstInsumos.get(i).getRodar(), i, 4);
                 dtmInsumos.setValueAt("", i, 6);
+                dtmInsumos.setValueAt(lstInsumos.get(i).getIdProducto(), i, 9);
                 
             }
             tblInsXproc.getTableHeader().setReorderingAllowed(false);
             tblInsXproc.setModel(dtmInsumos);
+            
+            tblInsXproc.getColumnModel().getColumn(9).setMaxWidth(0);
+            tblInsXproc.getColumnModel().getColumn(9).setMinWidth(0);
+            tblInsXproc.getColumnModel().getColumn(9).setPreferredWidth(0);
+            
             actualizarTotalInsumos();
             lblSubProceso.setText(subProceso[tblSubproceso.getSelectedRow()][0]);
 
@@ -2429,6 +2438,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 ifp.setIdSubproceso(Integer.parseInt(subProceso[tblSubproceso.getSelectedRow()][1]));
                 ifp.setIdFormXSubProc(lstInsumos.get(0).getIdFormXSubProc());
                 ifp.setTotalInsumos(costoInsumosFicha);
+                ifp.setCatDetEstatusSurtidoId(catDetEstatusNoSurtido);
 
                 ifpc.agregarInsumosFichaProd(ifp);
 
@@ -2449,6 +2459,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                         ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
                         ifpd.setPrecioUnitario(Double.parseDouble(tblInsXproc.getValueAt(i, 7).toString()));
                         ifpd.setTotal(Double.parseDouble(tblInsXproc.getValueAt(i, 8).toString()));
+                        ifpd.setMaterialId(Integer.parseInt(tblInsXproc.getValueAt(i, 9).toString()));
                     }
                     else
                     {
@@ -2461,6 +2472,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                         ifpd.setObservaciones(tblInsXproc.getValueAt(i, 6).toString());
                         ifpd.setPrecioUnitario(0.0);
                         ifpd.setTotal(0.0);
+                        ifpd.setMaterialId(Integer.parseInt(tblInsXproc.getValueAt(i, 9).toString()));
                     }
 
                     ifpdc.insertarInsumosFichaProdDet(ifpd);

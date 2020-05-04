@@ -6,12 +6,9 @@
 package Controlador;
 
 import Modelo.Entity.FichaProd;
-import Modelo.Entity.Insumo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

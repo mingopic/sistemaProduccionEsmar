@@ -40,6 +40,8 @@ public class PnlInsXproc extends javax.swing.JPanel {
     DefaultTableModel dtms=new DefaultTableModel();
     DefaultTableModel dtmInsumos;
     List<Material> lstInsumo;
+    static int CatDetBdPropia = 27;
+    static int CatDetBdContpaq = 28;
     
     //Variable para nombrar las columnas de la tabla que carga el listado de las entradas realizadas
     String[] cols = new String[]
@@ -49,7 +51,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
     
     String[] cols2 = new String[]
     {
-        "Clave","Porcentaje","Insumo","Rodar","idInsumo"
+        "Clave","Porcentaje","Insumo","Rodar","idInsumo","MaterialId"
     };
     
     boolean[] editables = new boolean[]
@@ -147,7 +149,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
         }
         else
         {
-            if (JOptionPane.showConfirmDialog(null, "Realmente desea guardar las modificaciones", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+            if (JOptionPane.showConfirmDialog(null, "Desea guardar las modificaciones", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
             {
                 int filas = tblInsXSubProc.getRowCount();
                 FormulaXSubProceso fxs = new FormulaXSubProceso();
@@ -179,12 +181,13 @@ public class PnlInsXproc extends javax.swing.JPanel {
                             datosIXP[i].setClave("");
                         }
                         //validar si el renglon se agrego por presionar btnAgregarEspacio
-                        if (tblInsXSubProc.getValueAt(i, 4).toString().equals("0"))
+                        if (tblInsXSubProc.getValueAt(i, 5).toString().equals("0"))
                         {
                             datosIXP[i].setPorcentaje((float) 0.0);
                             datosIXP[i].setNombreProducto("");
                             datosIXP[i].setComentario(tblInsXSubProc.getValueAt(i, 3).toString());
                             datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 4).toString()));
+                            datosIXP[i].setMaterialId(Integer.parseInt(tblInsXSubProc.getValueAt(i, 5).toString()));
                         }
                         else
                         {
@@ -192,15 +195,17 @@ public class PnlInsXproc extends javax.swing.JPanel {
                             datosIXP[i].setNombreProducto(tblInsXSubProc.getValueAt(i, 2).toString());
                             datosIXP[i].setComentario(tblInsXSubProc.getValueAt(i, 3).toString());
                             datosIXP[i].setIdInsumo(Integer.parseInt(tblInsXSubProc.getValueAt(i, 4).toString()));
+                            datosIXP[i].setMaterialId(Integer.parseInt(tblInsXSubProc.getValueAt(i, 5).toString()));
                         } 
                     }
                     fxs.setIdSubproceso(idSubProceso);
+                    fxs.setCatDetOrigenMaterialId(CatDetBdPropia);
                     fxsc.agregarFormXSubProc(fxs);
+                    
                     ippc.agregarInsumoXProc(datosIXP, idSubProceso);
                     JOptionPane.showMessageDialog(null, "Fórmula guardada correctamente");
                 } catch (Exception e)
                 {
-//                    System.err.println(e);
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Ingrese datos validos","Error",JOptionPane.ERROR_MESSAGE);
                 }
@@ -528,7 +533,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 if (!lstInsumXProc.isEmpty())
                 {
                     // 28 -> Contpaq
-                    if (lstInsumXProc.get(0).getCatDetOrigenMaterialId() == 28)
+                    if (lstInsumXProc.get(0).getCatDetOrigenMaterialId() == CatDetBdContpaq)
                     {
                         btnAgregarInsumo.setEnabled(false);
                         btnAgregarEspacio.setEnabled(false);
@@ -563,6 +568,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
                     dtmInsumos.setValueAt(lstInsumXProc.get(i).getNombreProducto(), i, 2);
                     dtmInsumos.setValueAt(lstInsumXProc.get(i).getComentario(), i, 3);
                     dtmInsumos.setValueAt(lstInsumXProc.get(i).getIdInsumo(), i, 4);
+                    dtmInsumos.setValueAt(lstInsumXProc.get(i).getMaterialId(), i, 5);
                 }
                 tblInsXSubProc.setModel(dtmInsumos);
                 
@@ -570,6 +576,9 @@ public class PnlInsXproc extends javax.swing.JPanel {
                 tblInsXSubProc.getColumnModel().getColumn(4).setMaxWidth(0);
                 tblInsXSubProc.getColumnModel().getColumn(4).setMinWidth(0);
                 tblInsXSubProc.getColumnModel().getColumn(4).setPreferredWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(5).setMaxWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(5).setMinWidth(0);
+                tblInsXSubProc.getColumnModel().getColumn(5).setPreferredWidth(0);
 
             } catch (Exception e) {
 
@@ -581,7 +590,7 @@ public class PnlInsXproc extends javax.swing.JPanel {
     }//GEN-LAST:event_tblSubprocesoMouseClicked
 
     private void btnQuitarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarInsumoActionPerformed
-       int fila;
+        int fila;
         try
         {
             fila=this.tblInsXSubProc.getSelectedRow();
@@ -594,13 +603,13 @@ public class PnlInsXproc extends javax.swing.JPanel {
     }//GEN-LAST:event_btnQuitarInsumoActionPerformed
 
     private void btnAgregarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarInsumoActionPerformed
-        int n;
-        String datos[]=new String[5];
+        String datos[]=new String[6];
         datos[0]= "";
         datos[1]= "";
         datos[2]= cmbInsumo.getSelectedItem().toString();
         datos[3]= "";
-        datos[4]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getMaterialId());
+        datos[4]= "0";
+        datos[5]= String.valueOf(lstInsumo.get(cmbInsumo.getSelectedIndex()).getMaterialId());
         dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarInsumoActionPerformed
 
@@ -613,12 +622,13 @@ public class PnlInsXproc extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGuardarInsumoActionPerformed
 
     private void btnAgregarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEspacioActionPerformed
-        String datos[]=new String[5];
+        String datos[]=new String[6];
         datos[0]= "";
         datos[1]= "";
         datos[2]= "";
         datos[3]= "";
         datos[4]= "0";
+        datos[5]= "0";
         dtmInsumos.insertRow(tblInsXSubProc.getSelectedRow() + 1, datos);
     }//GEN-LAST:event_btnAgregarEspacioActionPerformed
 
@@ -664,15 +674,18 @@ public class PnlInsXproc extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCopiarFormulaActionPerformed
 
     private void tblInsXSubProcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInsXSubProcMouseClicked
-        // 27 -> BD Propia
-        if (lstInsumXProc.get(0).getCatDetOrigenMaterialId() == 27)
+        if (lstInsumXProc.size() > 0)
         {
-            if(evt.getClickCount()==1)
+            if (lstInsumXProc.get(0).getCatDetOrigenMaterialId() == CatDetBdPropia)
             {
-                btnAgregarInsumo.setEnabled(true);
-                btnQuitarInsumo.setEnabled(true);
+                if(evt.getClickCount()==1)
+                {
+                    btnAgregarInsumo.setEnabled(true);
+                    btnQuitarInsumo.setEnabled(true);
+                }
             }
         }
+        
     }//GEN-LAST:event_tblInsXSubProcMouseClicked
 
 

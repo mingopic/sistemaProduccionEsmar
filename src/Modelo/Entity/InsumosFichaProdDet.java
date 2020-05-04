@@ -21,6 +21,7 @@ public class InsumosFichaProdDet {
     String observaciones;
     Double precioUnitario;
     Double total;
+    int MaterialId;
 
     public int getIdIsumoFichaProdDet() {
         return idIsumoFichaProdDet;
@@ -109,4 +110,13 @@ public class InsumosFichaProdDet {
     public void setTotal(Double total) {
         this.total = total;
     }
+
+    public int getMaterialId() {
+        return MaterialId;
+    }
+
+    public void setMaterialId(int MaterialId) {
+        this.MaterialId = MaterialId;
+    }
+    
 }

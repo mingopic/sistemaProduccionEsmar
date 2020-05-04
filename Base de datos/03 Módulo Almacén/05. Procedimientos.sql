@@ -50,12 +50,6 @@ begin
 end
 go
 
-if object_id('dbo.sp_obtFormInsXSubProc') is not null
-begin
-	drop procedure dbo.sp_obtFormInsXSubProc
-end
-go
-
 if object_id('dbo.Usp_InsumosFichaProdUpdateEstatusSurtido') is not null
 begin
 	drop procedure dbo.Usp_InsumosFichaProdUpdateEstatusSurtido
@@ -65,6 +59,36 @@ go
 if object_id('dbo.Usp_MaterialGetCollectionByIdFichaProd') is not null
 begin
 	drop procedure dbo.Usp_MaterialGetCollectionByIdFichaProd
+end
+go
+
+if object_id('dbo.sp_agrFormSubProc') is not null
+begin
+	drop procedure dbo.sp_agrFormSubProc
+end
+go
+
+if object_id('dbo.sp_agrInsumXProc') is not null
+begin
+	drop procedure dbo.sp_agrInsumXProc
+end
+go
+
+if object_id('dbo.sp_obtFormInsXSubProc') is not null
+begin
+	drop procedure dbo.sp_obtFormInsXSubProc
+end
+go
+
+if object_id('dbo.sp_InsInsumosFichaProd') is not null
+begin
+	drop procedure dbo.sp_InsInsumosFichaProd
+end
+go
+
+if object_id('dbo.sp_InsInsumosFichaProdDet') is not null
+begin
+	drop procedure dbo.sp_InsInsumosFichaProdDet
 end
 go
 
@@ -759,146 +783,86 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-create procedure sp_obtFormInsXSubProc 
-  (
-    @idSubProceso int
-  )
-  as begin
-  /*
-  =================================================================================================================================
-    #Id  Autor     Fecha        Description
-  ---------------------------------------------------------------------------------------------------------------------------------
-    01   ???       ???          Creación
-    02   DLuna     2020/04/21   Validar origenes de tabla de insumos (material)
-  =================================================================================================================================
-  */ 
-  
-    declare 
-      @idFormXSubProc           int
-      , @CatDetOrigenMaterialId int --#02
-    
-    -- #02 {
-    select
-      @idFormXSubProc = idFormXSubProc
-      , @CatDetOrigenMaterialId = CatDetOrigenMaterialId
-    from 
-      tb_formXsubProc
-    where 
-      fechaCreacion = 
-      (
-        select 
-          max (fechaCreacion)
-          
-        from 
-          tb_formXsubProc
-          
-        where 
-          idSubproceso = @idSubProceso
-      )
-      and idSubproceso = @idSubProceso
-    -- #02 }
-    
-    select
-      idInsumXProc
-      , idFormXSubProc
-      , clave
-      , porcentaje
-      , idInsumo
-      , nombreProducto
-      , comentario
-      , MaterialId
-      , [CatDetOrigenMaterialId] = @CatDetOrigenMaterialId --#02
-      
-    from 
-      tb_insumXproc
-      
-    where 
-      idFormXSubProc = @idFormXSubProc
-  end
-
-go
-
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
 create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
 (
   @IdFichaProd  int
 )
-as begin
-  /*
-  =================================================================================================================================
-    #Id  Autor     Fecha        Description
-  ---------------------------------------------------------------------------------------------------------------------------------
-    01  JOlmedo    2020/05/02   Creación
-  =================================================================================================================================
-  */
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01  JOlmedo    2020/05/02   Creación
+    =================================================================================================================================
+    */
 
-  declare 
-    @CatDetEstatusNoSurtido int
+    declare 
+      @CatDetEstatusNoSurtido int
+      
+    set 
+      @CatDetEstatusNoSurtido = 30
     
-  set @CatDetEstatusActiva = 30
-  
-  select 
-    fp.idFichaProd
-    , ifpd.clave
-    , [MaterialId] = coalesce(m.MaterialId, ifpd.MaterialId)
-    , m.Codigo
-    , [material] = coalesce(m.descripcion,ifpd.material)
-    , ifpd.cantidad 
-    , [unidadmedida] = um.descripcion
-    , m.Existencia
-    , cd.CatDetId
-    , cd.Nombre
-    , m.FechaUltimaAct
+    select 
+      fp.idFichaProd
+      , ifpd.clave
+      , [MaterialId] = coalesce(m.MaterialId, ifpd.MaterialId)
+      , m.Codigo
+      , [material] = coalesce(m.descripcion,ifpd.material)
+      , ifpd.cantidad 
+      , [unidadmedida] = um.descripcion
+      , m.Existencia
+      , cd.CatDetId
+      , cd.Nombre
+      , m.FechaUltimaAct
 
-  from 
-    tb_fichaProd fp 
+    from 
+      tb_fichaProd fp 
+      
+      inner join 
+        tb_fichaProdDet fpd 
+      on 
+        fpd.idFichaProd = fp.idFichaProd 
+        
+      inner join 
+        tb_InsumosFichaProd ifp 
+      on 
+        fp.idFichaProd = ifp.idFichaProd 
+        
+      inner join 
+        tb_InsumosFichaProdDet ifpd 
+      on 
+        ifpd.idInsumoFichaProd = ifp.idInsumoFichaProd 
+        
+      left join 
+        Tb_Material m 
+      on 
+        m.MaterialId = ifpd.MaterialId
+        
+      left join 
+        tb_unidadMedida um 
+      on 
+        um.idUnidadMedida = m.idUnidadMedida
+        
+      left join 
+        Tb_Catalogodet cd 
+      on 
+        m.CatDetEstatusId = cd.CatId
+      
+      left join 
+        Tb_Catalogo c 
+      on 
+        c.CatId = cd.CatDetId
+      
+    where 
+      fp.idFichaProd = @IdFichaProd  
+      and ifp.CatDetEstatusSurtidoId = @CatDetEstatusNoSurtido
     
-    inner join 
-      tb_fichaProdDet fpd 
-    on 
-      fpd.idFichaProd = fp.idFichaProd 
+    order by 
+      m.MaterialId asc
+      , m.Descripcion asc
+      , ifpd.material asc;
       
-    inner join 
-      tb_InsumosFichaProd ifp 
-    on 
-      fp.idFichaProd = ifp.idFichaProd 
-      
-    inner join 
-      tb_InsumosFichaProdDet ifpd 
-    on 
-      ifpd.idInsumoFichaProd = ifp.idInsumoFichaProd 
-      
-    left join 
-      Tb_Material m 
-    on 
-      m.MaterialId = ifpd.MaterialId
-      
-    left join 
-      tb_unidadMedida um 
-    on 
-      um.idUnidadMedida = m.idUnidadMedida
-      
-    left join 
-      Tb_Catalogodet cd 
-    on 
-      m.CatDetEstatusId = cd.CatId
-    
-  left join 
-    Tb_Catalogo c 
-  on 
-    c.CatId = cd.CatDetId
-    
-  where 
-    fp.idFichaProd = @IdFichaProd  
-    and ifp.CatDetEstatusSurtidoId = @CatDetEstatusNoSurtido
-  
-  order by 
-    m.MaterialId asc
-    , m.Descripcion asc
-    , ifpd.material asc;
-end
+  end
 go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -907,46 +871,340 @@ create procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
 (
   @IdFichaProd  int
 )
-as begin
+  as begin
     /*
     =================================================================================================================================
       #Id  Autor     Fecha        Description
     ---------------------------------------------------------------------------------------------------------------------------------
-           JOlmedo   2020/05/02   Creación
+      01   JOlmedo   2020/05/02   Creación
     =================================================================================================================================
     */
-	set nocount on; 
-    
-    declare @Return_Value int
-    set @Return_Value = -1
-    
-    -- Validar que la cantidad en inventario sea suficiente
-    if (
-       (select 
-          idFichaProd
-          
-        from dbo.tb_InsumosFichaProd 
-        
-        where idFichaProd = @IdFichaProd) = null
-        )
-        
-    begin
-      set @Return_value = 0
-    end
-    
-    if (@Return_value = -1)
-    
-    begin 
-    
-      update dbo.tb_InsumosFichaProd  
-        set CatDetEstatusSurtidoId = 29 
-        
-      where idFichaProd = @IdFichaProd;
+    set nocount on; 
       
-      set @Return_value = SCOPE_IDENTITY()
-    end
-    
-    select [Return_value] = @Return_value
-    
+      declare 
+        @Return_Value int
+        
+      set 
+        @Return_Value = -1
+      
+      -- Validar que la cantidad en inventario sea suficiente
+      if (select idFichaProd from dbo.tb_InsumosFichaProd where idFichaProd = @IdFichaProd) = null
+      begin
+        set @Return_value = 0
+      end
+      
+      if (@Return_value = -1)
+      begin 
+        update 
+          dbo.tb_InsumosFichaProd  
+        set 
+          CatDetEstatusSurtidoId = 29 
+        where 
+          idFichaProd = @IdFichaProd;
+        
+        set @Return_value = SCOPE_IDENTITY()
+      end
+      
+      select [Return_value] = @Return_value
+      
   end
-  go
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.sp_agrFormSubProc 
+(
+  @idSubProceso             int
+  , @CatDetOrigenMaterialId int -- #02
+)
+  as begin
+    
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   ???       ???          Creación
+      02   DLuna     2020/05/03   Agregar parametro @CatDetOrigenMaterialId para insertar en nuevo campo de la tabla tb_formXsubProc
+    =================================================================================================================================
+    */ 
+    
+    insert into dbo.tb_formXsubProc
+    (
+      idSubproceso
+      , fechaCreacion
+      , CatDetOrigenMaterialId
+    )
+
+    values 
+    (
+      @idSubproceso
+      , getdate() -- #02
+      , @CatDetOrigenMaterialId -- #02
+    )
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_agrInsumXProc 
+(
+  @idSubProceso     int
+  , @clave          varchar(50)
+  , @porcentaje     float
+  , @nombreProducto varchar(60)
+  , @comentario     varchar(100)
+  , @idInsumo       int
+  , @MaterialId     int -- #02
+)
+  as begin
+
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   ???       ???          Creación
+    02   DLuna     2020/05/03   Agregar parametro @MaterialId para insertar en nuevo campo de la tabla tb_insumXproc
+  =================================================================================================================================
+  */ 
+
+    declare 
+      @idFormXSubProc int
+    
+    set @idFormXSubProc = 
+    (  
+      select
+        idFormXSubProc
+        
+      from 
+        tb_formXsubProc
+        
+      where 
+        fechaCreacion = 
+        (
+          select
+            max(fechaCreacion)
+            
+          from 
+            tb_formXsubProc
+            
+          where 
+            idSubProceso = @idSubProceso
+        )
+    )
+      
+    insert into 
+      tb_insumXproc
+      (
+        idFormXSubProc
+        , clave
+        , porcentaje
+        , idInsumo
+        , nombreProducto
+        , comentario
+        , MaterialId -- #02
+      )
+      
+    values 
+      (
+        @idFormXSubProc
+        , @clave
+        , @porcentaje
+        , @idInsumo
+        , @nombreProducto
+        , @comentario
+        , @MaterialId -- #02
+      )
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.sp_obtFormInsXSubProc 
+(
+  @idSubProceso int
+)
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   ???       ???          Creación
+    02   DLuna     2020/05/04   Validar origenes de tabla de insumos (material)
+  =================================================================================================================================
+  */ 
+  
+    declare 
+      @idFormXSubProc           int
+      , @CatDetOrigenMaterialId int --#02
+      , @CatDetBdPropia         int --#02
+      , @CatDetBdContpaq        int --#02
+      
+    -- #02 {
+    select
+      @CatDetBdPropia = 27
+      , @CatDetBdContpaq = 28
+            
+    select
+      @idFormXSubProc = idFormXSubProc
+      , @CatDetOrigenMaterialId = CatDetOrigenMaterialId
+    from 
+      dbo.tb_formXsubProc
+    where 
+      fechaCreacion = 
+      (
+        select 
+          max (fechaCreacion)
+          
+        from 
+          dbo.tb_formXsubProc
+          
+        where 
+          idSubproceso = @idSubProceso
+      )
+      and idSubproceso = @idSubProceso
+    
+    select
+      idInsumXProc
+      , idFormXSubProc
+      , clave
+      , porcentaje
+      , [idInsumo] = 
+          case @CatDetOrigenMaterialId
+            when @CatDetBdPropia then MaterialId
+            else idInsumo
+          end
+      , nombreProducto
+      , comentario
+      , CatDetOrigenMaterialId = @CatDetOrigenMaterialId
+      , MaterialId
+      , [precioUnitario] = 
+          isnull(
+            case @CatDetOrigenMaterialId
+              when @CatDetBdContpaq then
+                (select dbo.Fn_ObtPrecioInsumoContpaq(ip.idInsumo))
+              else 
+                (
+                  select
+                    case m.idTipoMoneda
+                      when 1 then m.Precio
+                      else m.Precio * (select tipoCambio from dbo.tb_tipoMoneda where idTipoMoneda = m.idTipoMoneda) 
+                    end
+                  from
+                    dbo.Tb_Material m
+                  where
+                    m.MaterialId = ip.MaterialId
+                )
+              end
+          ,0)
+      
+    from 
+      tb_insumXproc ip
+      
+    where 
+      idFormXSubProc = @idFormXSubProc
+      
+    -- #02 }
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_InsInsumosFichaProd
+(
+	@idFichaProd               int
+  , @idProceso               int
+  , @idSubproceso            int
+  , @idFormXSubProc          int
+  , @totalInsumos            float
+  , @CatDetEstatusSurtidoId  int -- #02
+)
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   ???       ???          Creación
+    02   DLuna     2020/05/04   agregar insert del campo CatDetEstatusSurtidoId
+  =================================================================================================================================
+  */ 
+  
+    insert into
+      tb_InsumosFichaProd
+      (
+        idFichaProd
+        , idProceso
+        , idSubproceso
+        , idFormXSubProc
+        , totalInsumos
+        , CatDetEstatusSurtidoId
+      )
+      
+    values
+      (
+        @idFichaProd
+        , @idProceso
+        , @idSubproceso
+        , @idFormXSubProc
+        , @totalInsumos
+        , @CatDetEstatusSurtidoId
+      )
+  end
+go
+
+
+create procedure sp_InsInsumosFichaProdDet
+(
+	@idInsumoFichaProd int
+  , @clave           varchar(50)
+  , @porcentaje      float
+  , @material        varchar(60)
+  , @temperatura     varchar(50)
+  , @rodar           varchar(50)
+  , @cantidad        float
+  , @observaciones   varchar(100)
+  , @precioUnitario  float
+  , @total           float
+  , @MaterialId      int -- #02
+)
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   ???       ???          Creación
+    02   DLuna     2020/05/04   agregar insert del campo MaterialId
+  =================================================================================================================================
+  */ 
+
+    insert into
+      tb_InsumosFichaProdDet
+      (
+        idInsumoFichaProd
+        , clave
+        , porcentaje
+        , material
+        , temperatura
+        , rodar
+        , cantidad
+        , observaciones
+        , precioUnitario
+        , total
+        , MaterialId --#02
+      )
+      
+    values
+      (
+        @idInsumoFichaProd
+        , @clave
+        , @porcentaje
+        , @material
+        , @temperatura
+        , @rodar
+        , @cantidad
+        , @observaciones
+        , @precioUnitario
+        , @total
+        , @MaterialId
+      )
+  end
+GO

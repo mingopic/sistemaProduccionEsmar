@@ -45,9 +45,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
     List<Material> lstMaterial; 
     List<CatalogoDet> lstCatDetTipoMaterial; 
     List<CatalogoDet> lstCatDetClasMaterial; 
+    List<CatalogoDet> lstCatDetEstatus; 
     List<UnidadMedida> lstUnidadMedida; 
     List<TipoMoneda> lstTipoMoneda;
     PnlSalidaFichaMaterial pnlSalidaFichaMaterial;
+    Material materialEditar = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     
     DefaultTableModel dtms=new DefaultTableModel();
@@ -61,6 +63,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
         llenarComboMateriales();
         llenarComboUnidadMedida();
         llenarComboTipoMoneda();
+        llenarComboEstatus();
     }
     
     
@@ -78,6 +81,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
             if (FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Produccion"))
             {
                 btnAgregarMaterial.setEnabled(true);
+                btnEditarMaterial.setEnabled(true);
                 btnRealizarEntrada.setEnabled(true);
                 btnRealizarSalida.setEnabled(true);
                 break;
@@ -110,12 +114,14 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lstCatDetTipoMaterial = cd.CatalogoDetGetByCatId(CatIdTipoMaterial);
         
         cmbTipoMaterialAgregar.removeAllItems();
+        cmbTipoMaterialEditar.removeAllItems();
 
         int i = 0;
         while (i < lstCatDetTipoMaterial.size())
         {
             cmbTipoMaterial.addItem(lstCatDetTipoMaterial.get(i).getNombre());
             cmbTipoMaterialAgregar.addItem(lstCatDetTipoMaterial.get(i).getNombre());
+            cmbTipoMaterialEditar.addItem(lstCatDetTipoMaterial.get(i).getNombre());
             i++;
         }
     }
@@ -127,12 +133,14 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lstCatDetClasMaterial = cd.CatalogoDetGetByCatId(CatIdClasMaterial);
         
         cmbClasificacionAgregar.removeAllItems();
+        cmbClasificacionEditar.removeAllItems();
 
         int i = 0;
         while (i < lstCatDetClasMaterial.size())
         {
             cmbClasificacionMaterial.addItem(lstCatDetClasMaterial.get(i).getNombre());
             cmbClasificacionAgregar.addItem(lstCatDetClasMaterial.get(i).getNombre());
+            cmbClasificacionEditar.addItem(lstCatDetClasMaterial.get(i).getNombre());
             i++;
         }
     }
@@ -143,11 +151,13 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lstUnidadMedida = umc.obtenerUnidadMedida();
         
         cmbUnidadMedidaAgregar.removeAllItems();
+        cmbUnidadMedidaEditar.removeAllItems();
 
         int i = 0;
         while (i < lstUnidadMedida.size())
         {
             cmbUnidadMedidaAgregar.addItem(lstUnidadMedida.get(i).getDescripcion());
+            cmbUnidadMedidaEditar.addItem(lstUnidadMedida.get(i).getDescripcion());
             i++;
         }
     }
@@ -158,11 +168,29 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lstTipoMoneda = tmc.obtenerMonedas();
         
         cmbMonedaAgregar.removeAllItems();
+        cmbMonedaEditar.removeAllItems();
 
         int i = 0;
         while (i < lstTipoMoneda.size())
         {
             cmbMonedaAgregar.addItem(lstTipoMoneda.get(i).getDescripcion());
+            cmbMonedaEditar.addItem(lstTipoMoneda.get(i).getDescripcion());
+            i++;
+        }
+    }
+    
+    private void llenarComboEstatus() throws Exception
+    {   
+        int CatIdEstatus = 3;
+        CatalogoDetCommands cd = new CatalogoDetCommands();
+        lstCatDetEstatus = cd.CatalogoDetGetByCatId(CatIdEstatus);
+        
+        cmbEstatusEditar.removeAllItems();
+
+        int i = 0;
+        while (i < lstCatDetEstatus.size())
+        {
+            cmbEstatusEditar.addItem(lstCatDetEstatus.get(i).getNombre());
             i++;
         }
     }
@@ -272,6 +300,60 @@ public class PnlAlmacen extends javax.swing.JPanel {
         cmbMonedaAgregar.setSelectedIndex(0);
         cmbTipoMaterialAgregar.setSelectedIndex(0);
         cmbClasificacionAgregar.setSelectedIndex(0);
+    }
+    
+    //Método para inicializar y abrir el JDialog para editar un material 
+    private void iniDialogoEditarMaterial()
+    {
+        txtCodigoEditar.setText(materialEditar.getCodigo());
+        txtDescripcionEditar.setText(materialEditar.getDescripcion());
+        
+        for (int i = 0; i < cmbUnidadMedidaEditar.getItemCount(); i++)
+        {
+            if (cmbUnidadMedidaEditar.getItemAt(i).equals(materialEditar.getUnidadMedida()))
+            {
+                cmbUnidadMedidaEditar.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        txtPrecioEditar.setText(materialEditar.getPrecio().toString());
+        
+        for (int i = 0; i < cmbMonedaEditar.getItemCount(); i++)
+        {
+            if (cmbMonedaEditar.getItemAt(i).equals(materialEditar.getTipoMoneda()))
+            {
+                cmbMonedaEditar.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        for (int i = 0; i < cmbTipoMaterialEditar.getItemCount(); i++)
+        {
+            if (cmbTipoMaterialEditar.getItemAt(i).equals(materialEditar.getTipoMaterial()))
+            {
+                cmbTipoMaterialEditar.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        for (int i = 0; i < cmbClasificacionEditar.getItemCount(); i++)
+        {
+            if (cmbClasificacionEditar.getItemAt(i).equals(materialEditar.getClasificacion()))
+            {
+                cmbClasificacionEditar.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        for (int i = 0; i < cmbEstatusEditar.getItemCount(); i++)
+        {
+            if (cmbEstatusEditar.getItemAt(i).equals(materialEditar.getEstatus()))
+            {
+                cmbEstatusEditar.setSelectedIndex(i);
+                break;
+            }
+        }
     }
     
     //Método para inicializar y abrir el JDialog para Realizar Entrada 
@@ -422,6 +504,42 @@ public class PnlAlmacen extends javax.swing.JPanel {
         }
     }
     
+    private void MaterialUpdate() throws ParseException, Exception
+    {
+        MaterialCommands mc;
+        RespuestaDto respuesta;
+        
+        if (ValidarEditarMaterial())
+        {
+            mc = new MaterialCommands();
+            
+            materialEditar.setCodigo(txtCodigoEditar.getText().trim());
+            materialEditar.setIdUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaEditar.getSelectedIndex()).getIdUnidadMedida());
+            materialEditar.setPrecio(Double.parseDouble(txtPrecioEditar.getText().trim()));
+            materialEditar.setIdTipoMoneda(lstTipoMoneda.get(cmbMonedaEditar.getSelectedIndex()).getIdTipoMoneda());
+            materialEditar.setCatDetTipoMaterialId(lstCatDetTipoMaterial.get(cmbTipoMaterialEditar.getSelectedIndex()).getCatDetId());
+            materialEditar.setCatDetClasificacionId(lstCatDetClasMaterial.get(cmbClasificacionEditar.getSelectedIndex()).getCatDetId());
+            materialEditar.setCatDetEstatusId(lstCatDetEstatus.get(cmbEstatusEditar.getSelectedIndex()).getCatDetId());
+            
+            respuesta = mc.MaterialUpdate(materialEditar);
+            
+            if (respuesta.getRespuesta() > 0)
+            {
+                dlgEditarMaterial.setVisible(false);
+                JOptionPane.showMessageDialog(null, respuesta.getMensaje());
+                actualizarTablaMateriales();
+            }
+            else if (respuesta.getRespuesta() == 0)
+            {
+                JOptionPane.showMessageDialog(null, respuesta.getMensaje(),"Mensaje",JOptionPane.WARNING_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, respuesta.getMensaje(),"Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
     private boolean ValidarAgregarMaterial()
     {
         boolean respuesta = true;
@@ -481,8 +599,47 @@ public class PnlAlmacen extends javax.swing.JPanel {
         if (!respuesta)
         {
             dlgAgregarMaterial.setVisible(false);
-            JOptionPane.showMessageDialog(dcEntrada, mensaje,"",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(dlgAgregarMaterial, mensaje,"",JOptionPane.WARNING_MESSAGE);
             dlgAgregarMaterial.setVisible(true);
+        }
+        
+        return respuesta;
+    }
+    
+    private boolean ValidarEditarMaterial()
+    {
+        boolean respuesta = true;
+        String mensaje = "";
+        
+        if (txtCodigoEditar.getText().trim().equals(""))
+        {
+            mensaje = "Ingrese un código";
+            respuesta = false;
+        }
+        
+        if (respuesta)
+        {
+            if (txtPrecioEditar.getText().trim().equals("") || txtPrecioEditar.getText().trim().equals("."))
+            {
+                mensaje = "Ingrese un precio";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtPrecioEditar.getText().trim()) < 0)
+            {
+                mensaje = "Precio no puede ser menor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (!respuesta)
+        {
+            dlgEditarMaterial.setVisible(false);
+            JOptionPane.showMessageDialog(dlgEditarMaterial, mensaje,"",JOptionPane.WARNING_MESSAGE);
+            dlgEditarMaterial.setVisible(true);
         }
         
         return respuesta;
@@ -715,6 +872,27 @@ public class PnlAlmacen extends javax.swing.JPanel {
         jLabel23 = new javax.swing.JLabel();
         cmbClasificacionAgregar = new javax.swing.JComboBox<>();
         btnGuardarAgregar = new javax.swing.JButton();
+        dlgEditarMaterial = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        lblAgregarMaterial1 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        txtCodigoEditar = new javax.swing.JTextField();
+        txtDescripcionEditar = new javax.swing.JTextField();
+        cmbUnidadMedidaEditar = new javax.swing.JComboBox<>();
+        txtPrecioEditar = new javax.swing.JTextField();
+        cmbMonedaEditar = new javax.swing.JComboBox<>();
+        jLabel32 = new javax.swing.JLabel();
+        cmbTipoMaterialEditar = new javax.swing.JComboBox<>();
+        jLabel33 = new javax.swing.JLabel();
+        cmbClasificacionEditar = new javax.swing.JComboBox<>();
+        btnGuardarEditar = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
+        cmbEstatusEditar = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMateriales = new javax.swing.JTable();
@@ -754,6 +932,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lblEnviarTerminado = new javax.swing.JLabel();
         btnAgregarMaterial = new javax.swing.JButton();
         jLabel61 = new javax.swing.JLabel();
+        btnEditarMaterial = new javax.swing.JButton();
+        jLabel62 = new javax.swing.JLabel();
         btnRealizarEntrada = new javax.swing.JButton();
         jLabel76 = new javax.swing.JLabel();
         btnRealizarSalida = new javax.swing.JButton();
@@ -1347,6 +1527,163 @@ try {
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
+    jPanel8.setBackground(new java.awt.Color(0, 204, 204));
+    jPanel8.setPreferredSize(new java.awt.Dimension(440, 33));
+
+    lblAgregarMaterial1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+    lblAgregarMaterial1.setForeground(new java.awt.Color(255, 255, 255));
+    lblAgregarMaterial1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    lblAgregarMaterial1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
+    lblAgregarMaterial1.setText("Editar Material");
+
+    javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+    jPanel8.setLayout(jPanel8Layout);
+    jPanel8Layout.setHorizontalGroup(
+        jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel8Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(lblAgregarMaterial1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+    );
+    jPanel8Layout.setVerticalGroup(
+        jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(lblAgregarMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+
+    jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+
+    jLabel24.setText("Código");
+
+    jLabel27.setText("Descripción");
+
+    jLabel29.setText("Unidad de Medida");
+
+    jLabel30.setText("Precio");
+
+    jLabel31.setText("Clasificación");
+
+    txtCodigoEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCodigoEditarKeyTyped(evt);
+        }
+    });
+
+    txtDescripcionEditar.setEditable(false);
+
+    txtPrecioEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtPrecioEditarKeyTyped(evt);
+        }
+    });
+
+    jLabel32.setText("Moneda");
+
+    jLabel33.setText("Tipo Material");
+
+    btnGuardarEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+    btnGuardarEditar.setText("Guardar");
+    btnGuardarEditar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnGuardarEditarActionPerformed(evt);
+        }
+    });
+
+    jLabel34.setText("Estatus");
+
+    javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+    jPanel9.setLayout(jPanel9Layout);
+    jPanel9Layout.setHorizontalGroup(
+        jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel9Layout.createSequentialGroup()
+            .addGap(49, 49, 49)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(txtDescripcionEditar)
+                .addGroup(jPanel9Layout.createSequentialGroup()
+                    .addComponent(txtCodigoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addContainerGap())
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnGuardarEditar)
+            .addGap(12, 12, 12))
+        .addGroup(jPanel9Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel34, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel31, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel33, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel32, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel29, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(cmbClasificacionEditar, 0, 210, Short.MAX_VALUE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(cmbTipoMaterialEditar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbMonedaEditar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPrecioEditar, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(cmbEstatusEditar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+    jPanel9Layout.setVerticalGroup(
+        jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel9Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel24)
+                .addComponent(txtCodigoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel27)
+                .addComponent(txtDescripcionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel29)
+                .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txtPrecioEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel30))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(cmbMonedaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel32))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(cmbTipoMaterialEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel33))
+            .addGap(12, 12, 12)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel31)
+                .addComponent(cmbClasificacionEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel34)
+                .addComponent(cmbEstatusEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+            .addComponent(btnGuardarEditar)
+            .addContainerGap())
+    );
+
+    javax.swing.GroupLayout dlgEditarMaterialLayout = new javax.swing.GroupLayout(dlgEditarMaterial.getContentPane());
+    dlgEditarMaterial.getContentPane().setLayout(dlgEditarMaterialLayout);
+    dlgEditarMaterialLayout.setHorizontalGroup(
+        dlgEditarMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    dlgEditarMaterialLayout.setVerticalGroup(
+        dlgEditarMaterialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(dlgEditarMaterialLayout.createSequentialGroup()
+            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+
     setBackground(new java.awt.Color(255, 255, 255));
 
     tblMateriales.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1434,9 +1771,6 @@ try {
     txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyPressed(java.awt.event.KeyEvent evt) {
             txtCodigoKeyPressed(evt);
-        }
-        public void keyTyped(java.awt.event.KeyEvent evt) {
-            txtCodigoKeyTyped(evt);
         }
     });
     jToolBar1.add(txtCodigo);
@@ -1685,6 +2019,24 @@ try {
     jLabel61.setText("   ");
     jToolBar3.add(jLabel61);
 
+    btnEditarMaterial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
+    btnEditarMaterial.setText("Editar Material");
+    btnEditarMaterial.setEnabled(false);
+    btnEditarMaterial.setFocusable(false);
+    btnEditarMaterial.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnEditarMaterial.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnEditarMaterial.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEditarMaterialActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnEditarMaterial);
+
+    jLabel62.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel62.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel62.setText("   ");
+    jToolBar3.add(jLabel62);
+
     btnRealizarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnRealizarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_arriba16x16.png"))); // NOI18N
     btnRealizarEntrada.setText("Entrada Material");
@@ -1791,10 +2143,6 @@ try {
     private void btnReporteSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSalidasActionPerformed
         
     }//GEN-LAST:event_btnReporteSalidasActionPerformed
-
-    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
-        
-    }//GEN-LAST:event_txtCodigoKeyTyped
 
     private void btnRealizarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarSalidaActionPerformed
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Realizar surtido de ficha de producción?", "Realizar Salida", JOptionPane.YES_NO_OPTION);
@@ -1915,12 +2263,44 @@ try {
         ValidarNumeros(evt, txtCantidadEntrada.getText());
     }//GEN-LAST:event_txtPrecioAgregarKeyTyped
 
+    private void txtCodigoEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoEditarKeyTyped
+        ValidarLongitud(evt,txtCodigoAgregar.getText(),10);
+    }//GEN-LAST:event_txtCodigoEditarKeyTyped
+
+    private void txtPrecioEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEditarKeyTyped
+        ValidarNumeros(evt, txtCantidadEntrada.getText());
+    }//GEN-LAST:event_txtPrecioEditarKeyTyped
+
+    private void btnGuardarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEditarActionPerformed
+        try {
+            MaterialUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGuardarEditarActionPerformed
+
+    private void btnEditarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMaterialActionPerformed
+        if (tblMateriales.getSelectedRow() >= 0)
+        {
+            materialEditar = new Material();
+            materialEditar = lstMaterial.get(tblMateriales.getSelectedRow());
+            iniDialogoEditarMaterial();
+            abrirDialogo(dlgEditarMaterial, 600, 450);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione un material para editar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarMaterialActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarMaterial;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditarMaterial;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardarAgregar;
+    private javax.swing.JButton btnGuardarEditar;
     private javax.swing.JButton btnGuardarEntrada;
     private javax.swing.JButton btnGuardarSalida;
     private javax.swing.JButton btnRealizarEntrada;
@@ -1929,18 +2309,24 @@ try {
     private javax.swing.JButton btnReporteInventario;
     private javax.swing.JButton btnReporteSalidas;
     private javax.swing.JComboBox<String> cmbClasificacionAgregar;
+    private javax.swing.JComboBox<String> cmbClasificacionEditar;
     private javax.swing.JComboBox cmbClasificacionMaterial;
+    private javax.swing.JComboBox<String> cmbEstatusEditar;
     private javax.swing.JComboBox<String> cmbMaterialEntrada;
     private javax.swing.JComboBox<String> cmbMaterialSalida;
     private javax.swing.JComboBox<String> cmbMonedaAgregar;
+    private javax.swing.JComboBox<String> cmbMonedaEditar;
     private javax.swing.JComboBox cmbTipoMaterial;
     private javax.swing.JComboBox<String> cmbTipoMaterialAgregar;
+    private javax.swing.JComboBox<String> cmbTipoMaterialEditar;
     private javax.swing.JComboBox<String> cmbUnidadMedidaAgregar;
+    private javax.swing.JComboBox<String> cmbUnidadMedidaEditar;
     private datechooser.beans.DateChooserCombo dcEntrada;
     private datechooser.beans.DateChooserCombo dcFechaDe;
     private datechooser.beans.DateChooserCombo dcFechaHasta;
     private datechooser.beans.DateChooserCombo dcSalida;
     private javax.swing.JDialog dlgAgregarMaterial;
+    private javax.swing.JDialog dlgEditarMaterial;
     private javax.swing.JDialog dlgEntradaMaterial;
     private javax.swing.JDialog dlgSalidaMaterial;
     private javax.swing.JLabel jLabel1;
@@ -1959,9 +2345,17 @@ try {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
@@ -1971,6 +2365,7 @@ try {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel75;
@@ -1984,6 +2379,8 @@ try {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1995,6 +2392,7 @@ try {
     private javax.swing.JRadioButton jrFiltroFechas;
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lblAgregarMaterial;
+    private javax.swing.JLabel lblAgregarMaterial1;
     private javax.swing.JLabel lblCalendario;
     private javax.swing.JLabel lblClasificacion;
     private javax.swing.JLabel lblCodigo;
@@ -2011,12 +2409,15 @@ try {
     private javax.swing.JTextField txtCantidadSalida;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCodigoAgregar;
+    private javax.swing.JTextField txtCodigoEditar;
     private javax.swing.JTextField txtCodigoEntrada;
     private javax.swing.JTextField txtCodigoSalida;
     private javax.swing.JTextField txtDepartamentoSalida;
     private javax.swing.JTextField txtDescripcionAgregar;
+    private javax.swing.JTextField txtDescripcionEditar;
     private javax.swing.JTextField txtExistenciaAgregar;
     private javax.swing.JTextField txtPrecioAgregar;
+    private javax.swing.JTextField txtPrecioEditar;
     private javax.swing.JTextField txtSolicitanteSalida;
     private javax.swing.JTextArea txtaComentariosEntrada;
     private javax.swing.JTextArea txtaComentariosSalida;

@@ -409,6 +409,11 @@ go
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure dbo.Usp_MaterialGetAll 
+(
+  @Codigo                   varchar(10) = ''
+  , @CatDetTipoMaterialId   int = 0
+  , @CatDetClasificacionId  int = 0
+)
   as begin
     /*
     =================================================================================================================================
@@ -464,6 +469,26 @@ create procedure dbo.Usp_MaterialGetAll
       on
         cdE.CatDetId = m.CatDetEstatusId
     
+    where
+      m.Codigo like
+        case
+          when @Codigo != ''
+           then @Codigo
+           else m.Codigo
+        end
+      and m.CatDetTipoMaterialId = 
+        case
+          when @CatDetTipoMaterialId > 0
+           then @CatDetTipoMaterialId
+           else m.CatDetTipoMaterialId
+        end
+      and m.CatDetClasificacionId = 
+        case
+          when @CatDetClasificacionId > 0
+           then @CatDetClasificacionId
+           else m.CatDetClasificacionId
+        end
+        
     order by
       m.Descripcion asc
   end

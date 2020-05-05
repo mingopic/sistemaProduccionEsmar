@@ -11,6 +11,7 @@ import Modelo.Entity.FichaProduccion;
 import Modelo.Entity.Material;
 import Modelo.Entity.SalidaMaterial;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -133,14 +134,14 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         tblMaterialesFicha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblMaterialesFicha.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "Estatus", "Última Actualización"
+                "Código", "Material", "Cantidad Solicitada", "Unidad Medida", "Existencia En Almacen", "Estatus"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -420,7 +421,6 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         llenarTabla();
         if (ValidarSalidaFicha()) {
             try {
-                
                 SalidaFichaMaterialCreate();
             } catch (Exception ex) {
                 Logger.getLogger(PnlSalidaFichaMaterial.class.getName()).log(Level.SEVERE, null, ex);
@@ -445,7 +445,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         {
             for (int i = 0 ; i < lstMaterial.size(); i ++) {
             salida = new SalidaMaterial();
-            salida.setMaterialId(Integer.parseInt(lstMaterial.get(i).get("MaterialId").toString()));
+            salida.setMaterialId(Integer.parseInt(lstMaterial.get(i).get("idmaterial").toString()));
             salida.setCantidad(Double.parseDouble(lstMaterial.get(i).get("cantidad").toString()));
             salida.setSolicitante(txtSolicitante.getText());
             salida.setDepartamento(txtDepartamento.getText());
@@ -455,10 +455,10 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
             salida.setFechaSalida(new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaSalida.getText()));
             lstSalidas.add(salida);
             }
-            respuesta = sc.SalidaFichaMaterialCreate(lstSalidas,Integer.parseInt(lstMaterial.get(0).get("idFichaProd").toString()));
+            respuesta = sc.SalidaFichaMaterialCreate(lstSalidas,Integer.parseInt(lstMaterial.get(1).get("idfichaprod").toString()));
             if (respuesta > 0)
             {
-                dlgSalidaMaterial.setVisible(false);
+                //dlgSalidaMaterial.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Salida realizada con éxito");
                 actualizarTablaMaterialesFicha();
             }
@@ -476,8 +476,9 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
     private void txtNoFichaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoFichaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             llenarTabla();
-        } else {
+                ((Component) evt.getSource()).transferFocus();
             
+        } else {
             limpiarComponentesSalidaMateriales();
         }
     }//GEN-LAST:event_txtNoFichaKeyPressed
@@ -519,7 +520,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
             }
         };
         String[] cols = new String[]{
-            "idfichaprod", "clave", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus", "Última Actualización"
+            "idfichaprod",  "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus"
         };
         dtm.setColumnIdentifiers(cols);
         tblMaterialesFicha.setModel(dtm);
@@ -528,10 +529,8 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         columnModel.getColumn(0).setMaxWidth(0);
         columnModel.getColumn(1).setMinWidth(0);
         columnModel.getColumn(1).setMaxWidth(0);
-        columnModel.getColumn(2).setMinWidth(0);
-        columnModel.getColumn(2).setMaxWidth(0);
-        columnModel.getColumn(8).setMinWidth(0);
-        columnModel.getColumn(8).setMaxWidth(0);
+        columnModel.getColumn(7).setMinWidth(0);
+        columnModel.getColumn(7).setMaxWidth(0);
         tblMaterialesFicha.getTableHeader().setReorderingAllowed(false);
     }
 
@@ -556,10 +555,10 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
             } else if (tblMaterialesFicha.getModel().getRowCount() > 0) {
                 int c = 0;
                 for (int i = 0; i < tblMaterialesFicha.getModel().getRowCount(); i++) {
-                    if (tblMaterialesFicha.getModel().getValueAt(i, 9) == null) {
+                    if (tblMaterialesFicha.getModel().getValueAt(i, 8) == null) {
                         c++;
                     }else
-                    if (!tblMaterialesFicha.getModel().getValueAt(i, 9).toString().equalsIgnoreCase("Disponible")) {
+                    if (!tblMaterialesFicha.getModel().getValueAt(i, 8).toString().equalsIgnoreCase("Disponible")) {
                         mensaje = "Uno o más materiales no se encuentran disponibles.";
                         respuesta = false;
                     } 
@@ -590,7 +589,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
     }
 
     private void actualizarTablaMaterialesFicha() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        limpiarComponentesSalidaMateriales();
     }
 
     private void llenarTabla() {
@@ -613,7 +612,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                         }
                     };
                     String[] cols = new String[]{
-                        "idfichaprod", "clave", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus", "Última Actualización"
+                        "idfichaprod", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus"
                     };
                     dtm.setColumnIdentifiers(cols);
                     dtm.setRowCount(lstMaterial.size());
@@ -624,35 +623,35 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                     for (int i = 0; i < lstMaterial.size(); i++) {
                         if (i > 0 && lstMaterial.get(i).get("idmaterial").toString().equalsIgnoreCase(tmpIdMaterial) && lstMaterial.get(i).get("material").toString().equalsIgnoreCase(tmpMaterial)) {
                             float cantidad = Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
-                                    + Float.parseFloat(dtm.getValueAt(tmpFila, 5).toString());
+                                    + Float.parseFloat(dtm.getValueAt(tmpFila, 4).toString());
                             dtm.setValueAt(
                                     cantidad,
-                                    tmpFila, 5);
+                                    tmpFila, 4);
 
                             continue;
                         }
                         dtm.setValueAt(lstMaterial.get(i).get("idfichaprod"), fila, 0);
-                        dtm.setValueAt(lstMaterial.get(i).get("clave"), fila, 1);
-                        dtm.setValueAt(lstMaterial.get(i).get("idmaterial"), fila, 2);
-                        dtm.setValueAt(lstMaterial.get(i).get("codigo"), fila, 3);
-                        dtm.setValueAt(lstMaterial.get(i).get("material"), fila, 4);
-                        dtm.setValueAt(lstMaterial.get(i).get("cantidad"), fila, 5);
-                        dtm.setValueAt(lstMaterial.get(i).get("unidadmedidad"), fila, 6);
-                        dtm.setValueAt(lstMaterial.get(i).get("existencia"), fila, 7);
-                        dtm.setValueAt(lstMaterial.get(i).get("idestatus"), fila, 8);
-                        if (lstMaterial.get(i).get("idestatus").toString().equals("27")
+                        //dtm.setValueAt(lstMaterial.get(i).get("clave"), fila, 1);
+                        dtm.setValueAt(lstMaterial.get(i).get("idmaterial"), fila, 1);
+                        dtm.setValueAt(lstMaterial.get(i).get("codigo"), fila, 2);
+                        dtm.setValueAt(lstMaterial.get(i).get("material"), fila, 3);
+                        dtm.setValueAt(lstMaterial.get(i).get("cantidad"), fila, 4);
+                        dtm.setValueAt(lstMaterial.get(i).get("unidadmedidad"), fila, 5);
+                        dtm.setValueAt(lstMaterial.get(i).get("existencia"), fila, 6);
+                        dtm.setValueAt(lstMaterial.get(i).get("idestatus"), fila, 7);
+                        if (lstMaterial.get(i).get("idestatus").toString().equals("25")
                                 && Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
                                 <= Float.parseFloat(lstMaterial.get(i).get("existencia").toString())) {
-                            dtm.setValueAt("Disponible", fila, 9);
-                        } else if (lstMaterial.get(i).get("idestatus").toString().equals("27")
+                            dtm.setValueAt("Disponible", fila, 8);
+                        } else if (lstMaterial.get(i).get("idestatus").toString().equals("25")
                                 && Float.parseFloat(lstMaterial.get(i).get("cantidad").toString())
                                 > Float.parseFloat(lstMaterial.get(i).get("existencia").toString())) {
-                            dtm.setValueAt("Cantidad Insuficiente", fila, 9);
+                            dtm.setValueAt("Cantidad Insuficiente", fila, 8);
                         } else {
-                            dtm.setValueAt("No Existente En Almacen", fila, 9);
+                            dtm.setValueAt("No Existente En Almacen", fila, 8);
                         }
                         //dtm.setValueAt(lstMaterial.get(i).get("estatus"), fila, 9);
-                        dtm.setValueAt(lstMaterial.get(i).get("fechaultimaact"), fila, 10);
+                        //dtm.setValueAt(lstMaterial.get(i).get("fechaultimaact"), fila, 10);
                         tmpIdMaterial = lstMaterial.get(i).get("idmaterial").toString();
                         tmpMaterial = lstMaterial.get(i).get("material").toString();
                         tmpFila = fila;
@@ -666,10 +665,8 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                     columnModel.getColumn(0).setMaxWidth(0);
                     columnModel.getColumn(1).setMinWidth(0);
                     columnModel.getColumn(1).setMaxWidth(0);
-                    columnModel.getColumn(2).setMinWidth(0);
-                    columnModel.getColumn(2).setMaxWidth(0);
-                    columnModel.getColumn(8).setMinWidth(0);
-                    columnModel.getColumn(8).setMaxWidth(0);
+                    columnModel.getColumn(7).setMinWidth(0);
+                    columnModel.getColumn(7).setMaxWidth(0);
                     tblMaterialesFicha.getTableHeader().setReorderingAllowed(false);
                 }
             }

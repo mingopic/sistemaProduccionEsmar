@@ -115,9 +115,10 @@ public class SalidaMaterialCommands {
                     return_value = Integer.parseInt(rs.getString("Return_value"));
                 }
             }
-            if (return_value == 1) {
+            if (return_value > 0) {
 
                 query = "execute dbo.Usp_InsumosFichaProdUpdateEstatusSurtido ?";
+                st = c.getConexion().prepareCall(query);
                 st.setInt(1, idFichaProd);
                 rs = st.executeQuery();
                 if (rs.next()) {
@@ -155,16 +156,16 @@ public class SalidaMaterialCommands {
                 while (rs.next()) {
                     Map m = new HashMap();
                     m.put("idfichaprod",rs.getInt("idFichaProd"));
-                    m.put("clave",rs.getString("clave"));
+                    //m.put("clave",rs.getString("clave"));
                     m.put("idmaterial",rs.getInt("MaterialId"));
                     m.put("codigo",rs.getString("Codigo"));
                     m.put("material",rs.getString("material"));
                     m.put("cantidad",rs.getFloat("cantidad"));
                     m.put("unidadmedidad",rs.getString("unidadmedida"));
                     m.put("existencia",rs.getFloat("Existencia"));
-                    m.put("idestatus",rs.getInt("CatDetId"));
-                    m.put("estatus",rs.getString("Nombre"));
-                    m.put("fechaultimaact",rs.getString("FechaUltimaAct"));
+                    m.put("idestatus",rs.getInt("estatus"));
+                    //m.put("estatus",rs.getString("Nombre"));
+                    //m.put("fechaultimaact",rs.getString("FechaUltimaAct"));
                     lstMaterial.add(m);
                 }
             

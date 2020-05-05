@@ -829,17 +829,13 @@ create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
     
     select 
       fp.idFichaProd
-      , ifpd.clave
-      , [MaterialId] = coalesce(m.MaterialId, ifpd.MaterialId)
+      , [MaterialId] = m.MaterialId
       , m.Codigo
       , [material] = coalesce(m.descripcion,ifpd.material)
       , ifpd.cantidad 
       , [unidadmedida] = um.descripcion
-      , m.Existencia
-      , cd.CatDetId
-      , cd.Nombre
-      , m.FechaUltimaAct
-
+      , m.Existencia  
+	  , [estatus] = m.CatDetEstatusId
     from 
       tb_fichaProd fp 
       
@@ -878,9 +874,17 @@ create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
       on 
         c.CatId = cd.CatDetId
       
+      left join  
+        tb_formXsubProc fxsp
+      on
+        fp.idSubproceso = fxsp.idSubproceso
+
     where 
-      fp.idFichaProd = @IdFichaProd  
-      and ifp.CatDetEstatusSurtidoId = @CatDetEstatusNoSurtido
+      fp.idFichaProd = @IdFichaProd
+
+      and 0 <> coalesce(m.MaterialId, ifpd.MaterialId) 
+      
+      and ifp.CatDetEstatusSurtidoId = 30
     
     order by 
       m.MaterialId asc
@@ -927,7 +931,7 @@ create procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
         where 
           idFichaProd = @IdFichaProd;
         
-        set @Return_value = SCOPE_IDENTITY()
+        set @Return_value = (select count(idFichaProd) from dbo.tb_InsumosFichaProd where idFichaProd = @idFichaProd)
       end
       
       select [Return_value] = @Return_value

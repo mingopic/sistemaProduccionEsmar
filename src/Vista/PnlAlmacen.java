@@ -109,7 +109,6 @@ public class PnlAlmacen extends javax.swing.JPanel {
         CatalogoDetCommands cd = new CatalogoDetCommands();
         lstCatDetTipoMaterial = cd.CatalogoDetGetByCatId(CatIdTipoMaterial);
         
-        cmbTipoMaterial.removeAllItems();
         cmbTipoMaterialAgregar.removeAllItems();
 
         int i = 0;
@@ -127,7 +126,6 @@ public class PnlAlmacen extends javax.swing.JPanel {
         CatalogoDetCommands cd = new CatalogoDetCommands();
         lstCatDetClasMaterial = cd.CatalogoDetGetByCatId(CatIdClasMaterial);
         
-        cmbClasificacionMaterial.removeAllItems();
         cmbClasificacionAgregar.removeAllItems();
 
         int i = 0;
@@ -180,8 +178,30 @@ public class PnlAlmacen extends javax.swing.JPanel {
         
         try 
         {
+            Material m = new Material();
             mc = new MaterialCommands();
-            lstMaterial = mc.MaterialGetAll();
+            
+            m.setCodigo(txtCodigo.getText().trim());
+            
+            if (cmbTipoMaterial.getSelectedIndex() > 0)
+            {
+                m.setCatDetTipoMaterialId(lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex()-1).getCatDetId());
+            }
+            else
+            {
+                m.setCatDetTipoMaterialId(0);
+            }
+            
+            if (cmbClasificacionMaterial.getSelectedIndex() > 0)
+            {
+                m.setCatDetClasificacionId(lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex()-1).getCatDetId());
+            }
+            else
+            {
+                m.setCatDetClasificacionId(0);
+            }
+
+            lstMaterial = mc.MaterialGetAll(m);
             
             dtm = new DefaultTableModel()
             {
@@ -710,7 +730,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
         jLabel60 = new javax.swing.JLabel();
         lblCodigo = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtNoPartida = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         jLabel59 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         lblCalendario = new javax.swing.JLabel();
@@ -794,38 +814,38 @@ public class PnlAlmacen extends javax.swing.JPanel {
 
         dcEntrada.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
             new datechooser.view.appearance.ViewAppearance("custom",
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    new java.awt.Color(187, 187, 187),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    new java.awt.Color(187, 187, 187),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(0, 0, 255),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(128, 128, 128),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    new java.awt.Color(187, 187, 187),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    new java.awt.Color(187, 187, 187),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(0, 0, 0),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -982,38 +1002,38 @@ public class PnlAlmacen extends javax.swing.JPanel {
 
     dcSalida.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                new java.awt.Color(187, 187, 187),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                new java.awt.Color(187, 187, 187),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                 new java.awt.Color(0, 0, 255),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
                 new java.awt.Color(128, 128, 128),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                new java.awt.Color(187, 187, 187),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                new java.awt.Color(187, 187, 187),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -1408,18 +1428,18 @@ try {
     jLabel9.setText("  ");
     jToolBar1.add(jLabel9);
 
-    txtNoPartida.setMinimumSize(new java.awt.Dimension(60, 25));
-    txtNoPartida.setName(""); // NOI18N
-    txtNoPartida.setPreferredSize(new java.awt.Dimension(45, 25));
-    txtNoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+    txtCodigo.setMinimumSize(new java.awt.Dimension(60, 25));
+    txtCodigo.setName(""); // NOI18N
+    txtCodigo.setPreferredSize(new java.awt.Dimension(45, 25));
+    txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyPressed(java.awt.event.KeyEvent evt) {
-            txtNoPartidaKeyPressed(evt);
+            txtCodigoKeyPressed(evt);
         }
         public void keyTyped(java.awt.event.KeyEvent evt) {
-            txtNoPartidaKeyTyped(evt);
+            txtCodigoKeyTyped(evt);
         }
     });
-    jToolBar1.add(txtNoPartida);
+    jToolBar1.add(txtCodigo);
 
     jLabel59.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel59.setForeground(new java.awt.Color(227, 222, 222));
@@ -1451,13 +1471,13 @@ try {
     dcFechaDe.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -1475,13 +1495,13 @@ try {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -1512,13 +1532,13 @@ try {
     dcFechaHasta.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
         new datechooser.view.appearance.ViewAppearance("custom",
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.ButtonPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 true,
                 true,
@@ -1536,13 +1556,13 @@ try {
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(0, 0, 255),
                 false,
                 true,
                 new datechooser.view.appearance.swing.LabelPainter()),
             new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(187, 187, 187),
+                new java.awt.Color(0, 0, 0),
                 new java.awt.Color(255, 0, 0),
                 false,
                 false,
@@ -1737,7 +1757,7 @@ try {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        
+        actualizarTablaMateriales();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jrFiltroFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrFiltroFechasActionPerformed
@@ -1756,7 +1776,7 @@ try {
     }//GEN-LAST:event_jrFiltroFechasActionPerformed
 
     private void cmbTipoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoMaterialActionPerformed
-        
+        actualizarTablaMateriales();
     }//GEN-LAST:event_cmbTipoMaterialActionPerformed
 
     private void btnReporteEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradasActionPerformed
@@ -1772,9 +1792,9 @@ try {
         
     }//GEN-LAST:event_btnReporteSalidasActionPerformed
 
-    private void txtNoPartidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyTyped
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
         
-    }//GEN-LAST:event_txtNoPartidaKeyTyped
+    }//GEN-LAST:event_txtCodigoKeyTyped
 
     private void btnRealizarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarSalidaActionPerformed
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Realizar surtido de ficha de producción?", "Realizar Salida", JOptionPane.YES_NO_OPTION);
@@ -1798,12 +1818,15 @@ try {
         }
     }//GEN-LAST:event_btnRealizarSalidaActionPerformed
 
-    private void txtNoPartidaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaKeyPressed
-        
-    }//GEN-LAST:event_txtNoPartidaKeyPressed
+    private void txtCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            actualizarTablaMateriales();
+        }
+    }//GEN-LAST:event_txtCodigoKeyPressed
 
     private void cmbClasificacionMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClasificacionMaterialActionPerformed
-        
+        actualizarTablaMateriales();
     }//GEN-LAST:event_cmbClasificacionMaterialActionPerformed
 
     private void btnAgregarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMaterialActionPerformed
@@ -1986,13 +2009,13 @@ try {
     private javax.swing.JTable tblMateriales;
     private javax.swing.JTextField txtCantidadEntrada;
     private javax.swing.JTextField txtCantidadSalida;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCodigoAgregar;
     private javax.swing.JTextField txtCodigoEntrada;
     private javax.swing.JTextField txtCodigoSalida;
     private javax.swing.JTextField txtDepartamentoSalida;
     private javax.swing.JTextField txtDescripcionAgregar;
     private javax.swing.JTextField txtExistenciaAgregar;
-    private javax.swing.JTextField txtNoPartida;
     private javax.swing.JTextField txtPrecioAgregar;
     private javax.swing.JTextField txtSolicitanteSalida;
     private javax.swing.JTextArea txtaComentariosEntrada;

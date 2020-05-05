@@ -102,7 +102,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Image ico = new ImageIcon(getClass().getResource("/Imagenes/esmar.png")).getImage();
         setIconImage(ico);        
         //Titulo de la aplicación
-        this.setTitle("Sistema de producción V.1.0 ");
+        this.setTitle("Sistema de producción V.1.1 ");
         
         ImageIcon fot = new ImageIcon("src/Imagenes/logoEsmar_CH.png");
         Icon icono = new ImageIcon(fot.getImage().getScaledInstance(lblLogoSistema.getWidth(), lblLogoSistema.getHeight(), Image.SCALE_DEFAULT));
@@ -135,6 +135,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmProveedores.setVisible(false);
         jmUsuarios.setVisible(false);
         jmPrecioVenta.setVisible(false);
+        
+        jmAlmacen.setVisible(false);
     }
     
     

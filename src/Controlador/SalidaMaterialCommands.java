@@ -137,13 +137,13 @@ public class SalidaMaterialCommands {
     }
     
     //Método para obtener los datos de la tabla Tb_Material
-    public static List<Map> MaterialGetCollectionByIdFichaProd(int idFichaProd) 
+    public static List<Map> MaterialGetCollectionByIdInsumoFichaProd(int idInsumoFichaProd) 
     {
         List<Map> lstMaterial = null;
         Statement st = null;
         ResultSet rs = null;
         
-        String query = "execute Usp_MaterialGetCollectionByIdFichaProd " + idFichaProd;
+        String query = "execute Usp_MaterialGetCollectionByIdInsumoFichaProd " + idInsumoFichaProd;
 
         try 
         {
@@ -155,17 +155,14 @@ public class SalidaMaterialCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     Map m = new HashMap();
-                    m.put("idfichaprod",rs.getInt("idFichaProd"));
-                    m.put("idinsumofichaprod",rs.getString("idInsumoFichaProd"));
-                    m.put("idmaterial",rs.getInt("MaterialId"));
-                    m.put("codigo",rs.getString("Codigo"));
-                    m.put("material",rs.getString("material"));
-                    m.put("cantidad",rs.getFloat("cantidad"));
-                    m.put("unidadmedidad",rs.getString("unidadmedida"));
-                    m.put("existencia",rs.getFloat("Existencia"));
-                    m.put("idestatus",rs.getInt("estatus"));
-                    //m.put("estatus",rs.getString("Nombre"));
-                    //m.put("fechaultimaact",rs.getString("FechaUltimaAct"));
+                    m.put("idInsumoFichaProd",rs.getInt("idInsumoFichaProd"));
+                    m.put("MaterialId",rs.getInt("MaterialId"));
+                    m.put("Codigo",rs.getString("Codigo"));
+                    m.put("Material",rs.getString("Material"));
+                    m.put("UnidadMedida",rs.getString("UnidadMedida"));
+                    m.put("CantidadSolicitada",rs.getFloat("CantidadSolicitada"));
+                    m.put("Existencia",rs.getFloat("Existencia"));
+                    m.put("CantidadSuficiente",rs.getInt("CantidadSuficiente"));
                     lstMaterial.add(m);
                 }
             

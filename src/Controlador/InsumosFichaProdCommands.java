@@ -5,9 +5,12 @@
  */
 package Controlador;
 
+import Modelo.Dto.RespuestaDto;
 import Modelo.Entity.InsumosFichaProd;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
@@ -63,5 +66,41 @@ public class InsumosFichaProdCommands {
         System.out.println(query);
         pstmt.executeUpdate();
         c.desconectar();
+    }
+    
+    public RespuestaDto ValidarSurtido(int idFichaProd) throws Exception
+    {
+        RespuestaDto respuesta = new RespuestaDto();
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_InsumosFichaProdValidarSurtido ?,?,?"; 
+        
+        //System.out.println("execute dbo.Usp_InsumosFichaProdValidarSurtido " + idFichaProd);
+         
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setInt(1,idFichaProd);
+            st.registerOutParameter(2, java.sql.Types.INTEGER);
+            st.registerOutParameter(3, java.sql.Types.VARCHAR);
+            
+            st.execute();
+            respuesta.setRespuesta(st.getInt("Respuesta"));
+            respuesta.setMensaje(st.getString("Mensaje"));
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+            respuesta.setRespuesta(-1);
+            respuesta.setMensaje("Error al buscar ficha de producción, " + e.getMessage());
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return respuesta;
     }
 }

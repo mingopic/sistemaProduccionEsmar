@@ -56,12 +56,6 @@ begin
 end
 go
 
-if object_id('dbo.Usp_MaterialGetCollectionByIdFichaProd') is not null
-begin
-	drop procedure dbo.Usp_MaterialGetCollectionByIdFichaProd
-end
-go
-
 if object_id('dbo.sp_agrFormSubProc') is not null
 begin
 	drop procedure dbo.sp_agrFormSubProc
@@ -95,6 +89,18 @@ go
 if object_id('dbo.Usp_MaterialUpdate') is not null
 begin
 	drop procedure dbo.Usp_MaterialUpdate
+end
+go
+
+if object_id('dbo.Usp_InsumosFichaProdValidarSurtido') is not null
+begin
+	drop procedure dbo.Usp_InsumosFichaProdValidarSurtido
+end
+go
+
+if object_id('dbo.Usp_MaterialGetCollectionByIdInsumoFichaProd') is not null
+begin
+	drop procedure dbo.Usp_MaterialGetCollectionByIdInsumoFichaProd
 end
 go
 
@@ -476,7 +482,7 @@ create procedure dbo.Usp_MaterialGetAll
         cdE.CatDetId = m.CatDetEstatusId
     
     where
-      m.Codigo like
+      m.Codigo =
         case
           when @Codigo != ''
            then @Codigo
@@ -814,95 +820,6 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
-(
-  @IdFichaProd  int
-)
-  as begin
-    /*
-    =================================================================================================================================
-      #Id  Autor     Fecha        Description
-    ---------------------------------------------------------------------------------------------------------------------------------
-      01  JOlmedo    2020/05/02   Creación
-    =================================================================================================================================
-    */
-
-    declare 
-      @CatDetEstatusNoSurtido int
-      
-    set 
-      @CatDetEstatusNoSurtido = 30
-    
-    select 
-      fp.idFichaProd
-      , [MaterialId] = m.MaterialId
-	    , ifp.idInsumoFichaProd
-      , m.Codigo
-      , [material] = coalesce(m.descripcion,ifpd.material)
-      , ifpd.cantidad 
-      , [unidadmedida] = um.descripcion
-      , m.Existencia  
-	  , [estatus] = m.CatDetEstatusId
-    from 
-      tb_fichaProd fp 
-      
-      inner join 
-        tb_fichaProdDet fpd 
-      on 
-        fpd.idFichaProd = fp.idFichaProd 
-        
-      inner join 
-        tb_InsumosFichaProd ifp 
-      on 
-        fp.idFichaProd = ifp.idFichaProd 
-        
-      inner join 
-        tb_InsumosFichaProdDet ifpd 
-      on 
-        ifpd.idInsumoFichaProd = ifp.idInsumoFichaProd 
-        
-      left join 
-        Tb_Material m 
-      on 
-        m.MaterialId = ifpd.MaterialId
-        
-      left join 
-        tb_unidadMedida um 
-      on 
-        um.idUnidadMedida = m.idUnidadMedida
-        
-      left join 
-        Tb_Catalogodet cd 
-      on 
-        m.CatDetEstatusId = cd.CatId
-      
-      left join 
-        Tb_Catalogo c 
-      on 
-        c.CatId = cd.CatDetId
-      
-      left join  
-        tb_formXsubProc fxsp
-      on
-        fp.idSubproceso = fxsp.idSubproceso
-
-    where 
-      fp.idFichaProd = @IdFichaProd
-
-      and 0 <> coalesce(m.MaterialId, ifpd.MaterialId) 
-      
-      and ifp.CatDetEstatusSurtidoId = @CatDetEstatusNoSurtido
-    
-    order by 
-      m.MaterialId asc
-      , m.Descripcion asc
-      , ifpd.material asc;
-      
-  end
-go
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
 create procedure [dbo].[Usp_InsumosFichaProdUpdateEstatusSurtido]
 (
   @IdFichaProd  int
@@ -982,7 +899,7 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-create procedure sp_agrInsumXProc 
+create procedure dbo.sp_agrInsumXProc 
 (
   @idSubProceso     int
   , @clave          varchar(50)
@@ -1145,7 +1062,7 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-create procedure sp_InsInsumosFichaProd
+create procedure dbo.sp_InsInsumosFichaProd
 (
 	@idFichaProd               int
   , @idProceso               int
@@ -1189,7 +1106,7 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-create procedure sp_InsInsumosFichaProdDet
+create procedure dbo.sp_InsInsumosFichaProdDet
 (
 	@idInsumoFichaProd int
   , @clave           varchar(50)
@@ -1248,7 +1165,7 @@ go
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-create procedure Usp_MaterialUpdate
+create procedure dbo.Usp_MaterialUpdate
 (
 	@MaterialId              int
   , @Codigo                varchar(10)
@@ -1306,6 +1223,135 @@ create procedure Usp_MaterialUpdate
     select 
       @Respuesta
       , @Mensaje
+      
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_InsumosFichaProdValidarSurtido
+(
+	@idFichaProd int
+  , @Respuesta int = -1 output
+  , @Mensaje   varchar(80) = '' output
+
+)
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   DLuna     2020/05/06   Creación
+  =================================================================================================================================
+  */
+  
+  declare
+    @idInsumoFichaProd        int
+    , @idFormXSubProc         int
+    , @CatDetEstatusSurtidoId int
+    , @CatDetNoSurtida        int
+    , @CatDetBdPropia         int
+  
+  select
+    @idInsumoFichaProd = 0
+    , @idFormXSubProc  = 0
+    , @CatDetBdPropia  = 27
+    , @CatDetNoSurtida   = 30
+  
+  select
+    @idInsumoFichaProd = idInsumoFichaProd
+    , @idFormXSubProc = idFormXSubProc
+    , @CatDetEstatusSurtidoId = CatDetEstatusSurtidoId
+  from
+    dbo.tb_InsumosFichaProd
+  where
+    idFichaProd = @idFichaProd
+  
+  if (@idInsumoFichaProd = 0 or @idInsumoFichaProd is null)
+  begin
+    select 
+      @Respuesta = 0
+      , @Mensaje = 'No existe la ficha capturada'
+  end
+  
+  else begin
+  
+    if exists (select 1 from dbo.tb_formXsubProc where idFormXSubProc = @idFormXSubProc and CatDetOrigenMaterialId = @CatDetBdPropia)
+    begin
+      
+      if (@CatDetEstatusSurtidoId = @CatDetNoSurtida)
+      begin
+        select
+          @Respuesta = @idInsumoFichaProd
+          , @Mensaje = 'Lista para surtir'
+      end
+      
+      else begin
+        select 
+          @Respuesta = 0
+          , @Mensaje = 'La ficha de producción ya ha sido surtida anteriormente'
+      end
+        
+    end
+    
+    else begin
+      select 
+        @Respuesta = 0
+        , @Mensaje = 'No se puede surtir una ficha con insumos de un origen de datos distinto'
+    end
+    
+  end
+    
+  select 
+    @Respuesta
+    , @Mensaje
+      
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_MaterialGetCollectionByIdInsumoFichaProd
+(
+	@idInsumoFichaProd int
+)
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   DLuna     2020/05/06   Creación
+  =================================================================================================================================
+  */
+  
+  select
+    ifpd.idInsumoFichaProd
+    , m.MaterialId
+    , m.Codigo
+    , [Material] = m.descripcion
+    , [UnidadMedida] = um.descripcion
+    , ifpd.CantidadSolicitada
+    , m.Existencia
+    , CantidadSuficiente = 
+        case
+          when ifpd.CantidadSolicitada <= m.Existencia
+           then 1
+           else 0
+        end
+  
+  from
+    dbo.Tb_Material m
+  
+    inner join
+      dbo.Vw_InsumosFichaProdDet ifpd
+    on
+      ifpd.MaterialId = m.MaterialId
+      and ifpd.idInsumoFichaProd = @idInsumoFichaProd
+      
+    inner join
+      dbo.tb_UnidadMedida um
+    on
+      um.idUnidadMedida = m.idUnidadMedida
       
   end
 go

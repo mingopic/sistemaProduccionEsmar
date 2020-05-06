@@ -128,6 +128,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         dcFechaSalida = new datechooser.beans.DateChooserCombo();
         btnGuardarSalida = new javax.swing.JButton();
         lblRequired4 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1223, 448));
 
@@ -160,6 +161,18 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         lblSolicitante.setText("Solicitante:");
 
         lblDepartamento.setText("Departamento:");
+
+        txtDepartamento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDepartamentoKeyTyped(evt);
+            }
+        });
+
+        txtSolicitante.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSolicitanteKeyTyped(evt);
+            }
+        });
 
         txtNoFicha.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -236,7 +249,13 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         lblComentarios.setText("Comentarios:");
 
         txtaComentarios.setColumns(20);
+        txtaComentarios.setLineWrap(true);
         txtaComentarios.setRows(5);
+        txtaComentarios.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtaComentariosKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -264,6 +283,8 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                     .addComponent(txtaComentarios, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
+
+        txtaComentarios.getAccessibleContext().setAccessibleParent(jScrollPane2);
 
         lblFechaSalida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblFechaSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calendar.png"))); // NOI18N
@@ -319,6 +340,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
     }
     dcFechaSalida.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
 
+    btnGuardarSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_abajo16x16.png"))); // NOI18N
     btnGuardarSalida.setText("Generar Salida");
     btnGuardarSalida.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,35 +352,49 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
     lblRequired4.setForeground(new java.awt.Color(255, 0, 0));
     lblRequired4.setText("*");
 
+    jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+    jButton1.setText("Remover Contenido");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel3Layout.createSequentialGroup()
+            .addContainerGap()
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 122, Short.MAX_VALUE)
+                    .addComponent(jButton1)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(btnGuardarSalida))
                 .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(12, 12, 12)
                     .addComponent(lblFechaSalida)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(dcFechaSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(lblRequired4)
-                    .addGap(0, 130, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE)))
             .addContainerGap())
     );
     jPanel3Layout.setVerticalGroup(
         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel3Layout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(dcFechaSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblFechaSalida)
-                .addComponent(lblRequired4))
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblFechaSalida)
+                        .addComponent(lblRequired4))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnGuardarSalida)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnGuardarSalida)
+                .addComponent(jButton1))
             .addContainerGap())
     );
 
@@ -443,19 +479,37 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         sc = new SalidaMaterialCommands();
         if (ValidarSalidaFicha())
         {
-            for (int i = 0 ; i < lstMaterial.size(); i ++) {
+            int tmp = -1;
+            int c = 0;
+            List<Map> lst = new ArrayList<>();
+            for (int i = 0; i < lstMaterial.size(); i++) {
+                if (i > 0) {
+                    if (Integer.parseInt(lst.get(c).get("idmaterial").toString()) == Integer.parseInt(lstMaterial.get(i).get("idmaterial").toString())) {
+                          lst.get(c).put("cantidad", 
+                                  Double.parseDouble(lst.get(c).get("cantidad").toString()) 
+                                  + Double.parseDouble(lstMaterial.get(i).get("cantidad").toString()));
+                    }
+                    else{
+                        c++;
+                        lst.add(lstMaterial.get(i));
+                    }
+                }else
+                lst.add(lstMaterial.get(i));
+                
+            }
+            for (int i = 0 ; i < lst.size(); i ++) {
             salida = new SalidaMaterial();
-            salida.setMaterialId(Integer.parseInt(lstMaterial.get(i).get("idmaterial").toString()));
-            salida.setCantidad(Double.parseDouble(lstMaterial.get(i).get("cantidad").toString()));
+            salida.setMaterialId(Integer.parseInt(lst.get(i).get("idmaterial").toString()));
+            salida.setCantidad(Double.parseDouble(lst.get(i).get("cantidad").toString()));
             salida.setSolicitante(txtSolicitante.getText());
             salida.setDepartamento(txtDepartamento.getText());
             salida.setComentarios(txtaComentarios.getText());
-            salida.setIdInsumoFichaProd(Integer.parseInt(lstMaterial.get(i).get("idinsumofichaprod").toString()));
+            salida.setIdInsumoFichaProd(Integer.parseInt(lst.get(i).get("idinsumofichaprod").toString()));
             salida.setIdUsuario(FrmPrincipal.u.getIdUsuario());
             salida.setFechaSalida(new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaSalida.getText()));
             lstSalidas.add(salida);
             }
-            respuesta = sc.SalidaFichaMaterialCreate(lstSalidas,Integer.parseInt(lstMaterial.get(1).get("idfichaprod").toString()));
+            respuesta = sc.SalidaFichaMaterialCreate(lstSalidas,Integer.parseInt(lst.get(1).get("idfichaprod").toString()));
             if (respuesta > 0)
             {
                 //dlgSalidaMaterial.setVisible(false);
@@ -487,10 +541,27 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         validarNumerosEnteros(evt, txtNoFicha.getText());
     }//GEN-LAST:event_txtNoFichaKeyTyped
 
+    private void txtSolicitanteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSolicitanteKeyTyped
+        ValidarLongitud(evt,txtSolicitante.getText(),10);
+    }//GEN-LAST:event_txtSolicitanteKeyTyped
+
+    private void txtDepartamentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepartamentoKeyTyped
+        ValidarLongitud(evt,txtDepartamento.getText(),50);
+    }//GEN-LAST:event_txtDepartamentoKeyTyped
+
+    private void txtaComentariosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtaComentariosKeyTyped
+        ValidarLongitud(evt,txtaComentarios.getText(),300);
+    }//GEN-LAST:event_txtaComentariosKeyTyped
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        LimpiarElementos();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarSalida;
     private datechooser.beans.DateChooserCombo dcFechaSalida;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -612,7 +683,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                         }
                     };
                     String[] cols = new String[]{
-                        "idfichaprod", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus", "idInsumoFichaProd"
+                        "idfichaprod", "idmaterial", "Código", "Material", "Cantidad Solicitada", "Unidad Medida", "Existencia En Almacen", "idestatus", "Estatus", "idInsumoFichaProd"
                     };
                     dtm.setColumnIdentifiers(cols);
                     dtm.setRowCount(lstMaterial.size());
@@ -672,5 +743,29 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                     tblMaterialesFicha.getTableHeader().setReorderingAllowed(false);
                 }
             }
+    }
+    private void ValidarLongitud(java.awt.event.KeyEvent evt, String textoCaja, int tamanioMaximo)
+    {
+        try {
+            char c = evt.getKeyChar();    
+            int longitud = textoCaja.trim().length();
+            
+            if (longitud == tamanioMaximo)
+            {
+                evt.consume();
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void LimpiarElementos(){
+        txtDepartamento.setText("");
+        txtSolicitante.setText("");
+        txtNoFicha.setText("");
+        txtaComentarios.setText("");
+        lstMaterial = new ArrayList<>();
+        limpiarComponentesSalidaMateriales();
     }
 }

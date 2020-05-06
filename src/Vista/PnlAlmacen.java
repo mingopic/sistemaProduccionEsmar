@@ -2155,7 +2155,7 @@ try {
                 pnlPrincipalx.paintAll(pnlSalidaFichaMaterial.getGraphics());
 
                 lblVentana.setText("Salida Ficha Material");
-                ImageIcon ico = new ImageIcon("src/Imagenes/cog.png");
+                ImageIcon ico=new ImageIcon("src/Imagenes/Flecha_abajo16x16.png");
                 lblVentana.setIcon(ico);
             } else {
                 iniDialogoSalida();

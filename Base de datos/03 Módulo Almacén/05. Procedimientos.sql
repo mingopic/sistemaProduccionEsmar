@@ -92,6 +92,12 @@ begin
 end
 go
 
+if object_id('dbo.Usp_MaterialUpdate') is not null
+begin
+	drop procedure dbo.Usp_MaterialUpdate
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_reiniciarPartida 
@@ -1181,6 +1187,7 @@ create procedure sp_InsInsumosFichaProd
   end
 go
 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_InsInsumosFichaProdDet
 (
@@ -1237,4 +1244,68 @@ create procedure sp_InsInsumosFichaProdDet
         , @MaterialId
       )
   end
-GO
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure Usp_MaterialUpdate
+(
+	@MaterialId              int
+  , @Codigo                varchar(10)
+  , @idUnidadMedida        int
+  , @Precio                float
+  , @idTipoMoneda          int
+	, @CatDetTipoMaterialId  int
+	, @CatDetClasificacionId int
+	, @CatDetEstatusId       int
+  , @Respuesta             int = -1 output
+  , @Mensaje               varchar(60) = '' output
+
+)
+  as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   DLuna     2020/05/05   Creación
+  =================================================================================================================================
+  */
+    
+    if exists (select 1 from dbo.Tb_Material where Codigo = @Codigo and MaterialId != @MaterialId)
+    begin
+    
+      select 
+        @Respuesta = 0
+        , @Mensaje = 'El código capturado ya ha sido registrado con otro material'
+    end
+    
+    else
+    begin
+
+      update 
+        dbo.Tb_Material
+        
+      set
+        Codigo = @Codigo
+        , idUnidadMedida = @idUnidadMedida
+        , Precio = @Precio
+        , idTipoMoneda = @idTipoMoneda
+        , CatDetTipoMaterialId = @CatDetTipoMaterialId
+        , CatDetClasificacionId = @CatDetClasificacionId
+        , CatDetEstatusId = @CatDetEstatusId
+        , FechaUltimaAct = getdate()
+        
+      where
+        MaterialId = @MaterialId
+        
+      select 
+        @Respuesta = @@ROWCOUNT
+        , @Mensaje = 'Material editado correctamente'
+    end
+    
+    select 
+      @Respuesta
+      , @Mensaje
+      
+  end
+go

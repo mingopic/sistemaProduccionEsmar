@@ -145,6 +145,7 @@ public class MaterialCommands {
         
         String query="execute dbo.Usp_MaterialCreate ?,?,?,?,?,?,?,?,?,?"; 
         
+        /*
         System.out.println("execute dbo.Usp_MaterialCreate "
                 + "'" + m.getCodigo() + "'"
                 + ", '" + m.getDescripcion()+ "'"
@@ -154,7 +155,7 @@ public class MaterialCommands {
                 + ", " + m.getIdTipoMoneda()
                 + ", " + m.getCatDetTipoMaterialId()
                 + ", " + m.getCatDetClasificacionId());
-         
+        */
         try 
         {
             c.conectar();
@@ -180,6 +181,57 @@ public class MaterialCommands {
             System.err.println(e);
             respuesta.setRespuesta(-1);
             respuesta.setMensaje("Error al guardar material, " + e.getMessage());
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return respuesta;
+    }
+    
+    public RespuestaDto MaterialUpdate(Material m) throws Exception
+    {
+        RespuestaDto respuesta = new RespuestaDto();
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_MaterialUpdate ?,?,?,?,?,?,?,?,?,?"; 
+        
+        System.out.println("execute dbo.Usp_MaterialUpdate "
+                +  m.getMaterialId()
+                + "'" + m.getCodigo() + "'"
+                + ", " + m.getIdUnidadMedida()
+                + ", " + m.getPrecio()
+                + ", " + m.getIdTipoMoneda()
+                + ", " + m.getCatDetTipoMaterialId()
+                + ", " + m.getCatDetClasificacionId()
+                + ", " + m.getCatDetEstatusId());
+         
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setInt(1,m.getMaterialId());
+            st.setString(2,m.getCodigo());
+            st.setInt(3,m.getIdUnidadMedida());
+            st.setDouble(4,m.getPrecio());
+            st.setInt(5, m.getIdTipoMoneda());
+            st.setInt(6, m.getCatDetTipoMaterialId());
+            st.setInt(7, m.getCatDetClasificacionId());
+            st.setInt(8, m.getCatDetEstatusId());
+            st.registerOutParameter(9, java.sql.Types.INTEGER);
+            st.registerOutParameter(10, java.sql.Types.VARCHAR);
+            
+            st.execute();
+            respuesta.setRespuesta(st.getInt("Respuesta"));
+            respuesta.setMensaje(st.getString("Mensaje"));
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+            respuesta.setRespuesta(-1);
+            respuesta.setMensaje("Error al editar material, " + e.getMessage());
         }
         finally
         {

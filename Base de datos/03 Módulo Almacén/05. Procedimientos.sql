@@ -830,6 +830,7 @@ create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
     select 
       fp.idFichaProd
       , [MaterialId] = m.MaterialId
+	    , ifp.idInsumoFichaProd
       , m.Codigo
       , [material] = coalesce(m.descripcion,ifpd.material)
       , ifpd.cantidad 
@@ -884,7 +885,7 @@ create procedure [dbo].[Usp_MaterialGetCollectionByIdFichaProd]
 
       and 0 <> coalesce(m.MaterialId, ifpd.MaterialId) 
       
-      and ifp.CatDetEstatusSurtidoId = 30
+      and ifp.CatDetEstatusSurtidoId = @CatDetEstatusNoSurtido
     
     order by 
       m.MaterialId asc

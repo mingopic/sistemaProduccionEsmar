@@ -156,7 +156,7 @@ public class SalidaMaterialCommands {
                 while (rs.next()) {
                     Map m = new HashMap();
                     m.put("idfichaprod",rs.getInt("idFichaProd"));
-                    //m.put("clave",rs.getString("clave"));
+                    m.put("idinsumofichaprod",rs.getString("idInsumoFichaProd"));
                     m.put("idmaterial",rs.getInt("MaterialId"));
                     m.put("codigo",rs.getString("Codigo"));
                     m.put("material",rs.getString("material"));

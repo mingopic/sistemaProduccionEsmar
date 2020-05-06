@@ -450,7 +450,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
             salida.setSolicitante(txtSolicitante.getText());
             salida.setDepartamento(txtDepartamento.getText());
             salida.setComentarios(txtaComentarios.getText());
-            salida.setIdInsumoFichaProd(0);
+            salida.setIdInsumoFichaProd(Integer.parseInt(lstMaterial.get(i).get("idinsumofichaprod").toString()));
             salida.setIdUsuario(FrmPrincipal.u.getIdUsuario());
             salida.setFechaSalida(new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaSalida.getText()));
             lstSalidas.add(salida);
@@ -612,7 +612,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                         }
                     };
                     String[] cols = new String[]{
-                        "idfichaprod", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus"
+                        "idfichaprod", "idmaterial", "Código", "Material", "Cantidad", "Unidad Medida", "Existencia", "idestatus", "Estatus", "idInsumoFichaProd"
                     };
                     dtm.setColumnIdentifiers(cols);
                     dtm.setRowCount(lstMaterial.size());
@@ -650,7 +650,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                         } else {
                             dtm.setValueAt("No Existente En Almacen", fila, 8);
                         }
-                        //dtm.setValueAt(lstMaterial.get(i).get("estatus"), fila, 9);
+                        dtm.setValueAt(lstMaterial.get(i).get("idinsumoFichaProd"), fila, 9);
                         //dtm.setValueAt(lstMaterial.get(i).get("fechaultimaact"), fila, 10);
                         tmpIdMaterial = lstMaterial.get(i).get("idmaterial").toString();
                         tmpMaterial = lstMaterial.get(i).get("material").toString();
@@ -667,6 +667,8 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                     columnModel.getColumn(1).setMaxWidth(0);
                     columnModel.getColumn(7).setMinWidth(0);
                     columnModel.getColumn(7).setMaxWidth(0);
+                    columnModel.getColumn(9).setMinWidth(0);
+                    columnModel.getColumn(9).setMaxWidth(0);
                     tblMaterialesFicha.getTableHeader().setReorderingAllowed(false);
                 }
             }

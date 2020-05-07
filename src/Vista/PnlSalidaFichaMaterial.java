@@ -551,7 +551,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
                 salida.setFechaSalida(new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaSalida.getText()));
                 lstSalidas.add(salida);
             }
-            respuesta = sc.SalidaFichaMaterialCreate(lstSalidas,Integer.parseInt(lstMaterial.get(1).get("idfichaprod").toString()));
+            respuesta = sc.SalidaFichaMaterialCreate(lstSalidas,Integer.parseInt(lstMaterial.get(1).get("idInsumoFichaProd").toString()));
             if (respuesta > 0)
             {
                 //dlgSalidaMaterial.setVisible(false);
@@ -728,7 +728,7 @@ public class PnlSalidaFichaMaterial extends javax.swing.JPanel {
         txtDepartamento.setText("");
         txtSolicitante.setText("");
         txtaComentarios.setText("");
-        dcFechaSalida.setText(null);
+        dcFechaSalida.setCurrent(null);
         lstMaterial = new ArrayList<>();
         InicializarTabla();
     }

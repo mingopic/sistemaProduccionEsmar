@@ -24,17 +24,27 @@ import static Vista.FrmPrincipal.lblVentana;
 import static Vista.FrmPrincipal.pnlPrincipalx;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -2137,7 +2147,7 @@ try {
     }//GEN-LAST:event_btnReporteEntradasActionPerformed
 
     private void btnReporteInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteInventarioActionPerformed
-        
+      generarReporteInventario();
     }//GEN-LAST:event_btnReporteInventarioActionPerformed
 
     private void btnReporteSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSalidasActionPerformed
@@ -2422,4 +2432,38 @@ try {
     private javax.swing.JTextArea txtaComentariosEntrada;
     private javax.swing.JTextArea txtaComentariosSalida;
     // End of variables declaration//GEN-END:variables
+
+    private void generarReporteInventario() {
+        try
+        {
+            actualizarTablaMateriales();
+            URL path = this.getClass().getResource("/Reportes/ReporteInventarioAlmacen.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("codigo", txtCodigo.getText().trim());
+            parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex()));
+            parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex()));
+            
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

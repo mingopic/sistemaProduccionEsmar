@@ -104,6 +104,18 @@ begin
 end
 go
 
+if object_id('dbo.Usp_EntradasGetAll') is not null
+begin
+	drop procedure dbo.Usp_EntradasGetAll
+end
+go
+
+
+if object_id('dbo.Usp_SalidasGetAll') is not null
+begin
+	drop procedure dbo.Usp_SalidasGetAll
+end
+go
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_reiniciarPartida 
@@ -1353,5 +1365,198 @@ create procedure dbo.Usp_MaterialGetCollectionByIdInsumoFichaProd
     on
       um.idUnidadMedida = m.idUnidadMedida
       
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_EntradasGetAll 
+(
+  @Codigo                   varchar(10) = ''
+  , @CatDetTipoMaterialId   int = 0
+  , @CatDetClasificacionId  int = 0
+  , @fechainicio datetime = null
+  , @fechafin datetime = null
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   JOlmedo     2020/05/13   Creación
+    =================================================================================================================================
+    */
+select
+      Codigo
+      , m.Descripcion
+      , em.cantidad
+      , m.Precio
+      , [UnidadMedida] = um.descripcion
+      , [TipoMoneda] = tm.descripcion
+      , [TipoMaterial] = cdT.Nombre
+      , [Clasificacion] = cdC.Nombre
+    , [FechaEntrada] = CONVERT (date, em.FechaEntrada)
+    
+    from
+      dbo.Tb_Material m
+    
+      inner join
+        tb_unidadMedida um
+      on
+        um.idUnidadMedida = m.idUnidadMedida
+      
+      inner join
+        tb_tipoMoneda tm
+      on
+        tm.idTipoMoneda = m.idTipoMoneda
+      
+      inner join
+        Tb_CatalogoDet cdT
+      on
+        cdT.CatDetId = m.CatDetTipoMaterialId
+        
+      inner join
+        Tb_CatalogoDet cdC
+      on
+        cdC.CatDetId = m.CatDetClasificacionId
+
+    inner join
+    Tb_EntradaMaterial em
+    on 
+    em.MaterialId = m.MaterialId
+        
+     where
+      m.Codigo =
+        case
+          when @Codigo != ''
+           then @Codigo
+           else m.Codigo
+        end
+      and m.CatDetTipoMaterialId = 
+        case
+          when @CatDetTipoMaterialId > 0
+           then @CatDetTipoMaterialId
+           else m.CatDetTipoMaterialId
+        end
+      and m.CatDetClasificacionId = 
+        case
+          when @CatDetClasificacionId > 0
+           then @CatDetClasificacionId
+           else m.CatDetClasificacionId
+        end
+      and em.FechaEntrada between 
+           (select 
+              case 
+              when @fechainicio is null
+              then  (SELECT DATEADD(year,-100, (select convert (date, getdate()))))
+              else @fechainicio 
+            end)
+          and 
+           (select 
+              case 
+              when @fechafin is null 
+              then (SELECT DATEADD(year,100, (select convert (date, getdate()))))
+              else @fechafin 
+            end)
+
+    order by
+     em.FechaEntrada asc , m.Descripcion asc;
+  end
+go
+
+/*---------------------------------------------------*/
+
+create procedure dbo.Usp_SalidasGetAll 
+(
+  @Codigo                   varchar(10) = ''
+  , @CatDetTipoMaterialId   int = 0
+  , @CatDetClasificacionId  int = 0
+  , @fechainicio datetime = null
+  , @fechafin datetime = null
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   JOlmedo     2020/05/13   Creación
+    =================================================================================================================================
+    */
+
+select
+      Codigo
+      , m.Descripcion
+      , s.cantidad
+      , m.Precio
+      , [UnidadMedida] = um.descripcion
+      , [TipoMoneda] = tm.descripcion
+      , [TipoMaterial] = cdT.Nombre
+      , [Clasificacion] = cdC.Nombre
+    , [FechaSalida] = CONVERT (date, s.FechaSalida)
+    
+    from
+      dbo.Tb_Material m
+    
+      inner join
+        tb_unidadMedida um
+      on
+        um.idUnidadMedida = m.idUnidadMedida
+      
+      inner join
+        tb_tipoMoneda tm
+      on
+        tm.idTipoMoneda = m.idTipoMoneda
+      
+      inner join
+        Tb_CatalogoDet cdT
+      on
+        cdT.CatDetId = m.CatDetTipoMaterialId
+        
+      inner join
+        Tb_CatalogoDet cdC
+      on
+        cdC.CatDetId = m.CatDetClasificacionId
+
+    inner join
+    Tb_SalidaMaterial s
+    on 
+    s.MaterialId = s.MaterialId
+        
+     where
+      m.Codigo =
+        case
+          when @Codigo != ''
+           then @Codigo
+           else m.Codigo
+        end
+      and m.CatDetTipoMaterialId = 
+        case
+          when @CatDetTipoMaterialId > 0
+           then @CatDetTipoMaterialId
+           else m.CatDetTipoMaterialId
+        end
+      and m.CatDetClasificacionId = 
+        case
+          when @CatDetClasificacionId > 0
+           then @CatDetClasificacionId
+           else m.CatDetClasificacionId
+        end
+      and s.FechaSalida between 
+           (select 
+              case 
+              when @fechainicio is null
+              then  (SELECT DATEADD(year,-100, (select convert (date, getdate()))))
+              else @fechainicio 
+            end)
+          and 
+           (select 
+              case 
+              when @fechafin is null 
+              then (SELECT DATEADD(year,100, (select convert (date, getdate()))))
+              else @fechafin 
+            end)
+
+    order by
+     s.FechaSalida asc , m.Descripcion asc;
   end
 go

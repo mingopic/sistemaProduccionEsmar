@@ -25,8 +25,10 @@ import static Vista.FrmPrincipal.pnlPrincipalx;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -2142,8 +2144,7 @@ try {
     }//GEN-LAST:event_cmbTipoMaterialActionPerformed
 
     private void btnReporteEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradasActionPerformed
-        
-        
+        generarReporteEntradas();
     }//GEN-LAST:event_btnReporteEntradasActionPerformed
 
     private void btnReporteInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteInventarioActionPerformed
@@ -2151,7 +2152,7 @@ try {
     }//GEN-LAST:event_btnReporteInventarioActionPerformed
 
     private void btnReporteSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSalidasActionPerformed
-        
+        generarReporteSalidas();
     }//GEN-LAST:event_btnReporteSalidasActionPerformed
 
     private void btnRealizarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarSalidaActionPerformed
@@ -2445,6 +2446,105 @@ try {
             parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex()));
             parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex()));
             
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void generarReporteEntradas() {
+        try
+        {
+            actualizarTablaMateriales();
+            URL path = this.getClass().getResource("/Reportes/ReporteEntradasAlmacen.jasper");
+            
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("codigo", txtCodigo.getText().trim());
+            
+            if (cmbTipoMaterial.getSelectedIndex() == 0)
+                parametros.put("catDetTipoMaterialId", 0);
+            else
+                parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId());
+            
+            if (cmbClasificacionMaterial.getSelectedIndex() == 0)
+                parametros.put("catDetClasificacionId", 0);
+            else
+                parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId());
+            
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+            Date dinicio = dcFechaDe.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaDe.getText());
+            String strDate = dinicio == null ? null : dateFormat.format(dinicio);
+            parametros.put("fechainicio", strDate);
+            
+            Date dfin = dcFechaHasta.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaHasta.getText());
+            String strDate2 = dfin == null ? null : dateFormat.format(dfin);   
+            parametros.put("fechafin", strDate2);
+            
+            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            
+            conexion.conectar();
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
+            
+            JasperViewer view = new JasperViewer(jprint, false);
+            
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
+            view.setVisible(true);
+            conexion.desconectar();
+        } catch (JRException ex) {
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void generarReporteSalidas() {
+        try
+        {
+            actualizarTablaMateriales();
+            URL path = this.getClass().getResource("/Reportes/ReporteSalidasAlmacen.jasper");
+            Map parametros = new HashMap();
+            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
+            parametros.put("codigo", txtCodigo.getText().trim());
+            
+            if (cmbTipoMaterial.getSelectedIndex() == 0)
+                parametros.put("catDetTipoMaterialId", 0);
+            else
+                parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId());
+            
+            if (cmbClasificacionMaterial.getSelectedIndex() == 0)
+                parametros.put("catDetClasificacionId", 0);
+            else
+                parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId());
+            
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+            Date dinicio = dcFechaDe.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaDe.getText());
+            String strDate = dinicio == null ? null : dateFormat.format(dinicio);
+            parametros.put("fechainicio", strDate);
+            
+            Date dfin = dcFechaHasta.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaHasta.getText());
+            String strDate2 = dfin == null ? null : dateFormat.format(dfin);   
+            parametros.put("fechafin", strDate2);
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

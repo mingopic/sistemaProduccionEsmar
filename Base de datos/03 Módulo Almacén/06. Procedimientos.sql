@@ -1390,11 +1390,10 @@ select
       Codigo
       , m.Descripcion
       , em.cantidad
-      , m.Precio
       , [UnidadMedida] = um.descripcion
-      , [TipoMoneda] = tm.descripcion
       , [TipoMaterial] = cdT.Nombre
       , [Clasificacion] = cdC.Nombre
+	  , [Comentarios] = em.Comentarios
     , [FechaEntrada] = CONVERT (date, em.FechaEntrada)
     
     from
@@ -1406,11 +1405,6 @@ select
         um.idUnidadMedida = m.idUnidadMedida
       
       inner join
-        tb_tipoMoneda tm
-      on
-        tm.idTipoMoneda = m.idTipoMoneda
-      
-      inner join
         Tb_CatalogoDet cdT
       on
         cdT.CatDetId = m.CatDetTipoMaterialId
@@ -1420,10 +1414,10 @@ select
       on
         cdC.CatDetId = m.CatDetClasificacionId
 
-    inner join
-    Tb_EntradaMaterial em
-    on 
-    em.MaterialId = m.MaterialId
+	  inner join
+		Tb_EntradaMaterial em
+	  on 
+		em.MaterialId = m.MaterialId
         
      where
       m.Codigo =
@@ -1486,12 +1480,14 @@ create procedure dbo.Usp_SalidasGetAll
 select
       Codigo
       , m.Descripcion
-      , s.cantidad
-      , m.Precio
       , [UnidadMedida] = um.descripcion
-      , [TipoMoneda] = tm.descripcion
+	  , [Cantidad] = s.Cantidad
       , [TipoMaterial] = cdT.Nombre
       , [Clasificacion] = cdC.Nombre
+	  , [Ficha] = s.idInsumoFichaProd
+	  , [Solicitante] = s.Solicitante
+	  , [Departamento] = s.Departamento
+	  , [Comentarios] = s.Comentarios
     , [FechaSalida] = CONVERT (date, s.FechaSalida)
     
     from
@@ -1501,11 +1497,6 @@ select
         tb_unidadMedida um
       on
         um.idUnidadMedida = m.idUnidadMedida
-      
-      inner join
-        tb_tipoMoneda tm
-      on
-        tm.idTipoMoneda = m.idTipoMoneda
       
       inner join
         Tb_CatalogoDet cdT
@@ -1557,6 +1548,6 @@ select
             end)
 
     order by
-     s.FechaSalida asc , m.Descripcion asc;
+     s.FechaSalida asc , s.idInsumoFichaProd asc, m.Descripcion asc;
   end
 go

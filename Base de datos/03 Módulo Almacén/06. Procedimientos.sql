@@ -1397,7 +1397,12 @@ select
     , [FechaEntrada] = CONVERT (date, em.FechaEntrada)
     
     from
-      dbo.Tb_Material m
+      dbo.Tb_EntradaMaterial em
+
+      inner join
+		Tb_Material m
+	  on 
+		em.MaterialId = m.MaterialId
     
       inner join
         tb_unidadMedida um
@@ -1414,10 +1419,6 @@ select
       on
         cdC.CatDetId = m.CatDetClasificacionId
 
-	  inner join
-		Tb_EntradaMaterial em
-	  on 
-		em.MaterialId = m.MaterialId
         
      where
       m.Codigo =
@@ -1491,8 +1492,13 @@ select
     , [FechaSalida] = CONVERT (date, s.FechaSalida)
     
     from
-      dbo.Tb_Material m
-    
+		Tb_SalidaMaterial s
+
+	  inner join
+		dbo.Tb_Material m
+	  on 
+		m.MaterialId = s.MaterialId
+		
       inner join
         tb_unidadMedida um
       on
@@ -1507,11 +1513,6 @@ select
         Tb_CatalogoDet cdC
       on
         cdC.CatDetId = m.CatDetClasificacionId
-
-    inner join
-    Tb_SalidaMaterial s
-    on 
-    s.MaterialId = s.MaterialId
         
      where
       m.Codigo =
@@ -1537,17 +1538,18 @@ select
               case 
               when @fechainicio is null
               then  (SELECT DATEADD(year,-100, (select convert (date, getdate()))))
-              else @fechainicio 
+              else @fechainicio
             end)
           and 
            (select 
               case 
               when @fechafin is null 
               then (SELECT DATEADD(year,100, (select convert (date, getdate()))))
-              else @fechafin 
+              else @fechafin
             end)
 
     order by
      s.FechaSalida asc , s.idInsumoFichaProd asc, m.Descripcion asc;
+
   end
 go

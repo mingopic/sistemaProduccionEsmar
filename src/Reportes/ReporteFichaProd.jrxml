@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a33bdac8-c79c-41df-a36d-9ac589d49aa8">
-	<property name="ireport.zoom" value="2.8531167061100127"/>
-	<property name="ireport.x" value="506"/>
+	<property name="ireport.zoom" value="1.9487171000000083"/>
+	<property name="ireport.x" value="85"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -109,6 +109,17 @@
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{ruta_subreporte}]]></subreportExpression>
 			</subreport>
+			<staticText>
+				<reportElement x="437" y="7" width="51" height="15" uuid="935fad1e-4f75-4290-bf20-6a34443134fb"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[No Ficha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="488" y="7" width="55" height="15" uuid="1d267a45-b262-4be4-a3c7-b08bbe570d24"/>
+				<textFieldExpression><![CDATA[$P{idFicha}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

@@ -26,16 +26,24 @@
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[execute Usp_MaterialGetAll]]>
+		<![CDATA[execute Usp_MaterialGetAll $P{codigo}, $P{catDetTipoMaterialId}, $P{catDetClasificacionId}]]>
 	</queryString>
+	<field name="MaterialId" class="java.lang.Integer"/>
 	<field name="Codigo" class="java.lang.String"/>
 	<field name="Descripcion" class="java.lang.String"/>
 	<field name="Existencia" class="java.lang.Double"/>
+	<field name="idUnidadMedida" class="java.lang.Integer"/>
 	<field name="Precio" class="java.lang.Double"/>
+	<field name="idTipoMoneda" class="java.lang.Integer"/>
+	<field name="CatDetTipoMaterialId" class="java.lang.Integer"/>
+	<field name="CatDetClasificacionId" class="java.lang.Integer"/>
+	<field name="CatDetEstatusId" class="java.lang.Integer"/>
+	<field name="FechaUltimaAct" class="java.sql.Timestamp"/>
 	<field name="UnidadMedida" class="java.lang.String"/>
 	<field name="TipoMoneda" class="java.lang.String"/>
 	<field name="TipoMaterial" class="java.lang.String"/>
 	<field name="Clasificacion" class="java.lang.String"/>
+	<field name="Estatus" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

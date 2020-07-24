@@ -195,11 +195,12 @@ public class MaterialCommands {
         RespuestaDto respuesta = new RespuestaDto();
         CallableStatement st = null;
         
-        String query="execute dbo.Usp_MaterialUpdate ?,?,?,?,?,?,?,?,?,?"; 
+        String query="execute dbo.Usp_MaterialUpdate ?,?,?,?,?,?,?,?,?,?,?"; 
         
         System.out.println("execute dbo.Usp_MaterialUpdate "
                 +  m.getMaterialId()
                 + "'" + m.getCodigo() + "'"
+                + "'" + m.getDescripcion()+ "'"
                 + ", " + m.getIdUnidadMedida()
                 + ", " + m.getPrecio()
                 + ", " + m.getIdTipoMoneda()
@@ -214,14 +215,15 @@ public class MaterialCommands {
             
             st.setInt(1,m.getMaterialId());
             st.setString(2,m.getCodigo());
-            st.setInt(3,m.getIdUnidadMedida());
-            st.setDouble(4,m.getPrecio());
-            st.setInt(5, m.getIdTipoMoneda());
-            st.setInt(6, m.getCatDetTipoMaterialId());
-            st.setInt(7, m.getCatDetClasificacionId());
-            st.setInt(8, m.getCatDetEstatusId());
-            st.registerOutParameter(9, java.sql.Types.INTEGER);
-            st.registerOutParameter(10, java.sql.Types.VARCHAR);
+            st.setString(3,m.getDescripcion());
+            st.setInt(4,m.getIdUnidadMedida());
+            st.setDouble(5,m.getPrecio());
+            st.setInt(6, m.getIdTipoMoneda());
+            st.setInt(7, m.getCatDetTipoMaterialId());
+            st.setInt(8, m.getCatDetClasificacionId());
+            st.setInt(9, m.getCatDetEstatusId());
+            st.registerOutParameter(10, java.sql.Types.INTEGER);
+            st.registerOutParameter(11, java.sql.Types.VARCHAR);
             
             st.execute();
             respuesta.setRespuesta(st.getInt("Respuesta"));

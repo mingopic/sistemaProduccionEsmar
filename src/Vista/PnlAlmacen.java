@@ -395,15 +395,21 @@ public class PnlAlmacen extends javax.swing.JPanel {
     private void onChangeCmbMaterialEntrada()
     {
         int index = cmbMaterialEntrada.getSelectedIndex();
-        txtCodigoEntrada.setText(lstMaterial.get(index).getCodigo());
-        lblUnidadMedidaEntrada.setText(lstMaterial.get(index).getUnidadMedida());
+        if (index >= 0)
+        {
+            txtCodigoEntrada.setText(lstMaterial.get(index).getCodigo());
+            lblUnidadMedidaEntrada.setText(lstMaterial.get(index).getUnidadMedida());
+        }
     }
     
     private void onChangeCmbMaterialSalida()
     {
         int index = cmbMaterialSalida.getSelectedIndex();
-        txtCodigoSalida.setText(lstMaterial.get(index).getCodigo());
-        lblUnidadMedidaSalida.setText(lstMaterial.get(index).getUnidadMedida());
+        if (index >= 0)
+        {
+            txtCodigoSalida.setText(lstMaterial.get(index).getCodigo());
+            lblUnidadMedidaSalida.setText(lstMaterial.get(index).getUnidadMedida());
+        }
     }
     
     private void EntradaMaterialCreate() throws ParseException, Exception
@@ -503,6 +509,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
             {
                 dlgAgregarMaterial.setVisible(false);
                 JOptionPane.showMessageDialog(null, respuesta.getMensaje());
+                llenarComboMateriales();
                 actualizarTablaMateriales();
             }
             else if (respuesta.getRespuesta() == 0)
@@ -526,6 +533,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
             mc = new MaterialCommands();
             
             materialEditar.setCodigo(txtCodigoEditar.getText().trim());
+            materialEditar.setDescripcion(txtDescripcionEditar.getText().trim());
             materialEditar.setIdUnidadMedida(lstUnidadMedida.get(cmbUnidadMedidaEditar.getSelectedIndex()).getIdUnidadMedida());
             materialEditar.setPrecio(Double.parseDouble(txtPrecioEditar.getText().trim()));
             materialEditar.setIdTipoMoneda(lstTipoMoneda.get(cmbMonedaEditar.getSelectedIndex()).getIdTipoMoneda());
@@ -1579,8 +1587,6 @@ try {
         }
     });
 
-    txtDescripcionEditar.setEditable(false);
-
     txtPrecioEditar.addKeyListener(new java.awt.event.KeyAdapter() {
         public void keyTyped(java.awt.event.KeyEvent evt) {
             txtPrecioEditarKeyTyped(evt);
@@ -1633,11 +1639,10 @@ try {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(cmbClasificacionEditar, 0, 210, Short.MAX_VALUE)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(cmbTipoMaterialEditar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbMonedaEditar, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPrecioEditar, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(cmbTipoMaterialEditar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cmbMonedaEditar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtPrecioEditar)
+                .addComponent(cmbUnidadMedidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(cmbEstatusEditar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
@@ -2170,7 +2175,7 @@ try {
                 lblVentana.setIcon(ico);
             } else {
                 iniDialogoSalida();
-                abrirDialogo(dlgSalidaMaterial, 600, 450);
+                abrirDialogo(dlgSalidaMaterial, 760, 450);
             }
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -2195,7 +2200,7 @@ try {
 
     private void btnRealizarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaActionPerformed
         iniDialogoEntrada();
-        abrirDialogo(dlgEntradaMaterial, 600, 355);
+        abrirDialogo(dlgEntradaMaterial, 750, 355);
     }//GEN-LAST:event_btnRealizarEntradaActionPerformed
 
     private void cmbMaterialEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMaterialEntradaActionPerformed
@@ -2296,7 +2301,7 @@ try {
             materialEditar = new Material();
             materialEditar = lstMaterial.get(tblMateriales.getSelectedRow());
             iniDialogoEditarMaterial();
-            abrirDialogo(dlgEditarMaterial, 600, 450);
+            abrirDialogo(dlgEditarMaterial, 700, 450);
         }
         else
         {
@@ -2443,9 +2448,16 @@ try {
             Map parametros = new HashMap();
             parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
             parametros.put("codigo", txtCodigo.getText().trim());
-            parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex()));
-            parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex()));
             
+            if (cmbTipoMaterial.getSelectedIndex() == 0)
+                parametros.put("catDetTipoMaterialId", 0);
+            else
+                parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId());
+            
+            if (cmbClasificacionMaterial.getSelectedIndex() == 0)
+                parametros.put("catDetClasificacionId", 0);
+            else
+                parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId());
             
             JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
             

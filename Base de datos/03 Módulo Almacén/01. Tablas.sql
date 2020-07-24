@@ -56,8 +56,8 @@ go
 create table dbo.Tb_Material
 (
   MaterialId              int not null identity(1,1) primary key
-  , Codigo                varchar(10) not null
-  , Descripcion           varchar(100) not null
+  , Codigo                varchar(20) not null
+  , Descripcion           varchar(200) not null
   , Existencia            float not null
   , idUnidadMedida        int not null
   , Precio                float default 0.0 not null

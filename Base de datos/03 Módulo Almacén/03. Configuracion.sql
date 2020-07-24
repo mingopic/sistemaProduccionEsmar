@@ -54,6 +54,7 @@ if not exists(
     dbo.Tb_CatalogoDet
   where 
     CatDetId between 4 and 24
+    and CatDetId between 31 and 32
 )
 begin
   insert into dbo.Tb_CatalogoDet
@@ -79,12 +80,14 @@ begin
   ,( 16, 'Limpieza', 13, 2)
   ,( 17, 'Mangueras Hidraulicas', 14, 2)
   ,( 18, 'Montacargas', 15, 2)
-  ,( 19, 'Papeleria', 16, 2)
+  ,( 19, 'Oficina', 16, 2)
   ,( 20, 'Pinturas Y Lubricantes', 17, 2)
-  ,( 21, 'Refacciones Electricas', 18, 2)
-  ,( 22, 'Refacciones Para Baños', 19, 2)
-  ,( 23, 'Tornillos-Pijas-Abrazaderas', 20, 2)
-  ,( 24, 'Varios', 21, 2)
+  ,( 21, 'Refacciones Electricas', 19, 2)
+  ,( 22, 'Refacciones Para Baños', 20, 2)
+  ,( 23, 'Tornillos-Pijas-Abrazaderas', 21, 2)
+  ,( 24, 'Varios', 22, 2)
+  ,( 31, 'Torno y Maquinados', 23, 2)
+  ,( 32, 'Químico', 18, 2)
 end
 
 /* Catálogo Estatus */
@@ -151,4 +154,27 @@ begin
   values
    ( 29, 'Surtida', 1, 5)
   ,( 30, 'No Surtida', 2, 5)
+end
+
+-- Unidades de medida
+if not exists(
+  select 1 
+  from 
+    dbo.tb_unidadMedida
+  where 
+    idUnidadMedida in (4,5,6,7,8,9)
+)
+begin
+  insert into dbo.tb_unidadMedida
+  (
+    descripcion
+    , desCorta
+  )
+  values
+   ('Pieza','Pza') -- 4
+   , ('Metro','M') -- 5
+   , ('Par','Par') -- 6
+   , ('Caja','Caja') -- 7
+   , ('Litro','L') -- 8
+   , ('Tambo','Tambo') -- 9
 end

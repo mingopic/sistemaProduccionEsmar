@@ -523,7 +523,7 @@ go
 create procedure dbo.Usp_MaterialCreate 
 (
   @Codigo                  varchar(10)
-  , @Descripcion           varchar(100)
+  , @Descripcion           varchar(200)
   , @Existencia            float
   , @idUnidadMedida        int
   , @Precio                float
@@ -1181,6 +1181,7 @@ create procedure dbo.Usp_MaterialUpdate
 (
 	@MaterialId              int
   , @Codigo                varchar(10)
+  , @Descripcion           varchar(200)
   , @idUnidadMedida        int
   , @Precio                float
   , @idTipoMoneda          int
@@ -1216,6 +1217,7 @@ create procedure dbo.Usp_MaterialUpdate
         
       set
         Codigo = @Codigo
+        , Descripcion = @Descripcion
         , idUnidadMedida = @idUnidadMedida
         , Precio = @Precio
         , idTipoMoneda = @idTipoMoneda

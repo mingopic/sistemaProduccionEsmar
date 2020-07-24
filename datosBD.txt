@@ -2,7 +2,7 @@ usuarioPC:127.0.0.1
 baseDatos: esmarProd        
 usuario:sa
 password:root
-instancia:SQLEXPRESS
-puerto:50713
+instancia:SQLEXPRESS2017
+puerto:56835
 BDcompaq: adESMAR2018
 ambiente: PRUEBAS

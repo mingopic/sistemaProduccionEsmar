@@ -20,10 +20,12 @@ import Modelo.Entity.Material;
 import Modelo.Entity.SalidaMaterial;
 import Modelo.Entity.TipoMoneda;
 import Modelo.Entity.UnidadMedida;
+import Utils.ExportarExcel;
 import static Vista.FrmPrincipal.lblVentana;
 import static Vista.FrmPrincipal.pnlPrincipalx;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -942,12 +944,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
         btnBuscar = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jToolBar2 = new javax.swing.JToolBar();
-        btnReporteEntradas = new javax.swing.JButton();
+        btnReporteEntradasExcel = new javax.swing.JButton();
         jLabel50 = new javax.swing.JLabel();
-        btnReporteSalidas = new javax.swing.JButton();
-        jLabel51 = new javax.swing.JLabel();
-        btnReporteInventario = new javax.swing.JButton();
+        btnReporteSalidasExcel = new javax.swing.JButton();
         jLabel72 = new javax.swing.JLabel();
+        btnReporteInventarioExcel = new javax.swing.JButton();
         jToolBar3 = new javax.swing.JToolBar();
         lblEnviarTerminado = new javax.swing.JLabel();
         btnAgregarMaterial = new javax.swing.JButton();
@@ -1954,61 +1955,57 @@ try {
     jToolBar2.setFloatable(false);
     jToolBar2.setRollover(true);
 
-    btnReporteEntradas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteEntradas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteEntradas.setText("Reporte Entradas");
-    btnReporteEntradas.setFocusable(false);
-    btnReporteEntradas.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-    btnReporteEntradas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteEntradas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteEntradas.addActionListener(new java.awt.event.ActionListener() {
+    btnReporteEntradasExcel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteEntradasExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/save_as_excel.png"))); // NOI18N
+    btnReporteEntradasExcel.setText("Reporte Entradas");
+    btnReporteEntradasExcel.setFocusable(false);
+    btnReporteEntradasExcel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+    btnReporteEntradasExcel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteEntradasExcel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteEntradasExcel.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteEntradasActionPerformed(evt);
+            btnReporteEntradasExcelActionPerformed(evt);
         }
     });
-    jToolBar2.add(btnReporteEntradas);
+    jToolBar2.add(btnReporteEntradasExcel);
 
     jLabel50.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel50.setForeground(new java.awt.Color(227, 222, 222));
     jLabel50.setText("     ");
     jToolBar2.add(jLabel50);
 
-    btnReporteSalidas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteSalidas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteSalidas.setText("Reporte Salidas");
-    btnReporteSalidas.setFocusable(false);
-    btnReporteSalidas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    btnReporteSalidas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    btnReporteSalidas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteSalidas.addActionListener(new java.awt.event.ActionListener() {
+    btnReporteSalidasExcel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteSalidasExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/save_as_excel.png"))); // NOI18N
+    btnReporteSalidasExcel.setText("Reporte Salidas");
+    btnReporteSalidasExcel.setFocusable(false);
+    btnReporteSalidasExcel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnReporteSalidasExcel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteSalidasExcel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteSalidasExcel.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteSalidasActionPerformed(evt);
+            btnReporteSalidasExcelActionPerformed(evt);
         }
     });
-    jToolBar2.add(btnReporteSalidas);
-
-    jLabel51.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    jLabel51.setForeground(new java.awt.Color(227, 222, 222));
-    jLabel51.setText("     ");
-    jToolBar2.add(jLabel51);
-
-    btnReporteInventario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnReporteInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/printer.png"))); // NOI18N
-    btnReporteInventario.setText("Reporte Inventario Almacén");
-    btnReporteInventario.setFocusable(false);
-    btnReporteInventario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    btnReporteInventario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    btnReporteInventario.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            btnReporteInventarioActionPerformed(evt);
-        }
-    });
-    jToolBar2.add(btnReporteInventario);
+    jToolBar2.add(btnReporteSalidasExcel);
 
     jLabel72.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     jLabel72.setForeground(new java.awt.Color(227, 222, 222));
     jLabel72.setText("     ");
     jToolBar2.add(jLabel72);
+
+    btnReporteInventarioExcel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnReporteInventarioExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/save_as_excel.png"))); // NOI18N
+    btnReporteInventarioExcel.setText("Reporte Inventario");
+    btnReporteInventarioExcel.setFocusable(false);
+    btnReporteInventarioExcel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    btnReporteInventarioExcel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnReporteInventarioExcel.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnReporteInventarioExcel.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnReporteInventarioExcelActionPerformed(evt);
+        }
+    });
+    jToolBar2.add(btnReporteInventarioExcel);
 
     jToolBar3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jToolBar3.setFloatable(false);
@@ -2096,10 +2093,13 @@ try {
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jScrollPane1)
         .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1223, Short.MAX_VALUE)
         .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 1223, Short.MAX_VALUE)
         .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 1223, Short.MAX_VALUE)
+        .addGroup(jPanel4Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane1)
+            .addContainerGap())
     );
     jPanel4Layout.setVerticalGroup(
         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2110,7 +2110,8 @@ try {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+            .addContainerGap())
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -2148,17 +2149,9 @@ try {
         actualizarTablaMateriales();
     }//GEN-LAST:event_cmbTipoMaterialActionPerformed
 
-    private void btnReporteEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradasActionPerformed
+    private void btnReporteEntradasExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteEntradasExcelActionPerformed
         generarReporteEntradas();
-    }//GEN-LAST:event_btnReporteEntradasActionPerformed
-
-    private void btnReporteInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteInventarioActionPerformed
-      generarReporteInventario();
-    }//GEN-LAST:event_btnReporteInventarioActionPerformed
-
-    private void btnReporteSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSalidasActionPerformed
-        generarReporteSalidas();
-    }//GEN-LAST:event_btnReporteSalidasActionPerformed
+    }//GEN-LAST:event_btnReporteEntradasExcelActionPerformed
 
     private void btnRealizarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarSalidaActionPerformed
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Realizar surtido de ficha de producción?", "Realizar Salida", JOptionPane.YES_NO_OPTION);
@@ -2309,6 +2302,20 @@ try {
         }
     }//GEN-LAST:event_btnEditarMaterialActionPerformed
 
+    private void btnReporteInventarioExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteInventarioExcelActionPerformed
+        ExportarExcel obj = new ExportarExcel();
+        try {
+            obj.exportarExcelJTable(tblMateriales);
+        } catch (IOException ex) {
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnReporteInventarioExcelActionPerformed
+
+    private void btnReporteSalidasExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSalidasExcelActionPerformed
+        generarReporteSalidas();
+    }//GEN-LAST:event_btnReporteSalidasExcelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarMaterial;
@@ -2321,9 +2328,9 @@ try {
     private javax.swing.JButton btnGuardarSalida;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarSalida;
-    private javax.swing.JButton btnReporteEntradas;
-    private javax.swing.JButton btnReporteInventario;
-    private javax.swing.JButton btnReporteSalidas;
+    private javax.swing.JButton btnReporteEntradasExcel;
+    private javax.swing.JButton btnReporteInventarioExcel;
+    private javax.swing.JButton btnReporteSalidasExcel;
     private javax.swing.JComboBox<String> cmbClasificacionAgregar;
     private javax.swing.JComboBox<String> cmbClasificacionEditar;
     private javax.swing.JComboBox cmbClasificacionMaterial;
@@ -2375,7 +2382,6 @@ try {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
-    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
@@ -2483,99 +2489,143 @@ try {
     private void generarReporteEntradas() {
         try
         {
-            actualizarTablaMateriales();
-            URL path = this.getClass().getResource("/Reportes/ReporteEntradasAlmacen.jasper");
+            EntradaMaterialCommands emc = new EntradaMaterialCommands();
+            String codigo = txtCodigo.getText().trim();
+            int catDetTipoMaterialId = 0;
+            int catDetClasificacionId = 0;
+            String fechainicio = "";
+            String fechafin = "";
             
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            parametros.put("codigo", txtCodigo.getText().trim());
+            if (cmbTipoMaterial.getSelectedIndex() != 0)
+                catDetTipoMaterialId = lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId();
             
-            if (cmbTipoMaterial.getSelectedIndex() == 0)
-                parametros.put("catDetTipoMaterialId", 0);
-            else
-                parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId());
-            
-            if (cmbClasificacionMaterial.getSelectedIndex() == 0)
-                parametros.put("catDetClasificacionId", 0);
-            else
-                parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId());
+            if (cmbClasificacionMaterial.getSelectedIndex() != 0)
+                catDetClasificacionId = lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId();
             
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
             Date dinicio = dcFechaDe.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaDe.getText());
             String strDate = dinicio == null ? null : dateFormat.format(dinicio);
-            parametros.put("fechainicio", strDate);
+            fechainicio = strDate;
             
             Date dfin = dcFechaHasta.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaHasta.getText());
             String strDate2 = dfin == null ? null : dateFormat.format(dfin);   
-            parametros.put("fechafin", strDate2);
+            fechafin = strDate2;
             
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            List<EntradaMaterial> entrada = emc.EntradaMaterialGetAll(codigo,catDetTipoMaterialId,catDetClasificacionId,fechainicio,fechafin);
             
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+            if (entrada.size() > 0)
+            {
+                String[][] report = new String[entrada.size()+1][8];
+                
+                // Encabezados
+                report[0][0] = "Código";
+                report[0][1] = "Descripción";
+                report[0][2] = "Cantidad";
+                report[0][3] = "Unidad de Medida";
+                report[0][4] = "Tipo Material";
+                report[0][5] = "Clasificación";
+                report[0][6] = "Comentarios";
+                report[0][7] = "Fecha Entrada";
+                
+                for(int i = 0; i < entrada.size(); i++)
+                {
+                    int position = i + 1;
+                    report[position][0] = entrada.get(i).getCodigo();
+                    report[position][1] = entrada.get(i).getDescripcion();
+                    report[position][2] = entrada.get(i).getCantidad().toString();
+                    report[position][3] = entrada.get(i).getUnidadMedida();
+                    report[position][4] = entrada.get(i).getTipoMaterial();
+                    report[position][5] = entrada.get(i).getClasificacion();
+                    report[position][6] = entrada.get(i).getComentarios();
+                    report[position][7] = entrada.get(i).getFechaEntrada().toString();
+                }
+                ExportarExcel excel = new ExportarExcel();
+                excel.exportarExcelArray(report);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No hay información","Mensaje",JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private void generarReporteSalidas() {
         try
         {
-            actualizarTablaMateriales();
-            URL path = this.getClass().getResource("/Reportes/ReporteSalidasAlmacen.jasper");
-            Map parametros = new HashMap();
-            parametros.put("imagen", this.getClass().getResourceAsStream(imagen));
-            parametros.put("codigo", txtCodigo.getText().trim());
+            SalidaMaterialCommands smc = new SalidaMaterialCommands();
+            String codigo = txtCodigo.getText().trim();
+            int catDetTipoMaterialId = 0;
+            int catDetClasificacionId = 0;
+            String fechainicio = "";
+            String fechafin = "";
             
-            if (cmbTipoMaterial.getSelectedIndex() == 0)
-                parametros.put("catDetTipoMaterialId", 0);
-            else
-                parametros.put("catDetTipoMaterialId", lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId());
+            if (cmbTipoMaterial.getSelectedIndex() != 0)
+                catDetTipoMaterialId = lstCatDetTipoMaterial.get(cmbTipoMaterial.getSelectedIndex() - 1).getCatDetId();
             
-            if (cmbClasificacionMaterial.getSelectedIndex() == 0)
-                parametros.put("catDetClasificacionId", 0);
-            else
-                parametros.put("catDetClasificacionId", lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId());
+            if (cmbClasificacionMaterial.getSelectedIndex() != 0)
+                catDetClasificacionId = lstCatDetClasMaterial.get(cmbClasificacionMaterial.getSelectedIndex() - 1).getCatDetId();
             
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
             Date dinicio = dcFechaDe.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaDe.getText());
             String strDate = dinicio == null ? null : dateFormat.format(dinicio);
-            parametros.put("fechainicio", strDate);
+            fechainicio = strDate;
             
             Date dfin = dcFechaHasta.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaHasta.getText());
             String strDate2 = dfin == null ? null : dateFormat.format(dfin);   
-            parametros.put("fechafin", strDate2);
+            fechafin = strDate2;
             
-            JasperReport reporte=(JasperReport) JRLoader.loadObject(path);
+            List<SalidaMaterial> salida = smc.SalidaMaterialGetAll(codigo,catDetTipoMaterialId,catDetClasificacionId,fechainicio,fechafin);
             
-            conexion.conectar();
-            
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametros, conexion.getConexion());
-            
-            JasperViewer view = new JasperViewer(jprint, false);
-            
-            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
-            view.setVisible(true);
-            conexion.desconectar();
-        } catch (JRException ex) {
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
+            if (salida.size() > 0)
+            {
+                String[][] report = new String[salida.size()+1][11];
+                
+                // Encabezados
+                report[0][0] = "Código";
+                report[0][1] = "Descripción";
+                report[0][2] = "Unidad de Medida";
+                report[0][3] = "Cantidad";
+                report[0][4] = "Tipo Material";
+                report[0][5] = "Clasificación";
+                report[0][6] = "Ficha";
+                report[0][7] = "Solicitante";
+                report[0][8] = "Departamento";
+                report[0][9] = "Comentarios";
+                report[0][10] = "Fecha Salida";
+                
+                for(int i = 0; i < salida.size(); i++)
+                {
+                    int position = i + 1;
+                    report[position][0] = salida.get(i).getCodigo();
+                    report[position][1] = salida.get(i).getDescripcion();
+                    report[position][2] = salida.get(i).getUnidadMedida();
+                    report[position][3] = salida.get(i).getCantidad().toString();
+                    report[position][4] = salida.get(i).getTipoMaterial();
+                    report[position][5] = salida.get(i).getClasificacion();
+                    
+                    if (salida.get(i).getFicha() > 0)
+                        report[position][6] = String.valueOf(salida.get(i).getFicha());
+                    else
+                        report[position][6] = "";
+                    
+                    report[position][7] = salida.get(i).getSolicitante();
+                    report[position][8] = salida.get(i).getDepartamento();
+                    report[position][9] = salida.get(i).getComentarios();
+                    report[position][10] = salida.get(i).getFechaSalida().toString();
+                }
+                ExportarExcel excel = new ExportarExcel();
+                excel.exportarExcelArray(report);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No hay información","Mensaje",JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (Exception ex) {
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "No se puede generar el reporte","Error",JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(PnlRecepcionCuero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

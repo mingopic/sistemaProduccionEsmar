@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -59,5 +61,66 @@ public class EntradaMaterialCommands {
             c.desconectar();
         }
         return return_value;
+    }
+    
+    public static List<EntradaMaterial> EntradaMaterialGetAll(String codigo, int catDetTipoMaterialId, int catDetClasificacionId, String fechainicio, String fechafin) 
+    {
+        List<EntradaMaterial> lstEntradaMaterial = null;
+        String strDateInicio = null;
+        String strDateFin = null;
+        
+        if (fechainicio != null)
+            strDateInicio = "'" + fechainicio + "'";
+        
+        if (fechafin != null)
+            strDateFin = "'" + fechafin + "'";
+        
+        
+        String query = "execute dbo.Usp_EntradasGetAll '" + codigo + "'"
+                        + ", " + catDetTipoMaterialId
+                        + ", " + catDetClasificacionId
+                        + ", " + strDateInicio + ""
+                        + ", " + strDateFin + "";
+        
+        System.out.println(query);
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try 
+        {
+            c.conectar();
+            stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = stmt.executeQuery(query);
+
+            lstEntradaMaterial = new ArrayList<>();
+            if (rs.last()) 
+            {
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    EntradaMaterial m = new EntradaMaterial();
+                    m.setCodigo(rs.getString("Codigo"));
+                    m.setDescripcion(rs.getString("Descripcion"));
+                    m.setCantidad(rs.getDouble("cantidad"));
+                    m.setUnidadMedida(rs.getString("UnidadMedida"));
+                    m.setTipoMaterial(rs.getString("TipoMaterial"));
+                    m.setClasificacion(rs.getString("Clasificacion"));
+                    m.setComentarios(rs.getString("Comentarios"));
+                    m.setFechaEntrada(rs.getDate("FechaEntrada"));
+                    
+                    lstEntradaMaterial.add(m);
+                }
+            }
+            rs.close();
+            stmt.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return lstEntradaMaterial;
     }
 }

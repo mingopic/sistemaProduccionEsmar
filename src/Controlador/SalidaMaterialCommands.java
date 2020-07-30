@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,5 +176,69 @@ public class SalidaMaterialCommands {
             System.err.println(e);
         }
         return lstMaterial;
+    }
+    
+    public static List<SalidaMaterial> SalidaMaterialGetAll(String codigo, int catDetTipoMaterialId, int catDetClasificacionId, String fechainicio, String fechafin) 
+    {
+        List<SalidaMaterial> lstSalidaMaterial = null;
+        String strDateInicio = null;
+        String strDateFin = null;
+        
+        if (fechainicio != null)
+            strDateInicio = "'" + fechainicio + "'";
+        
+        if (fechafin != null)
+            strDateFin = "'" + fechafin + "'";
+        
+        
+        String query = "execute dbo.Usp_SalidasGetAll '" + codigo + "'"
+                        + ", " + catDetTipoMaterialId
+                        + ", " + catDetClasificacionId
+                        + ", " + strDateInicio + ""
+                        + ", " + strDateFin + "";
+        
+        System.out.println(query);
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try 
+        {
+            c.conectar();
+            stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = stmt.executeQuery(query);
+
+            lstSalidaMaterial = new ArrayList<>();
+            if (rs.last()) 
+            {
+                rs.beforeFirst();
+
+                //Recorremos el ResultSet registro a registro
+                while (rs.next()) {
+                    SalidaMaterial m = new SalidaMaterial();
+                    m.setCodigo(rs.getString("Codigo"));
+                    m.setDescripcion(rs.getString("Descripcion"));
+                    m.setUnidadMedida(rs.getString("UnidadMedida"));
+                    m.setCantidad(rs.getDouble("Cantidad"));
+                    m.setTipoMaterial(rs.getString("TipoMaterial"));
+                    m.setClasificacion(rs.getString("Clasificacion"));
+                    m.setFicha(rs.getInt("Ficha"));
+                    m.setSolicitante(rs.getString("Solicitante"));
+                    m.setDepartamento(rs.getString("Departamento"));
+                    m.setComentarios(rs.getString("Comentarios"));
+                    m.setFechaSalida(rs.getDate("FechaSalida"));
+                    
+                    lstSalidaMaterial.add(m);
+                }
+            }
+            rs.close();
+            stmt.close();
+            c.desconectar();
+        } 
+        catch (Exception e) 
+        {
+            System.err.println(e);
+        }
+        return lstSalidaMaterial;
     }
 }

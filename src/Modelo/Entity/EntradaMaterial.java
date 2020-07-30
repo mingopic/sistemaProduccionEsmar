@@ -5,13 +5,14 @@
  */
 package Modelo.Entity;
 
+import Modelo.Dto.EntradaMaterialDto;
 import java.util.Date;
 
 /**
  *
  * @author mingo
  */
-public class EntradaMaterial {
+public class EntradaMaterial extends EntradaMaterialDto{
     int EntradaMaterialId;
     int MaterialId;
     Double Cantidad;

@@ -82,7 +82,7 @@ public class EntradaMaterialCommands {
                         + ", " + strDateInicio + ""
                         + ", " + strDateFin + "";
         
-        System.out.println(query);
+        //System.out.println(query);
 
         Statement stmt = null;
         ResultSet rs = null;

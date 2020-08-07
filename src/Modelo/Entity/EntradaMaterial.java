@@ -20,6 +20,7 @@ public class EntradaMaterial extends EntradaMaterialDto{
     int idUsuario;
     Date FechaEntrada;
     Date FechaInsercion;
+    Double Precio;
 
     public int getEntradaMaterialId() {
         return EntradaMaterialId;
@@ -75,6 +76,14 @@ public class EntradaMaterial extends EntradaMaterialDto{
 
     public void setFechaInsercion(Date FechaInsercion) {
         this.FechaInsercion = FechaInsercion;
+    }
+
+    public Double getPrecio() {
+        return Precio;
+    }
+
+    public void setPrecio(Double Precio) {
+        this.Precio = Precio;
     }
     
 }

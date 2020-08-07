@@ -34,7 +34,7 @@ public class EntradaMaterialCommands {
         String strDate = dateFormat.format(em.getFechaEntrada());
         CallableStatement st = null;
         
-        String query="execute dbo.Usp_EntradaMaterialCreate ?,?,?,?,?,?"; 
+        String query="execute dbo.Usp_EntradaMaterialCreate ?,?,?,?,?,?,?"; 
         
         try 
         {
@@ -43,10 +43,79 @@ public class EntradaMaterialCommands {
             
             st.setInt(1,em.getMaterialId());
             st.setDouble(2,em.getCantidad());
-            st.setString(3,em.getComentarios());
-            st.setInt(4,em.getIdUsuario());
-            st.setString(5,strDate);
-            st.registerOutParameter(6, java.sql.Types.INTEGER);  
+            st.setDouble(3,em.getPrecio());
+            st.setString(4,em.getComentarios());
+            st.setInt(5,em.getIdUsuario());
+            st.setString(6,strDate);
+            st.registerOutParameter(7, java.sql.Types.INTEGER);  
+            
+            st.execute();
+            return_value = st.getInt("Return_value");
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return return_value;
+    }
+    
+    //Método para editar una entrada de material
+    public int EntradaMaterialUpdate(EntradaMaterial em) throws Exception
+    {
+        int return_value = 0;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+        String strDate = dateFormat.format(em.getFechaEntrada());
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_EntradaMaterialUpdate ?,?,?,?,?,?,?"; 
+        
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setInt(1,em.getEntradaMaterialId());
+            st.setDouble(2,em.getCantidad());
+            st.setDouble(3,em.getPrecio());
+            st.setString(4,em.getComentarios());
+            st.setInt(5,em.getIdUsuario());
+            st.setString(6,strDate);
+            st.registerOutParameter(7, java.sql.Types.INTEGER);  
+            
+            st.execute();
+            return_value = st.getInt("Return_value");
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return return_value;
+    }
+    
+    public int EntradaMaterialDelete(int entradaMaterialId) throws Exception
+    {
+        int return_value = 0;
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_EntradaMaterialDelete ?,?"; 
+        
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setInt(1,entradaMaterialId);
+            st.registerOutParameter(2, java.sql.Types.INTEGER);  
             
             st.execute();
             return_value = st.getInt("Return_value");
@@ -101,9 +170,12 @@ public class EntradaMaterialCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     EntradaMaterial m = new EntradaMaterial();
+                    m.setEntradaMaterialId(rs.getInt("EntradaMaterialId"));
                     m.setCodigo(rs.getString("Codigo"));
+                    m.setMaterialId(rs.getInt("MaterialId"));
                     m.setDescripcion(rs.getString("Descripcion"));
                     m.setCantidad(rs.getDouble("cantidad"));
+                    m.setPrecio(rs.getDouble("Precio"));
                     m.setUnidadMedida(rs.getString("UnidadMedida"));
                     m.setTipoMaterial(rs.getString("TipoMaterial"));
                     m.setClasificacion(rs.getString("Clasificacion"));

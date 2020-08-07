@@ -23,6 +23,7 @@ import Modelo.Entity.UnidadMedida;
 import Utils.ExportarExcel;
 import static Vista.FrmPrincipal.lblVentana;
 import static Vista.FrmPrincipal.pnlPrincipalx;
+import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -40,7 +41,6 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -69,6 +69,10 @@ public class PnlAlmacen extends javax.swing.JPanel {
     Material materialEditar = null;
     private final String imagen="/Imagenes/logo_esmar.png";
     int panelActual = 0;
+    EntradaMaterial entradaEdicion;
+    JTextFieldDateEditor dtFechaEntradaEditar;
+    JTextFieldDateEditor dtFechaDeEntrada;
+    JTextFieldDateEditor dtFechaHastaEntrada;
     
     DefaultTableModel dtms=new DefaultTableModel();
    
@@ -97,6 +101,13 @@ public class PnlAlmacen extends javax.swing.JPanel {
         jrFiltroFechasSalidas.setSelected(false);
         dcFechaDeSalidas.setEnabled(false);
         dcFechaHastaSalidas.setEnabled(false);
+        
+        dtFechaEntradaEditar = (JTextFieldDateEditor) dcEntradaEditar.getDateEditor();
+        dtFechaEntradaEditar.setEditable(false);
+        dtFechaDeEntrada = (JTextFieldDateEditor) dcFechaDeEntradas.getDateEditor();
+        dtFechaDeEntrada.setEditable(false);
+        dtFechaHastaEntrada = (JTextFieldDateEditor) dcFechaHastaEntradas.getDateEditor();
+        dtFechaHastaEntrada.setEditable(false);
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
@@ -301,7 +312,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
         DefaultTableModel dtm = null;
         String[] cols = new String[]
         {
-            "Código","Descripción","Cantidad","Unidad de Medida","Tipo Material","Clasificación","Comentarios","Fecha Entrada"
+            "Código","Descripción","Cantidad","Unidad de Medida","Precio","Tipo Material","Clasificación","Comentarios","Fecha Entrada"
         };
         
         try 
@@ -323,10 +334,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
                 dtm.setValueAt(lstEntradaMaterial.get(i).getDescripcion(), i, 1);
                 dtm.setValueAt(lstEntradaMaterial.get(i).getCantidad(), i, 2);
                 dtm.setValueAt(lstEntradaMaterial.get(i).getUnidadMedida(), i, 3);
-                dtm.setValueAt(lstEntradaMaterial.get(i).getTipoMaterial(), i, 4);
-                dtm.setValueAt(lstEntradaMaterial.get(i).getClasificacion(), i, 5);
-                dtm.setValueAt(lstEntradaMaterial.get(i).getComentarios(), i, 6);
-                dtm.setValueAt(lstEntradaMaterial.get(i).getFechaEntrada(), i, 7);
+                dtm.setValueAt(lstEntradaMaterial.get(i).getPrecio(), i, 4);
+                dtm.setValueAt(lstEntradaMaterial.get(i).getTipoMaterial(), i, 5);
+                dtm.setValueAt(lstEntradaMaterial.get(i).getClasificacion(), i, 6);
+                dtm.setValueAt(lstEntradaMaterial.get(i).getComentarios(), i, 7);
+                dtm.setValueAt(lstEntradaMaterial.get(i).getFechaEntrada(), i, 8);
             }
             tblEntradas.setModel(dtm);
             
@@ -538,6 +550,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
             
             entrada.setMaterialId(lstMaterial.get(cmbMaterialEntrada.getSelectedIndex()).getMaterialId());
             entrada.setCantidad(Double.parseDouble(txtCantidadEntrada.getText().trim()));
+            entrada.setPrecio(Double.parseDouble(txtPrecioEntrada.getText().trim()));
             entrada.setComentarios(txtaComentariosEntrada.getText().trim());
             entrada.setIdUsuario(FrmPrincipal.u.getIdUsuario());
             entrada.setFechaEntrada(new SimpleDateFormat("dd/MM/yyyy").parse(dcEntrada.getText()));
@@ -669,6 +682,38 @@ public class PnlAlmacen extends javax.swing.JPanel {
             else
             {
                 JOptionPane.showMessageDialog(null, respuesta.getMensaje(),"Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void EntradaMaterialUpdate() throws ParseException, Exception
+    {
+        EntradaMaterial entrada;
+        EntradaMaterialCommands emc;
+        int respuesta;
+        
+        if (ValidarEditarEntradaMaterial())
+        {
+            entrada = entradaEdicion;
+            emc = new EntradaMaterialCommands();
+            
+            entrada.setCantidad(Double.parseDouble(txtCantidadEntradaEditar.getText().trim()));
+            entrada.setPrecio(Double.parseDouble(txtPrecioEntradaEditar.getText().trim()));
+            entrada.setComentarios(txtaComentariosEntradaEditar.getText().trim());
+            entrada.setIdUsuario(FrmPrincipal.u.getIdUsuario());
+            entrada.setFechaEntrada(dcEntradaEditar.getDate());
+            
+            respuesta = emc.EntradaMaterialUpdate(entrada);
+            
+            if (respuesta > 0)
+            {
+                dlgEditarEntrada.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Edición realizada con éxito");
+                actualizarTablaEntradas();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Error al editar entrada, intente de nuevo","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -809,7 +854,85 @@ public class PnlAlmacen extends javax.swing.JPanel {
         
         if (respuesta)
         {
+            if (txtPrecioEntrada.getText().trim().equals("") || txtPrecioEntrada.getText().trim().equals("."))
+            {
+                mensaje = "Ingrese precio";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtPrecioEntrada.getText().trim()) <= 0)
+            {
+                mensaje = "Precio debe ser mayor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
             if (dcEntrada.getText().trim().equals(""))
+            {
+                mensaje = "Seleccione fecha de entrada";
+                respuesta = false;
+            }
+        }
+        
+        if (!respuesta)
+        {
+            dlgEntradaMaterial.setVisible(false);
+            JOptionPane.showMessageDialog(dcEntrada, mensaje,"",JOptionPane.WARNING_MESSAGE);
+            dlgEntradaMaterial.setVisible(true);
+        }
+        
+        return respuesta;
+    }
+    
+    private boolean ValidarEditarEntradaMaterial()
+    {
+        boolean respuesta = true;
+        String mensaje = "";
+        
+        if (respuesta)
+        {
+            if (txtCantidadEntradaEditar.getText().trim().equals("") || txtCantidadEntradaEditar.getText().trim().equals("."))
+            {
+                mensaje = "Ingrese cantidad";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtCantidadEntradaEditar.getText().trim()) <= 0)
+            {
+                mensaje = "Cantidad debe ser mayor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (txtPrecioEntradaEditar.getText().trim().equals("") || txtPrecioEntradaEditar.getText().trim().equals("."))
+            {
+                mensaje = "Ingrese precio";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtPrecioEntradaEditar.getText().trim()) <= 0)
+            {
+                mensaje = "Precio debe ser mayor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (dcEntradaEditar.getDate() == null)
             {
                 mensaje = "Seleccione fecha de entrada";
                 respuesta = false;
@@ -963,6 +1086,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         txtCodigoEntrada = new javax.swing.JTextField();
         lblUnidadMedidaEntrada = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        txtPrecioEntrada = new javax.swing.JTextField();
         dlgSalidaMaterial = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         lblSalidaMaterial = new javax.swing.JLabel();
@@ -1026,6 +1151,25 @@ public class PnlAlmacen extends javax.swing.JPanel {
         btnGuardarEditar = new javax.swing.JButton();
         jLabel34 = new javax.swing.JLabel();
         cmbEstatusEditar = new javax.swing.JComboBox<>();
+        dlgEditarEntrada = new javax.swing.JDialog();
+        jPanel4 = new javax.swing.JPanel();
+        lblEditarEntradaDlg = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel45 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        jLabel47 = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        txtCantidadEntradaEditar = new javax.swing.JTextField();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        txtaComentariosEntradaEditar = new javax.swing.JTextArea();
+        btnEditarEntradaGuardar = new javax.swing.JButton();
+        jLabel49 = new javax.swing.JLabel();
+        txtCodigoEntradaEditar = new javax.swing.JTextField();
+        lblUnidadMedidaEntrada1 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        txtPrecioEntradaEditar = new javax.swing.JTextField();
+        txtMaterialEntradaEditar = new javax.swing.JTextField();
+        dcEntradaEditar = new com.toedter.calendar.JDateChooser();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         PnlInventario = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -1079,10 +1223,10 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lblCalendario1 = new javax.swing.JLabel();
         jrFiltroFechasEntradas = new javax.swing.JRadioButton();
         lblDe1 = new javax.swing.JLabel();
-        dcFechaDeEntradas = new datechooser.beans.DateChooserCombo();
+        dcFechaDeEntradas = new com.toedter.calendar.JDateChooser();
         lbl1 = new javax.swing.JLabel();
         lblHasta1 = new javax.swing.JLabel();
-        dcFechaHastaEntradas = new datechooser.beans.DateChooserCombo();
+        dcFechaHastaEntradas = new com.toedter.calendar.JDateChooser();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnBuscarEntradas = new javax.swing.JButton();
         jLabel38 = new javax.swing.JLabel();
@@ -1249,6 +1393,14 @@ public class PnlAlmacen extends javax.swing.JPanel {
 
     lblUnidadMedidaEntrada.setText("Unidad Medida");
 
+    jLabel44.setText("Precio:");
+
+    txtPrecioEntrada.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtPrecioEntradaKeyTyped(evt);
+        }
+    });
+
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
@@ -1258,13 +1410,18 @@ public class PnlAlmacen extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                 .addComponent(btnGuardarEntrada)
                 .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addGap(12, 12, 12)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel44, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGap(12, 12, 12))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(dcEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1273,7 +1430,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(txtCodigoEntrada, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                                    .addComponent(txtCantidadEntrada, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(txtCantidadEntrada, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPrecioEntrada, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblUnidadMedidaEntrada))))))
             .addGap(528, 528, 528))
@@ -1294,7 +1452,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addComponent(txtCantidadEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(lblUnidadMedidaEntrada))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGap(13, 13, 13)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txtPrecioEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel44))
+            .addGap(10, 10, 10)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jLabel3)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1874,6 +2036,159 @@ try {
             .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
+    jPanel4.setBackground(new java.awt.Color(0, 204, 204));
+    jPanel4.setPreferredSize(new java.awt.Dimension(440, 33));
+
+    lblEditarEntradaDlg.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+    lblEditarEntradaDlg.setForeground(new java.awt.Color(255, 255, 255));
+    lblEditarEntradaDlg.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    lblEditarEntradaDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
+    lblEditarEntradaDlg.setText("Editar Entrada Material");
+
+    javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+    jPanel4.setLayout(jPanel4Layout);
+    jPanel4Layout.setHorizontalGroup(
+        jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(lblEditarEntradaDlg, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE))
+    );
+    jPanel4Layout.setVerticalGroup(
+        jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(lblEditarEntradaDlg, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+
+    jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+
+    jLabel45.setText("Material:");
+
+    jLabel46.setText("Cantidad:");
+
+    jLabel47.setText("Comentarios:");
+
+    jLabel48.setText("Fecha Entrada:");
+
+    txtCantidadEntradaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCantidadEntradaEditarKeyTyped(evt);
+        }
+    });
+
+    txtaComentariosEntradaEditar.setColumns(20);
+    txtaComentariosEntradaEditar.setRows(5);
+    txtaComentariosEntradaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtaComentariosEntradaEditarKeyTyped(evt);
+        }
+    });
+    jScrollPane6.setViewportView(txtaComentariosEntradaEditar);
+
+    btnEditarEntradaGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+    btnEditarEntradaGuardar.setText("Guardar");
+    btnEditarEntradaGuardar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEditarEntradaGuardarActionPerformed(evt);
+        }
+    });
+
+    jLabel49.setText("Código:");
+
+    txtCodigoEntradaEditar.setEditable(false);
+
+    lblUnidadMedidaEntrada1.setText("Unidad Medida");
+
+    jLabel50.setText("Precio:");
+
+    txtPrecioEntradaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtPrecioEntradaEditarKeyTyped(evt);
+        }
+    });
+
+    txtMaterialEntradaEditar.setEditable(false);
+
+    javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+    jPanel10.setLayout(jPanel10Layout);
+    jPanel10Layout.setHorizontalGroup(
+        jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(btnEditarEntradaGuardar)
+                .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel47, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel46, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel49, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel45, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel50, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGap(12, 12, 12))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addComponent(jLabel48)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                    .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtCodigoEntradaEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                                .addComponent(txtCantidadEntradaEditar, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtPrecioEntradaEditar, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblUnidadMedidaEntrada1))
+                        .addComponent(txtMaterialEntradaEditar)
+                        .addComponent(dcEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGap(528, 528, 528))
+    );
+    jPanel10Layout.setVerticalGroup(
+        jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel10Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel45)
+                .addComponent(txtMaterialEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel49)
+                .addComponent(txtCodigoEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel46)
+                .addComponent(txtCantidadEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblUnidadMedidaEntrada1))
+            .addGap(13, 13, 13)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txtPrecioEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel50))
+            .addGap(10, 10, 10)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel47)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(13, 13, 13)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel48)
+                .addComponent(dcEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+            .addComponent(btnEditarEntradaGuardar)
+            .addContainerGap())
+    );
+
+    javax.swing.GroupLayout dlgEditarEntradaLayout = new javax.swing.GroupLayout(dlgEditarEntrada.getContentPane());
+    dlgEditarEntrada.getContentPane().setLayout(dlgEditarEntradaLayout);
+    dlgEditarEntradaLayout.setHorizontalGroup(
+        dlgEditarEntradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+        .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+    );
+    dlgEditarEntradaLayout.setVerticalGroup(
+        dlgEditarEntradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(dlgEditarEntradaLayout.createSequentialGroup()
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+
     setBackground(new java.awt.Color(255, 255, 255));
 
     jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -2235,56 +2550,8 @@ try {
     lblDe1.setText("De:");
     jToolBar4.add(lblDe1);
 
-    dcFechaDeEntradas.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
-        new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                true,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 255),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(128, 128, 128),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(255, 0, 0),
-                false,
-                false,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            (datechooser.view.BackRenderer)null,
-            false,
-            true)));
-dcFechaDeEntradas.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-dcFechaDeEntradas.setFormat(2);
-dcFechaDeEntradas.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
-try {
-    dcFechaDeEntradas.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
-    } catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
-        e1.printStackTrace();
-    }
-    dcFechaDeEntradas.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+    dcFechaDeEntradas.setDateFormatString("dd/MM/yyyy");
+    dcFechaDeEntradas.setPreferredSize(new java.awt.Dimension(130, 25));
     jToolBar4.add(dcFechaDeEntradas);
 
     lbl1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -2296,55 +2563,8 @@ try {
     lblHasta1.setText("Hasta:");
     jToolBar4.add(lblHasta1);
 
-    dcFechaHastaEntradas.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
-        new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                true,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 255),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(128, 128, 128),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(255, 0, 0),
-                false,
-                false,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            (datechooser.view.BackRenderer)null,
-            false,
-            true)));
-dcFechaHastaEntradas.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-dcFechaHastaEntradas.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
-try {
-    dcFechaHastaEntradas.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
-    } catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
-        e1.printStackTrace();
-    }
-    dcFechaHastaEntradas.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+    dcFechaHastaEntradas.setDateFormatString("dd/MM/yyyy");
+    dcFechaHastaEntradas.setPreferredSize(new java.awt.Dimension(130, 25));
     jToolBar4.add(dcFechaHastaEntradas);
     jToolBar4.add(jSeparator4);
 
@@ -2396,7 +2616,6 @@ try {
 
     btnEditarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
     btnEditarEntrada.setText("Editar Entrada");
-    btnEditarEntrada.setEnabled(false);
     btnEditarEntrada.setFocusable(false);
     btnEditarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
     btnEditarEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -2413,9 +2632,8 @@ try {
     jToolBar6.add(jLabel67);
 
     btnEliminarEntrada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-    btnEliminarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Flecha_arriba16x16.png"))); // NOI18N
+    btnEliminarEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
     btnEliminarEntrada.setText("Eliminar Entrada");
-    btnEliminarEntrada.setEnabled(false);
     btnEliminarEntrada.setFocusable(false);
     btnEliminarEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
     btnEliminarEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -2738,7 +2956,6 @@ try {
 
     btnEditarSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
     btnEditarSalida.setText("Editar Salida");
-    btnEditarSalida.setEnabled(false);
     btnEditarSalida.setFocusable(false);
     btnEditarSalida.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
     btnEditarSalida.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -2757,7 +2974,6 @@ try {
     btnEliminarSalida.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     btnEliminarSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
     btnEliminarSalida.setText("Eliminar Salida");
-    btnEliminarSalida.setEnabled(false);
     btnEliminarSalida.setFocusable(false);
     btnEliminarSalida.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
     btnEliminarSalida.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -2928,7 +3144,7 @@ try {
 
     private void btnRealizarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarEntradaActionPerformed
         iniDialogoEntrada();
-        abrirDialogo(dlgEntradaMaterial, 750, 355);
+        abrirDialogo(dlgEntradaMaterial, 750, 400);
     }//GEN-LAST:event_btnRealizarEntradaActionPerformed
 
     private void btnEditarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMaterialActionPerformed
@@ -2987,14 +3203,18 @@ try {
         if (dcFechaDeEntradas.isEnabled())
         {
             dcFechaDeEntradas.setEnabled(false);
-            dcFechaDeEntradas.setCurrent(null);
+            dtFechaDeEntrada.setDate(null);
+            
             dcFechaHastaEntradas.setEnabled(false);
-            dcFechaHastaEntradas.setCurrent(null);
+            dcFechaHastaEntradas.setDate(null);
         }
         else
         {
             dcFechaDeEntradas.setEnabled(true);
+            dtFechaDeEntrada.setDate(null);
+            
             dcFechaHastaEntradas.setEnabled(true);
+            dcFechaHastaEntradas.setDate(null);
         }
     }//GEN-LAST:event_jrFiltroFechasEntradasActionPerformed
 
@@ -3007,11 +3227,63 @@ try {
     }//GEN-LAST:event_btnReporteEntradasExcelActionPerformed
 
     private void btnEditarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarEntradaActionPerformed
-        // TODO add your handling code here:
+        try 
+        {
+            int fila = tblEntradas.getSelectedRow();
+            if (fila >= 0)
+            {
+                entradaEdicion = lstEntradaMaterial.get(fila);
+
+                txtMaterialEntradaEditar.setText(entradaEdicion.getDescripcion());
+                txtCodigoEntradaEditar.setText(entradaEdicion.getCodigo());
+                txtCantidadEntradaEditar.setText(entradaEdicion.getCantidad().toString());
+                txtPrecioEntradaEditar.setText(entradaEdicion.getPrecio().toString());
+                txtaComentariosEntradaEditar.setText(entradaEdicion.getComentarios());
+                dtFechaEntradaEditar.setDate(entradaEdicion.getFechaEntrada());
+                
+                abrirDialogo(dlgEditarEntrada, 600, 400);
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Seleccione registro a editar","Mensaje",JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEditarEntradaActionPerformed
 
     private void btnEliminarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEntradaActionPerformed
-        // TODO add your handling code here:
+        try
+        {
+            int fila = tblEntradas.getSelectedRow();
+            
+            if (fila != -1)
+            {
+                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar le entrada de material?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                {
+                    int entradaMaterialId = lstEntradaMaterial.get(fila).getEntradaMaterialId();
+                    EntradaMaterialCommands emc = new EntradaMaterialCommands();
+                    int respuesta = emc.EntradaMaterialDelete(entradaMaterialId);
+                    
+                    if (respuesta > 0)
+                    {
+                        JOptionPane.showMessageDialog(null, "Entrada de material eliminada");
+                        actualizarTablaEntradas();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Error al eliminar entrada, intente de nuevo","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla a eliminar","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error: "+e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEliminarEntradaActionPerformed
 
     private void cmbTipoMaterialSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoMaterialSalidasActionPerformed
@@ -3091,6 +3363,31 @@ try {
         actualizarTablaSalidas();
     }//GEN-LAST:event_txtCodigoSalidasMaterialActionPerformed
 
+    private void txtPrecioEntradaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEntradaKeyTyped
+        ValidarNumeros(evt, txtCantidadEntrada.getText());
+    }//GEN-LAST:event_txtPrecioEntradaKeyTyped
+
+    private void txtCantidadEntradaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadEntradaEditarKeyTyped
+        ValidarNumeros(evt, txtCantidadEntrada.getText());
+    }//GEN-LAST:event_txtCantidadEntradaEditarKeyTyped
+
+    private void txtaComentariosEntradaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtaComentariosEntradaEditarKeyTyped
+        ValidarLongitud(evt,txtaComentariosEntrada.getText(),300);
+    }//GEN-LAST:event_txtaComentariosEntradaEditarKeyTyped
+
+    private void btnEditarEntradaGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarEntradaGuardarActionPerformed
+        try {
+            EntradaMaterialUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error: "+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarEntradaGuardarActionPerformed
+
+    private void txtPrecioEntradaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioEntradaEditarKeyTyped
+        ValidarNumeros(evt, txtCantidadEntrada.getText());
+    }//GEN-LAST:event_txtPrecioEntradaEditarKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnlEntradas;
@@ -3101,6 +3398,7 @@ try {
     private javax.swing.JButton btnBuscarEntradas;
     private javax.swing.JButton btnBuscarSalidas;
     private javax.swing.JButton btnEditarEntrada;
+    private javax.swing.JButton btnEditarEntradaGuardar;
     private javax.swing.JButton btnEditarMaterial;
     private javax.swing.JButton btnEditarSalida;
     private javax.swing.JButton btnEliminarEntrada;
@@ -3133,12 +3431,14 @@ try {
     private javax.swing.JComboBox<String> cmbUnidadMedidaAgregar;
     private javax.swing.JComboBox<String> cmbUnidadMedidaEditar;
     private datechooser.beans.DateChooserCombo dcEntrada;
-    private datechooser.beans.DateChooserCombo dcFechaDeEntradas;
+    private com.toedter.calendar.JDateChooser dcEntradaEditar;
+    private com.toedter.calendar.JDateChooser dcFechaDeEntradas;
     private datechooser.beans.DateChooserCombo dcFechaDeSalidas;
-    private datechooser.beans.DateChooserCombo dcFechaHastaEntradas;
+    private com.toedter.calendar.JDateChooser dcFechaHastaEntradas;
     private datechooser.beans.DateChooserCombo dcFechaHastaSalidas;
     private datechooser.beans.DateChooserCombo dcSalida;
     private javax.swing.JDialog dlgAgregarMaterial;
+    private javax.swing.JDialog dlgEditarEntrada;
     private javax.swing.JDialog dlgEditarMaterial;
     private javax.swing.JDialog dlgEntradaMaterial;
     private javax.swing.JDialog dlgSalidaMaterial;
@@ -3180,7 +3480,14 @@ try {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
@@ -3204,8 +3511,10 @@ try {
     private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -3216,6 +3525,7 @@ try {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
@@ -3247,6 +3557,7 @@ try {
     private javax.swing.JLabel lblCodigo2;
     private javax.swing.JLabel lblDe1;
     private javax.swing.JLabel lblDe2;
+    private javax.swing.JLabel lblEditarEntradaDlg;
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JLabel lblHasta1;
     private javax.swing.JLabel lblHasta2;
@@ -3256,16 +3567,19 @@ try {
     private javax.swing.JLabel lblTipoMaterial1;
     private javax.swing.JLabel lblTipoMaterial2;
     private javax.swing.JLabel lblUnidadMedidaEntrada;
+    private javax.swing.JLabel lblUnidadMedidaEntrada1;
     private javax.swing.JLabel lblUnidadMedidaSalida;
     private javax.swing.JTable tblEntradas;
     private javax.swing.JTable tblMateriales;
     private javax.swing.JTable tblSalidas;
     private javax.swing.JTextField txtCantidadEntrada;
+    private javax.swing.JTextField txtCantidadEntradaEditar;
     private javax.swing.JTextField txtCantidadSalida;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCodigoAgregar;
     private javax.swing.JTextField txtCodigoEditar;
     private javax.swing.JTextField txtCodigoEntrada;
+    private javax.swing.JTextField txtCodigoEntradaEditar;
     private javax.swing.JTextField txtCodigoEntradasMaterial;
     private javax.swing.JTextField txtCodigoSalida;
     private javax.swing.JTextField txtCodigoSalidasMaterial;
@@ -3273,10 +3587,14 @@ try {
     private javax.swing.JTextField txtDescripcionAgregar;
     private javax.swing.JTextField txtDescripcionEditar;
     private javax.swing.JTextField txtExistenciaAgregar;
+    private javax.swing.JTextField txtMaterialEntradaEditar;
     private javax.swing.JTextField txtPrecioAgregar;
     private javax.swing.JTextField txtPrecioEditar;
+    private javax.swing.JTextField txtPrecioEntrada;
+    private javax.swing.JTextField txtPrecioEntradaEditar;
     private javax.swing.JTextField txtSolicitanteSalida;
     private javax.swing.JTextArea txtaComentariosEntrada;
+    private javax.swing.JTextArea txtaComentariosEntradaEditar;
     private javax.swing.JTextArea txtaComentariosSalida;
     // End of variables declaration//GEN-END:variables
 
@@ -3328,17 +3646,18 @@ try {
             
             if (entrada.size() > 0)
             {
-                String[][] report = new String[entrada.size()+1][8];
+                String[][] report = new String[entrada.size()+1][9];
                 
                 // Encabezados
                 report[0][0] = "Código";
                 report[0][1] = "Descripción";
                 report[0][2] = "Cantidad";
                 report[0][3] = "Unidad de Medida";
-                report[0][4] = "Tipo Material";
-                report[0][5] = "Clasificación";
-                report[0][6] = "Comentarios";
-                report[0][7] = "Fecha Entrada";
+                report[0][4] = "Precio";
+                report[0][5] = "Tipo Material";
+                report[0][6] = "Clasificación";
+                report[0][7] = "Comentarios";
+                report[0][8] = "Fecha Entrada";
                 
                 for(int i = 0; i < entrada.size(); i++)
                 {
@@ -3347,10 +3666,11 @@ try {
                     report[position][1] = entrada.get(i).getDescripcion();
                     report[position][2] = entrada.get(i).getCantidad().toString();
                     report[position][3] = entrada.get(i).getUnidadMedida();
-                    report[position][4] = entrada.get(i).getTipoMaterial();
-                    report[position][5] = entrada.get(i).getClasificacion();
-                    report[position][6] = entrada.get(i).getComentarios();
-                    report[position][7] = entrada.get(i).getFechaEntrada().toString();
+                    report[position][4] = entrada.get(i).getPrecio().toString();
+                    report[position][5] = entrada.get(i).getTipoMaterial();
+                    report[position][6] = entrada.get(i).getClasificacion();
+                    report[position][7] = entrada.get(i).getComentarios();
+                    report[position][8] = entrada.get(i).getFechaEntrada().toString();
                 }
                 ExportarExcel excel = new ExportarExcel();
                 excel.exportarExcelArray(report);
@@ -3439,11 +3759,11 @@ try {
                 catDetClasificacionId = lstCatDetClasMaterial.get(cmbClasificacionMaterialEntradas.getSelectedIndex() - 1).getCatDetId();
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-            Date dinicio = dcFechaDeEntradas.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaDeEntradas.getText());
+                Date dinicio = dcFechaDeEntradas.getDate() == null ? null : dcFechaDeEntradas.getDate();
             String strDate = dinicio == null ? null : dateFormat.format(dinicio);
             fechainicio = strDate;
 
-            Date dfin = dcFechaHastaEntradas.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaHastaEntradas.getText());
+            Date dfin = dcFechaHastaEntradas.getDate() == null ? null : dcFechaHastaEntradas.getDate();
             String strDate2 = dfin == null ? null : dateFormat.format(dfin);   
             fechafin = strDate2;
 

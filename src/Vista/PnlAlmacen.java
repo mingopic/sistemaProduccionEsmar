@@ -70,9 +70,13 @@ public class PnlAlmacen extends javax.swing.JPanel {
     private final String imagen="/Imagenes/logo_esmar.png";
     int panelActual = 0;
     EntradaMaterial entradaEdicion;
+    SalidaMaterial salidaEdicion;
     JTextFieldDateEditor dtFechaEntradaEditar;
     JTextFieldDateEditor dtFechaDeEntrada;
     JTextFieldDateEditor dtFechaHastaEntrada;
+    JTextFieldDateEditor dtFechaSalidaEditar;
+    JTextFieldDateEditor dtFechaDeSalida;
+    JTextFieldDateEditor dtFechaHastaSalida;
     
     DefaultTableModel dtms=new DefaultTableModel();
    
@@ -108,6 +112,13 @@ public class PnlAlmacen extends javax.swing.JPanel {
         dtFechaDeEntrada.setEditable(false);
         dtFechaHastaEntrada = (JTextFieldDateEditor) dcFechaHastaEntradas.getDateEditor();
         dtFechaHastaEntrada.setEditable(false);
+        
+        dtFechaSalidaEditar = (JTextFieldDateEditor) dcSalidaEditar.getDateEditor();
+        dtFechaSalidaEditar.setEditable(false);
+        dtFechaDeSalida = (JTextFieldDateEditor) dcFechaDeSalidas.getDateEditor();
+        dtFechaDeSalida.setEditable(false);
+        dtFechaHastaSalida = (JTextFieldDateEditor) dcFechaHastaSalidas.getDateEditor();
+        dtFechaHastaSalida.setEditable(false);
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
@@ -523,6 +534,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
         if (index >= 0)
         {
             txtCodigoEntrada.setText(lstMaterial.get(index).getCodigo());
+            txtPrecioEntrada.setText(lstMaterial.get(index).getPrecio().toString());
             lblUnidadMedidaEntrada.setText(lstMaterial.get(index).getUnidadMedida());
         }
     }
@@ -714,6 +726,39 @@ public class PnlAlmacen extends javax.swing.JPanel {
             else
             {
                 JOptionPane.showMessageDialog(null, "Error al editar entrada, intente de nuevo","Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void SalidaMaterialUpdate() throws ParseException, Exception
+    {
+        SalidaMaterial salida;
+        SalidaMaterialCommands smc;
+        int respuesta;
+        
+        if (ValidarEditarSalida())
+        {
+            salida = salidaEdicion;
+            smc = new SalidaMaterialCommands();
+            
+            salida.setCantidad(Double.parseDouble(txtCantidadSalidaEditar.getText().trim()));
+            salida.setSolicitante(txtSolicitanteSalidaEditar.getText().trim());
+            salida.setDepartamento(txtDepartamentoSalidaEditar.getText().trim());
+            salida.setComentarios(txtaComentariosSalidaEditar.getText().trim());
+            salida.setIdUsuario(FrmPrincipal.u.getIdUsuario());
+            salida.setFechaSalida(dcSalidaEditar.getDate());
+            
+            respuesta = smc.SalidaMaterialUpdate(salida);
+            
+            if (respuesta > 0)
+            {
+                dlgEditarSalida.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Edición realizada con éxito");
+                actualizarTablaSalidas();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Error al editar salida, intente de nuevo","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -1015,6 +1060,62 @@ public class PnlAlmacen extends javax.swing.JPanel {
         return respuesta;
     }
     
+     private boolean ValidarEditarSalida()
+    {
+        boolean respuesta = true;
+        String mensaje = "";
+        
+        if (txtCantidadSalidaEditar.getText().trim().equals("") || txtCantidadSalidaEditar.getText().trim().equals("."))
+        {
+            mensaje = "Ingrese cantidad";
+            respuesta = false;
+        }
+        if (respuesta)
+        {
+            if (Double.parseDouble(txtCantidadSalidaEditar.getText().trim()) <= 0)
+            {
+                mensaje = "Cantidad debe ser mayor a 0";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (txtSolicitanteSalidaEditar.getText().trim().equals(""))
+            {
+                mensaje = "Ingrese solicitante";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (txtDepartamentoSalidaEditar.getText().trim().equals(""))
+            {
+                mensaje = "Ingrese departamento";
+                respuesta = false;
+            }
+        }
+        
+        if (respuesta)
+        {
+            if (dcSalidaEditar.getDate() == null)
+            {
+                mensaje = "Seleccione fecha de salida";
+                respuesta = false;
+            }
+        }
+        
+        if (!respuesta)
+        {
+            dlgEditarSalida.setVisible(false);
+            JOptionPane.showMessageDialog(null, mensaje,"",JOptionPane.WARNING_MESSAGE);
+            dlgEditarSalida.setVisible(true);
+        }
+        
+        return respuesta;
+    }
+    
     private void ValidarNumeros(java.awt.event.KeyEvent evt, String textoCaja)
     {
         try {
@@ -1165,11 +1266,32 @@ public class PnlAlmacen extends javax.swing.JPanel {
         btnEditarEntradaGuardar = new javax.swing.JButton();
         jLabel49 = new javax.swing.JLabel();
         txtCodigoEntradaEditar = new javax.swing.JTextField();
-        lblUnidadMedidaEntrada1 = new javax.swing.JLabel();
+        lblUnidadMedidaEntradaEditar = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
         txtPrecioEntradaEditar = new javax.swing.JTextField();
         txtMaterialEntradaEditar = new javax.swing.JTextField();
         dcEntradaEditar = new com.toedter.calendar.JDateChooser();
+        dlgEditarSalida = new javax.swing.JDialog();
+        jPanel11 = new javax.swing.JPanel();
+        lblEditarEntradaDlg1 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel51 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel53 = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
+        txtCantidadSalidaEditar = new javax.swing.JTextField();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtaComentariosSalidaEditar = new javax.swing.JTextArea();
+        btnEditarSalidaGuardar = new javax.swing.JButton();
+        jLabel55 = new javax.swing.JLabel();
+        txtCodigoSalidaEditar = new javax.swing.JTextField();
+        lblUnidadMedidaSalidaEditar = new javax.swing.JLabel();
+        jLabel56 = new javax.swing.JLabel();
+        txtSolicitanteSalidaEditar = new javax.swing.JTextField();
+        txtMaterialSalidaEditar = new javax.swing.JTextField();
+        dcSalidaEditar = new com.toedter.calendar.JDateChooser();
+        jLabel57 = new javax.swing.JLabel();
+        txtDepartamentoSalidaEditar = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         PnlInventario = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -1259,10 +1381,10 @@ public class PnlAlmacen extends javax.swing.JPanel {
         lblCalendario2 = new javax.swing.JLabel();
         jrFiltroFechasSalidas = new javax.swing.JRadioButton();
         lblDe2 = new javax.swing.JLabel();
-        dcFechaDeSalidas = new datechooser.beans.DateChooserCombo();
+        dcFechaDeSalidas = new com.toedter.calendar.JDateChooser();
         lbl2 = new javax.swing.JLabel();
         lblHasta2 = new javax.swing.JLabel();
-        dcFechaHastaSalidas = new datechooser.beans.DateChooserCombo();
+        dcFechaHastaSalidas = new com.toedter.calendar.JDateChooser();
         jSeparator6 = new javax.swing.JToolBar.Separator();
         btnBuscarSalidas = new javax.swing.JButton();
         jLabel43 = new javax.swing.JLabel();
@@ -2095,7 +2217,7 @@ try {
 
     txtCodigoEntradaEditar.setEditable(false);
 
-    lblUnidadMedidaEntrada1.setText("Unidad Medida");
+    lblUnidadMedidaEntradaEditar.setText("Unidad Medida");
 
     jLabel50.setText("Precio:");
 
@@ -2106,6 +2228,8 @@ try {
     });
 
     txtMaterialEntradaEditar.setEditable(false);
+
+    dcEntradaEditar.setDateFormatString("dd/MM/yyyy");
 
     javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
     jPanel10.setLayout(jPanel10Layout);
@@ -2136,7 +2260,7 @@ try {
                                 .addComponent(txtCantidadEntradaEditar, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtPrecioEntradaEditar, javax.swing.GroupLayout.Alignment.LEADING))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(lblUnidadMedidaEntrada1))
+                            .addComponent(lblUnidadMedidaEntradaEditar))
                         .addComponent(txtMaterialEntradaEditar)
                         .addComponent(dcEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addGap(528, 528, 528))
@@ -2156,7 +2280,7 @@ try {
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel46)
                 .addComponent(txtCantidadEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblUnidadMedidaEntrada1))
+                .addComponent(lblUnidadMedidaEntradaEditar))
             .addGap(13, 13, 13)
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(txtPrecioEntradaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2187,6 +2311,180 @@ try {
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+
+    jPanel11.setBackground(new java.awt.Color(0, 204, 204));
+    jPanel11.setPreferredSize(new java.awt.Dimension(440, 33));
+
+    lblEditarEntradaDlg1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+    lblEditarEntradaDlg1.setForeground(new java.awt.Color(255, 255, 255));
+    lblEditarEntradaDlg1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    lblEditarEntradaDlg1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pencil.png"))); // NOI18N
+    lblEditarEntradaDlg1.setText("Editar Salida Material");
+
+    javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+    jPanel11.setLayout(jPanel11Layout);
+    jPanel11Layout.setHorizontalGroup(
+        jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(lblEditarEntradaDlg1, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE))
+    );
+    jPanel11Layout.setVerticalGroup(
+        jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(lblEditarEntradaDlg1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+
+    jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+
+    jLabel51.setText("Material:");
+
+    jLabel52.setText("Cantidad:");
+
+    jLabel53.setText("Comentarios:");
+
+    jLabel54.setText("Fecha Salida:");
+
+    txtCantidadSalidaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCantidadSalidaEditarKeyTyped(evt);
+        }
+    });
+
+    txtaComentariosSalidaEditar.setColumns(20);
+    txtaComentariosSalidaEditar.setRows(5);
+    txtaComentariosSalidaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtaComentariosSalidaEditarKeyTyped(evt);
+        }
+    });
+    jScrollPane7.setViewportView(txtaComentariosSalidaEditar);
+
+    btnEditarSalidaGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/disk.png"))); // NOI18N
+    btnEditarSalidaGuardar.setText("Guardar");
+    btnEditarSalidaGuardar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEditarSalidaGuardarActionPerformed(evt);
+        }
+    });
+
+    jLabel55.setText("Código:");
+
+    txtCodigoSalidaEditar.setEditable(false);
+
+    lblUnidadMedidaSalidaEditar.setText("Unidad Medida");
+
+    jLabel56.setText("Solicitante:");
+
+    txtSolicitanteSalidaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtSolicitanteSalidaEditarKeyTyped(evt);
+        }
+    });
+
+    txtMaterialSalidaEditar.setEditable(false);
+
+    dcSalidaEditar.setDateFormatString("dd/MM/yyyy");
+
+    jLabel57.setText("Departamento:");
+
+    txtDepartamentoSalidaEditar.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtDepartamentoSalidaEditarKeyTyped(evt);
+        }
+    });
+
+    javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+    jPanel12.setLayout(jPanel12Layout);
+    jPanel12Layout.setHorizontalGroup(
+        jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel12Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(btnEditarSalidaGuardar)
+                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel12Layout.createSequentialGroup()
+                    .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel12Layout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addComponent(jLabel54)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(dcSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel12Layout.createSequentialGroup()
+                            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel57)
+                                .addComponent(jLabel56)
+                                .addComponent(jLabel55)
+                                .addComponent(jLabel52)
+                                .addComponent(jLabel51))
+                            .addGap(12, 12, 12)
+                            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtSolicitanteSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtCodigoSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtMaterialSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtDepartamentoSalidaEditar, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel12Layout.createSequentialGroup()
+                                        .addComponent(txtCantidadSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblUnidadMedidaSalidaEditar)))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel12Layout.createSequentialGroup()
+                            .addGap(9, 9, 9)
+                            .addComponent(jLabel53)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addContainerGap(20, Short.MAX_VALUE))
+    );
+    jPanel12Layout.setVerticalGroup(
+        jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel12Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel51)
+                .addComponent(txtMaterialSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel55)
+                .addComponent(txtCodigoSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel52)
+                .addComponent(txtCantidadSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblUnidadMedidaSalidaEditar))
+            .addGap(13, 13, 13)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txtSolicitanteSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel56))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txtDepartamentoSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel57))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel53))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(dcSalidaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel54))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnEditarSalidaGuardar)
+            .addContainerGap())
+    );
+
+    javax.swing.GroupLayout dlgEditarSalidaLayout = new javax.swing.GroupLayout(dlgEditarSalida.getContentPane());
+    dlgEditarSalida.getContentPane().setLayout(dlgEditarSalidaLayout);
+    dlgEditarSalidaLayout.setHorizontalGroup(
+        dlgEditarSalidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+        .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    dlgEditarSalidaLayout.setVerticalGroup(
+        dlgEditarSalidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(dlgEditarSalidaLayout.createSequentialGroup()
+            .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     setBackground(new java.awt.Color(255, 255, 255));
@@ -2797,55 +3095,8 @@ try {
     lblDe2.setText("De:");
     jToolBar7.add(lblDe2);
 
-    dcFechaDeSalidas.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
-        new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                true,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 255),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(128, 128, 128),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(255, 0, 0),
-                false,
-                false,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            (datechooser.view.BackRenderer)null,
-            false,
-            true)));
-dcFechaDeSalidas.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-dcFechaDeSalidas.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
-try {
-    dcFechaDeSalidas.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
-    } catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
-        e1.printStackTrace();
-    }
-    dcFechaDeSalidas.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+    dcFechaDeSalidas.setDateFormatString("dd/MM/yyyy");
+    dcFechaDeSalidas.setPreferredSize(new java.awt.Dimension(130, 25));
     jToolBar7.add(dcFechaDeSalidas);
 
     lbl2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -2857,54 +3108,8 @@ try {
     lblHasta2.setText("Hasta:");
     jToolBar7.add(lblHasta2);
 
-    dcFechaHastaSalidas.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
-        new datechooser.view.appearance.ViewAppearance("custom",
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                true,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 255),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(128, 128, 128),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(0, 0, 255),
-                false,
-                true,
-                new datechooser.view.appearance.swing.LabelPainter()),
-            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12),
-                new java.awt.Color(0, 0, 0),
-                new java.awt.Color(255, 0, 0),
-                false,
-                false,
-                new datechooser.view.appearance.swing.ButtonPainter()),
-            (datechooser.view.BackRenderer)null,
-            false,
-            true)));
-dcFechaHastaSalidas.setCalendarPreferredSize(new java.awt.Dimension(260, 195));
-try {
-    dcFechaHastaSalidas.setDefaultPeriods(new datechooser.model.multiple.PeriodSet());
-    } catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
-        e1.printStackTrace();
-    }
-    dcFechaHastaSalidas.setFieldFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+    dcFechaHastaSalidas.setDateFormatString("dd/MM/yyyy");
+    dcFechaHastaSalidas.setPreferredSize(new java.awt.Dimension(130, 25));
     jToolBar7.add(dcFechaHastaSalidas);
     jToolBar7.add(jSeparator6);
 
@@ -3237,6 +3442,7 @@ try {
                 txtMaterialEntradaEditar.setText(entradaEdicion.getDescripcion());
                 txtCodigoEntradaEditar.setText(entradaEdicion.getCodigo());
                 txtCantidadEntradaEditar.setText(entradaEdicion.getCantidad().toString());
+                lblUnidadMedidaEntradaEditar.setText(entradaEdicion.getUnidadMedida());
                 txtPrecioEntradaEditar.setText(entradaEdicion.getPrecio().toString());
                 txtaComentariosEntradaEditar.setText(entradaEdicion.getComentarios());
                 dtFechaEntradaEditar.setDate(entradaEdicion.getFechaEntrada());
@@ -3257,7 +3463,7 @@ try {
             
             if (fila != -1)
             {
-                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar le entrada de material?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la entrada de material?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
                 {
                     int entradaMaterialId = lstEntradaMaterial.get(fila).getEntradaMaterialId();
                     EntradaMaterialCommands emc = new EntradaMaterialCommands();
@@ -3302,14 +3508,18 @@ try {
         if (dcFechaDeSalidas.isEnabled())
         {
             dcFechaDeSalidas.setEnabled(false);
-            dcFechaDeSalidas.setCurrent(null);
+            dtFechaDeSalida.setDate(null);
+            
             dcFechaHastaSalidas.setEnabled(false);
-            dcFechaHastaSalidas.setCurrent(null);
+            dcFechaHastaSalidas.setDate(null);
         }
         else
         {
             dcFechaDeSalidas.setEnabled(true);
+            dtFechaDeSalida.setDate(null);
+            
             dcFechaHastaSalidas.setEnabled(true);
+            dcFechaHastaSalidas.setDate(null);
         }
     }//GEN-LAST:event_jrFiltroFechasSalidasActionPerformed
 
@@ -3322,11 +3532,64 @@ try {
     }//GEN-LAST:event_btnReporteSalidasExcelActionPerformed
 
     private void btnEditarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarSalidaActionPerformed
-        // TODO add your handling code here:
+        try 
+        {
+            int fila = tblSalidas.getSelectedRow();
+            if (fila >= 0)
+            {
+                salidaEdicion = lstSalidaMaterial.get(fila);
+
+                txtMaterialSalidaEditar.setText(salidaEdicion.getDescripcion());
+                txtCodigoSalidaEditar.setText(salidaEdicion.getCodigo());
+                txtCantidadSalidaEditar.setText(salidaEdicion.getCantidad().toString());  
+                lblUnidadMedidaSalidaEditar.setText(salidaEdicion.getUnidadMedida());
+                txtSolicitanteSalidaEditar.setText(salidaEdicion.getSolicitante());
+                txtDepartamentoSalidaEditar.setText(salidaEdicion.getDepartamento());
+                txtaComentariosSalidaEditar.setText(salidaEdicion.getComentarios());
+                dtFechaSalidaEditar.setDate(salidaEdicion.getFechaSalida());
+                
+                abrirDialogo(dlgEditarSalida, 600, 450);
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Seleccione registro a editar","Mensaje",JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEditarSalidaActionPerformed
 
     private void btnEliminarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarSalidaActionPerformed
-        // TODO add your handling code here:
+        try
+        {
+            int fila = tblSalidas.getSelectedRow();
+            
+            if (fila != -1)
+            {
+                if (JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar la salida de material?", "", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == 0)
+                {
+                    int salidaMaterialId = lstSalidaMaterial.get(fila).getSalidaMaterialId();
+                    SalidaMaterialCommands smc = new SalidaMaterialCommands();
+                    int respuesta = smc.SalidaMaterialDelete(salidaMaterialId);
+                    
+                    if (respuesta > 0)
+                    {
+                        JOptionPane.showMessageDialog(null, "Salida de material eliminada");
+                        actualizarTablaSalidas();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Error al eliminar salida, intente de nuevo","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla a eliminar","Advertencia",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
     }//GEN-LAST:event_btnEliminarSalidaActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
@@ -3388,6 +3651,31 @@ try {
         ValidarNumeros(evt, txtCantidadEntrada.getText());
     }//GEN-LAST:event_txtPrecioEntradaEditarKeyTyped
 
+    private void txtCantidadSalidaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadSalidaEditarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadSalidaEditarKeyTyped
+
+    private void txtaComentariosSalidaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtaComentariosSalidaEditarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtaComentariosSalidaEditarKeyTyped
+
+    private void btnEditarSalidaGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarSalidaGuardarActionPerformed
+        try {
+            SalidaMaterialUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error: "+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarSalidaGuardarActionPerformed
+
+    private void txtSolicitanteSalidaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSolicitanteSalidaEditarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSolicitanteSalidaEditarKeyTyped
+
+    private void txtDepartamentoSalidaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepartamentoSalidaEditarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDepartamentoSalidaEditarKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnlEntradas;
@@ -3401,6 +3689,7 @@ try {
     private javax.swing.JButton btnEditarEntradaGuardar;
     private javax.swing.JButton btnEditarMaterial;
     private javax.swing.JButton btnEditarSalida;
+    private javax.swing.JButton btnEditarSalidaGuardar;
     private javax.swing.JButton btnEliminarEntrada;
     private javax.swing.JButton btnEliminarSalida;
     private javax.swing.ButtonGroup btnGroup;
@@ -3433,13 +3722,15 @@ try {
     private datechooser.beans.DateChooserCombo dcEntrada;
     private com.toedter.calendar.JDateChooser dcEntradaEditar;
     private com.toedter.calendar.JDateChooser dcFechaDeEntradas;
-    private datechooser.beans.DateChooserCombo dcFechaDeSalidas;
+    private com.toedter.calendar.JDateChooser dcFechaDeSalidas;
     private com.toedter.calendar.JDateChooser dcFechaHastaEntradas;
-    private datechooser.beans.DateChooserCombo dcFechaHastaSalidas;
+    private com.toedter.calendar.JDateChooser dcFechaHastaSalidas;
     private datechooser.beans.DateChooserCombo dcSalida;
+    private com.toedter.calendar.JDateChooser dcSalidaEditar;
     private javax.swing.JDialog dlgAgregarMaterial;
     private javax.swing.JDialog dlgEditarEntrada;
     private javax.swing.JDialog dlgEditarMaterial;
+    private javax.swing.JDialog dlgEditarSalida;
     private javax.swing.JDialog dlgEntradaMaterial;
     private javax.swing.JDialog dlgSalidaMaterial;
     private javax.swing.JLabel jLabel1;
@@ -3488,6 +3779,13 @@ try {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
@@ -3512,6 +3810,8 @@ try {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -3526,6 +3826,7 @@ try {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
@@ -3558,6 +3859,7 @@ try {
     private javax.swing.JLabel lblDe1;
     private javax.swing.JLabel lblDe2;
     private javax.swing.JLabel lblEditarEntradaDlg;
+    private javax.swing.JLabel lblEditarEntradaDlg1;
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JLabel lblHasta1;
     private javax.swing.JLabel lblHasta2;
@@ -3567,14 +3869,16 @@ try {
     private javax.swing.JLabel lblTipoMaterial1;
     private javax.swing.JLabel lblTipoMaterial2;
     private javax.swing.JLabel lblUnidadMedidaEntrada;
-    private javax.swing.JLabel lblUnidadMedidaEntrada1;
+    private javax.swing.JLabel lblUnidadMedidaEntradaEditar;
     private javax.swing.JLabel lblUnidadMedidaSalida;
+    private javax.swing.JLabel lblUnidadMedidaSalidaEditar;
     private javax.swing.JTable tblEntradas;
     private javax.swing.JTable tblMateriales;
     private javax.swing.JTable tblSalidas;
     private javax.swing.JTextField txtCantidadEntrada;
     private javax.swing.JTextField txtCantidadEntradaEditar;
     private javax.swing.JTextField txtCantidadSalida;
+    private javax.swing.JTextField txtCantidadSalidaEditar;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCodigoAgregar;
     private javax.swing.JTextField txtCodigoEditar;
@@ -3582,20 +3886,25 @@ try {
     private javax.swing.JTextField txtCodigoEntradaEditar;
     private javax.swing.JTextField txtCodigoEntradasMaterial;
     private javax.swing.JTextField txtCodigoSalida;
+    private javax.swing.JTextField txtCodigoSalidaEditar;
     private javax.swing.JTextField txtCodigoSalidasMaterial;
     private javax.swing.JTextField txtDepartamentoSalida;
+    private javax.swing.JTextField txtDepartamentoSalidaEditar;
     private javax.swing.JTextField txtDescripcionAgregar;
     private javax.swing.JTextField txtDescripcionEditar;
     private javax.swing.JTextField txtExistenciaAgregar;
     private javax.swing.JTextField txtMaterialEntradaEditar;
+    private javax.swing.JTextField txtMaterialSalidaEditar;
     private javax.swing.JTextField txtPrecioAgregar;
     private javax.swing.JTextField txtPrecioEditar;
     private javax.swing.JTextField txtPrecioEntrada;
     private javax.swing.JTextField txtPrecioEntradaEditar;
     private javax.swing.JTextField txtSolicitanteSalida;
+    private javax.swing.JTextField txtSolicitanteSalidaEditar;
     private javax.swing.JTextArea txtaComentariosEntrada;
     private javax.swing.JTextArea txtaComentariosEntradaEditar;
     private javax.swing.JTextArea txtaComentariosSalida;
+    private javax.swing.JTextArea txtaComentariosSalidaEditar;
     // End of variables declaration//GEN-END:variables
 
     private void generarReporteInventario() {
@@ -3759,7 +4068,7 @@ try {
                 catDetClasificacionId = lstCatDetClasMaterial.get(cmbClasificacionMaterialEntradas.getSelectedIndex() - 1).getCatDetId();
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-                Date dinicio = dcFechaDeEntradas.getDate() == null ? null : dcFechaDeEntradas.getDate();
+            Date dinicio = dcFechaDeEntradas.getDate() == null ? null : dcFechaDeEntradas.getDate();
             String strDate = dinicio == null ? null : dateFormat.format(dinicio);
             fechainicio = strDate;
 
@@ -3799,11 +4108,11 @@ try {
                 catDetClasificacionId = lstCatDetClasMaterial.get(cmbClasificacionMaterialSalidas.getSelectedIndex() - 1).getCatDetId();
             
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-            Date dinicio = dcFechaDeSalidas.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaDeSalidas.getText());
+            Date dinicio = dcFechaDeSalidas.getDate() == null ? null : dcFechaDeSalidas.getDate();
             String strDate = dinicio == null ? null : dateFormat.format(dinicio);
             fechainicio = strDate;
-            
-            Date dfin = dcFechaHastaSalidas.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(dcFechaHastaSalidas.getText());
+
+            Date dfin = dcFechaHastaSalidas.getDate() == null ? null : dcFechaHastaSalidas.getDate();
             String strDate2 = dfin == null ? null : dateFormat.format(dfin);   
             fechafin = strDate2;
 

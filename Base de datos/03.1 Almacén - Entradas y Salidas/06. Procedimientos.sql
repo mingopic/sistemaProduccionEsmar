@@ -27,6 +27,24 @@ begin
 end
 go
 
+if object_id('dbo.Usp_SalidasGetAll') is not null
+begin
+	drop procedure dbo.Usp_SalidasGetAll
+end
+go
+
+if object_id('dbo.Usp_SalidaMaterialUpdate') is not null
+begin
+	drop procedure dbo.Usp_SalidaMaterialUpdate
+end
+go
+
+if object_id('dbo.Usp_SalidaMaterialDelete') is not null
+begin
+	drop procedure dbo.Usp_SalidaMaterialDelete
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure dbo.Usp_EntradaMaterialCreate
@@ -279,3 +297,205 @@ create procedure dbo.Usp_EntradaMaterialDelete
   end
 go
 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_SalidasGetAll 
+(
+  @Codigo                   varchar(10) = ''
+  , @CatDetTipoMaterialId   int = 0
+  , @CatDetClasificacionId  int = 0
+  , @fechainicio            datetime = null
+  , @fechafin               datetime = null
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   JOlmedo     2020/05/13   Creación
+      02   DLuna       2020/08/15   Se agregan a la consulta los campos SalidaMaterialId y MaterialId
+    =================================================================================================================================
+    */
+
+  select
+    s.SalidaMaterialId --#02
+    , s.MaterialId --#02
+    , Codigo
+    , m.Descripcion
+    , [UnidadMedida] = um.descripcion
+	  , [Cantidad] = s.Cantidad
+    , [TipoMaterial] = cdT.Nombre
+    , [Clasificacion] = cdC.Nombre
+	  , [Ficha] = s.idInsumoFichaProd
+	  , [Solicitante] = s.Solicitante
+	  , [Departamento] = s.Departamento
+	  , [Comentarios] = s.Comentarios
+    , [FechaSalida] = CONVERT (date, s.FechaSalida)
+    
+    from
+      Tb_SalidaMaterial s
+
+      inner join
+        dbo.Tb_Material m
+      on 
+        m.MaterialId = s.MaterialId
+		
+      inner join
+        tb_unidadMedida um
+      on
+        um.idUnidadMedida = m.idUnidadMedida
+      
+      inner join
+        Tb_CatalogoDet cdT
+      on
+        cdT.CatDetId = m.CatDetTipoMaterialId
+        
+      inner join
+        Tb_CatalogoDet cdC
+      on
+        cdC.CatDetId = m.CatDetClasificacionId
+        
+   where
+    m.Codigo =
+      case
+        when @Codigo != ''
+         then @Codigo
+         else m.Codigo
+      end
+    and m.CatDetTipoMaterialId = 
+      case
+        when @CatDetTipoMaterialId > 0
+         then @CatDetTipoMaterialId
+         else m.CatDetTipoMaterialId
+      end
+    and m.CatDetClasificacionId = 
+      case
+        when @CatDetClasificacionId > 0
+         then @CatDetClasificacionId
+         else m.CatDetClasificacionId
+      end
+    and s.FechaSalida between 
+         (select 
+            case 
+            when @fechainicio is null
+            then  (SELECT DATEADD(year,-100, (select convert (date, getdate()))))
+            else @fechainicio
+          end)
+        and 
+         (select 
+            case 
+            when @fechafin is null 
+            then (SELECT DATEADD(year,100, (select convert (date, getdate()))))
+            else @fechafin
+          end)
+
+    order by
+     s.FechaSalida asc , s.idInsumoFichaProd asc, m.Descripcion asc;
+
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_SalidaMaterialUpdate
+(
+  @SalidaMaterialId  int
+  , @Cantidad        float
+  , @Solicitante     varchar(100)
+  , @Departamento    varchar(50)
+  , @Comentarios     varchar(300)
+  , @idUsuario       int
+  , @FechaSalida     datetime
+  , @Return_value    int = -1 output
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   DLuna     2020/08/15   Creación
+    =================================================================================================================================
+    */ 
+    
+    declare
+      @CantidadPrevia float
+      , @MaterialId   int
+    
+    select
+      @CantidadPrevia = Cantidad
+      , @MaterialId = MaterialId
+    from
+      dbo.Tb_SalidaMaterial
+    where
+      SalidaMaterialId = @SalidaMaterialId
+    
+    update 
+      dbo.Tb_Material
+    set
+      Existencia = Existencia - (@Cantidad - @CantidadPrevia)
+    where
+      MaterialId = @MaterialId
+    
+    update 
+      dbo.Tb_SalidaMaterial
+    set  
+      Cantidad = @Cantidad    
+      , Solicitante = @Solicitante
+      , Departamento = @Departamento
+      , Comentarios = @Comentarios  
+      , idUsuario = @idUsuario    
+      , FechaSalida = @FechaSalida
+    where
+      SalidaMaterialId = @SalidaMaterialId
+    
+    set @Return_value = @@ROWCOUNT
+    
+    select @Return_value
+  end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure dbo.Usp_SalidaMaterialDelete
+(
+  @SalidaMaterialId  int
+  , @Return_value     int = -1 output
+)
+  as begin
+    /*
+    =================================================================================================================================
+      #Id  Autor     Fecha        Description
+    ---------------------------------------------------------------------------------------------------------------------------------
+      01   DLuna     2020/08/15   Creación
+    =================================================================================================================================
+    */ 
+    
+    declare
+      @CantidadPrevia float
+      , @MaterialId   int
+    
+    select
+      @CantidadPrevia = Cantidad
+      , @MaterialId = MaterialId
+    from
+      dbo.Tb_SalidaMaterial
+    where
+      SalidaMaterialId = @SalidaMaterialId
+    
+    update 
+      dbo.Tb_Material
+    set
+      Existencia = Existencia + @CantidadPrevia
+    where
+      MaterialId = @MaterialId
+    
+    delete from 
+      dbo.Tb_SalidaMaterial
+    where
+      SalidaMaterialId = @SalidaMaterialId
+    
+    set @Return_value = @@ROWCOUNT
+    
+    select @Return_value
+  end
+go

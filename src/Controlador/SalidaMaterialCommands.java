@@ -137,6 +137,75 @@ public class SalidaMaterialCommands {
         return return_value;
     }
     
+    //Método para editar una salida de material
+    public int SalidaMaterialUpdate(SalidaMaterial sm) throws Exception
+    {
+        int return_value = 0;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+        String strDate = dateFormat.format(sm.getFechaSalida());
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_SalidaMaterialUpdate ?,?,?,?,?,?,?,?"; 
+        
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setInt(1,sm.getSalidaMaterialId());
+            st.setDouble(2,sm.getCantidad());
+            st.setString(3,sm.getSolicitante());
+            st.setString(4,sm.getDepartamento());
+            st.setString(5,sm.getComentarios());
+            st.setInt(6,sm.getIdUsuario());
+            st.setString(7,strDate);
+            st.registerOutParameter(8, java.sql.Types.INTEGER);  
+            
+            st.execute();
+            return_value = st.getInt("Return_value");
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return return_value;
+    }
+    
+    public int SalidaMaterialDelete(int salidaMaterialId) throws Exception
+    {
+        int return_value = 0;
+        CallableStatement st = null;
+        
+        String query="execute dbo.Usp_SalidaMaterialDelete ?,?"; 
+        
+        try 
+        {
+            c.conectar();
+            st = c.getConexion().prepareCall(query);
+            
+            st.setInt(1,salidaMaterialId);
+            st.registerOutParameter(2, java.sql.Types.INTEGER);  
+            
+            st.execute();
+            return_value = st.getInt("Return_value");
+        } 
+        catch (SQLException e) 
+        {
+            System.err.println(e);
+        }
+        finally
+        {
+            st.close();
+            c.desconectar();
+        }
+        return return_value;
+    }
+    
     //Método para obtener los datos de la tabla Tb_Material
     public static List<Map> MaterialGetCollectionByIdInsumoFichaProd(int idInsumoFichaProd) 
     {
@@ -216,6 +285,8 @@ public class SalidaMaterialCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     SalidaMaterial m = new SalidaMaterial();
+                    m.setSalidaMaterialId(rs.getInt("SalidaMaterialId"));
+                    m.setMaterialId(rs.getInt("MaterialId"));
                     m.setCodigo(rs.getString("Codigo"));
                     m.setDescripcion(rs.getString("Descripcion"));
                     m.setUnidadMedida(rs.getString("UnidadMedida"));

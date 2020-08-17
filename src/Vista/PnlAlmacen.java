@@ -130,13 +130,20 @@ public class PnlAlmacen extends javax.swing.JPanel {
         
         for (int i = 0; i < FrmPrincipal.roles.length; i++)
         {
-            if (FrmPrincipal.roles[i].equals("Sistemas") || FrmPrincipal.roles[i].equals("Produccion"))
+            if (FrmPrincipal.roles[i].contains("Sistemas") || FrmPrincipal.roles[i].contains("Almacen"))
             {
                 btnAgregarMaterial.setEnabled(true);
                 btnEditarMaterial.setEnabled(true);
                 btnRealizarEntrada.setEnabled(true);
                 btnRealizarSalida.setEnabled(true);
-                break;
+            }
+            else
+            {
+                btnEditarEntrada.setVisible(false);
+                btnEliminarEntrada.setVisible(false);
+                
+                btnEditarSalida.setVisible(false);
+                btnEliminarSalida.setVisible(false);
             }
         }
         
@@ -2401,6 +2408,11 @@ public class PnlAlmacen extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
         jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTabbedPane1MouseClicked(evt);
@@ -3504,25 +3516,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarSalidaActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        if (panelActual != jTabbedPane1.getSelectedIndex())
-        {
-            panelActual = jTabbedPane1.getSelectedIndex();
-            
-            switch(jTabbedPane1.getSelectedIndex())
-            {
-                case 0:
-                    actualizarTablaMateriales();
-                    break;
-
-                case 1:
-                    actualizarTablaEntradas();
-                    break;
-
-                case 2:
-                    actualizarTablaSalidas();
-                    break;
-            }
-        }
+        
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -3586,6 +3580,28 @@ public class PnlAlmacen extends javax.swing.JPanel {
     private void txtDepartamentoSalidaEditarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepartamentoSalidaEditarKeyTyped
         ValidarLongitud(evt,txtDepartamentoSalidaEditar.getText(),100);
     }//GEN-LAST:event_txtDepartamentoSalidaEditarKeyTyped
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        if (panelActual != jTabbedPane1.getSelectedIndex())
+        {
+            panelActual = jTabbedPane1.getSelectedIndex();
+            
+            switch(jTabbedPane1.getSelectedIndex())
+            {
+                case 0:
+                    actualizarTablaMateriales();
+                    break;
+
+                case 1:
+                    actualizarTablaEntradas();
+                    break;
+
+                case 2:
+                    actualizarTablaSalidas();
+                    break;
+            }
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

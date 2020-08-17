@@ -195,6 +195,11 @@ public class PnlUsuarios extends javax.swing.JPanel {
             {
                 listaPermisos.add("Engrase");
             }
+            
+            if (chkAlmacenAgregar.isSelected())
+            {
+                listaPermisos.add("Almacen");
+            }
 
             if (listaPermisos.size() > 0)
             {
@@ -269,6 +274,11 @@ public class PnlUsuarios extends javax.swing.JPanel {
             if (chkEngraseEditar.isSelected())
             {
                 listaPermisos.add("Engrase");
+            }
+            
+            if (chkAlmacenEditar.isSelected())
+            {
+                listaPermisos.add("Almacen");
             }
             
             if (listaPermisos.size() > 0)
@@ -378,7 +388,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
     public void abrirDialogoAgregar()
     {   try 
         {
-            dlgAgregarUsuario.setSize(580, 340);
+            dlgAgregarUsuario.setSize(580, 350);
             dlgAgregarUsuario.setPreferredSize(dlgAgregarUsuario.getSize());
             dlgAgregarUsuario.setLocationRelativeTo(null);
             dlgAgregarUsuario.setModal(true);
@@ -395,7 +405,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
             chkSemiterminadoAgregar.setSelected(false);
             chkSistemasAgregar.setSelected(false);
             chkTerminadoAgregar.setSelected(false);
-            
+            chkAlmacenAgregar.setSelected(false);
         } 
         catch (Exception e) 
         {
@@ -410,7 +420,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
     public void abrirDialogoEditar()
     {   try 
         {
-            dlgEditarUsuario.setSize(580, 340);
+            dlgEditarUsuario.setSize(580, 350);
             dlgEditarUsuario.setPreferredSize(dlgEditarUsuario.getSize());
             dlgEditarUsuario.setLocationRelativeTo(null);
             dlgEditarUsuario.setModal(true);
@@ -456,6 +466,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
         chkTerminadoAgregar = new javax.swing.JCheckBox();
         chkRiveraAgregar = new javax.swing.JCheckBox();
         chkEngraseAgregar = new javax.swing.JCheckBox();
+        chkAlmacenAgregar = new javax.swing.JCheckBox();
         txtPasswordUsuAgregar = new javax.swing.JPasswordField();
         dlgEditarUsuario = new javax.swing.JDialog();
         jPanel7 = new javax.swing.JPanel();
@@ -479,6 +490,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
         chkTerminadoEditar = new javax.swing.JCheckBox();
         chkRiveraEditar = new javax.swing.JCheckBox();
         chkEngraseEditar = new javax.swing.JCheckBox();
+        chkAlmacenEditar = new javax.swing.JCheckBox();
         txtPasswordUsuEditar = new javax.swing.JPasswordField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -562,6 +574,8 @@ public class PnlUsuarios extends javax.swing.JPanel {
 
         chkEngraseAgregar.setText("Engrase");
 
+        chkAlmacenAgregar.setText("Almacen");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -582,7 +596,8 @@ public class PnlUsuarios extends javax.swing.JPanel {
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkEngraseAgregar)
                             .addComponent(chkSemiterminadoAgregar)
-                            .addComponent(chkTerminadoAgregar))))
+                            .addComponent(chkTerminadoAgregar)))
+                    .addComponent(chkAlmacenAgregar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -604,7 +619,9 @@ public class PnlUsuarios extends javax.swing.JPanel {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkRiveraAgregar)
                     .addComponent(chkEngraseAgregar))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkAlmacenAgregar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -658,10 +675,9 @@ public class PnlUsuarios extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(cmbEstatusAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                            .addComponent(cmbEstatusAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnGuardarAgregar)
                 .addContainerGap())
         );
@@ -759,6 +775,8 @@ public class PnlUsuarios extends javax.swing.JPanel {
 
         chkEngraseEditar.setText("Engrase");
 
+        chkAlmacenEditar.setText("Almacén");
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -779,7 +797,8 @@ public class PnlUsuarios extends javax.swing.JPanel {
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkEngraseEditar)
                             .addComponent(chkSemiterminadoEditar)
-                            .addComponent(chkTerminadoEditar))))
+                            .addComponent(chkTerminadoEditar)))
+                    .addComponent(chkAlmacenEditar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -801,6 +820,8 @@ public class PnlUsuarios extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkRiveraEditar)
                     .addComponent(chkEngraseEditar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkAlmacenEditar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -859,11 +880,11 @@ public class PnlUsuarios extends javax.swing.JPanel {
                             .addComponent(cmbEstatusEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12)))
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardarEditar)
-                    .addComponent(lblIdUsuario))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardarEditar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblIdUsuario, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout dlgEditarUsuarioLayout = new javax.swing.GroupLayout(dlgEditarUsuario.getContentPane());
@@ -976,6 +997,7 @@ public class PnlUsuarios extends javax.swing.JPanel {
             chkSemiterminadoEditar.setSelected(false);
             chkSistemasEditar.setSelected(false);
             chkTerminadoEditar.setSelected(false);
+            chkAlmacenEditar.setSelected(false);
             
             u.setUserName(tblUsuarios.getValueAt(tblUsuarios.getSelectedRow(), 0).toString());
             u.setNombre(tblUsuarios.getValueAt(tblUsuarios.getSelectedRow(), 1).toString());
@@ -1061,6 +1083,15 @@ public class PnlUsuarios extends javax.swing.JPanel {
                         break;
                     }
                 }
+                
+                for (int i = 0; i < listaRoles.length; i++)
+                {
+                    if (listaRoles[i].equals("Almacen"))
+                    {
+                        chkAlmacenEditar.setSelected(true);
+                        break;
+                    }
+                }
             }
             
             abrirDialogoEditar();
@@ -1087,6 +1118,8 @@ public class PnlUsuarios extends javax.swing.JPanel {
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnGuardarAgregar;
     private javax.swing.JButton btnGuardarEditar;
+    private javax.swing.JCheckBox chkAlmacenAgregar;
+    private javax.swing.JCheckBox chkAlmacenEditar;
     private javax.swing.JCheckBox chkContabilidadAgregar;
     private javax.swing.JCheckBox chkContabilidadEditar;
     private javax.swing.JCheckBox chkCrossAgregar;

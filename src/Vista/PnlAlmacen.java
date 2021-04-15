@@ -58,6 +58,7 @@ import net.sf.jasperreports.view.JasperViewer;
 public class PnlAlmacen extends javax.swing.JPanel {
     ConexionBD conexion;    
     List<Material> lstMaterial; 
+    List<Material> lstMaterialAux;
     List<EntradaMaterial> lstEntradaMaterial; 
     List<SalidaMaterial> lstSalidaMaterial;
     List<CatalogoDet> lstCatDetTipoMaterial; 
@@ -158,10 +159,10 @@ public class PnlAlmacen extends javax.swing.JPanel {
         cmbMaterialSalida.removeAllItems();
 
         int i = 0;
-        while (i < lstMaterial.size())
+        while (i < lstMaterialAux.size())
         {
-            cmbMaterialEntrada.addItem(lstMaterial.get(i).getDescripcion());
-            cmbMaterialSalida.addItem(lstMaterial.get(i).getDescripcion());
+            cmbMaterialEntrada.addItem(lstMaterialAux.get(i).getDescripcion());
+            cmbMaterialSalida.addItem(lstMaterialAux.get(i).getDescripcion());
             i++;
         }
     }
@@ -295,6 +296,13 @@ public class PnlAlmacen extends javax.swing.JPanel {
             }
 
             lstMaterial = mc.MaterialGetAll(m);
+            
+            // Tabla auxiliar de materiales para que en los combos de salidas y entradas no se pierdan todos lo materiales existentes al filtrar en la tabla principal
+            Material mAux = new Material();
+            mAux.setCodigo("");
+            mAux.setCatDetTipoMaterialId(0);
+            mAux.setCatDetClasificacionId(0);
+            lstMaterialAux = mc.MaterialGetAll(mAux);
             
             dtm = new DefaultTableModel()
             {
@@ -523,8 +531,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
     private void iniDialogoEntrada()
     {
         cmbMaterialEntrada.setSelectedIndex(0);
-        txtCodigoEntrada.setText(lstMaterial.get(0).getCodigo());
-        lblUnidadMedidaEntrada.setText(lstMaterial.get(0).getUnidadMedida());
+        txtCodigoEntrada.setText(lstMaterialAux.get(0).getCodigo());
+        lblUnidadMedidaEntrada.setText(lstMaterialAux.get(0).getUnidadMedida());
         txtCantidadEntrada.setText("");
         txtaComentariosEntrada.setText("");
         dcEntrada.setDate(null);
@@ -534,8 +542,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
     private void iniDialogoSalida()
     {
         cmbMaterialSalida.setSelectedIndex(0);
-        txtCodigoSalida.setText(lstMaterial.get(0).getCodigo());
-        lblUnidadMedidaSalida.setText(lstMaterial.get(0).getUnidadMedida());
+        txtCodigoSalida.setText(lstMaterialAux.get(0).getCodigo());
+        lblUnidadMedidaSalida.setText(lstMaterialAux.get(0).getUnidadMedida());
         txtCantidadSalida.setText("");
         txtSolicitanteSalida.setText("");
         txtDepartamentoSalida.setText("");
@@ -548,9 +556,9 @@ public class PnlAlmacen extends javax.swing.JPanel {
         int index = cmbMaterialEntrada.getSelectedIndex();
         if (index >= 0)
         {
-            txtCodigoEntrada.setText(lstMaterial.get(index).getCodigo());
-            txtPrecioEntrada.setText(lstMaterial.get(index).getPrecio().toString());
-            lblUnidadMedidaEntrada.setText(lstMaterial.get(index).getUnidadMedida());
+            txtCodigoEntrada.setText(lstMaterialAux.get(index).getCodigo());
+            txtPrecioEntrada.setText(lstMaterialAux.get(index).getPrecio().toString());
+            lblUnidadMedidaEntrada.setText(lstMaterialAux.get(index).getUnidadMedida());
         }
     }
     
@@ -559,8 +567,8 @@ public class PnlAlmacen extends javax.swing.JPanel {
         int index = cmbMaterialSalida.getSelectedIndex();
         if (index >= 0)
         {
-            txtCodigoSalida.setText(lstMaterial.get(index).getCodigo());
-            lblUnidadMedidaSalida.setText(lstMaterial.get(index).getUnidadMedida());
+            txtCodigoSalida.setText(lstMaterialAux.get(index).getCodigo());
+            lblUnidadMedidaSalida.setText(lstMaterialAux.get(index).getUnidadMedida());
         }
     }
     
@@ -575,7 +583,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
             entrada = new EntradaMaterial();
             emc = new EntradaMaterialCommands();
             
-            entrada.setMaterialId(lstMaterial.get(cmbMaterialEntrada.getSelectedIndex()).getMaterialId());
+            entrada.setMaterialId(lstMaterialAux.get(cmbMaterialEntrada.getSelectedIndex()).getMaterialId());
             entrada.setCantidad(Double.parseDouble(txtCantidadEntrada.getText().trim()));
             entrada.setPrecio(Double.parseDouble(txtPrecioEntrada.getText().trim()));
             entrada.setComentarios(txtaComentariosEntrada.getText().trim());
@@ -608,7 +616,7 @@ public class PnlAlmacen extends javax.swing.JPanel {
             salida = new SalidaMaterial();
             sc = new SalidaMaterialCommands();
             
-            salida.setMaterialId(lstMaterial.get(cmbMaterialSalida.getSelectedIndex()).getMaterialId());
+            salida.setMaterialId(lstMaterialAux.get(cmbMaterialSalida.getSelectedIndex()).getMaterialId());
             salida.setCantidad(Double.parseDouble(txtCantidadSalida.getText().trim()));
             salida.setSolicitante(txtSolicitanteSalida.getText().trim());
             salida.setDepartamento(txtDepartamentoSalida.getText().trim());

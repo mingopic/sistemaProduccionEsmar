@@ -96,13 +96,8 @@ public class PartidaCommands {
                     pd.setNoPartida(rs.getInt("NoPartida"));
                     pd.setTipoRecorte(rs.getString("descripcion"));
                     pd.setNoPiezasAct(rs.getInt("noPiezasAct"));
-                    pd.setIdPartidaDet(rs.getInt("idPartidaDet"));
                     pd.setIdPartida(rs.getInt("idPartida"));
                     pd.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
-                    pd.setProveedor(rs.getString("Proveedor"));
-                    pd.setIdRecepcionCuero(rs.getInt("idRecepcionCuero"));
-                    pd.setIdRecortePartidaDet(rs.getInt("idRecortePartidaDet"));
-                    pd.setIdInventarioCrudo(rs.getInt("idInventarioCrudo"));
                     partidas.add(pd);
                 }
             }

@@ -1,5 +1,5 @@
 usuarioPC:127.0.0.1
-baseDatos: esmarProd        
+baseDatos: esmarProd
 usuario:sa
 password:root
 instancia:SQLEXPRESS2017

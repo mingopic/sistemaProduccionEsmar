@@ -13,15 +13,11 @@ public class PartidaDisp {
     int noPartida;
     String tipoRecorte;
     int noPiezasAct;
-    int idPartidaDet;
     int idPartida;
     int idTipoRecorte;
-    String proveedor;
+    int idTipoRecorteOrigen;
     Double kgXpieza;
-    int idRecepcionCuero;
     int idProceso;
-    int idRecortePartidaDet;
-    int idInventarioCrudo;
 
     public int getNoPartida() {
         return noPartida;
@@ -38,6 +34,14 @@ public class PartidaDisp {
     public void setTipoRecorte(String tipoRecorte) {
         this.tipoRecorte = tipoRecorte;
     }
+    
+    public int getIdTipoRecorteOrigen() {
+        return idTipoRecorteOrigen;
+    }
+
+    public void setIdTipoRecorteOrigen(int idTipoRecorteOrigen) {
+        this.idTipoRecorteOrigen = idTipoRecorteOrigen;
+    }
 
     public int getNoPiezasAct() {
         return noPiezasAct;
@@ -45,14 +49,6 @@ public class PartidaDisp {
 
     public void setNoPiezasAct(int noPiezasAct) {
         this.noPiezasAct = noPiezasAct;
-    }
-
-    public int getIdPartidaDet() {
-        return idPartidaDet;
-    }
-
-    public void setIdPartidaDet(int idPartidaDet) {
-        this.idPartidaDet = idPartidaDet;
     }
 
     public int getIdPartida() {
@@ -71,13 +67,6 @@ public class PartidaDisp {
         this.idTipoRecorte = idTipoRecorte;
     }
 
-    public String getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
-    }
 
     public Double getKgXpieza() {
         return kgXpieza;
@@ -87,14 +76,6 @@ public class PartidaDisp {
         this.kgXpieza = kgXpieza;
     }
 
-    public int getIdRecepcionCuero() {
-        return idRecepcionCuero;
-    }
-
-    public void setIdRecepcionCuero(int idRecepcionCuero) {
-        this.idRecepcionCuero = idRecepcionCuero;
-    }
-
     public int getIdProceso() {
         return idProceso;
     }
@@ -102,22 +83,4 @@ public class PartidaDisp {
     public void setIdProceso(int idProceso) {
         this.idProceso = idProceso;
     }
-
-    public int getIdRecortePartidaDet() {
-        return idRecortePartidaDet;
-    }
-
-    public void setIdRecortePartidaDet(int idRecortePartidaDet) {
-        this.idRecortePartidaDet = idRecortePartidaDet;
-    }
-
-    public int getIdInventarioCrudo() {
-        return idInventarioCrudo;
-    }
-
-    public void setIdInventarioCrudo(int idInventarioCrudo) {
-        this.idInventarioCrudo = idInventarioCrudo;
-    }
-    
-    
 }

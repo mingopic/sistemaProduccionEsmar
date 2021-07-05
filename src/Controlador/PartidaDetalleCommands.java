@@ -7,7 +7,6 @@ package Controlador;
 
 import Modelo.Entity.BajasPartidaDet;
 import Modelo.Entity.FichaProdDet;
-import Modelo.Entity.FichaProduccion;
 import Modelo.Entity.PartidaDetalle;
 import Modelo.Entity.PartidaDisp;
 import Modelo.Entity.RecepcionCuero;
@@ -54,12 +53,12 @@ public class PartidaDetalleCommands {
         try 
         {
             String query = "exec sp_insRecorte "
-                    + datosPartida.getIdPartidaDet()
-                    + "," + datosPartida.getIdTipoRecorte()
-                    + "," + noPiezasAct
-                    + "," + noPiezas
-                    + "," + datosPartida.getIdPartida()
-                    + "," + idProceso;
+                    + "@idTipoRecorte = " + datosPartida.getIdTipoRecorte()
+                    + ", @noPiezasArecortar = " + noPiezasAct
+                    + ", @noPiezasNuevas = " + noPiezas
+                    + ", @idPartida = " + datosPartida.getIdPartida()
+                    + ", @idProceso = " + idProceso
+                    + ", @idTipoRecorteOrigen = " + datosPartida.getIdTipoRecorteOrigen();
             
             PreparedStatement pstmt = null;
             
@@ -103,13 +102,17 @@ public class PartidaDetalleCommands {
         return datos;
     }
     
-    //Método para agregar una entrada a la tabla entradaProductoAlmacen
-    public static void insPartidaDetFicha(PartidaDetalle pd) throws Exception {
+    public static void insPartidaDetFicha(PartidaDetalle pd, FichaProdDet fpd, int noPiezasPartida, Double kgPartida, Double costoInsumosFicha) throws Exception {
         String query = "exec sp_InsPartidaDetalleFicha "
-                + pd.getNoPiezas()
-                + ", " + pd.getIdPartida()
-                + ", " + pd.getIdPartidaDet()
-                + ", " + pd.getIdTipoRecorte();
+                + "@noPiezas = " + pd.getNoPiezas()
+                + ", @idPartida = " + pd.getIdPartida()
+                + ", @idTipoRecorte = " + pd.getIdTipoRecorte()
+                + ", @idProceso = " + pd.getIdProceso()
+                + ", @idFichaProd = " + fpd.getIdFichaProd()
+                + ", @noPiezasTotal = " + fpd.getNoPiezasTotal()
+                + ", @kgPartida = " + kgPartida 
+                + ", @kgTotal = " + fpd.getKgTotal()
+                + ", @costoInsumosFicha = " + costoInsumosFicha;
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -282,16 +285,15 @@ public class PartidaDetalleCommands {
     //Método que se llama para validar si se puede realizar un recorte
     public static int validarCrearRecorte(PartidaDisp pd) throws Exception {
         String query= "execute sp_valCrearRecorte "
-                + pd.getIdPartida()
-                +", " + pd.getIdRecepcionCuero()
-                +", " + pd.getIdTipoRecorte()
-                +", " + pd.getIdProceso();
+                + "@idPartida = " + pd.getIdPartida()
+                + ", @idTipoRecorte = " + pd.getIdTipoRecorte()
+                + ", @idProceso = " + pd.getIdProceso();
         
         int datos = 0;
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        System.out.println(query);
+        //System.out.println(query);
         rs = stmt.executeQuery(query);
         
         if (rs.last()) 

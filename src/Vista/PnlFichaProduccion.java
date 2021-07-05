@@ -246,7 +246,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             
             String[] cols = new String[]
             {
-                "No. Partida", "Prov - Camión", "Recorte", "No. Piezas"
+                "No. Partida", "Recorte", "No. Piezas"
             };
             
             dtm = new DefaultTableModel(){
@@ -259,18 +259,16 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             for (int i = 0; i < lstPartidas.size(); i++)
             {
                 dtm.setValueAt(lstPartidas.get(i).getNoPartida(), i, 0);
-                dtm.setValueAt(lstPartidas.get(i).getProveedor(), i, 1);
-                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 2);
-                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 3);
+                dtm.setValueAt(lstPartidas.get(i).getTipoRecorte(), i, 1);
+                dtm.setValueAt(lstPartidas.get(i).getNoPiezasAct(), i, 2);
             }
             tblPartidasDisponibles.setModel(dtm);
             
             TableColumnModel columnModel = tblPartidasDisponibles.getColumnModel();
 
             columnModel.getColumn(0).setPreferredWidth(120);
-            columnModel.getColumn(1).setPreferredWidth(210);
-            columnModel.getColumn(2).setPreferredWidth(200);
-            columnModel.getColumn(3).setPreferredWidth(120);
+            columnModel.getColumn(1).setPreferredWidth(200);
+            columnModel.getColumn(2).setPreferredWidth(120);
             
             tblPartidasDisponibles.getTableHeader().setReorderingAllowed(false);
         } 
@@ -817,7 +815,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     int piezasOriginal = 0;
                     for (int i = 0; i < lstPartidas.size(); i++)
                     {
-                        if (lstPartidas.get(i).getIdPartidaDet() == Integer.parseInt(tblPartidasAgregadas.getValueAt(fila, 4).toString()))
+                        if (lstPartidas.get(i).getIdPartida() == Integer.parseInt(tblPartidasAgregadas.getValueAt(fila, 4).toString()) && String.valueOf(lstPartidas.get(i).getTipoRecorte()).equals(tblPartidasAgregadas.getValueAt(fila, 1)))
                         {
                             piezasOriginal = lstPartidas.get(i).getNoPiezasAct();
                         }
@@ -909,20 +907,22 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     pd = new PartidaDetalle();
                     pdc = new PartidaDetalleCommands();
 
-                    pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
+                    //pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
                     pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
-                    pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
-                    pd.setIdInventarioCrudo(lstPartidas.get(fila).getIdInventarioCrudo());
+                    //pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
+                    //pd.setIdInventarioCrudo(lstPartidas.get(fila).getIdInventarioCrudo());
                     
                     if (pd.getIdRecortePartidaDet() == 0)
                     {
                         for (int i = 0; i < lstPartidas.size(); i++)
                         {
+                            /*170521
                             if(lstPartidas.get(i).getIdRecortePartidaDet() == pd.getIdPartidaDet())
                             {
                                 JOptionPane.showMessageDialog(null, "No se puede eliminar partida \nEsta partida ya tiene recortes de cuero","Advertencia",JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
+                            */
                         }
                     }
                     
@@ -980,12 +980,12 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     pd = new PartidaDetalle();
                     pdc = new PartidaDetalleCommands();
 
-                    pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
+                    //pd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
                     pd.setNoPiezas(lstPartidas.get(fila).getNoPiezasAct());
                     pd.setIdPartida(lstPartidas.get(fila).getIdPartida());
-                    pd.setIdRecepcionCuero(lstPartidas.get(fila).getIdRecepcionCuero());
+                    //pd.setIdRecepcionCuero(lstPartidas.get(fila).getIdRecepcionCuero());
                     pd.setIdTipoRecorte(lstPartidas.get(fila).getIdTipoRecorte());
-                    pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
+                    //pd.setIdRecortePartidaDet(lstPartidas.get(fila).getIdRecortePartidaDet());
                     
                     if (pd.getIdTipoRecorte() == 1)
                     {
@@ -1085,7 +1085,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 //                        kg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString());
 //                    }
 
-                    bpd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
+                    //bpd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
                     bpd.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
                     bpd.setMotivo(txtrMotivo.getText());
 //                    bic.setKgTotal(kg);
@@ -1773,10 +1773,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         tblPartidasDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null}
+                {null, null, null}
             },
             new String [] {
-                "No. Partida", "Prov - Camión", "Recorte", "No. Piezas"
+                "No. Partida", "Recorte", "No. Piezas"
             }
         ));
         tblPartidasDisponibles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -2171,9 +2171,9 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             pad.setNoPartida(lstPartidas.get(i).getNoPartida());
             pad.setTipoRecorte(lstPartidas.get(i).getTipoRecorte());
             pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
-            pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
+            //pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
             pad.setIdPartida(lstPartidas.get(i).getIdPartida());
-            pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
+            pad.setIdTipoRecorteOrigen(lstPartidas.get(i).getIdTipoRecorte());
             pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
             
             abrirDialogoRecortar();
@@ -2286,7 +2286,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 datosPartidas[1]= lstPartidas.get(fila).getTipoRecorte();
                 datosPartidas[2]= String.valueOf(lstPartidas.get(fila).getNoPiezasAct());
                 datosPartidas[3]= "0.0";
-                datosPartidas[4]= String.valueOf(lstPartidas.get(fila).getIdPartidaDet());
+                datosPartidas[4]= String.valueOf(lstPartidas.get(fila).getIdPartida());
 
                 dtms.addRow(datosPartidas);
                 asignados[fila][0] = "1";
@@ -2308,7 +2308,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             
             for (int i = 0; i < lstPartidas.size(); i++)
             {
-                if (String.valueOf(lstPartidas.get(i).getIdPartidaDet()).equals(tblPartidasAgregadas.getValueAt(fila, 4)))
+                if (String.valueOf(lstPartidas.get(i).getIdPartida()).equals(tblPartidasAgregadas.getValueAt(fila, 4)) && String.valueOf(lstPartidas.get(i).getTipoRecorte()).equals(tblPartidasAgregadas.getValueAt(fila, 1)))
                 {
                     asignados[i][0] = "0";
                 }
@@ -2386,6 +2386,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 fp.setIdTambor(lstTambor.get(cmbTambores.getSelectedIndex()).getIdTambor());
                 fp.setNoPiezasTotal(0);
                 fp.setKgTotal(0.0);
+                
                 for (int i = 0; i < tblPartidasAgregadas.getRowCount(); i++)
                 {
                     fp.setNoPiezasTotal(fp.getNoPiezasTotal() + Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 2).toString()));
@@ -2411,23 +2412,19 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     pd.setNoPiezas(noPiezasPartida);
                     for (int j = 0; j < lstPartidas.size(); j++)
                     {
-                        if (Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) == lstPartidas.get(j).getIdPartidaDet())
+                        if (lstPartidas.get(j).getIdPartida() == Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()) && String.valueOf(lstPartidas.get(j).getTipoRecorte()).equals(tblPartidasAgregadas.getValueAt(i, 1)))
                         {
                             pd.setIdPartida(lstPartidas.get(j).getIdPartida());
                             pd.setIdTipoRecorte(lstPartidas.get(j).getIdTipoRecorte());
                         }
                     }
-                    pd.setIdPartidaDet(Integer.parseInt(tblPartidasAgregadas.getValueAt(i, 4).toString()));
-
-                    pdc.insPartidaDetFicha(pd);
-
-
-                    fpd.setIdPartidaDet(pdc.obtenerUltPartidaDet());
+                    pd.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
                     fpd.setNoPiezasTotal(fp.getNoPiezasTotal());
                     Double kgPartida = Double.parseDouble(tblPartidasAgregadas.getValueAt(i, 3).toString());
                     fpd.setKgTotal(fp.getKgTotal());
-
-                    fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
+                    
+                    pdc.insPartidaDetFicha(pd, fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
+                    //fpdc.agregarFichaProdDet(fpd, noPiezasPartida, kgPartida, costoInsumosFicha);
                 }
 
                 InsumosFichaProd ifp = new InsumosFichaProd();
@@ -2514,7 +2511,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             pad.setNoPartida(lstPartidas.get(i).getNoPartida());
             pad.setTipoRecorte(lstPartidas.get(i).getTipoRecorte());
             pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
-            pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
+            //pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
             pad.setIdPartida(lstPartidas.get(i).getIdPartida());
             pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
             pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));

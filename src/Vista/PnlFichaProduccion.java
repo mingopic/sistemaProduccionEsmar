@@ -15,7 +15,7 @@ import Controlador.PartidaDetalleCommands;
 import Controlador.ProcesoCommands;
 import Controlador.SubProcesoCommands;
 import Controlador.TamborCommands;
-import Modelo.Entity.BajasPartidaDet;
+import Modelo.Dto.BajaPartidaDto;
 import Modelo.Entity.FichaProd;
 import Modelo.Entity.FichaProdDet;
 import Modelo.Entity.InsumosFichaProd;
@@ -54,7 +54,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     SubProcesoCommands subPc;
     Tambor t;
     TamborCommands tc;
-    BajasPartidaDet bpd;
     BajasPartidaDetCommands bpdc;
     String[][] proceso = null;
     String[][] subProceso = null;
@@ -1043,9 +1042,9 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         int fila = tblPartidasDisponibles.getSelectedRow();
         
         txtNoPartida.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 0)));
-        txtProveedorNoCamion.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 1)));
-        txtTipoRecorte.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 2)));
-        txtNoPiezasActuales.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 3)));
+        //txtProveedorNoCamion.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 1)));
+        txtTipoRecorte.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 1)));
+        txtNoPiezasActuales.setText(String.valueOf(tblPartidasDisponibles.getValueAt(fila, 2)));
     }
     
     //Método que abre el dialogo para eliminar piezas del inventario en proceso 
@@ -1053,7 +1052,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     {
         inicializarCamposEliPzaFichaProd();
         
-        dlgEliPzaFichaProd.setSize(460, 490);
+        dlgEliPzaFichaProd.setSize(460, 430);
         dlgEliPzaFichaProd.setPreferredSize(dlgEliPzaFichaProd.getSize());
         dlgEliPzaFichaProd.setLocationRelativeTo(null);
         dlgEliPzaFichaProd.setModal(true);
@@ -1074,24 +1073,15 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 else
                 {
                     int fila = tblPartidasDisponibles.getSelectedRow();
-                    bpd = new BajasPartidaDet();
-                    bpdc = new BajasPartidaDetCommands();
+                    BajaPartidaDto baja = new BajaPartidaDto();
                     
-//                    double promKg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 6).toString());
-//                    double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
-//                    
-//                    if (kg > Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString()))
-//                    {
-//                        kg = Double.parseDouble(tblPartidasDisponibles.getValueAt(fila, 5).toString());
-//                    }
+                    baja.setPiezasUtilizar(Integer.parseInt(txtNoPiezasEliminar.getText()));
+                    baja.setIdPartida(lstPartidas.get(fila).getIdPartida());
+                    baja.setIdTipoRecorte(lstPartidas.get(fila).getIdTipoRecorte());
+                    baja.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
+                    baja.setMotivoBaja(txtrMotivo.getText());
 
-                    //bpd.setIdPartidaDet(lstPartidas.get(fila).getIdPartidaDet());
-                    bpd.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
-                    bpd.setMotivo(txtrMotivo.getText());
-//                    bic.setKgTotal(kg);
-
-                    bpdc.agregarBajaPartidaDet(bpd);
-                    pdc.actualizarNoPiezasBaja(bpd);
+                    pdc.actualizarNoPiezasBaja(baja);
                     actualizarTablaPartidasDisponibles();
                     dlgEliPzaFichaProd.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
@@ -1151,7 +1141,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         lblTipoCueroAcabar1 = new javax.swing.JLabel();
         dlgEliPzaFichaProd = new javax.swing.JDialog();
         jPanel15 = new javax.swing.JPanel();
-        jLabel55 = new javax.swing.JLabel();
         txtNoPiezasActuales = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
         jLabel53 = new javax.swing.JLabel();
@@ -1162,7 +1151,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        txtProveedorNoCamion = new javax.swing.JTextField();
         txtNoPartida = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         txtTipoRecorte = new javax.swing.JTextField();
@@ -1183,7 +1171,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         btnEliminarPartida = new javax.swing.JButton();
         btnEliminarRecorte = new javax.swing.JButton();
         btnSelAcabado = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnEliminarPiezas = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -1503,9 +1491,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
 
         jPanel15.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel55.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel55.setText("Proveedor y No. Camión:");
-
         txtNoPiezasActuales.setEditable(false);
         txtNoPiezasActuales.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtNoPiezasActuales.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1573,9 +1558,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel22.setText("No. piezas a eliminar:");
 
-        txtProveedorNoCamion.setEditable(false);
-        txtProveedorNoCamion.setBackground(new java.awt.Color(255, 255, 255));
-
         txtNoPartida.setEditable(false);
         txtNoPartida.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1595,15 +1577,18 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addComponent(btnRealizarEntradaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarAgregarEnvSemi))
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel15Layout.createSequentialGroup()
-                                    .addGap(32, 32, 32)
+                                    .addGap(69, 69, 69)
                                     .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabel32)
-                                        .addComponent(jLabel55)
                                         .addComponent(jLabel24)
                                         .addComponent(jLabel21)))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
@@ -1615,17 +1600,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                             .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(txtNoPartida, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                .addComponent(txtProveedorNoCamion)
                                 .addComponent(txtTipoRecorte))
                             .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRealizarEntradaEnvSemi, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelarAgregarEnvSemi)))
-                .addGap(6, 6, 6))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1636,29 +1614,25 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                     .addComponent(jLabel32)
                     .addComponent(txtNoPartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel55)
-                    .addComponent(txtProveedorNoCamion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtTipoRecorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel24))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNoPiezasActuales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNoPiezasEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel53))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRealizarEntradaEnvSemi)
-                    .addComponent(btnCancelarAgregarEnvSemi))
+                    .addComponent(btnCancelarAgregarEnvSemi)
+                    .addComponent(btnRealizarEntradaEnvSemi))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1826,12 +1800,13 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
-        jButton1.setText("Eliminar Piezas");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnEliminarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/delete.png"))); // NOI18N
+        btnEliminarPiezas.setText("Eliminar Piezas");
+        btnEliminarPiezas.setName(""); // NOI18N
+        btnEliminarPiezas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEliminarPiezasActionPerformed(evt);
             }
         });
 
@@ -1855,7 +1830,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSelAcabado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(btnEliminarPiezas)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -1871,7 +1846,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminarPartida)
                     .addComponent(btnSelAcabado)
-                    .addComponent(jButton1))
+                    .addComponent(btnEliminarPiezas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
         );
@@ -2045,7 +2020,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 589, Short.MAX_VALUE)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2513,7 +2488,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             pad.setNoPiezasAct(lstPartidas.get(i).getNoPiezasAct());
             //pad.setIdPartidaDet(lstPartidas.get(i).getIdPartidaDet());
             pad.setIdPartida(lstPartidas.get(i).getIdPartida());
-            pad.setIdTipoRecorte(lstPartidas.get(i).getIdTipoRecorte());
+            pad.setIdTipoRecorteOrigen(lstPartidas.get(i).getIdTipoRecorte());
             pad.setIdProceso(Integer.parseInt(proceso[cmbProceso.getSelectedIndex()][0]));
             
             abrirDialogoSeleccionarAcabado();
@@ -2531,7 +2506,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
             if (p.getIdProceso() == 4)
             {
                 int fila = tblPartidasDisponibles.getSelectedRow();
-                if (tblPartidasDisponibles.getValueAt(fila, 2).equals("Centro"))
+                if (tblPartidasDisponibles.getValueAt(fila, 1).equals("Centro"))
                 {
                     btnSelAcabado.setEnabled(true);
                 }
@@ -2615,10 +2590,10 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEliminarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPiezasActionPerformed
         try {
             int fila = tblPartidasDisponibles.getSelectedRow();
-            String piezas = (String.valueOf(tblPartidasDisponibles.getValueAt(fila, 3)));
+            String piezas = (String.valueOf(tblPartidasDisponibles.getValueAt(fila, 2)));
             int numPiezasActuales = Integer.parseInt(piezas);
 
             if (numPiezasActuales != 0)
@@ -2632,7 +2607,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Seleccione un registro de la tabla de partidas disponibles","Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEliminarPiezasActionPerformed
 
     private void txtNoPiezasActualesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasActualesKeyTyped
         // TODO add your handling code here:
@@ -2755,6 +2730,7 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JButton btnCancelarAgregarEnvSemi;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarPartida;
+    private javax.swing.JButton btnEliminarPiezas;
     private javax.swing.JButton btnEliminarRecorte;
     private javax.swing.JButton btnGenerarFicha;
     private javax.swing.JButton btnGuardar;
@@ -2768,7 +2744,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JDialog dlgEliPzaFichaProd;
     private javax.swing.JDialog dlgRecortar;
     private javax.swing.JDialog dlgSelAcabado;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2790,7 +2765,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel53;
-    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -2835,7 +2809,6 @@ public class PnlFichaProduccion extends javax.swing.JPanel {
     private javax.swing.JTextField txtNoPiezasRecortar2;
     private javax.swing.JTextField txtNoPiezasSelAcabado;
     private javax.swing.JTextField txtNoPiezasSelAcabado1;
-    private javax.swing.JTextField txtProveedorNoCamion;
     private javax.swing.JTextField txtTipoRecorte;
     private javax.swing.JTextField txtTotal;
     private javax.swing.JTextArea txtrMotivo;

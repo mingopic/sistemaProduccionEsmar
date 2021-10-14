@@ -5,7 +5,6 @@
  */
 package Controlador;
 
-import static Controlador.MaterialCommands.c;
 import Modelo.Entity.SalidaMaterial;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -15,7 +14,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

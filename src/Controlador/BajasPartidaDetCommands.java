@@ -18,9 +18,10 @@ public class BajasPartidaDetCommands {
     static Statement stmt = null;
     static PreparedStatement pstmt;
     static ResultSet rs = null;
-    static ConexionBD c=new ConexionBD();
+    static ConexionBD c = new ConexionBD();
     
     //Método para agregar una baja a la tabla tb_bajasPartidaDet
+    /*
     public static void agregarBajaPartidaDet(BajasPartidaDet bpd) throws Exception
     {
         String query = "exec sp_agrBajaPartidaDet "+bpd.getNoPiezas()+""
@@ -32,4 +33,5 @@ public class BajasPartidaDetCommands {
         pstmt.executeUpdate();
         c.desconectar();
     }
+    */
 }

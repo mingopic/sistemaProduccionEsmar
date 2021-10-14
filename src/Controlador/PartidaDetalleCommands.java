@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.Dto.BajaPartidaDto;
 import Modelo.Entity.BajasPartidaDet;
 import Modelo.Entity.FichaProdDet;
 import Modelo.Entity.PartidaDetalle;
@@ -314,10 +315,13 @@ public class PartidaDetalleCommands {
     }
     
     //Método para actualizar el número de piezas actuales
-    public static void actualizarNoPiezasBaja(BajasPartidaDet bpd) throws Exception {
+    public static void actualizarNoPiezasBaja(BajaPartidaDto baja) throws Exception {
         String query = "exec sp_actBajasPartidaDet "
-                + bpd.getNoPiezas()
-                + ", " + bpd.getIdPartidaDet();
+                + "@piezasUtilizar = " + baja.getPiezasUtilizar()
+                + ", @idPartida = " + baja.getIdPartida()
+                + ", @idTipoRecorte = " + baja.getIdTipoRecorte()
+                + ", @idProceso = " + baja.getIdProceso()
+                + ", @motivoBaja = '" + baja.getMotivoBaja()+ "'";
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

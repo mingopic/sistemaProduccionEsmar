@@ -22,6 +22,12 @@ begin
 end
 go
 
+if object_id('dbo.sp_actBajasPartidaDet') is not null
+begin
+	drop procedure dbo.sp_actBajasPartidaDet
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_obtPartidaXproceso
@@ -170,6 +176,7 @@ as begin
     idPartida = @idPartida
     and idTipoRecorte = @idTipoRecorte
     and idProceso = @idProceso - 1
+    and noPiezasAct > 0
   /* ------------------- */
   
   begin try
@@ -255,7 +262,7 @@ as begin
       delete from 
         #TmpPartidaDet
       where
-        @idPartidaDet = idPartidaDet
+        idPartidaDet = @idPartidaDet
         
       --      
       select
@@ -1435,3 +1442,109 @@ as begin
   
 end
 GO
+
+create procedure sp_actBajasPartidaDet
+(
+  @piezasUtilizar  int
+  , @idPartida     int
+  , @idTipoRecorte int
+  , @idProceso     int
+  , @motivoBaja    varchar (100)
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    01   DLuna     ????/??/??   Creación
+    02   DLuna     2021/07/20   Se borra parámetro @idPartidaDet para insertar bajas de partidaDet y se cambia para realizarlo
+                                calculado.
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idPartidaDetAux     int
+    , @noPiezasAct       int
+    
+  drop table if exists #TmpPartidaDet
+  
+  /* ------------------- */
+  select
+    idPartidaDet
+    , noPiezasAct
+  into
+    #TmpPartidaDet
+  from
+    tb_partidaDet
+  where
+    idPartida = @idPartida
+    and idTipoRecorte = @idTipoRecorte
+    and idProceso = @idProceso - 1
+    and noPiezasAct > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpPartidaDet) > 0) and @piezasUtilizar > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idPartidaDetAux = idPartidaDet
+        , @noPiezasAct = noPiezasAct
+      from
+        #TmpPartidaDet
+        
+      --
+      if (@noPiezasAct < @piezasUtilizar)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @piezasUtilizar = @piezasUtilizar - @noPiezasAct
+      end
+      else if (@noPiezasAct > @piezasUtilizar)
+      begin
+        
+        set @noPiezasUpd = @piezasUtilizar
+        set @piezasUtilizar = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @piezasUtilizar = 0
+      end
+      
+      --
+      update
+        tb_partidaDet
+      set
+        noPiezasAct = noPiezasAct - @noPiezasUpd
+      where
+        idPartidaDet = @idPartidaDetAux
+
+      --
+      delete from 
+        #TmpPartidaDet
+      where
+        idPartidaDet = @idPartidaDetAux
+        
+      --
+      exec sp_agrBajaPartidaDet
+        @noPiezas       = @noPiezasUpd
+        , @motivo       = @motivoBaja
+        , @idPartidaDet = @idPartidaDetAux
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_actBajasPartidaDet ' + ERROR_MESSAGE()
+  end catch
+  
+end
+go

@@ -29,6 +29,7 @@ import Modelo.Entity.TipoRecorte;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +69,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     BajasInventarioSemiterminado bis;
     BajasInventarioSemiterminadoCommands bisc;
     String[][] datosSemiterminado = null;
-    String[][] datos = null;
+    List<InventarioCrossSemiterminado> lstInvCrossSemi;
     String[][] calibres = null;
     String[][] selecciones = null;
     private final String imagen="/Imagenes/logo_esmar.png";
@@ -313,7 +314,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             
             datosSemiterminado = isc.obtenerListaInvSemiterminado(p,tr,c,s,is);
             
-            dtm = new DefaultTableModel(datosSemiterminado, cols){
+            dtm = new DefaultTableModel(datosSemiterminado, colsInvSemi){
             public boolean isCellEditable(int row, int column) {
             return false;
             }
@@ -394,16 +395,27 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         
         try {
             
-            datos = icsc.obtenerListaInvCrossSemi(ics,p,tr);
+            lstInvCrossSemi = icsc.obtenerListaInvCrossSemi(ics,p,tr);
             
-            dtm = new DefaultTableModel(datos, colsInvSemi)
+            dtm = new DefaultTableModel()
             {
                 public boolean isCellEditable(int row, int column) 
                 {
                     return false;
                 }
             };
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(lstInvCrossSemi.size());
+            for (int i = 0; i < lstInvCrossSemi.size(); i++)
+            {
+                //"No. Partida","Tipo Recorte","No. Piezas","Fecha Entrada"
+                dtm.setValueAt(lstInvCrossSemi.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(lstInvCrossSemi.get(i).getRecorte(), i, 1);
+                dtm.setValueAt(lstInvCrossSemi.get(i).getNoPiezasActuales(), i, 2);
+                dtm.setValueAt(lstInvCrossSemi.get(i).getFechaEntrada(), i, 3);
+            }
             tblBuscarPartidaInvCrossSemi.setModel(dtm);
+            tblBuscarPartidaInvCrossSemi.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -467,7 +479,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             
             ic.setIdPartida(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 0).toString()));
             tr.setDescripcion(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 1).toString());
-            ics.setIdInvCrossSemi(Integer.parseInt(datos[renglonSeleccionado][5]));
+            //ics.setIdInvCrossSemi(Integer.parseInt(lstInvCrossSemi[renglonSeleccionado][5]));
             ics.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 2).toString()));
             
             dlgBuscar.setVisible(false);

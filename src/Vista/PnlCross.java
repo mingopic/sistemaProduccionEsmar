@@ -16,6 +16,7 @@ import Controlador.ProveedorCommands;
 import Controlador.RangoPesoCueroCommands;
 import Controlador.TipoCueroCommands;
 import Controlador.TipoRecorteCommands;
+import Modelo.Dto.EntradaInvCross;
 import Modelo.Entity.BajasInventarioCross;
 import Modelo.Entity.ConfiguracionMerma;
 import Modelo.Entity.InventarioCross;
@@ -60,7 +61,7 @@ public class PnlCross extends javax.swing.JPanel {
     Partida p;
     BajasInventarioCross bic;
     BajasInventarioCrossCommands bicc;
-    String[][] datosInvCross = null;
+    List<EntradaInvCross> datosInvCross;
     List<PartidaDetalle> lstCueroDisp;
     int seleccionado = -1;
     private final String imagen="/Imagenes/logo_esmar.png";
@@ -245,12 +246,23 @@ public class PnlCross extends javax.swing.JPanel {
             
             datosInvCross = icc.obtenerListaInvCross(ic,tr,p);
             
-            dtm = new DefaultTableModel(datosInvCross, cols){
+            dtm = new DefaultTableModel(){
             public boolean isCellEditable(int row, int column) {
             return false;
             }
             };
-            tblInvCross.setModel(dtm);
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(datosInvCross.size());
+            for (int i = 0; i < datosInvCross.size(); i++)
+            {
+                //"No. Partida","Tipo Recorte","No. Piezas","Kg Totales","Fecha de Entrada"
+                dtm.setValueAt(datosInvCross.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(datosInvCross.get(i).getRecorte(), i, 1);
+                dtm.setValueAt(datosInvCross.get(i).getNoPiezasActuales(), i, 2);
+                dtm.setValueAt(datosInvCross.get(i).getKgActual(), i, 3);
+                dtm.setValueAt(datosInvCross.get(i).getFechaEntrada(), i, 4);
+            }
+            tblInvCross.setModel(dtm);            
             tblInvCross.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
@@ -325,21 +337,24 @@ public class PnlCross extends javax.swing.JPanel {
                     ics = new InventarioCrossSemiterminado();
                     icsc = new InventarioCrossSemiterminadoCommands();
                     
-                    double promKg = Double.parseDouble(datosInvCross[fila][6]) / Integer.parseInt(datosInvCross[fila][5]);
+                    /*
+                    double promKg = datosInvCross.get(fila).getKgTotal() / datosInvCross.get(fila).getNoPiezas();
                     double kg = promKg * Integer.parseInt(txtNoPiezasEnvSemi.getText());
                     
-                    if (kg > Double.parseDouble(datosInvCross[fila][6]))
+                    if (kg > datosInvCross.get(fila).getKgTotal())
                     {
-                        kg = Double.parseDouble(datosInvCross[fila][6]);
+                        kg = datosInvCross.get(fila).getKgTotal();
                     }
 
                     ics.setIdInvPCross(Integer.parseInt(datosInvCross[fila][7]));
+                    */
+                    ics.setIdPartida(datosInvCross.get(fila).getIdPartida());
+                    ics.setFechaEntrada(datosInvCross.get(fila).getFechaEntrada());
+                    ics.setIdTipoRecorte(datosInvCross.get(fila).getIdTipoRecorte());
                     ics.setNoPiezas(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
-                    ics.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvSemi.getText()));
-                    ics.setKgTotal(kg);
 
                     icsc.agregarInvCrossSemi(ics);
-                    icc.actualizarNoPiezasActual(ics);
+                    //icc.actualizarNoPiezasActual(ics);
                     actualizarTablaCross();
                     dlgEnvSemi.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
@@ -558,22 +573,25 @@ public class PnlCross extends javax.swing.JPanel {
                     int fila = tblInvCross.getSelectedRow();
                     bic = new BajasInventarioCross();
                     bicc = new BajasInventarioCrossCommands();
-                    
-                    double promKg = (Double.parseDouble(datosInvCross[fila][6])) / (Double.parseDouble(datosInvCross[fila][5]));
+                    /*
+                    double promKg = datosInvCross.get(fila).getKgTotal() / datosInvCross.get(fila).getNoPiezas();
                     double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
                     
-                    if (kg > Double.parseDouble(datosInvCross[fila][6]))
+                    if (kg > datosInvCross.get(fila).getKgTotal())
                     {
-                        kg = Double.parseDouble(datosInvCross[fila][6]);
+                        kg = datosInvCross.get(fila).getKgTotal();
                     }
 
-                    bic.setIdInvPCross(Integer.parseInt(datosInvCross[fila][7]));
+                    //bic.setIdInvPCross(Integer.parseInt(datosInvCross[fila][7]));
+                    */
+                    bic.setIdPartida(datosInvCross.get(fila).getIdPartida());
+                    bic.setFechaEntrada(datosInvCross.get(fila).getFechaEntrada());
+                    bic.setIdTipoRecorte(datosInvCross.get(fila).getIdTipoRecorte());
                     bic.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
                     bic.setMotivo(txtrMotivo.getText());
-                    bic.setKgTotal(kg);
 
                     bicc.agregarBajaInvSemiterminado(bic);
-                    icc.actualizarNoPiezasBaja(bic);
+                    //icc.actualizarNoPiezasBaja(bic);
                     actualizarTablaCross();
                     dlgEliPzaInvCross.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
@@ -1896,8 +1914,8 @@ try {
                     PartidaDetalle pd = new PartidaDetalle();
                     InventarioCrossCommands icc = new InventarioCrossCommands();
 
-                    pd.setIdPartidaDet(lstCueroDisp.get(seleccionado).getIdPartidaDet());
                     pd.setIdPartida(lstCueroDisp.get(seleccionado).getIdPartida());
+                    pd.setIdTipoRecorte(lstCueroDisp.get(seleccionado).getIdTipoRecorte());
                     pd.setNoPiezas(noPiezas);
 
                     icc.insertarInvCross(pd);

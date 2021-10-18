@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.Dto.EntradaInvCross;
 import Modelo.Entity.BajasInventarioCross;
 import Modelo.Entity.InventarioCross;
 import Modelo.Entity.InventarioCrossSemiterminado;
@@ -15,7 +16,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -27,20 +30,16 @@ public class InventarioCrossCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista del inventario de cross
-    public static String[][] obtenerListaInvCross(InventarioCross ic, TipoRecorte tr, Partida p) throws Exception
+    public static List<EntradaInvCross> obtenerListaInvCross(InventarioCross ic, TipoRecorte tr, Partida p) throws Exception
     {
+        List<EntradaInvCross> lstEntradas = new ArrayList<>();
         String query;
         
         query= "execute sp_obtEntCross "
-                + "'" + tr.getDescripcion() +"'"
-                + "," + p.getNoPartida()
-                + ",'" + ic.getFecha() + "'"
-                + ",'" + ic.getFecha1() +"'";
-
-        String[][] datos = null;
-        int renglones = 0;
-        int columnas = 8;
-        int i = 0;
+                + "@tipoRecorte = '" + tr.getDescripcion() +"'"
+                + ", @noPartida = " + p.getNoPartida()
+                + ", @fecha = '" + ic.getFecha() + "'"
+                + ", @fecha1 = '" + ic.getFecha1() +"'";
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -49,32 +48,28 @@ public class InventarioCrossCommands {
         
         if (rs.last()) 
         {
-            renglones = rs.getRow();
-            datos = new String[renglones][columnas];
             rs.beforeFirst();
-            
+
             //Recorremos el ResultSet registro a registro
-            while (rs.next()) 
-            {
-                datos[i][0] = rs.getString("noPartida");
-                datos[i][1] = rs.getString("descripcion");
-                datos[i][2] = rs.getString("noPiezasActuales");
-                datos[i][3] = String.format("%.2f",Double.parseDouble(rs.getString("kgActual")));
-                Date sqlDate = rs.getDate("fechaEntrada");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][4] = sdf.format(sqlDate);
-                
-                datos[i][5] = rs.getString("noPiezas");
-                datos[i][6] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotal")));
-                datos[i][7] = rs.getString("idInvPCross");
-                i++; 
+            while (rs.next()) {
+                EntradaInvCross obj = new EntradaInvCross();
+                obj.setIdPartida(rs.getInt("idPartida"));
+                obj.setFechaEntrada(rs.getString("fechaentrada"));
+                obj.setNoPartida(rs.getInt("noPartida"));
+                obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                obj.setRecorte(rs.getString("descripcion"));
+                obj.setNoPiezas(rs.getInt("noPiezas"));
+                obj.setNoPiezasActuales(rs.getInt("noPiezasActuales"));
+                obj.setKgTotal(rs.getDouble("kgTotal"));
+                obj.setKgActual(rs.getDouble("kgActual"));
+                lstEntradas.add(obj);
             }
         }
         
         rs.close();
         stmt.close();
         c.desconectar();
-        return datos;
+        return lstEntradas;
     }
     
     //Método para actualizar el número de piezas actuales
@@ -94,8 +89,8 @@ public class InventarioCrossCommands {
     public static void insertarInvCross(PartidaDetalle pd) throws Exception
     {
         String query = "execute sp_insInvCross "
-                + pd.getIdPartidaDet()
-                + ", " + pd.getIdPartida()
+                + pd.getIdPartida()
+                + ", " + pd.getIdTipoRecorte()
                 + ", " + pd.getNoPiezas();
         PreparedStatement pstmt = null;
         c.conectar();

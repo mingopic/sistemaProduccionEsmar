@@ -14,7 +14,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -28,8 +30,11 @@ public class InventarioCrossSemiterminadoCommands {
     //Método para agregar una entrada a la tabla tb_invCrossSemi
     public static void agregarInvCrossSemi(InventarioCrossSemiterminado ics) throws Exception
     {
-        String query = "exec sp_agrInvCrossSemi "+ics.getIdInvPCross()+""
-            + ","+ics.getNoPiezas()+","+ics.getNoPiezasActuales()+","+ics.getKgTotal();
+        String query = "exec sp_agrInvCrossSemi "
+                + "@idPartida = "+ics.getIdPartida()+""
+                + ", @fechaentrada = '"+ics.getFechaEntrada()+"'"
+                + ", @idTipoRecorte = "+ics.getIdTipoRecorte()
+                + ", @noPiezas = "+ics.getNoPiezas();
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -39,8 +44,9 @@ public class InventarioCrossSemiterminadoCommands {
     }
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaInvCrossSemi(InventarioCrossSemiterminado ics, Partida p, TipoRecorte tr) throws Exception
+    public static List<InventarioCrossSemiterminado> obtenerListaInvCrossSemi(InventarioCrossSemiterminado ics, Partida p, TipoRecorte tr) throws Exception
     {
+        List<InventarioCrossSemiterminado> lstInvCrossSemi = new ArrayList<>();
         String query;
         
         query= "EXEC sp_obtInvCrossSemi "
@@ -49,11 +55,6 @@ public class InventarioCrossSemiterminadoCommands {
                 + ",'" + ics.getFecha() +"'"
                 + ",'" + ics.getFecha1() +"'";
 
-        String[][] datos = null;
-        int renglones = 0;
-        int columnas = 6;
-        int i = 0;
-
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         System.out.println(query);
@@ -61,30 +62,26 @@ public class InventarioCrossSemiterminadoCommands {
         
         if (rs.last()) 
         {
-            renglones = rs.getRow();
-            datos = new String[renglones][columnas];
             rs.beforeFirst();
-            
+
             //Recorremos el ResultSet registro a registro
-            while (rs.next()) 
-            {
-                datos[i][0] = rs.getString("noPartida");
-                datos[i][1] = rs.getString("descripcion");
-                datos[i][2] = rs.getString("noPiezasActuales");
-                Date sqlDate = rs.getDate("fechaEntrada");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][3] = sdf.format(sqlDate);
-                
-                datos[i][4] = rs.getString("noPiezas");
-                datos[i][5] = rs.getString("idInvCrossSemi");
-                i++; 
+            while (rs.next()) {
+                InventarioCrossSemiterminado obj = new InventarioCrossSemiterminado();
+                obj.setIdPartida(rs.getInt("idPartida"));
+                obj.setNoPartida(rs.getInt("noPartida"));
+                obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                obj.setRecorte(rs.getString("recorte"));
+                obj.setFechaEntrada(rs.getString("fechaentrada"));
+                obj.setNoPiezas(rs.getInt("noPiezas"));
+                obj.setNoPiezasActuales(rs.getInt("noPiezasActuales"));
+                lstInvCrossSemi.add(obj);
             }
         }
         
         rs.close();
         stmt.close();
         c.desconectar();
-        return datos;
+        return lstInvCrossSemi;
     }
     
     //Método para actualizar el número de piezas actuales

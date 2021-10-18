@@ -22,8 +22,12 @@ public class BajasInventarioCrossCommands {
     //Método para agregar una baja a la tabla tb_bajasInventarioSemiterminado
     public static void agregarBajaInvSemiterminado(BajasInventarioCross bic) throws Exception
     {
-        String query = "exec sp_agrBajaInvCross "+bic.getNoPiezas()+""
-            + ",'"+bic.getMotivo()+"',"+bic.getIdInvPCross();
+        String query = "exec sp_agrBajaInvCross "
+            +"@idPartida = "+bic.getIdPartida()
+            + ", @fechaentrada = '"+bic.getFechaEntrada()+"'"
+            + ", @idTipoRecorte = "+bic.getIdTipoRecorte()
+            + ", @noPiezas = "+bic.getNoPiezas()
+            + ", @motivo = '"+bic.getMotivo()+"'";
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

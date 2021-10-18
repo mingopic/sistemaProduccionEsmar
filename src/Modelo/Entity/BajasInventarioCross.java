@@ -11,19 +11,14 @@ package Modelo.Entity;
  */
 public class BajasInventarioCross {
     int idBajaInvCross;
+    int idPartida;
+    int idTipoRecorte;
     int noPiezas;
     String motivo;
+    String fechaEntrada;
     String fechaBaja;
     int idInvPCross;
     double kgTotal;
-
-    public double getKgTotal() {
-        return kgTotal;
-    }
-
-    public void setKgTotal(double kgTotal) {
-        this.kgTotal = kgTotal;
-    }
 
     public int getIdBajaInvCross() {
         return idBajaInvCross;
@@ -31,6 +26,22 @@ public class BajasInventarioCross {
 
     public void setIdBajaInvCross(int idBajaInvCross) {
         this.idBajaInvCross = idBajaInvCross;
+    }
+
+    public int getIdPartida() {
+        return idPartida;
+    }
+
+    public void setIdPartida(int idPartida) {
+        this.idPartida = idPartida;
+    }
+
+    public int getIdTipoRecorte() {
+        return idTipoRecorte;
+    }
+
+    public void setIdTipoRecorte(int idTipoRecorte) {
+        this.idTipoRecorte = idTipoRecorte;
     }
 
     public int getNoPiezas() {
@@ -49,6 +60,14 @@ public class BajasInventarioCross {
         this.motivo = motivo;
     }
 
+    public String getFechaEntrada() {
+        return fechaEntrada;
+    }
+
+    public void setFechaEntrada(String fechaEntrada) {
+        this.fechaEntrada = fechaEntrada;
+    }
+
     public String getFechaBaja() {
         return fechaBaja;
     }
@@ -64,4 +83,14 @@ public class BajasInventarioCross {
     public void setIdInvPCross(int idInvPCross) {
         this.idInvPCross = idInvPCross;
     }
+
+    public double getKgTotal() {
+        return kgTotal;
+    }
+
+    public void setKgTotal(double kgTotal) {
+        this.kgTotal = kgTotal;
+    }
+
+    
 }

@@ -264,8 +264,8 @@ public class PartidaDetalleCommands {
                 //Recorremos el ResultSet registro a registro
                 while (rs.next()) {
                     PartidaDetalle obj = new PartidaDetalle();
-                    obj.setIdPartidaDet(rs.getInt("idPartidaDet"));
                     obj.setIdPartida(rs.getInt("idPartida"));
+                    obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
                     obj.setNoPartida(rs.getInt("noPartida"));
                     obj.setRecorte(rs.getString("recorte"));
                     obj.setNoPiezas(rs.getInt("noPiezasAct"));

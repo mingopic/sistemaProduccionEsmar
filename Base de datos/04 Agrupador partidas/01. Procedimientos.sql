@@ -28,6 +28,42 @@ begin
 end
 go
 
+if object_id('dbo.sp_obtCueroEngraseDisp') is not null
+begin
+	drop procedure dbo.sp_obtCueroEngraseDisp
+end
+go
+
+if object_id('dbo.sp_insInvCross') is not null
+begin
+	drop procedure dbo.sp_insInvCross
+end
+go
+
+if object_id('dbo.sp_obtEntCross') is not null
+begin
+	drop procedure dbo.sp_obtEntCross
+end
+go
+
+if object_id('dbo.sp_agrInvCrossSemi') is not null
+begin
+	drop procedure dbo.sp_agrInvCrossSemi
+end
+go
+
+if object_id('dbo.sp_agrBajaInvCross') is not null
+begin
+	drop procedure dbo.sp_agrBajaInvCross
+end
+go
+
+if object_id('dbo.sp_obtInvCrossSemi') is not null
+begin
+	drop procedure dbo.sp_obtInvCrossSemi
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_obtPartidaXproceso
@@ -1548,3 +1584,649 @@ as begin
   
 end
 go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_obtCueroEngraseDisp
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se agrupan recortes por partida y se cambia consulta con join por consulta a vista Vw_PartidaDet
+  =================================================================================================================================
+  */ 
+  
+  select
+    idPartida
+    , idTipoRecorte
+    , [recorte] = DescripcionRecorte 
+    , noPartida
+    , [noPiezasAct] = sum(noPiezasAct)    
+    
+  from
+    Vw_PartidaDet
+  
+  where
+    idProceso = 6 -- Engrase
+    and noPiezasAct > 0
+  
+  group by
+    idPartida
+    , idTipoRecorte
+    , DescripcionRecorte
+    , noPartida
+    
+end
+GO
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_insInvCross
+(
+  @idPartida        int 
+  , @idTipoRecorte  int
+  , @piezasUtilizar int
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se borra parámetro @idPartidaDet para realizar bajas de partidaDet y se cambia para realizarlo
+                                calculado. Se agrega parametro @idTipoRecorte
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idPartidaDetAux     int
+    , @noPiezasAct       int
+    
+  drop table if exists #TmpPartidaDet
+  
+  /* ------------------- */
+  select
+    idPartidaDet
+    , noPiezasAct
+  into
+    #TmpPartidaDet
+  from
+    tb_partidaDet
+  where
+    idPartida = @idPartida
+    and idTipoRecorte = @idTipoRecorte
+    and idProceso = 6 -- Engrase
+    and noPiezasAct > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpPartidaDet) > 0) and @piezasUtilizar > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idPartidaDetAux = idPartidaDet
+        , @noPiezasAct = noPiezasAct
+      from
+        #TmpPartidaDet
+        
+      --
+      if (@noPiezasAct < @piezasUtilizar)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @piezasUtilizar = @piezasUtilizar - @noPiezasAct
+      end
+      else if (@noPiezasAct > @piezasUtilizar)
+      begin
+        
+        set @noPiezasUpd = @piezasUtilizar
+        set @piezasUtilizar = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @piezasUtilizar = 0
+      end
+      
+      --
+      update
+        tb_partidaDet
+      set
+        noPiezasAct = noPiezasAct - @noPiezasUpd
+      where
+        idPartidaDet = @idPartidaDetAux
+
+      --
+      delete from 
+        #TmpPartidaDet
+      where
+        idPartidaDet = @idPartidaDetAux
+        
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * (kgTotal/noPiezasTotal)
+        
+      from
+        tb_fichaProdDet
+        
+      where
+        idPartidaDet =@idPartidaDetAux
+        
+      insert into
+        tb_invCross
+        (
+          idPartidaDet     
+          , idPartida        
+          , noPiezas         
+          , noPiezasActuales
+          , kgTotal
+          , kgActual
+          , fechaEntrada   
+        )
+      values
+        (
+          @idPartidaDetAux
+          , @idPartida
+          , @noPiezasUpd
+          , @noPiezasUpd
+          , @kg
+          , @kg
+          , getdate()
+        )
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_insInvCross ' + ERROR_MESSAGE()
+  end catch
+    
+end
+GO
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_obtEntCross
+(
+	@tipoRecorte varchar(20)
+	, @noPartida int
+	, @fecha varchar(10)
+	, @fecha1 varchar(10)
+  , @accion int = 0
+)
+as begin
+
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se agrupan entradas por partida y fechaEntrada y recorte
+  =================================================================================================================================
+  */
+
+  if @accion = 0
+  begin
+  
+    select 
+      p.idPartida
+      , ic.fechaentrada
+      , p.noPartida
+      , pd.idTipoRecorte
+      , tr.descripcion
+      , [noPiezas] = sum(ic.noPiezas)
+      , [noPiezasActuales] = sum(ic.noPiezasActuales)
+      , [kgTotal] = sum(ic.kgTotal)
+      , [kgActual] = sum(ic.kgActual)
+      
+    from 
+      tb_invCross as ic
+      
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = ic.idPartidaDet
+      
+      inner join
+        tb_partida as p
+      on
+        p.idPartida = pd.idPartida
+        
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = pd.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+        
+    where
+      ic.fechaentrada between @fecha and @fecha1
+      and ic.noPiezasActuales > 0
+      and 
+      (
+        (
+          @noPartida = 0
+          and p.noPartida > 0
+        )
+        or
+        (
+          @noPartida > 0
+          and p.noPartida = @noPartida
+        )
+      )
+    group by
+      p.idPartida
+      , ic.fechaentrada
+      , p.noPartida
+      , pd.idTipoRecorte
+      , tr.descripcion
+  end
+  
+  else begin
+    select 
+      p.idPartida
+      , ic.fechaentrada
+      , p.noPartida
+      , pd.idTipoRecorte
+      , tr.descripcion
+      , [noPiezas] = sum(ic.noPiezas)
+      , [noPiezasActuales] = sum(ic.noPiezasActuales)
+      , [kgTotal] = sum(ic.kgTotal)
+      , [kgActual] = sum(ic.kgActual)
+      
+    from 
+      tb_invCross as ic
+      
+      inner join
+        tb_partidaDet as pd
+      on
+        pd.idPartidaDet = ic.idPartidaDet
+      
+      inner join
+        tb_partida as p
+      on
+        p.idPartida = pd.idPartida
+        
+      inner join
+        tb_tipoRecorte as tr
+      on
+        tr.idTipoRecorte = pd.idTipoRecorte
+        and tr.descripcion like @tipoRecorte
+        
+    where
+      ic.fechaentrada between @fecha and @fecha1
+      and 
+      (
+        (
+          @noPartida = 0
+          and p.noPartida > 0
+        )
+        or
+        (
+          @noPartida > 0
+          and p.noPartida = @noPartida
+        )
+      )
+    group by
+      p.idPartida
+      , ic.fechaentrada
+      , p.noPartida
+      , pd.idTipoRecorte
+      , tr.descripcion
+  end
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_agrInvCrossSemi
+(  
+  @idPartida          int  --#01
+  , @fechaentrada     date --#01
+  , @idTipoRecorte    int  --#01
+	, @noPiezas         int
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se borran parámetros @idInvPCross, @noPiezasActuales y @kg. Se agregan parámetros @idPartida, 
+                                @fechaentrada y @idTipoRecorte para agregar invCrossSemi agrupado por partida
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idInvPCrossAux int
+    , @noPiezasAct  int
+    , @kgAct        float
+    
+  drop table if exists #TmpInvCross
+  
+  /* ------------------- */
+  select
+    ic.idInvPCross
+    , ic.noPiezasActuales
+    , ic.kgActual
+  into
+    #TmpInvCross
+  from
+    tb_invCross ic
+    
+    inner join
+      tb_partidaDet as pd
+    on
+      pd.idPartidaDet = ic.idPartidaDet
+        
+  where
+    ic.idPartida = @idPartida
+    and pd.idTipoRecorte = @idTipoRecorte
+    and ic.fechaentrada = @fechaentrada
+    and ic.noPiezasActuales > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpInvCross) > 0) and @noPiezas > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idInvPCrossAux = idInvPCross 
+        , @noPiezasAct = noPiezasActuales
+        , @kgAct = kgActual
+      from
+        #TmpInvCross
+        
+      --
+      if (@noPiezasAct < @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = @noPiezas - @noPiezasAct
+      end
+      else if (@noPiezasAct > @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezas
+        set @noPiezas = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = 0
+      end
+      
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * (@kgAct/@noPiezasAct)
+      
+      --
+      update
+        tb_invCross
+      set
+        noPiezasActuales = noPiezasActuales - @noPiezasUpd
+        , kgActual = kgActual - @kg
+      where
+        idInvPCross = @idInvPCrossAux
+        
+      --
+      insert into
+        tb_invCrossSemi
+        
+      values
+        (
+          @idInvPCrossAux
+          , @noPiezasUpd
+          , @noPiezasUpd
+          , @kg
+          , @kg
+          , getdate()
+        )
+        
+       --
+      delete from 
+        #TmpInvCross
+      where
+        idInvPCross = @idInvPCrossAux
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_agrInvCrossSemi ' + ERROR_MESSAGE()
+  end catch
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_agrBajaInvCross
+(  
+  @idPartida       int  --#01
+  , @fechaentrada  date --#01
+  , @idTipoRecorte int  --#01
+	, @noPiezas      int
+  , @motivo        varchar (100)
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se borra parámetro @idInvPCross. Se agregan parámetros @idPartida, @fechaentrada y @idTipoRecorte
+                                para agregar invCrossSemi agrupado por partida
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idInvPCrossAux int
+    , @noPiezasAct  int
+    , @kgAct        float
+    
+  drop table if exists #TmpInvCross
+  
+  /* ------------------- */
+  select
+    ic.idInvPCross
+    , ic.noPiezasActuales
+    , ic.kgActual
+  into
+    #TmpInvCross
+  from
+    tb_invCross ic
+    
+    inner join
+      tb_partidaDet as pd
+    on
+      pd.idPartidaDet = ic.idPartidaDet
+        
+  where
+    ic.idPartida = @idPartida
+    and pd.idTipoRecorte = @idTipoRecorte
+    and ic.fechaentrada = @fechaentrada
+    and ic.noPiezasActuales > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpInvCross) > 0) and @noPiezas > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idInvPCrossAux = idInvPCross 
+        , @noPiezasAct = noPiezasActuales
+        , @kgAct = kgActual
+      from
+        #TmpInvCross
+        
+      --
+      if (@noPiezasAct < @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = @noPiezas - @noPiezasAct
+      end
+      else if (@noPiezasAct > @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezas
+        set @noPiezas = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = 0
+      end
+      
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * (@kgAct/@noPiezasAct)
+      
+      --
+      update
+        tb_invCross
+      set
+        noPiezasActuales = noPiezasActuales - @noPiezasUpd
+        , kgActual = kgActual - @kg
+      where
+        idInvPCross = @idInvPCrossAux
+        
+      --
+      insert into
+        tb_bajasInvCross
+      values
+        (
+          @noPiezasUpd
+          , @motivo
+          , getdate()
+          , @idInvPCrossAux
+        )
+        
+       --
+      delete from 
+        #TmpInvCross
+      where
+        idInvPCross = @idInvPCrossAux
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_agrBajaInvCross ' + ERROR_MESSAGE()
+  end catch
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_obtInvCrossSemi
+(
+	@tipoRecorte varchar(20)
+	, @noPartida int
+	, @fecha     varchar(10)
+	, @fecha1    varchar(10)
+)
+as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se agrupan registros por partida, recorte y fechaEntrada
+  =================================================================================================================================
+  */ 
+  
+	if (@noPartida = 0)
+	begin
+		
+    select
+      idPartida
+			, noPartida
+      , idTipoRecorte
+      , recorte
+      , fechaEntrada
+      , [noPiezas] = sum(noPiezas)
+      , [noPiezasActuales] = sum(noPiezasActuales)
+      
+		from
+		  Vw_InvCrossSemi
+		
+    where
+      fechaentrada between @fecha and @fecha1
+      and recorte like @tipoRecorte
+      and noPiezasActuales > 0
+    
+    group by
+      idPartida
+      , noPartida
+      , idTipoRecorte
+      , recorte
+      , fechaEntrada
+	end
+	
+	else
+	begin
+		
+		select
+      idPartida
+			, noPartida
+      , idTipoRecorte
+      , recorte
+      , fechaEntrada
+      , [noPiezas] = sum(noPiezas)
+      , [noPiezasActuales] = sum(noPiezasActuales)
+		from
+		  Vw_InvCrossSemi
+		
+    where
+      fechaentrada between @fecha and @fecha1
+      and recorte like @tipoRecorte
+      and noPartida = @noPartida
+      and noPiezasActuales > 0
+      
+    group by
+      idPartida
+      , noPartida
+      , idTipoRecorte
+      , recorte
+      , fechaEntrada
+      
+	end
+  
+end
+go
+
+
+

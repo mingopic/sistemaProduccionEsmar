@@ -68,11 +68,13 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     Partida p;
     BajasInventarioSemiterminado bis;
     BajasInventarioSemiterminadoCommands bisc;
-    String[][] datosSemiterminado = null;
+    List<InventarioSemiterminado> datosSemiterminado;
     List<InventarioCrossSemiterminado> lstInvCrossSemi;
+    List<InventarioSemiterminado> datosSemiterminadoRegresar;
     String[][] calibres = null;
     String[][] selecciones = null;
     private final String imagen="/Imagenes/logo_esmar.png";
+    int renglonSeleccionadoGlobal = -1;
     
     DefaultTableModel dtms=new DefaultTableModel();
     
@@ -126,6 +128,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                 btnAgregarEntrada.setEnabled(true);
                 btnEnviarTerminado.setEnabled(true);
                 btnEliminarPiezas.setEnabled(true);
+                btnRegresarPiezas.setEnabled(true);
                 break;
             }
         }
@@ -314,11 +317,27 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             
             datosSemiterminado = isc.obtenerListaInvSemiterminado(p,tr,c,s,is);
             
-            dtm = new DefaultTableModel(datosSemiterminado, colsInvSemi){
-            public boolean isCellEditable(int row, int column) {
-            return false;
-            }
+            dtm = new DefaultTableModel()
+            {
+                public boolean isCellEditable(int row, int column) 
+                {
+                    return false;
+                }
             };
+            dtm.setColumnIdentifiers(cols);
+            dtm.setRowCount(datosSemiterminado.size());
+            for (int i = 0; i < datosSemiterminado.size(); i++)
+            {
+                //"No. Partida","Tipo Recorte","No. Piezas","Peso","Peso prom. X pieza","Selección","Calibre","Fecha Entrada"
+                dtm.setValueAt(datosSemiterminado.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(datosSemiterminado.get(i).getRecorte(), i, 1);
+                dtm.setValueAt(datosSemiterminado.get(i).getNoPiezasActuales(), i, 2);
+                dtm.setValueAt(datosSemiterminado.get(i).getKgTotalesActuales(), i, 3);
+                dtm.setValueAt(datosSemiterminado.get(i).getPesoPromXPza(), i, 4);
+                dtm.setValueAt(datosSemiterminado.get(i).getSeleccion(), i, 5);
+                dtm.setValueAt(datosSemiterminado.get(i).getCalibre(), i, 6);
+                dtm.setValueAt(datosSemiterminado.get(i).getFechaEntrada(), i, 7);
+            }
             tblSemiterminado.setModel(dtm);
             tblSemiterminado.getTableHeader().setReorderingAllowed(false);
 
@@ -333,7 +352,6 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     //Metodo para inicializar los campos de dlgAgregar
     public void inicializarCamposAgregar() throws Exception
     {
-        
         c = new Calibre();
         s = new Seleccion();
         txtNoPartidaAgregar.setText("");
@@ -368,6 +386,42 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         //----------------------------------------------------------------------
     }
     
+    //Metodo para inicializar los campos de dlgRegresarPiezas
+    public void inicializarCamposRegresar() throws Exception
+    {
+        c = new Calibre();
+        s = new Seleccion();
+        txtNoPartidaRegresar.setText("");
+        txtTipoRecorteRegresar.setText("");
+        txtNoPiezasRegresar.setText("");
+        
+        //Llenar comboBox con los tipos de calibre
+        //----------------------------------------------------------------------
+        cc=new CalibreCommands();
+        cmbCalibreRegresar.removeAllItems();
+        calibres=cc.llenarComboboxCalibre();
+        int i=0;
+        while (i<calibres.length)
+        {
+            cmbCalibreRegresar.addItem(calibres[i][1]);
+            i++;
+        }
+        //----------------------------------------------------------------------
+        
+        //Llenar comboBox con los tipos de selección
+        //----------------------------------------------------------------------
+        sc = new SeleccionCommands();
+        cmbSeleccionRegresar.removeAllItems();
+        selecciones=sc.llenarComboboxSeleccion();
+        int j=0;
+        while (j<selecciones.length)
+        {
+            cmbSeleccionRegresar.addItem(selecciones[j][1]);
+            j++;
+        }
+        //----------------------------------------------------------------------
+    }
+    
     //Método que abre el dialogo de agregar entrada de Semiterminad
     public void abrirDialogoAgregar() throws Exception
     {   
@@ -376,6 +430,16 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         dlgAgregar.setLocationRelativeTo(null);
         dlgAgregar.setModal(true);
         dlgAgregar.setVisible(true);
+    }
+    
+    //Método que abre el dialogo de agregar entrada de Semiterminad
+    public void abrirDialogoRegresar() throws Exception
+    {   
+        dlgRegresarPiezas.setSize(380, 360);
+        dlgRegresarPiezas.setPreferredSize(dlgRegresarPiezas.getSize());
+        dlgRegresarPiezas.setLocationRelativeTo(null);
+        dlgRegresarPiezas.setModal(true);
+        dlgRegresarPiezas.setVisible(true);
     }
     
     //Método para actualizar la tabla de inventario cross semiterminado
@@ -404,7 +468,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     return false;
                 }
             };
-            dtm.setColumnIdentifiers(cols);
+            dtm.setColumnIdentifiers(colsInvSemi);
             dtm.setRowCount(lstInvCrossSemi.size());
             for (int i = 0; i < lstInvCrossSemi.size(); i++)
             {
@@ -425,17 +489,73 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         }
     }
     
+    //Método para actualizar la tabla de inventario cross semiterminado
+    public void actualizarTablaRegresar() 
+    {  
+        isc = new InventarioSemiterminadoCommands();
+        DefaultTableModel dtm = null;
+        String[] colsRegresar = new String[]
+        {
+            "No. Partida","Tipo Recorte","No. Piezas","Selección","Calibre","Fecha Salida"
+        };
+        
+        try {
+            
+            datosSemiterminadoRegresar = isc.obtenerListaInvSemTer();
+            
+            dtm = new DefaultTableModel()
+            {
+                public boolean isCellEditable(int row, int column) 
+                {
+                    return false;
+                }
+            };
+            dtm.setColumnIdentifiers(colsRegresar);
+            dtm.setRowCount(datosSemiterminadoRegresar.size());
+            for (int i = 0; i < datosSemiterminadoRegresar.size(); i++)
+            {
+                dtm.setValueAt(datosSemiterminadoRegresar.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(datosSemiterminadoRegresar.get(i).getRecorte(), i, 1);
+                dtm.setValueAt(datosSemiterminadoRegresar.get(i).getNoPiezasActuales(), i, 2);
+                dtm.setValueAt(datosSemiterminadoRegresar.get(i).getSeleccion(), i, 3);
+                dtm.setValueAt(datosSemiterminadoRegresar.get(i).getCalibre(), i, 4);
+                dtm.setValueAt(datosSemiterminadoRegresar.get(i).getFechaEntrada(), i, 5);
+            }
+            tblRegresarPartidaBuscar.setModel(dtm);
+            tblRegresarPartidaBuscar.getTableHeader().setReorderingAllowed(false);
+
+        } catch (Exception e) {
+           
+            e.printStackTrace();
+            
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
+    }
+    
     //Método que abre el dialogo de buscar partida
     public void abrirDialogoBuscarPartida() throws Exception
     {   
         dlgAgregar.setVisible(false);
+        actualizarTablaRegresar();
+        
+        dlgRegresarPiezasBuscar.setSize(600,320);
+        dlgRegresarPiezasBuscar.setPreferredSize(dlgBuscar.getSize());
+        dlgRegresarPiezasBuscar.setLocationRelativeTo(null);
+        dlgRegresarPiezasBuscar.setModal(true);
+        dlgRegresarPiezasBuscar.setVisible(true);
+    }
+    
+    //Método que abre el dialogo de buscar partida regresar
+    public void abrirDialogoBuscarPartidaRegresar() throws Exception
+    {   
+        dlgRegresarPiezasBuscar.setVisible(false);
         actualizarTablaInvCrossSemi();
         
-        dlgBuscar.setSize(600,320);
-        dlgBuscar.setPreferredSize(dlgBuscar.getSize());
-        dlgBuscar.setLocationRelativeTo(null);
-        dlgBuscar.setModal(true);
-        dlgBuscar.setVisible(true);
+        dlgRegresarPiezasBuscar.setSize(600,320);
+        dlgRegresarPiezasBuscar.setPreferredSize(dlgRegresarPiezasBuscar.getSize());
+        dlgRegresarPiezasBuscar.setLocationRelativeTo(null);
+        dlgRegresarPiezasBuscar.setModal(true);
+        dlgRegresarPiezasBuscar.setVisible(true);
     }
     
     private void validarNumeros(java.awt.event.KeyEvent evt, String textoCaja)
@@ -469,18 +589,18 @@ public class PnlSemiterminado extends javax.swing.JPanel {
     
     //Método para validar que se selecciono un producto de la lista, se usa en dldBuscar
     public void SeleccionarEntrada() throws Exception
-     {
-        int renglonSeleccionado = tblBuscarPartidaInvCrossSemi.getSelectedRow();
-        if (renglonSeleccionado!=-1) 
+    {
+        renglonSeleccionadoGlobal = tblBuscarPartidaInvCrossSemi.getSelectedRow();
+        if (renglonSeleccionadoGlobal!=-1) 
         {
             ics = new InventarioCrossSemiterminado();
             ic =new InventarioCross();
             tr = new TipoRecorte();
             
-            ic.setIdPartida(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 0).toString()));
-            tr.setDescripcion(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 1).toString());
+            ic.setIdPartida(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionadoGlobal, 0).toString()));
+            tr.setDescripcion(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionadoGlobal, 1).toString());
             //ics.setIdInvCrossSemi(Integer.parseInt(lstInvCrossSemi[renglonSeleccionado][5]));
-            ics.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionado, 2).toString()));
+            ics.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvCrossSemi.getValueAt(renglonSeleccionadoGlobal, 2).toString()));
             
             dlgBuscar.setVisible(false);
             
@@ -498,7 +618,33 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Seleccione una entrada de la lista", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
             dlgBuscar.setVisible(true);
         }
-     }
+    }
+    
+    //Método para validar que se selecciono un producto de la lista, se usa en dlgRegresarPiezasBuscar
+    public void SeleccionarEntradaRegresar() throws Exception
+    {
+        renglonSeleccionadoGlobal = tblRegresarPartidaBuscar.getSelectedRow();
+        if (renglonSeleccionadoGlobal!=-1) 
+        {
+            dlgRegresarPiezasBuscar.setVisible(false);
+            
+            inicializarCamposRegresar();
+            
+            txtNoPartidaRegresar.setText(String.valueOf(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getNoPartida()));
+            txtTipoRecorteRegresar.setText(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getRecorte());
+            txtNoPiezasRegresar.setText(String.valueOf(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getNoPiezasActuales()));
+            cmbCalibreRegresar.setSelectedItem(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getCalibre());
+            cmbSeleccionRegresar.setSelectedItem(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getSeleccion());
+            
+            abrirDialogoRegresar();
+        }
+        else 
+        {
+            dlgRegresarPiezasBuscar.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Seleccione una entrada de la lista", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+            dlgRegresarPiezasBuscar.setVisible(true);
+        }
+    }
     
     public void realizarEntradaSemiterminado()
     {
@@ -510,14 +656,18 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                 {
                     try 
                     {
-                        is.setIdInvCrossSemi(ics.getIdInvCrossSemi());
+                        //is.setIdInvCrossSemi(ics.getIdInvCrossSemi());
+                        is.setIdPartida(lstInvCrossSemi.get(renglonSeleccionadoGlobal).getIdPartida());
+                        is.setFechaEntrada(lstInvCrossSemi.get(renglonSeleccionadoGlobal).getFechaEntrada());
+                        is.setIdTipoRecorte(lstInvCrossSemi.get(renglonSeleccionadoGlobal).getIdTipoRecorte());
+                        
                         is.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         is.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));
-                        is.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
                         is.setNoPiezas(Integer.parseInt(txtNoPiezasAgregar.getText()));
+                        is.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
                         
                         isc.agregarInvSemiterminado(is);
-                        icsc.actualizarNoPiezasActual(is);
+                        //icsc.actualizarNoPiezasActual(is);
                         dlgAgregar.setVisible(false);
                         JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
                         actualizarTablaSemiterminado();
@@ -549,6 +699,62 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             dlgAgregar.setVisible(false);
             JOptionPane.showMessageDialog(null, "Llene todos los campos", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
             dlgAgregar.setVisible(true);
+        }
+    }
+    
+    public void regresarPiezassemiterminado()
+    {
+        if (!txtNoPartidaRegresar.getText().equals("") && !txtTipoRecorteRegresar.getText().equals("") && !txtNoPiezasRegresar.getText().equals(""))
+        {
+            if (Integer.parseInt(txtNoPiezasRegresar.getText()) >= 1)
+            {
+                if (Integer.parseInt(txtNoPiezasRegresar.getText()) <= datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getNoPiezasActuales())
+                {
+                    try 
+                    {
+                        //is.setIdInvCrossSemi(ics.getIdInvCrossSemi());
+                        is.setIdPartida(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getIdPartida());
+                        is.setFechaEntrada(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getFechaEntrada());
+                        is.setIdTipoRecorte(datosSemiterminadoRegresar.get(renglonSeleccionadoGlobal).getIdTipoRecorte());
+                        
+                        is.setIdCalibre(Integer.parseInt(calibres[cmbCalibreRegresar.getSelectedIndex()][0]));
+                        is.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionRegresar.getSelectedIndex()][0]));
+                        is.setNoPiezas(Integer.parseInt(txtNoPiezasRegresar.getText()));
+                        //is.setKgTotales(Double.parseDouble(txtKgTotalesAgregar.getText()));
+                        
+                        isc.regresarPartidaSemiterminado(is);
+                        //icsc.actualizarNoPiezasActual(is);
+                        dlgRegresarPiezas.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Entrada realizada con éxito");
+                        actualizarTablaSemiterminado();
+                    } 
+                    catch (Exception e) 
+                    {
+                        System.out.println(e);
+                        dlgRegresarPiezas.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Error de conexión en la base de datos", "Mensaje de error", JOptionPane.ERROR_MESSAGE);
+                        dlgRegresarPiezas.setVisible(true);
+                    }
+                }
+                else
+                {
+                    dlgRegresarPiezas.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Cantidad en inventario insuficiente", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                    dlgRegresarPiezas.setVisible(true);
+                }
+            }   
+            else
+            {
+                dlgRegresarPiezas.setVisible(false);
+                JOptionPane.showMessageDialog(null, "El número de piezas debe de ser mayor a 0", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+                dlgRegresarPiezas.setVisible(true);
+            }
+        }
+        else
+        {
+            dlgRegresarPiezas.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Mensaje de advertencia", JOptionPane.WARNING_MESSAGE);
+            dlgRegresarPiezas.setVisible(true);
         }
     }
     
@@ -726,14 +932,20 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     ist = new InventarioSemiterminadoTerminado();
                     istc = new InventarioSemiterminadoTerminadoCommands();
 
-                    ist.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
+                    //ist.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
                     ist.setNoPiezas(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
-                    ist.setNoPiezasActuales(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
-                    double kgTotales = (Double.parseDouble(datosSemiterminado[fila][4]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
-                    double kg = Double.parseDouble(datosSemiterminado[fila][9]);
+                    ist.setKgTotales(Double.parseDouble(txtNoPiezasEnvTermi.getText()) * datosSemiterminado.get(fila).getPesoPromXPza());
+                    ist.setIdPartida(datosSemiterminado.get(fila).getIdPartida());
+                    ist.setIdTipoRecorte(datosSemiterminado.get(fila).getIdTipoRecorte());
+                    ist.setIdCalibre(datosSemiterminado.get(fila).getIdCalibre());
+                    ist.setIdSeleccion(datosSemiterminado.get(fila).getIdSeleccion());
+                    ist.setFechaEntrada(datosSemiterminado.get(fila).getFechaEntrada());
+                    
+                    //double kgTotales = (Double.parseDouble(datosSemiterminado[fila][4]))*(Integer.parseInt(txtNoPiezasEnvTermi.getText()));
+                    //double kg = Double.parseDouble(datosSemiterminado[fila][9]);
 
-                    istc.agregarInvSemTer(ist,kgTotales);
-                    isc.actualizarNoPiezasActual(ist, kg);
+                    istc.agregarInvSemTer(ist);
+                    //isc.actualizarNoPiezasActual(ist, kg);
                     actualizarTablaSemiterminado();
                     dlgEnvTermi.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Entrada realizada correctamente");
@@ -796,7 +1008,7 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     int fila = tblSemiterminado.getSelectedRow();
                     bis = new BajasInventarioSemiterminado();
                     bisc = new BajasInventarioSemiterminadoCommands();
-                    
+                    /*
                     double promKg = Double.parseDouble(tblSemiterminado.getValueAt(fila, 4).toString());
                     double kg = promKg * Integer.parseInt(txtNoPiezasEliminar.getText());
                     
@@ -804,14 +1016,19 @@ public class PnlSemiterminado extends javax.swing.JPanel {
                     {
                         kg = Double.parseDouble(datosSemiterminado[fila][9]);
                     }
+                    */
 
-                    bis.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
+                    //bis.setIdInvSemiterminado(Integer.parseInt(datosSemiterminado[fila][10]));
+                    bis.setIdPartida(datosSemiterminado.get(fila).getIdPartida());
+                    bis.setIdTipoRecorte(datosSemiterminado.get(fila).getIdTipoRecorte());
+                    bis.setIdCalibre(datosSemiterminado.get(fila).getIdCalibre());
+                    bis.setIdSeleccion(datosSemiterminado.get(fila).getIdSeleccion());
+                    bis.setFechaentrada(datosSemiterminado.get(fila).getFechaEntrada());
                     bis.setNoPiezas(Integer.parseInt(txtNoPiezasEliminar.getText()));
                     bis.setMotivo(txtrMotivo.getText());
-                    bis.setKgTotal(kg);
 
                     bisc.agregarBajaInvSemiterminado(bis);
-                    isc.actualizarNoPiezasBaja(bis);
+                    //isc.actualizarNoPiezasBaja(bis);
                     actualizarTablaSemiterminado();
                     dlgEliPzaInvSemiterminado.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Baja realizada correctamente");
@@ -932,6 +1149,31 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         txtNoPiezasEliminar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        dlgRegresarPiezasBuscar = new javax.swing.JDialog();
+        jPanel10 = new javax.swing.JPanel();
+        btnSeleccionarRegresar = new javax.swing.JButton();
+        btnCancelarRegresar = new javax.swing.JButton();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblRegresarPartidaBuscar = new javax.swing.JTable();
+        dlgRegresarPiezas = new javax.swing.JDialog();
+        jPanel12 = new javax.swing.JPanel();
+        btnRealizarRegreso = new javax.swing.JButton();
+        btnCancelarRegreso = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel70 = new javax.swing.JLabel();
+        jLabel71 = new javax.swing.JLabel();
+        txtNoPartidaRegresar = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
+        txtTipoRecorteRegresar = new javax.swing.JTextField();
+        jLabel72 = new javax.swing.JLabel();
+        txtNoPiezasRegresar = new javax.swing.JTextField();
+        cmbCalibreRegresar = new javax.swing.JComboBox();
+        jLabel73 = new javax.swing.JLabel();
+        cmbSeleccionRegresar = new javax.swing.JComboBox();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSemiterminado = new javax.swing.JTable();
@@ -981,6 +1223,8 @@ public class PnlSemiterminado extends javax.swing.JPanel {
         btnEnviarTerminado = new javax.swing.JButton();
         jLabel66 = new javax.swing.JLabel();
         btnEliminarPiezas = new javax.swing.JButton();
+        jLabel69 = new javax.swing.JLabel();
+        btnRegresarPiezas = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1629,6 +1873,280 @@ public class PnlSemiterminado extends javax.swing.JPanel {
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnSeleccionarRegresar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSeleccionarRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnSeleccionarRegresar.setText("Seleccionar");
+        btnSeleccionarRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarRegresarActionPerformed(evt);
+            }
+        });
+
+        btnCancelarRegresar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelarRegresar.setText("Cancelar");
+        btnCancelarRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarRegresarActionPerformed(evt);
+            }
+        });
+
+        jPanel11.setBackground(new java.awt.Color(0, 204, 204));
+
+        jLabel23.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel23.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        jLabel23.setText("Regresar Piezas terminado");
+        jLabel23.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel23)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        tblRegresarPartidaBuscar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(tblRegresarPartidaBuscar);
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSeleccionarRegresar)
+                        .addGap(13, 13, 13)
+                        .addComponent(btnCancelarRegresar))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSeleccionarRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelarRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13))
+        );
+
+        javax.swing.GroupLayout dlgRegresarPiezasBuscarLayout = new javax.swing.GroupLayout(dlgRegresarPiezasBuscar.getContentPane());
+        dlgRegresarPiezasBuscar.getContentPane().setLayout(dlgRegresarPiezasBuscarLayout);
+        dlgRegresarPiezasBuscarLayout.setHorizontalGroup(
+            dlgRegresarPiezasBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgRegresarPiezasBuscarLayout.setVerticalGroup(
+            dlgRegresarPiezasBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnRealizarRegreso.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRealizarRegreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/accept_1.png"))); // NOI18N
+        btnRealizarRegreso.setText("Aceptar");
+        btnRealizarRegreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRealizarRegresoActionPerformed(evt);
+            }
+        });
+
+        btnCancelarRegreso.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelarRegreso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cross.png"))); // NOI18N
+        btnCancelarRegreso.setText("Cancelar");
+        btnCancelarRegreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarRegresoActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel34.setText("No. Partida:");
+
+        jLabel70.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel70.setText("Tipo de recorte:");
+
+        jLabel71.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel71.setText("Calibre:");
+
+        txtNoPartidaRegresar.setEditable(false);
+        txtNoPartidaRegresar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPartidaRegresar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPartidaRegresarKeyTyped(evt);
+            }
+        });
+
+        jButton6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/magnifier.png"))); // NOI18N
+        jButton6.setText("Buscar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        txtTipoRecorteRegresar.setEditable(false);
+        txtTipoRecorteRegresar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTipoRecorteRegresar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTipoRecorteRegresarKeyTyped(evt);
+            }
+        });
+
+        jLabel72.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel72.setText("No. Piezas:");
+
+        txtNoPiezasRegresar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNoPiezasRegresar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPiezasRegresarKeyTyped(evt);
+            }
+        });
+
+        cmbCalibreRegresar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbCalibreRegresar.setEnabled(false);
+
+        jLabel73.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel73.setText("Selección");
+
+        cmbSeleccionRegresar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbSeleccionRegresar.setEnabled(false);
+
+        jPanel13.setBackground(new java.awt.Color(0, 204, 51));
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+        jLabel24.setText("Regresar piezas terminado");
+        jLabel24.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel24)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addComponent(btnRealizarRegreso, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelarRegreso))
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel72)
+                            .addComponent(jLabel70)
+                            .addComponent(jLabel34)
+                            .addComponent(jLabel71)
+                            .addComponent(jLabel73))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cmbSeleccionRegresar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtNoPiezasRegresar, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNoPartidaRegresar, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTipoRecorteRegresar, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbCalibreRegresar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton6)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6)
+                    .addGroup(jPanel12Layout.createSequentialGroup()
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel34)
+                            .addComponent(txtNoPartidaRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTipoRecorteRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel70))
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbCalibreRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel71))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbSeleccionRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel73))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNoPiezasRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel72))))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRealizarRegreso)
+                    .addComponent(btnCancelarRegreso))
+                .addGap(0, 16, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout dlgRegresarPiezasLayout = new javax.swing.GroupLayout(dlgRegresarPiezas.getContentPane());
+        dlgRegresarPiezas.getContentPane().setLayout(dlgRegresarPiezasLayout);
+        dlgRegresarPiezasLayout.setHorizontalGroup(
+            dlgRegresarPiezasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgRegresarPiezasLayout.setVerticalGroup(
+            dlgRegresarPiezasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setBackground(new java.awt.Color(255, 255, 255));
 
         tblSemiterminado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -2056,6 +2574,26 @@ try {
     });
     jToolBar3.add(btnEliminarPiezas);
 
+    jLabel69.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    jLabel69.setForeground(new java.awt.Color(227, 222, 222));
+    jLabel69.setText("   ");
+    jToolBar3.add(jLabel69);
+
+    btnRegresarPiezas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+    btnRegresarPiezas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/arrow_down_up.png"))); // NOI18N
+    btnRegresarPiezas.setText("Regresar Piezas");
+    btnRegresarPiezas.setEnabled(false);
+    btnRegresarPiezas.setFocusable(false);
+    btnRegresarPiezas.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+    btnRegresarPiezas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    btnRegresarPiezas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+    btnRegresarPiezas.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnRegresarPiezasActionPerformed(evt);
+        }
+    });
+    jToolBar3.add(btnRegresarPiezas);
+
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
@@ -2257,6 +2795,7 @@ try {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
+            renglonSeleccionadoGlobal = -1;
             abrirDialogoBuscarPartida();
         } catch (Exception ex) {
             Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
@@ -2364,6 +2903,64 @@ try {
         }
     }//GEN-LAST:event_txtNoPiezasEliminarKeyTyped
 
+    private void btnRegresarPiezasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarPiezasActionPerformed
+        try {
+            inicializarCamposRegresar();
+            abrirDialogoRegresar();
+        } catch (Exception ex) {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(this, "Error al recuperar datos de la BD");
+        }
+    }//GEN-LAST:event_btnRegresarPiezasActionPerformed
+
+    private void btnSeleccionarRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarRegresarActionPerformed
+        try {
+            SeleccionarEntradaRegresar();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSeleccionarRegresarActionPerformed
+
+    private void btnCancelarRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRegresarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarRegresarActionPerformed
+
+    private void btnRealizarRegresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarRegresoActionPerformed
+        regresarPiezassemiterminado();
+    }//GEN-LAST:event_btnRealizarRegresoActionPerformed
+
+    private void btnCancelarRegresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRegresoActionPerformed
+        dlgRegresarPiezas.setVisible(false);
+    }//GEN-LAST:event_btnCancelarRegresoActionPerformed
+
+    private void txtNoPartidaRegresarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPartidaRegresarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoPartidaRegresarKeyTyped
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            renglonSeleccionadoGlobal = -1;
+            abrirDialogoBuscarPartida();
+        } catch (Exception ex) {
+            Logger.getLogger(PnlSemiterminado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void txtTipoRecorteRegresarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoRecorteRegresarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoRecorteRegresarKeyTyped
+
+    private void txtNoPiezasRegresarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPiezasRegresarKeyTyped
+        char c;
+        c=evt.getKeyChar();
+
+        if (!Character.isDigit(c)  && c!=KeyEvent.VK_BACK_SPACE)
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNoPiezasRegresarKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEntrada;
@@ -2371,19 +2968,26 @@ try {
     private javax.swing.JButton btnCancelarAgregar;
     private javax.swing.JButton btnCancelarAgregarEnvSemi2;
     private javax.swing.JButton btnCancelarAgregarEnvTermi;
+    private javax.swing.JButton btnCancelarRegresar;
+    private javax.swing.JButton btnCancelarRegreso;
     private javax.swing.JButton btnEliminarPiezas;
     private javax.swing.JButton btnEnviarTerminado;
     private javax.swing.JButton btnRealizarEntrada;
     private javax.swing.JButton btnRealizarEntradaEnvSemi2;
     private javax.swing.JButton btnRealizarEntradaEnvTermi;
+    private javax.swing.JButton btnRealizarRegreso;
+    private javax.swing.JButton btnRegresarPiezas;
     private javax.swing.JButton btnReporteEntrada;
     private javax.swing.JButton btnReporteEntrada2;
     private javax.swing.JButton btnReporteEntrada3;
     private javax.swing.JButton btnReporteEntrada6;
+    private javax.swing.JButton btnSeleccionarRegresar;
     private javax.swing.JComboBox cmbCalibre;
     private javax.swing.JComboBox cmbCalibreAgregar;
+    private javax.swing.JComboBox cmbCalibreRegresar;
     private javax.swing.JComboBox cmbSeleccion;
     private javax.swing.JComboBox cmbSeleccionAgregar;
+    private javax.swing.JComboBox cmbSeleccionRegresar;
     private javax.swing.JComboBox cmbTipoRecorte;
     private datechooser.beans.DateChooserCombo dcFecha1EntradaSemiterminado;
     private datechooser.beans.DateChooserCombo dcFecha2EntradaSemiterminado;
@@ -2391,10 +2995,13 @@ try {
     private javax.swing.JDialog dlgBuscar;
     private javax.swing.JDialog dlgEliPzaInvSemiterminado;
     private javax.swing.JDialog dlgEnvTermi;
+    private javax.swing.JDialog dlgRegresarPiezas;
+    private javax.swing.JDialog dlgRegresarPiezasBuscar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2410,11 +3017,14 @@ try {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -2436,10 +3046,19 @@ try {
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2451,6 +3070,7 @@ try {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
@@ -2460,6 +3080,7 @@ try {
     private javax.swing.JLabel lbl;
     private javax.swing.JLabel lblEnviarTerminado;
     private javax.swing.JTable tblBuscarPartidaInvCrossSemi;
+    private javax.swing.JTable tblRegresarPartidaBuscar;
     private javax.swing.JTable tblSemiterminado;
     private javax.swing.JTextField txtCalibre;
     private javax.swing.JTextField txtKgTotalesAgregar;
@@ -2467,15 +3088,18 @@ try {
     private javax.swing.JTextField txtNoPartida1;
     private javax.swing.JTextField txtNoPartidaAgregar;
     private javax.swing.JTextField txtNoPartidaEnvTermi;
+    private javax.swing.JTextField txtNoPartidaRegresar;
     private javax.swing.JTextField txtNoPiezasActuales;
     private javax.swing.JTextField txtNoPiezasActualesEnvTermi;
     private javax.swing.JTextField txtNoPiezasAgregar;
     private javax.swing.JTextField txtNoPiezasEliminar;
     private javax.swing.JTextField txtNoPiezasEnvTermi;
+    private javax.swing.JTextField txtNoPiezasRegresar;
     private javax.swing.JTextField txtSeleccion;
     private javax.swing.JTextField txtTipoRecorte;
     private javax.swing.JTextField txtTipoRecorteAgregar;
     private javax.swing.JTextField txtTipoRecorteEnvTermi;
+    private javax.swing.JTextField txtTipoRecorteRegresar;
     private javax.swing.JTextArea txtrMotivo;
     // End of variables declaration//GEN-END:variables
 }

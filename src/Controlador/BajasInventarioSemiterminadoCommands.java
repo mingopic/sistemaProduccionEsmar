@@ -22,8 +22,14 @@ public class BajasInventarioSemiterminadoCommands {
     //Método para agregar una baja a la tabla tb_bajasInventarioCrudo
     public static void agregarBajaInvSemiterminado(BajasInventarioSemiterminado bis) throws Exception
     {
-        String query = "exec sp_agrBajaInvSemiterminado "+bis.getNoPiezas()+""
-            + ",'"+bis.getMotivo()+"',"+bis.getIdInvSemiterminado();
+        String query = "exec sp_agrBajaInvSemiterminado "
+                + "@idPartida = "+bis.getIdPartida()
+                + ", @idTipoRecorte = "+bis.getIdTipoRecorte()
+                + ", @idCalibre = "+bis.getIdCalibre()
+                + ", @idSeleccion = "+bis.getIdSeleccion()
+                + ", @fechaentrada = '"+bis.getFechaentrada()+"'"
+                + ", @noPiezas = "+bis.getNoPiezas()
+                + ", @motivo = '"+bis.getMotivo()+"'";
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);

@@ -10,24 +10,31 @@ package Modelo.Entity;
  * @author EQUIPO-PC
  */
 public class InventarioSemiterminado {
+    String calibre;
     int idInvSemiterminado;
     int idInvCrossSemi;
     int idCalibre;
+    int idPartida;
     int idSeleccion;
+    int idTipoRecorte;
+    int noPartida;
     int noPiezas;
     int noPiezasActuales;
     double kgTotales;
+    double kgTotalesActuales;
     String fechaEntrada;
     String fecha;
     String fecha1;
-    int noPartida;
+    double pesoPromXPza;
+    String recorte;
+    String seleccion;
 
-    public int getNoPartida() {
-        return noPartida;
+    public String getCalibre() {
+        return calibre;
     }
 
-    public void setNoPartida(int noPartida) {
-        this.noPartida = noPartida;
+    public void setCalibre(String calibre) {
+        this.calibre = calibre;
     }
 
     public int getIdInvSemiterminado() {
@@ -54,6 +61,14 @@ public class InventarioSemiterminado {
         this.idCalibre = idCalibre;
     }
 
+    public int getIdPartida() {
+        return idPartida;
+    }
+
+    public void setIdPartida(int idPartida) {
+        this.idPartida = idPartida;
+    }
+
     public int getIdSeleccion() {
         return idSeleccion;
     }
@@ -62,20 +77,20 @@ public class InventarioSemiterminado {
         this.idSeleccion = idSeleccion;
     }
 
-    public double getKgTotales() {
-        return kgTotales;
+    public int getIdTipoRecorte() {
+        return idTipoRecorte;
     }
 
-    public void setKgTotales(double kgTotales) {
-        this.kgTotales = kgTotales;
+    public void setIdTipoRecorte(int idTipoRecorte) {
+        this.idTipoRecorte = idTipoRecorte;
     }
 
-    public String getFechaEntrada() {
-        return fechaEntrada;
+    public int getNoPartida() {
+        return noPartida;
     }
 
-    public void setFechaEntrada(String fechaEntrada) {
-        this.fechaEntrada = fechaEntrada;
+    public void setNoPartida(int noPartida) {
+        this.noPartida = noPartida;
     }
 
     public int getNoPiezas() {
@@ -94,6 +109,30 @@ public class InventarioSemiterminado {
         this.noPiezasActuales = noPiezasActuales;
     }
 
+    public double getKgTotales() {
+        return kgTotales;
+    }
+
+    public void setKgTotales(double kgTotales) {
+        this.kgTotales = kgTotales;
+    }
+
+    public double getKgTotalesActuales() {
+        return kgTotalesActuales;
+    }
+
+    public void setKgTotalesActuales(double kgTotalesActuales) {
+        this.kgTotalesActuales = kgTotalesActuales;
+    }
+
+    public String getFechaEntrada() {
+        return fechaEntrada;
+    }
+
+    public void setFechaEntrada(String fechaEntrada) {
+        this.fechaEntrada = fechaEntrada;
+    }
+
     public String getFecha() {
         return fecha;
     }
@@ -109,5 +148,28 @@ public class InventarioSemiterminado {
     public void setFecha1(String fecha1) {
         this.fecha1 = fecha1;
     }
-    
+
+    public double getPesoPromXPza() {
+        return pesoPromXPza;
+    }
+
+    public void setPesoPromXPza(double pesoPromXPza) {
+        this.pesoPromXPza = pesoPromXPza;
+    }
+
+    public String getRecorte() {
+        return recorte;
+    }
+
+    public void setRecorte(String recorte) {
+        this.recorte = recorte;
+    }
+
+    public String getSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(String seleccion) {
+        this.seleccion = seleccion;
+    }
 }

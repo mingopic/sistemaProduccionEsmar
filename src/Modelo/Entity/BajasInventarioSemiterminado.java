@@ -10,19 +10,32 @@ package Modelo.Entity;
  * @author Mingo
  */
 public class BajasInventarioSemiterminado {
-    int idBajaInvSemiterminado;
-    int noPiezas;
-    String motivo;
     String fechaBaja;
+    String fechaentrada;
+    int idBajaInvSemiterminado;
+    int idCalibre;
     int idInvSemiterminado;
+    int idPartida;
+    int idSeleccion;
+    int idTipoRecorte;
     double kgTotal;
+    String motivo;
+    int noPiezas;
 
-    public double getKgTotal() {
-        return kgTotal;
+    public String getFechaBaja() {
+        return fechaBaja;
     }
 
-    public void setKgTotal(double kgTotal) {
-        this.kgTotal = kgTotal;
+    public void setFechaBaja(String fechaBaja) {
+        this.fechaBaja = fechaBaja;
+    }
+
+    public String getFechaentrada() {
+        return fechaentrada;
+    }
+
+    public void setFechaentrada(String fechaentrada) {
+        this.fechaentrada = fechaentrada;
     }
 
     public int getIdBajaInvSemiterminado() {
@@ -33,12 +46,52 @@ public class BajasInventarioSemiterminado {
         this.idBajaInvSemiterminado = idBajaInvSemiterminado;
     }
 
-    public int getNoPiezas() {
-        return noPiezas;
+    public int getIdCalibre() {
+        return idCalibre;
     }
 
-    public void setNoPiezas(int noPiezas) {
-        this.noPiezas = noPiezas;
+    public void setIdCalibre(int idCalibre) {
+        this.idCalibre = idCalibre;
+    }
+
+    public int getIdInvSemiterminado() {
+        return idInvSemiterminado;
+    }
+
+    public void setIdInvSemiterminado(int idInvSemiterminado) {
+        this.idInvSemiterminado = idInvSemiterminado;
+    }
+
+    public int getIdPartida() {
+        return idPartida;
+    }
+
+    public void setIdPartida(int idPartida) {
+        this.idPartida = idPartida;
+    }
+
+    public int getIdSeleccion() {
+        return idSeleccion;
+    }
+
+    public void setIdSeleccion(int idSeleccion) {
+        this.idSeleccion = idSeleccion;
+    }
+
+    public int getIdTipoRecorte() {
+        return idTipoRecorte;
+    }
+
+    public void setIdTipoRecorte(int idTipoRecorte) {
+        this.idTipoRecorte = idTipoRecorte;
+    }
+
+    public double getKgTotal() {
+        return kgTotal;
+    }
+
+    public void setKgTotal(double kgTotal) {
+        this.kgTotal = kgTotal;
     }
 
     public String getMotivo() {
@@ -49,19 +102,12 @@ public class BajasInventarioSemiterminado {
         this.motivo = motivo;
     }
 
-    public String getFechaBaja() {
-        return fechaBaja;
+    public int getNoPiezas() {
+        return noPiezas;
     }
 
-    public void setFechaBaja(String fechaBaja) {
-        this.fechaBaja = fechaBaja;
+    public void setNoPiezas(int noPiezas) {
+        this.noPiezas = noPiezas;
     }
-
-    public int getIdInvSemiterminado() {
-        return idInvSemiterminado;
-    }
-
-    public void setIdInvSemiterminado(int idInvSemiterminado) {
-        this.idInvSemiterminado = idInvSemiterminado;
-    }
+    
 }

@@ -64,6 +64,48 @@ begin
 end
 go
 
+if object_id('dbo.sp_agrInvSemi') is not null
+begin
+	drop procedure dbo.sp_agrInvSemi
+end
+go
+
+if object_id('dbo.sp_obtEntInvSem') is not null
+begin
+	drop procedure dbo.sp_obtEntInvSem
+end
+go
+
+if object_id('dbo.sp_agrInvSemTer') is not null
+begin
+	drop procedure dbo.sp_agrInvSemTer
+end
+go
+
+if object_id('dbo.sp_agrBajaInvSemiterminado') is not null
+begin
+	drop procedure dbo.sp_agrBajaInvSemiterminado
+end
+go
+
+if object_id('dbo.sp_obtInvSemTer') is not null
+begin
+	drop procedure dbo.sp_obtInvSemTer
+end
+go
+
+if object_id('dbo.Usp_InvSemTerGetAgrupado') is not null
+begin
+	drop procedure dbo.Usp_InvSemTerGetAgrupado
+end
+go
+
+if object_id('dbo.Usp_InvSemiterminadoregresar') is not null
+begin
+	drop procedure dbo.Usp_InvSemiterminadoregresar
+end
+go
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 create procedure sp_obtPartidaXproceso
@@ -2228,5 +2270,716 @@ as begin
 end
 go
 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+create procedure sp_agrInvSemi
+(  
+  @idPartida       int  --#01
+  , @fechaentrada  date --#01
+  , @idTipoRecorte int  --#01
+  , @idCalibre     int
+	, @idSeleccion   int
+  , @noPiezas      int
+	, @kgTotales     float
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se borra parámetro @idInvCrossSemi. Se agregan parámetros @idPartida, @fechaentrada y 
+                                @idTipoRecorte para agregar InvSemiterminado agrupado por partida
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idInvCrossSemiAux int
+    , @noPiezasAct     int
+    , @kgXpieza        float
+    
+ --  
+  select
+    @kgXpieza = @kgTotales / @noPiezas
+    
+  drop table if exists #TmpInvCrossSemi
+  
+  /* ------------------- */
+  select
+    idInvCrossSemi
+    , noPiezasActuales
+  into
+    #TmpInvCrossSemi
+  from
+    Vw_InvCrossSemi
+        
+  where
+    idPartida = @idPartida
+    and idTipoRecorte = @idTipoRecorte
+    and fechaentrada = @fechaentrada
+    and noPiezasActuales > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpInvCrossSemi) > 0) and @noPiezas > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idInvCrossSemiAux = idInvCrossSemi 
+        , @noPiezasAct = noPiezasActuales
+      from
+        #TmpInvCrossSemi
+        
+      --
+      if (@noPiezasAct < @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = @noPiezas - @noPiezasAct
+      end
+      else if (@noPiezasAct > @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezas
+        set @noPiezas = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = 0
+      end
+      
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * @kgXpieza
+      
+      --
+      update
+        tb_invCrossSemi
+      set
+        noPiezasActuales = noPiezasActuales - @noPiezasUpd
+        , kgActual = kgActual - @kg
+      where
+        idInvCrossSemi = @idInvCrossSemiAux
+        
+      --
+      insert into
+        tb_invSemiterminado
+        
+      values
+        (
+          @idInvCrossSemiAux
+          , @idCalibre
+          , @idSeleccion
+          , @noPiezasUpd
+          , @noPiezasUpd
+          , @kg
+          , @kg
+          , getdate()
+        )
+        
+       --
+      delete from 
+        #TmpInvCrossSemi
+      where
+        idInvCrossSemi = @idInvCrossSemiAux
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_agrInvSemi ' + ERROR_MESSAGE()
+  end catch
+end
+go
 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_obtEntInvSem
+(
+	@tipoRecorte varchar(20)
+	, @calibre   varchar(15)
+	, @seleccion varchar(15)
+	, @noPartida int
+	, @fecha     varchar(10)
+	, @fecha1    varchar(10)
+)
+as begin
+	/*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se agrupa consulta por Partida, recorte, seleccion, calibre y fechaEntrada
+  =================================================================================================================================
+  */ 
+  
+  if (@noPartida = 0)
+  begin
+  
+		select
+      idPartida
+			, noPartida
+      , idTipoRecorte
+      , recorte
+      , idSeleccion
+      , seleccion
+      , idCalibre
+      , calibre
+      , fechaEntrada
+      , [noPiezas] = sum(noPiezas)
+      , [noPiezasActuales] = sum(noPiezasActuales)
+      , [kgTotales] = sum(kgTotales)
+      , [kgTotalesActuales] = sum(kgTotalesActuales)
+      , [pesoPromXPza] = sum(PesoPromXPza)
+      
+    from
+      Vw_InvSemiterminado        
+        
+    where
+      recorte like @tipoRecorte
+      and calibre like @calibre
+      and seleccion like @seleccion
+      and fechaEntrada between @fecha and @fecha1
+      and noPiezasActuales > 0
+    
+    group by
+      idPartida
+			, noPartida
+      , idTipoRecorte
+      , recorte 
+      , idSeleccion
+      , seleccion
+      , idCalibre
+      , calibre
+      , fechaEntrada
+      
+	end
+  
+  else
+	begin
+  
+		select
+      idPartida
+			, noPartida
+      , idTipoRecorte
+      , recorte
+      , idSeleccion
+      , seleccion
+      , idCalibre
+      , calibre
+      , fechaEntrada
+      , [noPiezas] = sum(noPiezas)
+      , [noPiezasActuales] = sum(noPiezasActuales)
+      , [kgTotales] = sum(kgTotales)
+      , [kgTotalesActuales] = sum(kgTotalesActuales)
+      , [pesoPromXPza] = sum(PesoPromXPza)
+      
+    from
+      Vw_InvSemiterminado        
+        
+    where
+      recorte like @tipoRecorte
+      and calibre like @calibre
+      and seleccion like @seleccion
+      and fechaEntrada between @fecha and @fecha1
+      and noPartida = @noPartida
+      and noPiezasActuales > 0
+      
+    group by
+      idPartida
+			, noPartida
+      , idTipoRecorte
+      , recorte 
+      , idSeleccion
+      , seleccion
+      , idCalibre
+      , calibre
+      , fechaEntrada
+  end
+
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_agrInvSemTer
+(
+	@noPiezas        int
+	, @kgTotales 		 float
+  , @idPartida     int
+  , @idTipoRecorte int
+  , @idCalibre     int
+  , @idSeleccion   int
+  , @fechaentrada  varchar(10)
+)
+as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se borra parámetro @idInvSemiterminado, @noPiezasActuales y se agregan parámetros @idPartida, 
+                                @idTipoRecorte, @idCalibre, @idSeleccion, @fechaentrada para agrupar partidas
+  =================================================================================================================================
+  */ 
+	declare 
+    @idInvSemiterminadoAux int
+    , @noPiezasAct         int
+    , @kgXpieza            float
+  
+  --  
+  select
+    @kgXpieza = @kgTotales / @noPiezas
+    
+  drop table if exists #TmpInvSemiterminado
+  
+  /* ------------------- */
+  select
+    idInvSemiterminado
+    , noPiezasActuales
+  into
+    #TmpInvSemiterminado
+  from
+    Vw_InvSemiterminado
+  where
+    idPartida = @idPartida
+    and idTipoRecorte = @idTipoRecorte
+    and idCalibre = @idCalibre
+    and idSeleccion = @idSeleccion
+    and fechaentrada = @fechaentrada
+    and noPiezasActuales > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpInvSemiterminado) > 0) and @noPiezas > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idInvSemiterminadoAux = idInvSemiterminado 
+        , @noPiezasAct = noPiezasActuales
+      from
+        #TmpInvSemiterminado
+        
+      --
+      if (@noPiezasAct < @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = @noPiezas - @noPiezasAct
+      end
+      else if (@noPiezasAct > @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezas
+        set @noPiezas = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = 0
+      end
+      
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * @kgXpieza
+      
+      --
+      update
+        tb_invSemiterminado
+      set
+        noPiezasActuales = noPiezasActuales - @noPiezasUpd
+        , kgTotalesActuales = kgTotalesActuales - @kg
+      where
+        idInvSemiterminado = @idInvSemiterminadoAux
+        
+      --
+      insert into
+        tb_invSemTer
+      values
+      (
+          @idInvSemiterminadoAux
+          , @noPiezasUpd
+          , @noPiezasUpd
+          , @kg
+          , getdate()
+        )
+        
+       --
+      delete from 
+        #TmpInvSemiterminado
+      where
+        idInvSemiterminado = @idInvSemiterminadoAux
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_agrInvSemTer ' + ERROR_MESSAGE()
+  end catch
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_agrBajaInvSemiterminado
+(  
+  @idPartida       int
+  , @idTipoRecorte int
+  , @idCalibre     int
+  , @idSeleccion   int
+  , @fechaentrada  varchar(10)
+	, @noPiezas      int
+	, @motivo        varchar (100)
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se borra parámetro @idInvSemiterminado. Se agregan parámetros @idPartida, @fechaentrada,  
+                                @idTipoRecorte, @idCalibre, @idSeleccion para agregar bajas de semiterminado
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idInvSemiterminadoAux int
+    , @noPiezasAct         int
+    , @kgAct               float
+    
+  drop table if exists #TmpInvSemiterminado
+  
+  /* ------------------- */
+  select
+    idInvSemiterminado
+    , noPiezasActuales
+    , kgTotalesActuales
+  into
+    #TmpInvSemiterminado
+  from
+    Vw_InvSemiterminado
+    
+  where
+    idPartida = @idPartida
+    and idTipoRecorte = @idTipoRecorte
+    and idCalibre = @idCalibre
+    and idSeleccion = @idSeleccion
+    and fechaentrada = @fechaentrada
+    and noPiezasActuales > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpInvSemiterminado) > 0) and @noPiezas > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idInvSemiterminadoAux = idInvSemiterminado 
+        , @noPiezasAct = noPiezasActuales
+        , @kgAct = kgTotalesActuales
+      from
+        #TmpInvSemiterminado
+        
+      --
+      if (@noPiezasAct < @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = @noPiezas - @noPiezasAct
+      end
+      else if (@noPiezasAct > @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezas
+        set @noPiezas = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = 0
+      end
+      
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * (@kgAct/@noPiezasAct)
+      
+      --
+      update
+        tb_invSemiterminado
+      set
+        noPiezasActuales = noPiezasActuales - @noPiezasUpd
+        , kgTotalesActuales = kgTotalesActuales - @kg
+      where
+        idInvSemiterminado = @idInvSemiterminadoAux
+        
+      --
+      insert into
+        tb_bajasInvSemiterminado
+      values
+        (
+          @noPiezasUpd
+          , @motivo
+          , getdate()
+          , @idInvSemiterminadoAux
+        )
+        
+       --
+      delete from 
+        #TmpInvSemiterminado
+      where
+        idInvSemiterminado = @idInvSemiterminadoAux
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'sp_agrBajaInvSemiterminado ' + ERROR_MESSAGE()
+  end catch
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure sp_obtInvSemTer
+as begin
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     ????/??/??   Creación
+    01   DLuna     2021/10/14   Se agrupa consulta por partida, recorte, calibre, seleccion y fechaEntrada 
+  =================================================================================================================================
+  */ 
+  
+  select
+	  noPartida
+    , idTipoRecorte
+    , tipoRecorte
+    , idCalibre
+    , calibre
+    , idSeleccion
+    , seleccion
+    , fechaEntrada
+    , bandera
+    , [noPiezas] = sum(noPiezas)
+    , [kgTotales] = sum(kgTotales)
+    
+  from
+    Vw_InvSemTerCompleto
+  
+  where
+    noPiezas > 0
+  
+  group by
+    noPartida
+    , idTipoRecorte
+    , tipoRecorte
+    , idCalibre
+    , calibre
+    , idSeleccion
+    , seleccion
+    , fechaEntrada
+    , bandera
+end
+go
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure Usp_InvSemTerGetAgrupado
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     2021/10/14   Creación
+  =================================================================================================================================
+  */ 
+  
+  select
+    idPartida
+    , noPartida
+    , idTipoRecorte
+    , recorte
+    , idCalibre
+    , calibre
+    , idSeleccion
+    , seleccion
+    , fechaEntrada
+	  , [noPiezasActuales] = sum(noPiezasActuales)
+	  
+    
+  from
+    Vw_InvSemTer
+  
+  where
+    noPiezasActuales > 0
+  
+  group by
+    idPartida
+    , noPartida
+    , idTipoRecorte
+    , recorte
+    , idCalibre
+    , calibre
+    , idSeleccion
+    , seleccion
+    , fechaEntrada
+    
+end
+GO
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+create procedure Usp_InvSemiterminadoregresar
+(  
+  @idPartida       int
+  , @idTipoRecorte int
+  , @idCalibre     int
+  , @idSeleccion   int
+  , @fechaentrada  varchar(10)
+	, @noPiezas      int
+)
+as begin
+  
+  /*
+  =================================================================================================================================
+    #Id  Autor     Fecha        Description
+  ---------------------------------------------------------------------------------------------------------------------------------
+    00   DLuna     2021/10/14   Creación
+  =================================================================================================================================
+  */ 
+  
+  declare 
+    @idInvSemTer          int
+    , @idInvSemiterminado int
+    , @noPiezasAct         int
+    , @kgAct               float
+    
+  drop table if exists #TmpInvSemTer
+  
+  /* ------------------- */
+  select
+    idInvSemTer
+    , idInvSemiterminado
+    , noPiezasActuales
+    , kgTotales
+  into
+    #TmpInvSemTer
+  from
+    Vw_InvSemTer
+    
+  where
+    idPartida = @idPartida
+    and idTipoRecorte = @idTipoRecorte
+    and idCalibre = @idCalibre
+    and idSeleccion = @idSeleccion
+    and fechaentrada = @fechaentrada
+    and noPiezasActuales > 0
+  /* ------------------- */
+  
+  begin try
+  
+    while ( ((select count(1) from #TmpInvSemTer) > 0) and @noPiezas > 0)
+    begin
+      
+      declare
+        @noPiezasUpd int = 0
+      
+      select top 1
+        @idInvSemTer = idInvSemTer 
+        , @idInvSemiterminado = idInvSemiterminado
+        , @noPiezasAct = noPiezasActuales
+        , @kgAct = kgTotales
+      from
+        #TmpInvSemTer
+        
+      --
+      if (@noPiezasAct < @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = @noPiezas - @noPiezasAct
+      end
+      else if (@noPiezasAct > @noPiezas)
+      begin
+        
+        set @noPiezasUpd = @noPiezas
+        set @noPiezas = 0
+      end
+      else
+      begin
+      
+        set @noPiezasUpd = @noPiezasAct
+        set @noPiezas = 0
+      end
+      
+      --
+      declare
+        @kg float
+        
+      select
+        @kg = @noPiezasUpd * (@kgAct/@noPiezasAct)
+      
+      --
+      update
+        tb_invSemTer
+      set
+        noPiezasActuales = noPiezasActuales - @noPiezasUpd
+        , kgTotales = kgTotales - @kg
+      where
+        idInvSemTer = @idInvSemTer
+        
+      --
+      update
+        tb_invSemiterminado
+      set
+        noPiezasActuales = noPiezasActuales + @noPiezasUpd
+        , kgTotalesActuales = kgTotalesActuales + @kg
+      where
+        idInvSemiterminado = @idInvSemiterminado
+        
+       --
+      delete from 
+        #TmpInvSemTer
+      where
+        idInvSemTer = @idInvSemTer
+      
+    end
+    
+  end try
+  begin catch
+    
+    print 'Error al ejecutar '+ 'Usp_InvSemiterminadoregresar ' + ERROR_MESSAGE()
+  end catch
+end
+go

@@ -28,19 +28,13 @@ import Modelo.Entity.InventarioTerminado;
 import Modelo.Entity.Partida;
 import Modelo.Entity.Seleccion;
 import Modelo.Entity.TipoRecorte;
-import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.net.URL;
-import java.sql.Connection;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
@@ -80,7 +74,7 @@ public class PnlTerminado extends javax.swing.JPanel {
     BajasInventarioTerminadoCommands bitc;
     double promXPieza;
     String[][] datosTerminado = null;
-    String[][] datos = null;
+    List<InventarioSemiterminadoTerminado> datos;
     String[][] calibres = null;
     String[][] selecciones = null;
     String[][] tipoRecorte = null;
@@ -412,14 +406,29 @@ public class PnlTerminado extends javax.swing.JPanel {
             // Este es el mètodo que debes de modificar
             datos = istc.obtenerListaInvSemTer();
             
-            dtm = new DefaultTableModel(datos, colsInvTermi)
+            dtm = new DefaultTableModel()
             {
                 public boolean isCellEditable(int row, int column) 
                 {
                     return false;
                 }
             };
+            dtm.setColumnIdentifiers(colsInvTermi);
+            dtm.setRowCount(datos.size());
+            for (int i = 0; i < datos.size(); i++)
+            {
+                //"No. Partida","Tipo Recorte","Calibre","Seleccion","No. Piezas","kgTotales","Fecha Entrada"
+                dtm.setValueAt(datos.get(i).getNoPartida(), i, 0);
+                dtm.setValueAt(datos.get(i).getTipoRecorte(), i, 1);
+                dtm.setValueAt(datos.get(i).getCalibre(), i, 2);
+                dtm.setValueAt(datos.get(i).getSeleccion(), i, 3);
+                dtm.setValueAt(datos.get(i).getNoPiezas(), i, 4);
+                dtm.setValueAt(datos.get(i).getKgTotales(), i, 5);
+                dtm.setValueAt(datos.get(i).getFechaEntrada(), i, 6);
+            }
+            
             tblBuscarPartidaInvSemTer.setModel(dtm);
+            tblBuscarPartidaInvSemTer.getTableHeader().setReorderingAllowed(false);
 
         } catch (Exception e) {
            
@@ -439,7 +448,7 @@ public class PnlTerminado extends javax.swing.JPanel {
         //Modificar mètodo actualizarTablaInvSemTer() para llenar la tabla de busqueda
         actualizarTablaInvSemTer();
         
-        dlgBuscar.setSize(600,320);
+        dlgBuscar.setSize(800,450);
         dlgBuscar.setPreferredSize(dlgBuscar.getSize());
         dlgBuscar.setLocationRelativeTo(null);
         dlgBuscar.setModal(true);
@@ -492,8 +501,8 @@ public class PnlTerminado extends javax.swing.JPanel {
             c.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 2).toString());
             s.setDescripcion(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 3).toString());
             ist.setNoPiezasActuales(Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
-            ist.setBandera(Integer.parseInt(datos[renglonSeleccionado][7]));
-            ist.setIdInvSemTer(Integer.parseInt(datos[renglonSeleccionado][8]));
+            //ist.setBandera(Integer.parseInt(datos[renglonSeleccionado][7]));
+            //ist.setIdInvSemTer(Integer.parseInt(datos[renglonSeleccionado][8]));
             
             promXPieza = (Double.parseDouble(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 5).toString())) / (Integer.parseInt(tblBuscarPartidaInvSemTer.getValueAt(renglonSeleccionado, 4).toString()));
             double kgTotales = promXPieza * ist.getNoPiezasActuales();
@@ -529,7 +538,7 @@ public class PnlTerminado extends javax.swing.JPanel {
                 {
                     try 
                     {
-                        it.setIdInvSemTer(ist.getIdInvSemTer());
+                        //it.setIdInvSemTer(ist.getIdInvSemTer());
                         it.setBandera(ist.getBandera());
                         it.setIdCalibre(Integer.parseInt(calibres[cmbCalibreAgregar.getSelectedIndex()][0]));
                         it.setIdSeleccion(Integer.parseInt(selecciones[cmbSeleccionAgregar.getSelectedIndex()][0]));

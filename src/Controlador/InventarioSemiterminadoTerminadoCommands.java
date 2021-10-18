@@ -5,17 +5,15 @@
  */
 package Controlador;
 
-import Modelo.Entity.Calibre;
 import Modelo.Entity.InventarioSemiterminadoTerminado;
 import Modelo.Entity.InventarioTerminado;
-import Modelo.Entity.Partida;
-import Modelo.Entity.Seleccion;
-import Modelo.Entity.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -27,11 +25,16 @@ public class InventarioSemiterminadoTerminadoCommands {
     static ConexionBD c=new ConexionBD();
     
     //Método para agregar una entrada a la tabla tb_invSemTer
-    public static void agregarInvSemTer(InventarioSemiterminadoTerminado ist, double kgTotales) throws Exception
+    public static void agregarInvSemTer(InventarioSemiterminadoTerminado ist) throws Exception
     {
-        String query = "execute sp_agrInvSemTer "+ist.getIdInvSemiterminado()+""
-            + ","+ist.getNoPiezas()+","+ist.getNoPiezasActuales()+""
-                + ","+kgTotales;
+        String query = "execute sp_agrInvSemTer "
+                + "@noPiezas = " + ist.getNoPiezas()
+                + ", @kgTotales = "+ist.getKgTotales()
+                + ", @idPartida = "+ist.getIdPartida()
+                + ", @idTipoRecorte = "+ist.getIdTipoRecorte()
+                + ", @idCalibre = "+ist.getIdCalibre()
+                + ", @idSeleccion = "+ist.getIdSeleccion()
+                + ", @fechaentrada = '"+ist.getFechaEntrada()+"'";
         PreparedStatement pstmt = null;
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
@@ -41,17 +44,13 @@ public class InventarioSemiterminadoTerminadoCommands {
     }
     
     //Método que se llama para obtener la lista del Inventario Semiterminado Terminado Completo
-    public static String[][] obtenerListaInvSemTer() throws Exception
+    public static List<InventarioSemiterminadoTerminado> obtenerListaInvSemTer() throws Exception
     {
+        List<InventarioSemiterminadoTerminado> list = new ArrayList<>();
         String query;
         
         // Este SP es el que modificas
         query= "execute sp_obtInvSemTer ";
-
-        String[][] datos = null;
-        int renglones = 0;
-        int columnas = 9;
-        int i = 0;
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -60,33 +59,33 @@ public class InventarioSemiterminadoTerminadoCommands {
         
         if (rs.last()) 
         {
-            renglones = rs.getRow();
-            datos = new String[renglones][columnas];
             rs.beforeFirst();
             
             //Recorremos el ResultSet registro a registro
-            while (rs.next()) 
-            {
-                datos[i][0] = rs.getString("noPartida");
-                datos[i][1] = rs.getString("tipoRecorte");
-                datos[i][2] = rs.getString("calibre");
-                datos[i][3] = rs.getString("seleccion");
-                datos[i][4] = rs.getString("noPiezas");
-                datos[i][5] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotales")));
-                Date sqlDate = rs.getDate("fechaEntrada");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][6] = sdf.format(sqlDate);
+            while (rs.next()) {
+                InventarioSemiterminadoTerminado obj = new InventarioSemiterminadoTerminado();
+                obj.setNoPartida(rs.getInt("noPartida"));
+                obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                obj.setTipoRecorte(rs.getString("tipoRecorte"));
+                obj.setIdCalibre(rs.getInt("idCalibre"));
+                obj.setCalibre(rs.getString("calibre"));
+                obj.setIdSeleccion(rs.getInt("idSeleccion"));
+                obj.setSeleccion(rs.getString("seleccion"));
+                obj.setFechaEntrada(rs.getString("fechaEntrada"));
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                //datos[i][7] = sdf.format(sqlDate);
+                obj.setBandera(rs.getInt("bandera"));
+                obj.setNoPiezas(rs.getInt("noPiezas"));    
+                obj.setKgTotales(Double.parseDouble((String.format("%.2f", rs.getDouble("kgTotales")))));
                 
-                datos[i][7] = rs.getString("bandera");
-                datos[i][8] = rs.getString("idInvSemTer");
-                i++; 
+                list.add(obj);
             }
         }
         
         rs.close();
         stmt.close();
         c.desconectar();
-        return datos;
+        return list;
     }
     
     //Método para actualizar el número de piezas actuales

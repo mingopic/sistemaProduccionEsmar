@@ -15,8 +15,8 @@ import Modelo.Entity.TipoRecorte;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,22 +28,18 @@ public class InventarioSemiterminadoCommands {
     static ConexionBD c = new ConexionBD();
     
     //Método que se llama para obtener la lista de los cueros por trabajar
-    public static String[][] obtenerListaInvSemiterminado(Partida p, TipoRecorte tr, Calibre ca, Seleccion s, InventarioSemiterminado is) throws Exception
+    public static List<InventarioSemiterminado> obtenerListaInvSemiterminado(Partida p, TipoRecorte tr, Calibre ca, Seleccion s, InventarioSemiterminado is) throws Exception
     {
+        List<InventarioSemiterminado> list = new ArrayList<>();
         String query;
         
-        query= "EXEC sp_obtEntInvSem "
-                + "'" + tr.getDescripcion()+"'"
-                + "," + "'"+ ca.getDescripcion() +"'"
-                + "," + "'"+ s.getDescripcion() +"'"
-                + "," + p.getNoPartida()
-                + "," + "'"+ is.getFecha() +"'"
-                + "," + "'"+ is.getFecha1() +"'";
-
-        String[][] datos = null;
-        int renglones = 0;
-        int columnas = 11;
-        int i = 0;
+        query = "EXEC sp_obtEntInvSem "
+                + "@tipoRecorte = '" + tr.getDescripcion()+"'"
+                + ", @calibre = " + "'"+ ca.getDescripcion() +"'"
+                + ", @seleccion = " + "'"+ s.getDescripcion() +"'"
+                + ", @noPartida = " + p.getNoPartida()
+                + ", @fecha = " + "'"+ is.getFecha() +"'"
+                + ", @fecha1 = " + "'"+ is.getFecha1() +"'";
 
         c.conectar();
         stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -52,35 +48,36 @@ public class InventarioSemiterminadoCommands {
         
         if (rs.last()) 
         {
-            renglones = rs.getRow();
-            datos = new String[renglones][columnas];
-            rs.beforeFirst();
-            
+           rs.beforeFirst();
+
             //Recorremos el ResultSet registro a registro
-            while (rs.next()) 
-            {
-                datos[i][0] = rs.getString("noPartida");
-                datos[i][1] = rs.getString("tipoRecorte");
-                datos[i][2] = rs.getString("noPiezasActuales");
-                datos[i][3] = String.format("%.2f",Double.parseDouble(rs.getString("kgTotalesActuales")));
-                datos[i][4] = String.format("%.2f",Double.parseDouble(rs.getString("PesoPromXPza")));
-                datos[i][5] = rs.getString("seleccion");
-                datos[i][6] = rs.getString("calibre");
-                Date sqlDate = rs.getDate("fechaEntrada");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                datos[i][7] = sdf.format(sqlDate);
+            while (rs.next()) {
+                InventarioSemiterminado obj = new InventarioSemiterminado();
+                obj.setIdPartida(rs.getInt("idPartida"));
+                obj.setNoPartida(rs.getInt("noPartida"));
+                obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                obj.setRecorte(rs.getString("recorte"));
+                obj.setIdSeleccion(rs.getInt("idSeleccion"));
+                obj.setSeleccion(rs.getString("seleccion"));
+                obj.setIdCalibre(rs.getInt("idCalibre"));
+                obj.setCalibre(rs.getString("calibre"));
+                obj.setFechaEntrada(rs.getString("fechaEntrada"));
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                //datos[i][7] = sdf.format(sqlDate);
+                obj.setNoPiezas(rs.getInt("noPiezas"));
+                obj.setNoPiezasActuales(rs.getInt("noPiezasActuales"));         
+                obj.setKgTotales(Double.parseDouble((String.format("%.2f", rs.getDouble("kgTotales")))));
+                obj.setKgTotalesActuales(Double.parseDouble((String.format("%.2f", rs.getDouble("kgTotalesActuales")))));
+                obj.setPesoPromXPza(Double.parseDouble((String.format("%.2f", rs.getDouble("pesoPromXPza")))));
                 
-                datos[i][8] = rs.getString("noPiezas");
-                datos[i][9] = rs.getString("kgTotales");
-                datos[i][10] = rs.getString("idInvSemiterminado");
-                i++; 
+                list.add(obj);
             }
         }
         
         rs.close();
         stmt.close();
         c.desconectar();
-        return datos;
+        return list;
     }
     
     //Método para insertar el inventario completo de semiterminado
@@ -102,11 +99,13 @@ public class InventarioSemiterminadoCommands {
     public static void agregarInvSemiterminado(InventarioSemiterminado is) throws Exception
     {
         String query = "exec sp_agrInvSemi "
-                + is.getIdInvCrossSemi()
-                + "," + is.getIdCalibre()
-                + ","+ is.getIdSeleccion()
-                + ","+ is.getNoPiezas()
-                + "," + is.getKgTotales();
+                +"@idPartida = "+ is.getIdPartida()
+                + ", @fechaentrada = '" + is.getFechaEntrada()+"'"
+                + ", @idTipoRecorte =" + is.getIdTipoRecorte()
+                + ", @idCalibre = "+ is.getIdCalibre()
+                + ", @idSeleccion = " + is.getIdSeleccion()
+                + ", @noPiezas = " + is.getNoPiezas()
+                + ", @kgTotales = " + is.getKgTotales();
         PreparedStatement pstmt = null;
         c.conectar();
         System.out.println(query);
@@ -138,6 +137,67 @@ public class InventarioSemiterminadoCommands {
         c.conectar();
         pstmt = c.getConexion().prepareStatement(query);
         System.out.println(query);
+        pstmt.executeUpdate();
+        c.desconectar();
+    }
+    
+    //Método que se llama para obtener la lista de entradas que se encuentran en terminado 
+    public static List<InventarioSemiterminado> obtenerListaInvSemTer() throws Exception
+    {
+        List<InventarioSemiterminado> list = new ArrayList<>();
+        String query;
+        
+        query = "execute Usp_InvSemTerGetAgrupado";
+
+        c.conectar();
+        stmt = c.getConexion().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        rs = stmt.executeQuery(query);
+        System.out.println(query);
+        
+        if (rs.last()) 
+        {
+           rs.beforeFirst();
+
+            //Recorremos el ResultSet registro a registro
+            while (rs.next()) {
+                InventarioSemiterminado obj = new InventarioSemiterminado();
+                obj.setIdPartida(rs.getInt("idPartida"));
+                obj.setNoPartida(rs.getInt("noPartida"));
+                obj.setIdTipoRecorte(rs.getInt("idTipoRecorte"));
+                obj.setRecorte(rs.getString("recorte"));
+                obj.setIdSeleccion(rs.getInt("idSeleccion"));
+                obj.setSeleccion(rs.getString("seleccion"));
+                obj.setIdCalibre(rs.getInt("idCalibre"));
+                obj.setCalibre(rs.getString("calibre"));
+                obj.setFechaEntrada(rs.getString("fechaEntrada"));
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                //datos[i][7] = sdf.format(sqlDate);
+                obj.setNoPiezasActuales(rs.getInt("noPiezasActuales"));         
+
+                list.add(obj);
+            }
+        }
+        
+        rs.close();
+        stmt.close();
+        c.desconectar();
+        return list;
+    }
+    
+    //Método para agregar una entrada a la tabla tb_invSemiterminado
+    public static void regresarPartidaSemiterminado(InventarioSemiterminado is) throws Exception
+    {
+        String query = "exec Usp_InvSemiterminadoregresar "
+                +"@idPartida = "+ is.getIdPartida()
+                + ", @idTipoRecorte =" + is.getIdTipoRecorte()
+                + ", @idCalibre = "+ is.getIdCalibre()
+                + ", @idSeleccion = " + is.getIdSeleccion()
+                + ", @fechaentrada = '" + is.getFechaEntrada()+"'"
+                + ", @noPiezas = " + is.getNoPiezas();
+        PreparedStatement pstmt = null;
+        c.conectar();
+        System.out.println(query);
+        pstmt = c.getConexion().prepareStatement(query);
         pstmt.executeUpdate();
         c.desconectar();
     }
